@@ -2,8 +2,6 @@
 .idea
 out
 out/
-.DS_Store
-.vscode/
 mvnw
 .mvn
 mvnw.cmd
@@ -11,6 +9,13 @@ pom.xml
 resources/
 hello-view.fxml
 *.class
+
+
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
@@ -20,6 +25,28 @@ hello-view.fxml
 *.iws
 *.iml
 *.ipr
-*.class
 
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store

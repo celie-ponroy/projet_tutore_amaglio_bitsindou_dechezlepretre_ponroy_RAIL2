@@ -55,6 +55,12 @@ public class Simulation implements Jeu {
         //deplacer le gardien
 
         //gestion des interactions et de la fin du jeu
+        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
+            this.estFini = true;
+        }
+        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
+            this.estFini = true;
+        }
 
     }
 

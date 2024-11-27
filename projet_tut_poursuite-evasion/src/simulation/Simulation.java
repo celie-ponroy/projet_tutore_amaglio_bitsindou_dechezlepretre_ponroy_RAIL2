@@ -6,8 +6,8 @@ public class Simulation {
     private int nbTours;
     private Personnage gardien;
     private Personnage prisonnier;
-    
-    Simulation(){
+
+    Simulation() {
         this.nbTours = 0;
     }
 }

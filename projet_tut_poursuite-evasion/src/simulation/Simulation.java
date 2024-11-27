@@ -33,6 +33,7 @@ public class Simulation implements Jeu {
 
 
     public Simulation(){
+        this.nbTours = 0;
         this.prisonnier = new Joueur(5,4);
         this.gardien = new Agent(11,3);
     }
@@ -89,14 +90,14 @@ public class Simulation implements Jeu {
 
         if(clavier.diagHG){
             deplacmentpos[0]=-1;
-            deplacmentpos[1]=1;
+            deplacmentpos[1]=-1;
         }
         if(clavier.haut){
-            deplacmentpos[1]=1;
+            deplacmentpos[1]=-1;
         }
         if(clavier.diagHD){
             deplacmentpos[0]=1;
-            deplacmentpos[1]=1;
+            deplacmentpos[1]=-1;
         }
         if(clavier.droite){
             deplacmentpos[0]=1;
@@ -106,14 +107,14 @@ public class Simulation implements Jeu {
         }
         if(clavier.diagBG){
             deplacmentpos[0]=-1;
-            deplacmentpos[1]=-1;
+            deplacmentpos[1]=1;
         }
         if(clavier.bas){
-            deplacmentpos[1]=-1;
+            deplacmentpos[1]=1;
         }
         if(clavier.diagBD){
             deplacmentpos[0]=1;
-            deplacmentpos[1]=-1;
+            deplacmentpos[1]=1;
         }
         return deplacmentpos;
     }

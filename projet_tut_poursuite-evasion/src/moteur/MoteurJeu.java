@@ -87,107 +87,66 @@ public class MoteurJeu extends Application {
      * creation de l'application avec juste un canvas et des statistiques
      */
     public void start(Stage primaryStage) {
-        // initialisation du canvas de dessin et du container
-        final Canvas canvas = new Canvas();
-        final Pane canvasContainer = new Pane(canvas);
-        canvas.widthProperty().bind(canvasContainer.widthProperty());
-        canvas.heightProperty().bind(canvasContainer.heightProperty());
+        // Initialisation du Pane et du conteneur principal
+        final Pane pane = new Pane();
+        final BorderPane root = new BorderPane();
+        root.setCenter(pane);
 
-
-        // affichage des stats
+        // Affichage des statistiques
         final Label stats = new Label();
         stats.textProperty().bind(frameStats.textProperty());
-
-        // ajout des statistiques en bas de la fenetre
-        final BorderPane root = new BorderPane();
-        root.setCenter(canvasContainer);
         root.setBottom(stats);
 
-        // creation de la scene
-        final Scene scene = new Scene(root, 1000, 600);
+        // Création de la scène
+        final Scene scene = new Scene(root, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
+        primaryStage.setTitle("Moteur de Jeu");
         primaryStage.show();
 
+        // Gestion du clavier
+        scene.setOnKeyPressed(event -> controle.appuyerTouche(event));
+        scene.setOnKeyReleased(event -> controle.relacherTouche(event));
 
-        // listener clavier
-        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                controle.appuyerTouche(event);
+        // Gestion de la souris (réinitialisation du jeu au double-clic)
+        pane.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                jeu.init();
             }
         });
 
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                controle.relacherTouche(event);
-            }
-        });
-
-
-        // creation du listener souris
-        canvas.addEventHandler(MouseEvent.MOUSE_CLICKED,
-                new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        if (event.getClickCount() == 2) {
-                            jeu.init();
-                        }
-                    }
-                });
-
-        // lance la boucle de jeu
-        startAnimation(canvas);
+        // Lancer la boucle de jeu
+        startAnimation(pane);
     }
 
-    /**
-     * gestion de l'animation (boucle de jeu)
-     *
-     * @param canvas le canvas sur lequel on est synchronise
-     */
-    private void startAnimation(final Canvas canvas) {
-        // stocke la derniere mise e jour
+    private void startAnimation(final Pane pane) {
         final LongProperty lastUpdateTime = new SimpleLongProperty(0);
 
-        // timer pour boucle de jeu
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long timestamp) {
-                //fin du jeu
                 if (jeu.etreFini()) {
                     this.stop();
                     return;
                 }
 
-                // si jamais passe dans la boucle, initialise le temps
                 if (lastUpdateTime.get() == 0) {
                     lastUpdateTime.set(timestamp);
                 }
 
-                // mesure le temps ecoule depuis la derniere mise a jour
                 long elapsedTime = timestamp - lastUpdateTime.get();
                 double dureeEnMilliSecondes = elapsedTime / 1_000_000.0;
 
-
-                // si le temps ecoule depasse le necessaire pour FPS souhaite
                 if (dureeEnMilliSecondes > dureeFPS) {
-                    // met à jour le jeu en passant les touches appuyees
                     jeu.update(dureeEnMilliSecondes / 1_000., controle);
-
-                    // dessine le jeu
-                    dessin.dessinerJeu(jeu, canvas);
-
-                    // ajoute la duree dans les statistiques
+                    dessin.dessinerJeu(jeu, pane);
                     frameStats.addFrame(elapsedTime);
-
-                    // met a jour la date de derniere mise a jour
                     lastUpdateTime.set(timestamp);
                 }
-
             }
         };
 
-        // lance l'animation
         timer.start();
     }
+
+
 }

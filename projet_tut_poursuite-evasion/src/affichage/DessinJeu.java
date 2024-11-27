@@ -1,6 +1,7 @@
 package affichage;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.Pane;
 import moteur.Jeu;
 
 
@@ -13,8 +14,8 @@ public interface DessinJeu {
      * affiche l'etat du jeu dans le canvas passe en parametre
      *
      * @param jeu    jeu a afficher
-     * @param canvas canvas dans lequel dessiner l'etat du jeu
+     * @param pane pane dans lequel dessiner l'etat du jeu
      */
-    void dessinerJeu(Jeu jeu, Canvas canvas);
+    void dessinerJeu(Jeu jeu, Pane pane);
 
 }

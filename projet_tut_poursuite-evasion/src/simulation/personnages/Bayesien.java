@@ -5,6 +5,9 @@ import simulation.Simulation;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org . junit . jupiter . api . Assertions . assertEquals ;
+import org.testng.annotations.Test;
+
 public class Bayesien {
     double[][] carteBayesienne;
     List<Integer[]> casesValides;

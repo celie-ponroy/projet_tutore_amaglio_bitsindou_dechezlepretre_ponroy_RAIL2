@@ -42,6 +42,9 @@ public class Simulation implements Jeu {
     // TODO
         this.nbTours++;
         //gestion des déplacements
+        //deplacer le personnage en fonction du clavier si cela est possible
+        deplacerJoueur(clavier);
+
         //gestion des colisions
         //gestion des interactions et de la fin du jeu
 
@@ -66,5 +69,39 @@ public class Simulation implements Jeu {
     public boolean etreFini() {
         return false;
         // TODO
+    }
+
+    /**
+     * Methode permettant de deplacer le joueur en fonction des touches appuyees
+     * @param clavier
+     */
+    public void deplacerJoueur(Clavier clavier){
+        if(clavier.diagHG){
+            this.prisonnier.deplacer(Personnage.DIAGHG);
+        }
+        if(clavier.haut){
+            this.prisonnier.deplacer(Personnage.HAUT);
+        }
+        if(clavier.diagHD){
+            this.prisonnier.deplacer(Personnage.DIAGHD);
+        }
+        if(clavier.droite){
+            this.prisonnier.deplacer(Personnage.DROITE);
+        }
+        if(clavier.neutre){
+            this.prisonnier.deplacer(Personnage.NEUTRE);
+        }
+        if(clavier.gauche){
+            this.prisonnier.deplacer(Personnage.GAUCHE);
+        }
+        if(clavier.diagBG){
+            this.prisonnier.deplacer(Personnage.DIAGBG);
+        }
+        if(clavier.bas){
+            this.prisonnier.deplacer(Personnage.BAS);
+        }
+        if(clavier.diagBD){
+            this.prisonnier.deplacer(Personnage.DIAGBD);
+        }
     }
 }

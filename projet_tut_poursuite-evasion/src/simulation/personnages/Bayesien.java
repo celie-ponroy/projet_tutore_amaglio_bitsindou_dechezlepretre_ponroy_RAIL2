@@ -1,11 +1,12 @@
 package simulation.personnages;
 
 import simulation.Simulation;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bayesien {
-    Double[][] carteBayesienne;
+    double[][] carteBayesienne;
     List<Integer[]> casesValides;
 
     /**
@@ -14,7 +15,7 @@ public class Bayesien {
     public Bayesien() {
         int[][] carte = Simulation.carte;
         casesValides = new ArrayList<Integer[]>();
-        carteBayesienne = new Double[carte.length][carte[0].length];
+        carteBayesienne = new double[carte.length][carte[0].length];
         for (int i = 0; i < carte.length; i++) {
             for (int j = 0; j < carte[0].length; j++) {
                 //Initialisation du tableau a -1
@@ -30,7 +31,75 @@ public class Bayesien {
         }
     }
 
-    public Double[][] getCarteBayesienne() {
+    /**
+     * Méthode permetant d'actualiser la carte de probabilité de présence en fonction de la vue d'un agent
+     *
+     * @param ancienneCarteProba carte de probabilité de présence du tour précédent
+     * @param casesVues          les cases vues par l'agents
+     * @return carte de probabilité de présence actualisé
+     */
+    public double[][] calculerProbaPresence(double[][] ancienneCarteProba, List<Integer[]> casesVues) {
+        double probaTransition = 0;
+        int nombreCasesVoisineValide = 0;
+
+        for (int i = 0; i < ancienneCarteProba.length; i++) {
+            for (int j = 0; j < ancienneCarteProba[0].length; j++) {
+                //On regarde si la case est une case valide
+                if (casesValides.contains(new Integer[]{i, j})) {
+
+                    //On regarde les case voisines de la case observé
+                    /*for (int k = -1; k < 2; k++) {
+                        for (int l = -1; l < 2; l++) {
+                            int y = i + k, x = j + l;
+                            if (x >= 0 && x < ancienneCarteProba.length && y >= 0 && y < ancienneCarteProba[0].length) {
+                                // --------------- Regader si on a besoin de spécifié que la case [1][1] est la case cible
+                                //On regarde si la case est une case valide
+                                if (casesValides.contains(new Integer[]{y, x})) {
+                                    probaTransition += carteBayesienne[y][x];
+                                    nombreCasesVoisineValide++;
+                                }
+                            }
+                        }*/
+                    List<Integer[]> caseVoisineValide = getCasesVoisineValide(j, i);
+                    for (Integer[] caseVoisine : caseVoisineValide) {
+                        //On calcule la probabilité de transition d'une case a une autre de chaque case voisine
+                        probaTransition += 1.0/getCasesVoisineValide(caseVoisine[1],caseVoisine[0]).size();
+                        nombreCasesVoisineValide++;
+                    }
+                    carteBayesienne[i][j] = probaTransition / nombreCasesVoisineValide;
+                    probaTransition = 0;
+                    nombreCasesVoisineValide = 0;
+                }
+            }
+        }
+        //On actualise nos probabilité en fonction des classes vues
+        return carteBayesienne;
+    }
+
+    /**
+     * Méthode renvoyant les cases voisines d'une case de coordonée x,y
+     *
+     * @param x coordoné en abscisse de la case donnée
+     * @param y coordoné en ordonée de la case donnée
+     * @return list de case coisine n'étant pas des murs
+     */
+    public List<Integer[]> getCasesVoisineValide(int x, int y) {
+        ArrayList<Integer[]> casesVoisinesValides = new ArrayList<>();
+        for (int k = -1; k < 2; k++) {
+            for (int l = -1; l < 2; l++) {
+                int i = y + k, j = x + l;
+                if (x >= 0 && x < Simulation.carte.length && y >= 0 && y < Simulation.carte[0].length) {
+                    //On regarde si la case exploré appartient au case valide
+                    if (casesValides.contains(new Integer[]{i, j})) {
+                        casesVoisinesValides.add(new Integer[]{i, j});
+                    }
+                }
+            }
+        }
+        return casesVoisinesValides;
+    }
+
+    public double[][] getCarteBayesienne() {
         return carteBayesienne;
     }
 }

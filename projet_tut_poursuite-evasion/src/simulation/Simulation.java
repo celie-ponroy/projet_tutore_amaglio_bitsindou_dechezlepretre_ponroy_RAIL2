@@ -34,8 +34,8 @@ public class Simulation implements Jeu {
 
     public Simulation(){
         this.nbTours = 0;
-        this.prisonnier = new Joueur(5,4);
-        this.gardien = new Agent(4,10);
+        this.prisonnier = new Joueur(4,10);
+        this.gardien = new Agent(5,4);
     }
 
     /**
@@ -67,8 +67,8 @@ public class Simulation implements Jeu {
         this.nbTours = 0;
         this.estFini = false;
         //le prisonier est un joueur et le gardien un agent
-        this.prisonnier = new Joueur(5,4);
-        this.gardien = new Agent(4,10);
+        this.prisonnier = new Joueur(4,10);
+        this.gardien = new Agent(5,4);
     }
 
     /**
@@ -135,11 +135,15 @@ public class Simulation implements Jeu {
         //verifier si le deplacement est possible
         if(murPresent(deplacmentpos[0],deplacmentpos[1])){
             return;
-        }//rajouter pour les diagonales
-
+        }
+        //verification des diagonales
+        if(action[0] != 0 && action[1] != 0){
+            if(murPresent(deplacmentpos[0],pos.getY()) || murPresent(pos.getX(),deplacmentpos[1])){
+                return;
+            }
+        }
         //si oui deplacer le personnage
         p.deplacer(action[0],action[1]);
-
     }
 
     /**

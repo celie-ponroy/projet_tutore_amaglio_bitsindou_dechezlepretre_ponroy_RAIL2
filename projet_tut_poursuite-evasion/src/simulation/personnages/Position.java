@@ -11,4 +11,16 @@ public class Position {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+    //se déplace de x, y
+    public void deplacer(int x, int y){
+        this.x = this.x + x;
+        this.y = this.y + y;
+    }
 }

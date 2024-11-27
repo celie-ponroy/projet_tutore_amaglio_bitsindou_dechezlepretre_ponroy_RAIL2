@@ -4,6 +4,7 @@ import moteur.Clavier;
 import moteur.Jeu;
 import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
+import simulation.personnages.Position;
 
 public class Simulation implements Jeu {
     private int nbTours;
@@ -25,15 +26,16 @@ public class Simulation implements Jeu {
     static final int SORTIE = 2;
     static final int MUR = -1;
     static final int SOL = 0;
+    private boolean estFini;
 
 
 
     public Simulation(){
-        this.nbTours = 0;
+
     }
 
     /**
-     * Methode permettant de mettre a jour l'etat du jeu en fonction du clavier et du temps ecoule
+     * Methode permettant de mettre à jour l'etat du jeu en fonction du clavier et du temps ecoule
      * @param secondes temps ecoule depuis la derniere mise a jour
      * @param clavier  objet contenant l'état du clavier'
      */
@@ -43,9 +45,11 @@ public class Simulation implements Jeu {
         this.nbTours++;
         //gestion des déplacements
         //deplacer le personnage en fonction du clavier si cela est possible
-        deplacerJoueur(clavier);
+        int[] actionJ = deplacementJoueur(clavier);
+        // pour l'instant le joueur est forcément le prisonnier
+        deplacerPersonnage(this.prisonnier,actionJ);
+        //deplacer le gardien
 
-        //gestion des colisions
         //gestion des interactions et de la fin du jeu
 
     }
@@ -55,6 +59,8 @@ public class Simulation implements Jeu {
      */
     @Override
     public void init() {
+        this.nbTours = 0;
+        this.estFini = false;
     // TODO
         //un personnage prisonnier
         this.prisonnier = new Joueur(5,4);
@@ -67,41 +73,68 @@ public class Simulation implements Jeu {
      */
     @Override
     public boolean etreFini() {
-        return false;
-        // TODO
+        return this.estFini;
     }
 
     /**
      * Methode permettant de deplacer le joueur en fonction des touches appuyees
      * @param clavier
+     * @return un tableau d'entiers contenant les coordonnees du deplacement
      */
-    public void deplacerJoueur(Clavier clavier){
+    public int[] deplacementJoueur(Clavier clavier){
+        int[] deplacmentpos = {0,0};
+
         if(clavier.diagHG){
-            this.prisonnier.deplacer(Personnage.DIAGHG);
+            deplacmentpos[0]=-1;
+            deplacmentpos[1]=1;
         }
         if(clavier.haut){
-            this.prisonnier.deplacer(Personnage.HAUT);
+            deplacmentpos[1]=1;
         }
         if(clavier.diagHD){
-            this.prisonnier.deplacer(Personnage.DIAGHD);
+            deplacmentpos[0]=1;
+            deplacmentpos[1]=1;
         }
         if(clavier.droite){
-            this.prisonnier.deplacer(Personnage.DROITE);
-        }
-        if(clavier.neutre){
-            this.prisonnier.deplacer(Personnage.NEUTRE);
+            deplacmentpos[0]=1;
         }
         if(clavier.gauche){
-            this.prisonnier.deplacer(Personnage.GAUCHE);
+            deplacmentpos[0]=-1;
         }
         if(clavier.diagBG){
-            this.prisonnier.deplacer(Personnage.DIAGBG);
+            deplacmentpos[0]=-1;
+            deplacmentpos[1]=-1;
         }
         if(clavier.bas){
-            this.prisonnier.deplacer(Personnage.BAS);
+            deplacmentpos[1]=-1;
         }
         if(clavier.diagBD){
-            this.prisonnier.deplacer(Personnage.DIAGBD);
+            deplacmentpos[0]=1;
+            deplacmentpos[1]=-1;
         }
+        return deplacmentpos;
+    }
+    public boolean murPresent(int x , int y){
+        return Simulation.CARTE[y][x] == Simulation.MUR;
+    }
+
+    /**
+     * Methode permettant de deplacer un personnage en fonction de l'action et de la carte
+     * @param p
+     * @param action
+     */
+
+    public void deplacerPersonnage(Personnage p, int[] action){
+        Position pos = p.getPosition();
+        //calcul des positions après déplacement
+        int[] deplacmentpos = {pos.getX()+action[0],pos.getY()+action[1]};
+        //verifier si le deplacement est possible
+        if(murPresent(deplacmentpos[0],deplacmentpos[1])){
+            return;
+        }//rajouter pour les diagonales
+
+        //si oui deplacer le personnage
+        p.deplacer(action[0],action[1]);
+
     }
 }

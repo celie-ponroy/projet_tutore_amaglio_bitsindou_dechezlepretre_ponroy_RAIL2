@@ -33,7 +33,8 @@ public class Simulation implements Jeu {
 
 
     public Simulation(){
-
+        this.prisonnier = new Joueur(5,4);
+        this.gardien = new Agent(11,3);
     }
 
     /**

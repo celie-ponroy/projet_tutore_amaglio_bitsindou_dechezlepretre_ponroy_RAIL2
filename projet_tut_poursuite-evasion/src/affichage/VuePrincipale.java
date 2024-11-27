@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import moteur.Jeu;
 import simulation.Simulation;
 import javafx.scene.paint.Color;
+import simulation.personnages.Position;
 
 
 /**
@@ -46,8 +47,20 @@ public class VuePrincipale implements DessinJeu {
                 }
             }
         }
+        //Gestion des personnages
+        //dessin du prisonnier (rond orange)
+        gc.setFill(Color.ORANGE);
+        //Position du prisonnier
+        Position posP = this.simulation.getPrisonnier().getPosition();
+        gc.fillOval(posP.getX() * 50, posP.getY() * 50, 50, 50);
 
-        this.simulation = (Simulation) jeu;
+        //dessin du gardien (rond bleu)
+        gc.setFill(Color.BLUE);
+        //Position du prisonnier
+        Position posG = this.simulation.getGardien().getPosition();
+        gc.fillOval(posG.getX() * 50, posG.getY() * 50, 50, 50);
+
+        //this.simulation = (Simulation) jeu;
 
     }
 }

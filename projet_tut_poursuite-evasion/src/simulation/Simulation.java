@@ -34,7 +34,7 @@ public class Simulation implements Jeu {
 
     public Simulation(){
         this.prisonnier = new Joueur(5,4);
-        this.gardien = new Agent(11,3);
+        this.gardien = new Agent(4,10);
     }
 
     /**
@@ -67,7 +67,7 @@ public class Simulation implements Jeu {
         this.estFini = false;
         //le prisonier est un joueur et le gardien un agent
         this.prisonnier = new Joueur(5,4);
-        this.gardien = new Agent(11,3);
+        this.gardien = new Agent(4,10);
     }
 
     /**
@@ -139,5 +139,21 @@ public class Simulation implements Jeu {
         //si oui deplacer le personnage
         p.deplacer(action[0],action[1]);
 
+    }
+
+    /**
+     * Methode permettant de recuperer le priosnnier
+     * @return le prisonnier
+     */
+    public Personnage getPrisonnier() {
+        return prisonnier;
+    }
+
+    /**
+     * Methode permettant de recuperer le gardien
+     * @return le gardien
+     */
+    public Personnage getGardien() {
+        return gardien;
     }
 }

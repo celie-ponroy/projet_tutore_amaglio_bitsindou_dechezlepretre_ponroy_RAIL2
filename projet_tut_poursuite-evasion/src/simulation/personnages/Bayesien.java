@@ -47,23 +47,10 @@ public class Bayesien {
                 //On regarde si la case est une case valide
                 if (casesValides.contains(new Integer[]{i, j})) {
 
-                    //On regarde les case voisines de la case observé
-                    /*for (int k = -1; k < 2; k++) {
-                        for (int l = -1; l < 2; l++) {
-                            int y = i + k, x = j + l;
-                            if (x >= 0 && x < ancienneCarteProba.length && y >= 0 && y < ancienneCarteProba[0].length) {
-                                // --------------- Regader si on a besoin de spécifié que la case [1][1] est la case cible
-                                //On regarde si la case est une case valide
-                                if (casesValides.contains(new Integer[]{y, x})) {
-                                    probaTransition += carteBayesienne[y][x];
-                                    nombreCasesVoisineValide++;
-                                }
-                            }
-                        }*/
                     List<Integer[]> caseVoisineValide = getCasesVoisineValide(j, i);
                     for (Integer[] caseVoisine : caseVoisineValide) {
                         //On calcule la probabilité de transition d'une case a une autre de chaque case voisine
-                        probaTransition += 1.0/getCasesVoisineValide(caseVoisine[1],caseVoisine[0]).size();
+                        probaTransition += 1.0 / getCasesVoisineValide(caseVoisine[1], caseVoisine[0]).size();
                         nombreCasesVoisineValide++;
                     }
                     carteBayesienne[i][j] = probaTransition / nombreCasesVoisineValide;
@@ -72,7 +59,24 @@ public class Bayesien {
                 }
             }
         }
+
         //On actualise nos probabilité en fonction des classes vues
+        for (Integer[] caseVue : casesVues) {
+            if (caseVue[2] == 0) {
+                for (Integer[] caseValide : casesValides) {
+                    // On divise la proba actuelle par la somme des proba sans la case vue
+                    double probaTotalSansCaseVue = 1 - carteBayesienne[caseVue[0]][caseVue[1]];
+                    double probaCaseModifier = carteBayesienne[caseValide[0]][caseValide[1]];
+                    carteBayesienne[caseValide[0]][caseValide[1]] = probaCaseModifier / probaTotalSansCaseVue;
+                }
+                carteBayesienne[caseVue[0]][caseVue[1]] = 0;
+            } else {
+                for (Integer[] caseValide : casesValides) {
+                    carteBayesienne[caseValide[0]][caseValide[1]] = 0;
+                }
+                carteBayesienne[caseVue[0]][caseVue[1]] = 1;
+            }
+        }
         return carteBayesienne;
     }
 

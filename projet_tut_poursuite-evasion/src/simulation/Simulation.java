@@ -2,6 +2,7 @@ package simulation;
 
 import moteur.Clavier;
 import moteur.Jeu;
+import simulation.personnages.Agent;
 import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
@@ -59,12 +60,12 @@ public class Simulation implements Jeu {
      */
     @Override
     public void init() {
+        // TODO
         this.nbTours = 0;
         this.estFini = false;
-    // TODO
-        //un personnage prisonnier
+        //le prisonier est un joueur et le gardien un agent
         this.prisonnier = new Joueur(5,4);
-        // (11,3)
+        this.gardien = new Agent(11,3);
     }
 
     /**

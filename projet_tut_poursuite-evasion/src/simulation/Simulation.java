@@ -22,9 +22,9 @@ public class Simulation implements Jeu {
             {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
             {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
             {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
-    static final int SORTIE = 2;
-    static final int MUR = -1;
-    static final int SOL = 0;
+    public static final int SORTIE = 2;
+    public static final int MUR = -1;
+    public static final int SOL = 0;
 
 
 

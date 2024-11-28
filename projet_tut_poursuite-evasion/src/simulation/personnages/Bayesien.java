@@ -3,13 +3,8 @@ package simulation.personnages;
 import simulation.Case;
 import simulation.Simulation;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import static org . junit . jupiter . api . Assertions . assertEquals ;
-import org.testng.annotations.Test;
 
 public class Bayesien {
     double[][] carteBayesienne;

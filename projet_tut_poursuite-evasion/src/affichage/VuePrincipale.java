@@ -1,81 +1,124 @@
 package affichage;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
-import javafx.scene.paint.Color;
-import simulation.personnages.Position;
 
-
-/**
- * Classe permettant de dessiner le labyrinthe
- */
 public class VuePrincipale implements DessinJeu {
     private Simulation simulation;
+    private Image imageMur;
+    private Image imageSol;
+    private Image imageSortie;
+    private Image imagePrisonnier;
+    private Image imageGardien;
+    private Pane pane; // Pane principal pour afficher le jeu
+    private ImageView prisonnierView; // Vue pour le prisonnier
+    private ImageView gardienView; // Vue pour le gardien
+
+    private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
     /**
-     * Affiche le labyrinthe en fonction de la carte du jeu
-     * @param jeu jeu a afficher
-     * @param pane pane dans lequel dessiner l'etat du jeu
+     * Initialise les images
+     */
+    private void initImages() {
+        this.imageMur = new Image("file:images/murs.png");
+        this.imageSol = new Image("file:images/sol.png");
+        this.imageSortie = new Image("file:images/sortie.png");
+        this.imagePrisonnier = new Image("file:images/prisonnier.png");
+        this.imageGardien = new Image("file:images/gardien.png");
+    }
+
+    /**
+     * Initialise le labyrinthe et les personnages
+     */
+    private void initLabyrinthe() {
+        // Création du labyrinthe à partir de la carte
+        for (int i = 0; i < simulation.CARTE.length; i++) {
+            for (int j = 0; j < simulation.CARTE[i].length; j++) {
+                StackPane stackPane = new StackPane();
+                stackPane.setLayoutX(j * TAILLE_CELLULE);
+                stackPane.setLayoutY(i * TAILLE_CELLULE);
+
+                // Sélection de l'image en fonction de la case
+                Image image = null;
+                switch (simulation.CARTE[i][j]) {
+                    case Simulation.MUR:
+                        image = this.imageMur;
+                        break;
+                    case Simulation.SOL:
+                        image = this.imageSol;
+                        break;
+                    case Simulation.SORTIE:
+                        image = this.imageSortie;
+                        break;
+                }
+
+                if (image != null) {
+                    ImageView imageView = new ImageView(image);
+                    imageView.setFitWidth(TAILLE_CELLULE);
+                    imageView.setFitHeight(TAILLE_CELLULE);
+                    stackPane.getChildren().add(imageView);
+                }
+
+                // Ajout d'une zone de collision invisible (si nécessaire)
+                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
+                rectangle.setFill(Color.TRANSPARENT);
+                stackPane.getChildren().add(rectangle);
+
+                pane.getChildren().add(stackPane); // Ajout au Pane principal
+            }
+        }
+
+        // Initialisation des personnages
+        prisonnierView = new ImageView(imagePrisonnier);
+        prisonnierView.setFitWidth(TAILLE_CELLULE);
+        prisonnierView.setFitHeight(TAILLE_CELLULE);
+        pane.getChildren().add(prisonnierView);
+
+        gardienView = new ImageView(imageGardien);
+        gardienView.setFitWidth(TAILLE_CELLULE);
+        gardienView.setFitHeight(TAILLE_CELLULE);
+        pane.getChildren().add(gardienView);
+
+        // Placement initial des personnages
+        updatePositions();
+    }
+
+    /**
+     * Met à jour uniquement les positions des personnages
+     */
+    private void updatePositions() {
+        // Met à jour la position du prisonnier
+        prisonnierView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
+        prisonnierView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);
+
+        // Met à jour la position du gardien
+        gardienView.setX(simulation.getGardien().getPosition().getX() * TAILLE_CELLULE);
+        gardienView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
+    }
+
+    /**
+     * Méthode principale de l'interface DessinJeu
      */
     @Override
     public void dessinerJeu(Jeu jeu, Pane pane) {
-        //on netttoie le pane
-        pane.getChildren().clear();
+        // Récuperation de la simulation
+        this.simulation = (Simulation)jeu;
+        this.pane = pane;
 
-        this.simulation = (Simulation) jeu;
-        //on parcourt toutes la carte du jeu
-        for (int i = 0; i < this.simulation.CARTE.length; i++) {
-            for (int j = 0; j < this.simulation.CARTE[i].length; j++) {
-                Rectangle r = new Rectangle(j * 50, i * 50, 50, 50);
-                switch (this.simulation.CARTE[i][j]) {
-                    case Simulation.MUR:
-                        //on crée un carré rouge pour dessiner un mur sur la carte
-                        r.setFill(Color.RED);
-                        break;
-
-                    case Simulation.SOL:
-                        //on trace un carre gris pour dessiner le sol
-                        r.setFill(Color.GREY);
-                        break;
-
-                    case Simulation.SORTIE:
-                        //on trace un carre vert pour dessiner la sortie
-                        r.setFill(Color.GREEN);;
-                        break;
-                }
-                //on ajoute le carré au pane
-                pane.getChildren().add(r);
-            }
+        if (pane.getChildren().isEmpty()) {
+            // Si le labyrinthe n'est pas encore initialisé
+            initImages();
+            initLabyrinthe();
+        } else {
+            // Sinon, il met juste a jour les positions des personnages
+            updatePositions();
         }
-        //Gestion des personnages
-        //dessin du prisonnier (rond orange)
-        Circle priso = new Circle();
-        priso.setRadius(25);
-        priso.setFill(Color.ORANGE);
-        //Position du prisonnier
-        Position posP = this.simulation.getPrisonnier().getPosition();
-        // Positionner le cercle du prisonnier
-        priso.setCenterX(posP.getX() * 50 + 25); // Position X (milieu du carré)
-        priso.setCenterY(posP.getY() * 50 + 25); // Position Y (milieu du carré)
-        pane.getChildren().add(priso);
-
-        //dessin du gardien (rond bleu)
-        Circle gard = new Circle();
-        gard.setRadius(25);
-        gard.setFill(Color.BLUE);
-        //Position du gardien
-        Position posG = this.simulation.getGardien().getPosition();
-        // Positionner le cercle du gardien
-        gard.setCenterX(posG.getX() * 50 + 25); // Position X (milieu du carré)
-        gard.setCenterY(posG.getY() * 50 + 25); // Position Y (milieu du carré)
-        pane.getChildren().add(gard);
-
-        //this.simulation = (Simulation) jeu;
-
     }
+
 }

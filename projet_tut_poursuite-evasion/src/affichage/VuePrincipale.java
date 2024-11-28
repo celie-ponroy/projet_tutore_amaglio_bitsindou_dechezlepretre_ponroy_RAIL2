@@ -9,14 +9,13 @@ import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
 
-public class VuePrincipale implements DessinJeu {
+public class VuePrincipale extends Pane implements DessinJeu {
     private Simulation simulation;
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
     private Image imagePrisonnier;
-    private Image imageGardien;
-    private Pane pane; // Pane principal pour afficher le jeu
+    private Image imageGardien;// Pane principal pour afficher le jeu
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
 
@@ -70,7 +69,7 @@ public class VuePrincipale implements DessinJeu {
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
 
-                pane.getChildren().add(stackPane); // Ajout au Pane principal
+                this.getChildren().add(stackPane); // Ajout au Pane principal
             }
         }
 
@@ -78,12 +77,12 @@ public class VuePrincipale implements DessinJeu {
         prisonnierView = new ImageView(imagePrisonnier);
         prisonnierView.setFitWidth(TAILLE_CELLULE);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(prisonnierView);
+        this.getChildren().add(prisonnierView);
 
         gardienView = new ImageView(imageGardien);
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(gardienView);
+        this.getChildren().add(gardienView);
 
         // Placement initial des personnages
         updatePositions();
@@ -106,12 +105,11 @@ public class VuePrincipale implements DessinJeu {
      * Méthode principale de l'interface DessinJeu
      */
     @Override
-    public void dessinerJeu(Jeu jeu, Pane pane) {
+    public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        this.pane = pane;
 
-        if (pane.getChildren().isEmpty()) {
+        if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();

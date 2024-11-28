@@ -1,18 +1,21 @@
 package moteur;
 
 
+import affichage.DessinJeu;
+
 /**
  * modele de jeu
  */
 public interface Jeu {
 
-    /**
-     * methode mise a jour du jeu
-     *
-     * @param secondes temps ecoule depuis la derniere mise a jour
-     * @param clavier  objet contenant l'état du clavier'
-     */
-    void update(double secondes, Clavier clavier);
+//    /**
+//     * methode mise a jour du jeu
+//     *
+//     * @param clavier  objet contenant l'état du clavier'
+//     */
+    //void update(Clavier clavier);
+    void ajouterObservateur(DessinJeu dj);
+    void notifierObservateurs();
 
     /**
      * initialisation du jeu

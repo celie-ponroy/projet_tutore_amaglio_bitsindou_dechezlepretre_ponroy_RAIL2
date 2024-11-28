@@ -1,12 +1,15 @@
 package simulation.personnages;
 
-public class Agent implements Personnage {
-    private Position position;
+import simulation.Case;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Agent extends Personnage {
 
     public Agent(int x, int y){
-        this.position = new Position(x,y);
+        super(x,y);
     }
-
 
     @Override
     public void deplacer(int x, int y) {
@@ -14,7 +17,4 @@ public class Agent implements Personnage {
     }
 
 
-    public Position getPosition() {
-        return position;
-    }
 }

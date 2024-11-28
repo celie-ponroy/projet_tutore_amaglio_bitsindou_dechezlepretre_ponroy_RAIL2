@@ -1,10 +1,10 @@
 package simulation.personnages;
 
-public class Joueur implements Personnage {
+public class Joueur extends Personnage {
     private Position position;
 
     public Joueur(int x, int y){
-        this.position = new Position(x,y);
+        super(x,y);
     }
 
 
@@ -13,7 +13,4 @@ public class Joueur implements Personnage {
         this.position.deplacer(x, y);
     }
 
-    public Position getPosition() {
-        return position;
-    }
 }

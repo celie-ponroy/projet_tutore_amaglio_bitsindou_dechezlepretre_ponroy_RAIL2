@@ -46,12 +46,15 @@ public class Simulation implements Jeu {
     @Override
     public void update(double secondes, Clavier clavier) {
     // TODO
-        this.nbTours++;
         //gestion des déplacements
         //deplacer le personnage en fonction du clavier si cela est possible
         int[] actionJ = deplacementJoueur(clavier);
         // pour l'instant le joueur est forcément le prisonnier
-        deplacerPersonnage(this.prisonnier,actionJ);
+        boolean deplacement = deplacerPersonnage(this.prisonnier,actionJ);
+        if (!deplacement){
+            return;
+        }
+        this.nbTours++;
         //deplacer le gardien
 
         //gestion des interactions et de la fin du jeu
@@ -134,22 +137,23 @@ public class Simulation implements Jeu {
      * @param action
      */
 
-    public void deplacerPersonnage(Personnage p, int[] action){
+    public boolean deplacerPersonnage(Personnage p, int[] action){
         Position pos = p.getPosition();
         //calcul des positions après déplacement
         int[] deplacmentpos = {pos.getX()+action[0],pos.getY()+action[1]};
         //verifier si le deplacement est possible
         if(murPresent(deplacmentpos[0],deplacmentpos[1])){
-            return;
+            return false;
         }
         //verification des diagonales
         if(action[0] != 0 && action[1] != 0){
             if(murPresent(deplacmentpos[0],pos.getY()) || murPresent(pos.getX(),deplacmentpos[1])){
-                return;
+                return true;
             }
         }
         //si oui deplacer le personnage
         p.deplacer(action[0],action[1]);
+        return true;
     }
 
     /**

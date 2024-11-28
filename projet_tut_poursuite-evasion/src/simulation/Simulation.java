@@ -29,9 +29,6 @@ public class Simulation implements Jeu {
     public static final int SOL = 0;
     private boolean estFini;
 
-
-
-
     public Simulation(){
         this.nbTours = 0;
         this.prisonnier = new Joueur(4,10);

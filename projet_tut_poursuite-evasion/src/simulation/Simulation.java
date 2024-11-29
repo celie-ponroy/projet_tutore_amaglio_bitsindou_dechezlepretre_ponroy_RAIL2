@@ -1,5 +1,6 @@
 package simulation;
 
+import affichage.DessinJeu;
 import moteur.Clavier;
 import moteur.Jeu;
 import simulation.personnages.Agent;
@@ -9,8 +10,10 @@ import simulation.personnages.Position;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Simulation implements Jeu {
+    private List<DessinJeu> observateurs;
     private int nbTours;
     private Personnage gardien;
     private Personnage prisonnier;
@@ -37,25 +40,27 @@ public class Simulation implements Jeu {
         this.nbTours = 0;
         this.prisonnier = new Joueur(4,10);
         this.gardien = new Agent(5,4);
+        this.observateurs = new ArrayList<>();
     }
 
-    /**
-     * Methode permettant de mettre à jour l'etat du jeu en fonction du clavier et du temps ecoule
-     * @param secondes temps ecoule depuis la derniere mise a jour
-     * @param clavier  objet contenant l'état du clavier'
-     */
-    @Override
-    public void update(double secondes, Clavier clavier) {
-    // TODO
-        //gestion des déplacements
-        //deplacer le personnage en fonction du clavier si cela est possible
-        int[] actionJ = deplacementJoueur(clavier);
+    public void ajouterObservateur(DessinJeu dj){
+        this.observateurs.add(dj);
+    }
+    public void notifierObservateurs(){
+        for(DessinJeu dj : this.observateurs){
+            dj.update(this);
+        }
+    }
+
+    public void deplacementJoueur(Deplacement d){
         // pour l'instant le joueur est forcément le prisonnier
-        boolean deplacement = deplacerPersonnage(this.prisonnier,actionJ);
+        boolean deplacement = deplacerPersonnage(this.prisonnier, d);
+        System.out.println(deplacement);
         if (!deplacement){
             return;
         }
         this.nbTours++;
+        this.notifierObservateurs();
         //deplacer le gardien
 
         //gestion des interactions et de la fin du jeu
@@ -65,7 +70,6 @@ public class Simulation implements Jeu {
         if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
             this.estFini = true;
         }
-
     }
 
     /**
@@ -90,44 +94,7 @@ public class Simulation implements Jeu {
         return this.estFini;
     }
 
-    /**
-     * Methode permettant de deplacer le joueur en fonction des touches appuyees
-     * @param clavier
-     * @return un tableau d'entiers contenant les coordonnees du deplacement
-     */
-    public int[] deplacementJoueur(Clavier clavier){
-        int[] deplacmentpos = {0,0};
 
-        if(clavier.diagHG){
-            deplacmentpos[0]=-1;
-            deplacmentpos[1]=-1;
-        }
-        if(clavier.haut){
-            deplacmentpos[1]=-1;
-        }
-        if(clavier.diagHD){
-            deplacmentpos[0]=1;
-            deplacmentpos[1]=-1;
-        }
-        if(clavier.droite){
-            deplacmentpos[0]=1;
-        }
-        if(clavier.gauche){
-            deplacmentpos[0]=-1;
-        }
-        if(clavier.diagBG){
-            deplacmentpos[0]=-1;
-            deplacmentpos[1]=1;
-        }
-        if(clavier.bas){
-            deplacmentpos[1]=1;
-        }
-        if(clavier.diagBD){
-            deplacmentpos[0]=1;
-            deplacmentpos[1]=1;
-        }
-        return deplacmentpos;
-    }
     public boolean murPresent(int x , int y){
         return Simulation.CARTE[y][x] == Simulation.MUR;
     }
@@ -135,25 +102,41 @@ public class Simulation implements Jeu {
     /**
      * Methode permettant de deplacer un personnage en fonction de l'action et de la carte
      * @param p
-     * @param action
+     * @param d
      */
 
-    public boolean deplacerPersonnage(Personnage p, int[] action){
-        Position pos = p.getPosition();
-        //calcul des positions après déplacement
-        int[] deplacmentpos = {pos.getX()+action[0],pos.getY()+action[1]};
+    public boolean deplacerPersonnage(Personnage p, Deplacement d){
+        Position persoPos = p.getPosition();
+        Position nvPos = new Position(persoPos.getX(), persoPos.getY());
+        nvPos.deplacement(d);
+
         //verifier si le deplacement est possible
-        if(murPresent(deplacmentpos[0],deplacmentpos[1])){
+        if(murPresent(nvPos.getX(), nvPos.getY())){
             return false;
         }
         //verification des diagonales
-        if(action[0] != 0 && action[1] != 0){
-            if(murPresent(deplacmentpos[0],pos.getY()) || murPresent(pos.getX(),deplacmentpos[1])){
-                return true;
+        if(!(d.equals(Deplacement.AUCUN))){
+            switch (d){
+                case DIAG_BAS_DROITE:
+                    if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
+                        return false;
+                    }
+                case DIAG_BAS_GAUCHE:
+                    if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
+                        return false;
+                    }
+                case DIAG_HAUT_DROITE:
+                    if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
+                        return false;
+                    }
+                case DIAG_HAUT_GAUCHE:
+                    if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
+                        return false;
+                    }
             }
         }
         //si oui deplacer le personnage
-        p.deplacer(action[0],action[1]);
+        p.deplacer(nvPos);
         return true;
     }
 
@@ -171,5 +154,9 @@ public class Simulation implements Jeu {
      */
     public Personnage getGardien() {
         return gardien;
+    }
+
+    public int getNbTours() {
+        return this.nbTours;
     }
 }

@@ -1,9 +1,11 @@
 package simulation.personnages;
 
-import java.io.Serializable;
+
+import simulation.Deplacement;
+
 import java.util.Objects;
 
-public class Position implements Serializable {
+public class Position {
 
 
     private int x;
@@ -36,6 +38,39 @@ public class Position implements Serializable {
         this.y = this.y + y;
     }
 
+    public void deplacement(Deplacement d) {
+        switch (d){
+            case BAS:
+                this.y += 1;
+                break;
+            case HAUT:
+                this.y -= 1;
+                break;
+            case GAUCHE:
+                this.x -= 1;
+                break;
+            case DROITE:
+                this.x += 1;
+                break;
+            case DIAG_HAUT_GAUCHE:
+                this.y -= 1;
+                this.x -= 1;
+                break;
+            case DIAG_HAUT_DROITE:
+                this.y -= 1;
+                this.x += 1;
+                break;
+            case DIAG_BAS_GAUCHE:
+                this.y += 1;
+                this.x -= 1;
+                break;
+            case DIAG_BAS_DROITE:
+                this.y += 1;
+                this.x += 1;
+                break;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -52,4 +87,5 @@ public class Position implements Serializable {
     public String toString() {
         return "("+x+";"+y+")";
     }
+
 }

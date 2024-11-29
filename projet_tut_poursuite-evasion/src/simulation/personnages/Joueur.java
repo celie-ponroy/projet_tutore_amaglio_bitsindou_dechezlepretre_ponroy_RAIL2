@@ -12,4 +12,13 @@ public class Joueur extends Personnage {
         this.position.deplacer(x, y);
     }
 
+
+    @Override
+    public void deplacer(Position p) {
+        this.position = p;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
 }

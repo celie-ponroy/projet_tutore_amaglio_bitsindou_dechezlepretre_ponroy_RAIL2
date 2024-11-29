@@ -13,6 +13,7 @@ public abstract class Personnage {
     }
 
     public abstract void deplacer(int x, int y);
+    public abstract void deplacer(Position p);
 
     public Position getPosition() {
         return this.position;
@@ -20,5 +21,6 @@ public abstract class Personnage {
     public ArrayList<Position> getVision(){
         return Simulation.vision.get(this.position);
     }
+
 
 }

@@ -4,21 +4,27 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
+import javafx.scene.control.Label;
+import org.w3c.dom.Text;
 import simulation.Simulation;
 
-public class VuePrincipale implements DessinJeu {
+import java.awt.*;
+
+public class VuePrincipale extends Pane implements DessinJeu {
     private Simulation simulation;
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
     private Image imagePrisonnier;
-    private Image imageGardien;
-    private Pane pane; // Pane principal pour afficher le jeu
+    private Image imageGardien;// Pane principal pour afficher le jeu
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
+    private Label iterationLabel; // Label pour afficher le nombre d'itération
+
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
@@ -70,23 +76,41 @@ public class VuePrincipale implements DessinJeu {
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
 
-                pane.getChildren().add(stackPane); // Ajout au Pane principal
+                this.getChildren().add(stackPane); // Ajout au Pane principal
+
             }
         }
+
+        //Ajout d'une vbox pour afficher le nombre d'itération sous le labyrinthe
+        VBox vbox = new VBox();
+        vbox.setLayoutX(10);
+        vbox.setLayoutY(620);
+        this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
+        vbox.getChildren().add(this.iterationLabel);
+        this.getChildren().add(vbox);
+
+        //Ajout d'un encadré pour afficher le nombre d'itération
+        Rectangle rectangle = new Rectangle(150, 20);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setStroke(Color.DARKGREY);
+        rectangle.setLayoutX(10);
+        rectangle.setLayoutY(620);
+        this.getChildren().add(rectangle);
 
         // Initialisation des personnages
         prisonnierView = new ImageView(imagePrisonnier);
         prisonnierView.setFitWidth(TAILLE_CELLULE);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(prisonnierView);
+        this.getChildren().add(prisonnierView);
 
         gardienView = new ImageView(imageGardien);
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(gardienView);
+        this.getChildren().add(gardienView);
 
         // Placement initial des personnages
         updatePositions();
+
     }
 
     /**
@@ -106,19 +130,28 @@ public class VuePrincipale implements DessinJeu {
      * Méthode principale de l'interface DessinJeu
      */
     @Override
-    public void dessinerJeu(Jeu jeu, Pane pane) {
+    public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        this.pane = pane;
 
-        if (pane.getChildren().isEmpty()) {
+        if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
+            updateIteration();
         }
     }
+
+    /**
+     * Méthode pour récupérer afficher le nombre d'itération
+     */
+    public void updateIteration() {
+        // Mise à jour du texte du label
+        this.iterationLabel.setText("Nombre d'itération: " + simulation.getNbTours());
+    }
+
 
 }

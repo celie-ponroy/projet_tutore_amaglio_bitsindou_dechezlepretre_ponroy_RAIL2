@@ -113,10 +113,24 @@ public class Simulation implements Jeu {
             return false;
         }
         //verification des diagonales
-        if(!d.equals(Deplacement.AUCUN)){
-            if(murPresent(nvPos.getX(), persoPos.getY()) || murPresent(persoPos.getX(), nvPos.getY())){
-                p.deplacer(nvPos);
-                return true;
+        if(!(d.equals(Deplacement.AUCUN))){
+            switch (d){
+                case DIAG_BAS_DROITE:
+                    if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
+                        return false;
+                    }
+                case DIAG_BAS_GAUCHE:
+                    if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
+                        return false;
+                    }
+                case DIAG_HAUT_DROITE:
+                    if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
+                        return false;
+                    }
+                case DIAG_HAUT_GAUCHE:
+                    if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
+                        return false;
+                    }
             }
         }
         //si oui deplacer le personnage

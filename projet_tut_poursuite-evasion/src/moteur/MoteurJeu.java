@@ -2,6 +2,7 @@ package moteur;
 
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
+import affichage.VueBayesienne;
 import affichage.VuePrincipale;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -55,10 +56,13 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         // Initialisation du Pane et du conteneur principal
         VuePrincipale vp = new VuePrincipale();
+        VueBayesienne vb = new VueBayesienne();
         vp.update(MoteurJeu.jeu);
+        vb.update(MoteurJeu.jeu);
         MoteurJeu.jeu.ajouterObservateur(vp);
+        MoteurJeu.jeu.ajouterObservateur(vb);
         final BorderPane root = new BorderPane();
-        root.setCenter(vp);
+        root.setCenter(vb);
 
         //Création du controleur
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);

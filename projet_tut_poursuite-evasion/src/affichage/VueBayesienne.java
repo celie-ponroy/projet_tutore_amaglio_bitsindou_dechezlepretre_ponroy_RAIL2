@@ -8,17 +8,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
+import simulation.personnages.Agent;
+import simulation.personnages.Joueur;
 
-public class VueBayesienne implements DessinJeu {
+import java.util.Arrays;
+
+public class VueBayesienne extends Pane implements DessinJeu {
     private Simulation simulation;
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
     private Image imagePrisonnier;
     private Image imageGardien;
-    private Pane pane; // Pane principal pour afficher le jeu
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
+
+    private Rectangle[][] caseBayesienne;
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
@@ -70,7 +75,28 @@ public class VueBayesienne implements DessinJeu {
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
 
-                pane.getChildren().add(stackPane); // Ajout au Pane principal
+                this.getChildren().add(stackPane); // Ajout au Pane principal
+            }
+        }
+
+        //Ajout filtre couleur bayes
+        Joueur prisonnier = (Joueur) simulation.getPrisonnier();
+        double[][] carteBayes = prisonnier.getCarteBayesien();
+        caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
+
+        for (int i = 0; i < simulation.CARTE.length; i++) {
+            for (int j = 0; j < simulation.CARTE[i].length; j++) {
+                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
+                rectangle.setX(j * TAILLE_CELLULE);
+                rectangle.setY(i * TAILLE_CELLULE);
+                if (carteBayes[i][j] == -1) {
+                    rectangle.setFill(new Color(0.0, 0, 0, 0.5));
+                } else {
+                    System.out.println(Color.rgb(255, 45, 0, 1 * carteBayes[i][j]));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 15 * carteBayes[i][j]));
+                }
+                this.getChildren().add(rectangle);
+                caseBayesienne[i][j] = rectangle;
             }
         }
 
@@ -78,15 +104,12 @@ public class VueBayesienne implements DessinJeu {
         prisonnierView = new ImageView(imagePrisonnier);
         prisonnierView.setFitWidth(TAILLE_CELLULE);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(prisonnierView);
+        this.getChildren().add(prisonnierView);
 
         gardienView = new ImageView(imageGardien);
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
-        pane.getChildren().add(gardienView);
-
-
-
+        this.getChildren().add(gardienView);
 
         // Placement initial des personnages
         updatePositions();
@@ -96,6 +119,7 @@ public class VueBayesienne implements DessinJeu {
      * Met à jour uniquement les positions des personnages
      */
     private void updatePositions() {
+
         // Met à jour la position du prisonnier
         prisonnierView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
         prisonnierView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);
@@ -105,23 +129,36 @@ public class VueBayesienne implements DessinJeu {
         gardienView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
     }
 
-    /**
-     * Méthode principale de l'interface DessinJeu
-     */
-    @Override
-    public void dessinerJeu(Jeu jeu, Pane pane) {
-        // Récuperation de la simulation
-        this.simulation = (Simulation)jeu;
-        this.pane = pane;
+    private void updateBayes() {
 
-        if (pane.getChildren().isEmpty()) {
+        Joueur prisonnier = (Joueur) simulation.getPrisonnier();
+        double[][] carteBayes = prisonnier.getCarteBayesien();
+        for (int i = 0; i < simulation.CARTE.length; i++) {
+            for (int j = 0; j < simulation.CARTE[i].length; j++) {
+                Rectangle rectangle = caseBayesienne[i][j];
+                if (carteBayes[i][j] == -1) {
+                    rectangle.setFill(new Color(0.0, 0, 0, 0.5));
+                } else {
+                    System.out.println(Color.rgb(255, 45, 0, 1 * carteBayes[i][j]));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 15 * carteBayes[i][j]));
+                }
+            }
+        }
+    }
+
+    @Override
+    public void update(Jeu jeu) {
+        // Récuperation de la simulation
+        this.simulation = (Simulation) jeu;
+
+        if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
+            updateBayes();
         }
     }
-
 }

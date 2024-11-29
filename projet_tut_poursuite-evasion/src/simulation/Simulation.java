@@ -35,10 +35,13 @@ public class Simulation implements Jeu {
     private boolean estFini;
 
     public Simulation(){
+
+        this.observateurs = new ArrayList<>();
         this.nbTours = 0;
+        this.estFini = false;
+        //le prisonier est un joueur et le gardien un agent
         this.prisonnier = new Joueur(4,10);
         this.gardien = new Agent(5,4);
-        this.observateurs = new ArrayList<>();
     }
 
     public void ajouterObservateur(DessinJeu dj){
@@ -74,14 +77,7 @@ public class Simulation implements Jeu {
      * Methode permettant d'initialiser le jeu
      */
     @Override
-    public void init() {
-        // TODO
-        this.nbTours = 0;
-        this.estFini = false;
-        //le prisonier est un joueur et le gardien un agent
-        this.prisonnier = new Joueur(4,10);
-        this.gardien = new Agent(5,4);
-    }
+    public void init() {}
 
     /**
      * Methode permettant de verifier si le jeu est fini

@@ -16,7 +16,7 @@ public class Main {
 
         // creation des objets
         Jeu simulation = new Simulation();
-        simulation.init();
+
 
         // parametrage du moteur de jeu
         MoteurJeu.setTaille(width, height);

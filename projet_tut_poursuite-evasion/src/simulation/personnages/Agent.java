@@ -3,9 +3,7 @@ package simulation.personnages;
 public class Agent implements Personnage {
     private Position position;
 
-    public Agent(int x, int y){
-        this.position = new Position(x,y);
-    }
+    public Agent(int x, int y) {this.position = new Position(x, y);}
 
 
     @Override

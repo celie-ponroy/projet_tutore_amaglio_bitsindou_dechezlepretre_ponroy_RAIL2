@@ -10,7 +10,6 @@ import moteur.Jeu;
 import simulation.Simulation;
 
 import simulation.personnages.Joueur;
-
 public class VueBayesienne extends Pane implements DessinJeu {
 
     private Simulation simulation;
@@ -24,7 +23,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
     private ImageView gardienView; // Vue pour le gardien
 
     private Rectangle[][] caseBayesienne;
-
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
     /**
@@ -74,7 +72,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
                 Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
-
                 this.getChildren().add(stackPane); // Ajout au Pane principal
             }
         }

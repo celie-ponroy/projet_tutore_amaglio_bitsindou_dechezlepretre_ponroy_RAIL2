@@ -11,6 +11,7 @@ import moteur.Jeu;
 import javafx.scene.control.Label;
 import org.w3c.dom.Text;
 import simulation.Simulation;
+import simulation.personnages.Position;
 
 import java.awt.*;
 
@@ -24,6 +25,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
     private Label iterationLabel; // Label pour afficher le nombre d'itération
+    private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
 
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
@@ -104,6 +106,12 @@ public class VuePrincipale extends Pane implements DessinJeu {
         this.getChildren().add(prisonnierView);
 
         gardienView = new ImageView(imageGardien);
+        //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
+        if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
+            gardienView.setOpacity(1);
+        } else {
+            gardienView.setOpacity(0);
+        }
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
         this.getChildren().add(gardienView);
@@ -138,11 +146,20 @@ public class VuePrincipale extends Pane implements DessinJeu {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
+            initFiltreVision();
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
             updateIteration();
+            setFiltreVision();
+            //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
+            if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
+                gardienView.setOpacity(1);
+            } else {
+                gardienView.setOpacity(0);
+            }
         }
+
     }
 
     /**
@@ -151,6 +168,52 @@ public class VuePrincipale extends Pane implements DessinJeu {
     public void updateIteration() {
         // Mise à jour du texte du label
         this.iterationLabel.setText("Nombre d'itération: " + simulation.getNbTours());
+    }
+
+    /**
+     * Méthode pour récupérer afficher le nombre d'itération
+     */
+    public void initFiltreVision() {
+        this.filtreVision = new Rectangle[simulation.CARTE[0].length][simulation.CARTE.length];
+        // Parcours de toutes les cases du labyrinthe
+        for (int i = 0; i < simulation.CARTE.length; i++) {
+            for (int j = 0; j < simulation.CARTE[i].length; j++) {
+                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
+                rectangle.setFill(Color.rgb(44, 88, 245));
+                rectangle.setLayoutX(j * TAILLE_CELLULE);
+                rectangle.setLayoutY(i * TAILLE_CELLULE);
+                this.filtreVision[j][i] = rectangle;
+                // Si la case n'est pas visible
+                if (!simulation.getPrisonnier().getVision().contains(new Position(j, i))) {
+                    // Création d'un filtre pour cacher la case
+
+                    rectangle.setOpacity(0.5);
+
+                }else{
+                    rectangle.setOpacity(0);
+                }
+                this.getChildren().add(rectangle);
+            }
+        }
+    }
+    /**
+     * Méthode pour lettre un filtre sur les cases non visibles
+     */
+    public void setFiltreVision() {
+        // Parcours de toutes les cases du labyrinthe
+        for (int i = 0; i < simulation.CARTE.length; i++) {
+            for (int j = 0; j < simulation.CARTE[i].length; j++) {
+                Rectangle rectangle = this.filtreVision[j][i];
+                // Si la case n'est pas visible
+                if (!simulation.getPrisonnier().getVision().contains(new Position(j, i))) {
+                    // Création d'un filtre pour cacher la case
+
+                    rectangle.setOpacity(0.5);
+                }else{
+                    rectangle.setOpacity(0);
+                }
+            }
+        }
     }
 
 

@@ -4,10 +4,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
+import javafx.scene.control.Label;
+import org.w3c.dom.Text;
 import simulation.Simulation;
+
+import java.awt.*;
 
 public class VuePrincipale extends Pane implements DessinJeu {
     private Simulation simulation;
@@ -18,6 +23,8 @@ public class VuePrincipale extends Pane implements DessinJeu {
     private Image imageGardien;// Pane principal pour afficher le jeu
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
+    private Label iterationLabel; // Label pour afficher le nombre d'itération
+
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
@@ -70,8 +77,25 @@ public class VuePrincipale extends Pane implements DessinJeu {
                 stackPane.getChildren().add(rectangle);
 
                 this.getChildren().add(stackPane); // Ajout au Pane principal
+
             }
         }
+
+        //Ajout d'une vbox pour afficher le nombre d'itération sous le labyrinthe
+        VBox vbox = new VBox();
+        vbox.setLayoutX(10);
+        vbox.setLayoutY(620);
+        this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
+        vbox.getChildren().add(this.iterationLabel);
+        this.getChildren().add(vbox);
+
+        //Ajout d'un encadré pour afficher le nombre d'itération
+        Rectangle rectangle = new Rectangle(150, 20);
+        rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setStroke(Color.DARKGREY);
+        rectangle.setLayoutX(10);
+        rectangle.setLayoutY(620);
+        this.getChildren().add(rectangle);
 
         // Initialisation des personnages
         prisonnierView = new ImageView(imagePrisonnier);
@@ -86,6 +110,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
 
         // Placement initial des personnages
         updatePositions();
+
     }
 
     /**
@@ -116,7 +141,17 @@ public class VuePrincipale extends Pane implements DessinJeu {
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
+            updateIteration();
         }
     }
+
+    /**
+     * Méthode pour récupérer afficher le nombre d'itération
+     */
+    public void updateIteration() {
+        // Mise à jour du texte du label
+        this.iterationLabel.setText("Nombre d'itération: " + simulation.getNbTours());
+    }
+
 
 }

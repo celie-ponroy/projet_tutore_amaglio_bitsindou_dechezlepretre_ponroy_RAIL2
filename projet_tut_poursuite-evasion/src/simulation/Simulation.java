@@ -153,4 +153,8 @@ public class Simulation implements Jeu {
     public Personnage getGardien() {
         return gardien;
     }
+
+    public int getNbTours() {
+        return this.nbTours;
+    }
 }

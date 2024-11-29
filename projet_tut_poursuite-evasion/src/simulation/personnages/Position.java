@@ -1,8 +1,9 @@
 package simulation.personnages;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Position {
+public class Position implements Serializable {
 
 
     private int x;

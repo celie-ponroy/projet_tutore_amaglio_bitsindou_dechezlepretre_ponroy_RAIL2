@@ -10,6 +10,9 @@ import moteur.Jeu;
 import simulation.Simulation;
 
 import simulation.personnages.Joueur;
+
+import java.util.Arrays;
+
 public class VueBayesienne extends Pane implements DessinJeu {
 
     private Simulation simulation;
@@ -78,7 +81,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
 
         //Ajout filtre couleur bayes
         Joueur prisonnier = (Joueur) simulation.getPrisonnier();
-        double[][] carteBayes = prisonnier.getCarteBayesien();
+        double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
         caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
         for (int i = 0; i < simulation.CARTE.length; i++) {
@@ -89,8 +92,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
                 if (carteBayes[i][j] == -1) {
                     rectangle.setFill(new Color(0.0, 0, 0, 0.5));
                 } else {
-                    System.out.println(Color.rgb(255, 45, 0, 1 * carteBayes[i][j]));
-                    rectangle.setFill(Color.rgb(190, 35, 0, 15 * carteBayes[i][j]));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 1 * carteBayes[i][j]));
                 }
                 this.getChildren().add(rectangle);
                 caseBayesienne[i][j] = rectangle;
@@ -131,15 +133,15 @@ public class VueBayesienne extends Pane implements DessinJeu {
     private void updateBayes() {
 
         Joueur prisonnier = (Joueur) simulation.getPrisonnier();
-        double[][] carteBayes = prisonnier.getCarteBayesien();
+        double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
+        System.out.println(Arrays.deepToString(carteBayes));
         for (int i = 0; i < simulation.CARTE.length; i++) {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = caseBayesienne[i][j];
                 if (carteBayes[i][j] == -1) {
                     rectangle.setFill(new Color(0.0, 0, 0, 0.5));
                 } else {
-                    System.out.println(Color.rgb(255, 45, 0, 1 * carteBayes[i][j]));
-                    rectangle.setFill(Color.rgb(190, 35, 0, 15 * carteBayes[i][j]));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 1 * carteBayes[i][j]));
                 }
             }
         }

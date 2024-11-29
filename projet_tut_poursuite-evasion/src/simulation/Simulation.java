@@ -6,6 +6,7 @@ import moteur.Jeu;
 import simulation.personnages.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -64,11 +65,13 @@ public class Simulation implements Jeu {
     public void deplacementJoueur(Deplacement d){
         // pour l'instant le joueur est forcément le prisonnier
         boolean deplacement = deplacerPersonnage(this.prisonnier, d);
-        System.out.println(deplacement);
         if (!deplacement){
             return;
         }
         this.nbTours++;
+
+        actualisationBayesienne();
+
         this.notifierObservateurs();
         //deplacer le gardien
 
@@ -80,7 +83,7 @@ public class Simulation implements Jeu {
             this.estFini = true;
         }
 
-        actualisationBayesienne();
+
 
     }
 
@@ -172,6 +175,10 @@ public class Simulation implements Jeu {
      */
     public Personnage getGardien() {
         return gardien;
+    }
+
+    public double[][] getCarteBayesienne(Personnage p) {
+        return carteBayesiennes.get(p);
     }
 
     public int getNbTours() {

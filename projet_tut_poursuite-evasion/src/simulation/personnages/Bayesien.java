@@ -88,17 +88,13 @@ public class Bayesien {
      */
     public List<Case> getCasesVoisineValide(int x, int y) {
         ArrayList<Case> casesVoisinesValides = new ArrayList<>();
-        System.out.println("Lancement vosine");
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 int i = y + k, j = x + l;
                 if (x >= 0 && x < Simulation.CARTE[0].length && y >= 0 && y < Simulation.CARTE.length) {
-                    System.out.println("Dans les bornes");
                     //On regarde si la case exploré appartient au case valide
                     if (casesValides.contains(new Case(j, i, 0))) {
-                        System.out.println("case valide");
                         if ((k==-1)&&(l==-1)){
-                            System.out.println("case en haut a gauche");
                             if(!(Simulation.CARTE[i][j+1]==-1|| Simulation.CARTE[i+1][j]==-1)){
                                 casesVoisinesValides.add(new Case(j, i, 0));;
                             }

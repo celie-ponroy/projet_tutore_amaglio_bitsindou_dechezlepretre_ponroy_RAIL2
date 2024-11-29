@@ -86,11 +86,9 @@ package "simulation"{
     }
 
     class Agent{
-      - position: Position
       + Agent(int, int)
     }
     class Joueur{
-      - position: Position
       + Joueur(int, int)
     }
   }
@@ -118,6 +116,20 @@ package "animation" {
     + initLabyrinthe(): void
     - updatePositions(): void
   }
+
+  class VueBayesienne{
+      - imageMur: Image
+      - imageSol: Image
+      - imageSortie: Image
+      - imagePrisonnier: Image
+      - imageGardien: Image
+      - prisonnierView: ImageView
+      - gardienView: ImageView
+      + initImages(): void
+      + initLabyrinthe(): void
+      - updatePositions(): void
+      - updateBayes(): void
+    }
 }
 
 package "main"{
@@ -129,12 +141,14 @@ package "main"{
 Bayesien "1" --> "*" Case: casesValides
 Agent --|> Personnage
 Joueur --|> Personnage
-Agent "1" --> "1" Position : position
-Joueur "1" --> "1" Position : position
+Personnage "1" --> "1" Position : position
 MoteurJeu --|> Application
 MoteurJeu "1" --> "1" Jeu: jeu
 Simulation "1" --> "*" DessinJeu : observateurs
 DessinJeu <|.. VuePrincipale
+DessinJeu <|.. VueBayesienne
+Simulation "1" --> "1" Personnage: gardien
+Simulation "1" --> "1" Personnage: prisonnier
 Clavier "1" --> "1" Simulation : simulation
 Jeu <|-- Simulation
 

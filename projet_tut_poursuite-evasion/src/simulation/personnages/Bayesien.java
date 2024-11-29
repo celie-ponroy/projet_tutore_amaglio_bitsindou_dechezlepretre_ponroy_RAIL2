@@ -4,6 +4,7 @@ import simulation.Case;
 import simulation.Simulation;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Bayesien {
@@ -44,7 +45,6 @@ public class Bayesien {
         for (int i = 0; i < ancienneCarteProba.length; i++) {
             for (int j = 0; j < ancienneCarteProba[0].length; j++) {
                 //On regarde si la case est une case valide
-                System.out.println("JE SUIS A LA CASE y=" + i + " x=" + j);
                 if (casesValides.contains(new Case(j, i, 0))) {
 
                     List<Case> caseVoisineValide = getCasesVoisineValide(j, i);
@@ -88,13 +88,39 @@ public class Bayesien {
      */
     public List<Case> getCasesVoisineValide(int x, int y) {
         ArrayList<Case> casesVoisinesValides = new ArrayList<>();
+        System.out.println("Lancement vosine");
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 int i = y + k, j = x + l;
                 if (x >= 0 && x < Simulation.CARTE[0].length && y >= 0 && y < Simulation.CARTE.length) {
+                    System.out.println("Dans les bornes");
                     //On regarde si la case exploré appartient au case valide
                     if (casesValides.contains(new Case(j, i, 0))) {
-                        casesVoisinesValides.add(new Case(j, i, 0));
+                        System.out.println("case valide");
+                        if ((k==-1)&&(l==-1)){
+                            System.out.println("case en haut a gauche");
+                            if(!(Simulation.CARTE[i][j+1]==-1|| Simulation.CARTE[i+1][j]==-1)){
+                                casesVoisinesValides.add(new Case(j, i, 0));;
+                            }
+                        }else
+                        if ((k==1)&&(l==-1)){
+                            if(!(Simulation.CARTE[i-1][j]==-1|| Simulation.CARTE[i][j+1]==-1)){
+                                casesVoisinesValides.add(new Case(j, i, 0));;
+                            }
+                        }else
+                        if ((k==-1)&&(l==1)){
+                            if(!(Simulation.CARTE[i][j-1]==-1|| Simulation.CARTE[i+1][j]==-1)){
+                                casesVoisinesValides.add(new Case(j, i, 0));;
+                            }
+                        }else
+                        if ((k==1)&&(l==1)){
+                            if(!(Simulation.CARTE[i-1][j]==-1|| Simulation.CARTE[i][j-1]==-1)){
+                                casesVoisinesValides.add(new Case(j, i, 0));;
+                            }
+                        }else {
+                            casesVoisinesValides.add(new Case(j, i, 0));
+                        }
+
                     }
                 }
             }
@@ -110,5 +136,20 @@ public class Bayesien {
             }
         }
         return d;
+    }
+
+    @Override
+    public String toString() {
+        String s = "Bayesien{" +
+                "carteBayesienne= [";
+        for (int i = 0; i < carteBayesienne.length; i++) {
+            s+='\n'+"[";
+            for (int j = 0; j < carteBayesienne[0].length; j++) {
+                s+= carteBayesienne[i][j]+",";
+            }
+            s+="]";
+        }
+        s+="]";
+        return s;
     }
 }

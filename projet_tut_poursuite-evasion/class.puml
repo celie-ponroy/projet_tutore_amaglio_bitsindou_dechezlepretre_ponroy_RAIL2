@@ -1,0 +1,141 @@
+@startuml
+class Application
+
+
+package "moteur"{
+  Interface Jeu{
+    + init(): void
+    + etreFini(): boolean
+    + ajouterObservateur(DessinJeu): void
+    - notifierObservateurs(): void
+  }
+  class Clavier{
+    + handle(KeyEvent): void
+  }
+  class MoteurJeu{
+    - {static} WIDTH : double
+    - {static} HEIGHT : double
+    + {static} launch(Jeu): void
+    + {static} setTaille(double, double): void
+    + start(Stage): void
+  }
+}
+
+package "simulation"{
+  enum Deplacement{
+    HAUT
+    BAS
+    GAUCHE
+    DROITE
+    DIAG_HAUT_GAUCHE
+    DIAG_HAUT_DROITE
+    DIAG_BAS_GAUCHE
+    DIAG_BAS_DROITE
+    AUCUN
+}
+  class Simulation{
+    - nbTours : int
+    - estFini : boolean
+    + {static} final CARTE : int[][]
+    + {static} final MUR : int
+    + {static} final SORTIE : int
+    + {static} final SOL : int
+    + Simulation()
+    + deplacementJoueur(Deplacement): void
+    + murPresent(int, int): boolean
+    + getPrisonnier(): Personnage
+    + getGardien(): Personnage
+  }
+
+  class Case{
+    - x: int
+    - y: int
+    - contenu: int
+  }
+
+  class CalculVision{
+    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
+    + {static} ecrireVision(): void
+    + {static} calculerCarteVision(): HashMap
+    + {static} calculerVision(int, int): ArrayList
+  }
+  package "personnage"{
+    class Bayesien{
+      - carteBayesienne: double[][]
+      + Bayesien()
+      + calculerProbaPresence(double[][], List<Integer[]>): double[][]
+      + getCasesVoisineValide(int, int): List<Case>
+      + getCarteBayesienne(): double[][]
+    }
+    class Position{
+     - x: int
+     - y: int
+     + Position(int, int)
+     + setX(int): void
+     + setY(int): void
+     + getX(): int
+     + getY(): int
+     + deplacer(int, int): void
+     + deplacer(Deplacement): void
+    }
+
+    class Personnage{
+      + {abstract} deplacer(int, int): void
+      + {abstract} deplacer(Position): void
+      + getPosition(): Position
+    }
+
+    class Agent{
+      - position: Position
+      + Agent(int, int)
+    }
+    class Joueur{
+      - position: Position
+      + Joueur(int, int)
+    }
+  }
+}
+
+
+package "animation" {
+  Interface DessinJeu{
+    + update(Jeu): void
+  }
+
+  class VueMenu{
+    + afficherMenu(Stage): void
+  }
+
+  class VuePrincipale{
+    - imageMur: Image
+    - imageSol: Image
+    - imageSortie: Image
+    - imagePrisonnier: Image
+    - imageGardien: Image
+    - prisonnierView: ImageView
+    - gardienView: ImageView
+    + initImages(): void
+    + initLabyrinthe(): void
+    - updatePositions(): void
+  }
+}
+
+package "main"{
+  class Main{
+    + main(): void
+  }
+}
+
+Bayesien "1" --> "*" Case: casesValides
+Agent --|> Personnage
+Joueur --|> Personnage
+Agent "1" --> "1" Position : position
+Joueur "1" --> "1" Position : position
+MoteurJeu --|> Application
+MoteurJeu "1" --> "1" Jeu: jeu
+Simulation "1" --> "*" DessinJeu : observateurs
+DessinJeu <|.. VuePrincipale
+Clavier "1" --> "1" Simulation : simulation
+Jeu <|-- Simulation
+
+@enduml

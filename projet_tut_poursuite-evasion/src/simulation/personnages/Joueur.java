@@ -2,7 +2,6 @@ package simulation.personnages;
 import java.util.ArrayList;
 
 public class Joueur extends Personnage {
-    private Position position;
     private Bayesien bayesien;
     private double[][] carteBayesien;
     public Joueur(int x, int y){

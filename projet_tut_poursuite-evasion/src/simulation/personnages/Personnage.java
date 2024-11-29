@@ -8,7 +8,7 @@ import java.util.List;
 public abstract class Personnage {
     protected Position position;
 
-    Personnage(int x, int y) {
+    public Personnage(int x, int y) {
         this.position = new Position(x, y);
     }
 

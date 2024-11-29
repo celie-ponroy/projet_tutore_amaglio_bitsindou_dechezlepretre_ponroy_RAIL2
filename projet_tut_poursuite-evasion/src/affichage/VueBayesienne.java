@@ -158,7 +158,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
             initImages();
             initLabyrinthe();
         } else {
-            // Sinon, il met juste a jour les positions des personnages
+            // Sinon, il met juste a jour les positions des personnages et des proba bayesienne
             updatePositions();
             updateBayes();
         }

@@ -69,7 +69,7 @@ public class Simulation implements Jeu {
             return;
         }
         this.nbTours++;
-
+        //actualisation des proba de présence
         actualisationBayesienne();
 
         this.notifierObservateurs();
@@ -87,6 +87,9 @@ public class Simulation implements Jeu {
 
     }
 
+    /**
+     * Méthode permetant de mettre a jour la carte bayesienne d'un personnage
+     */
     public void actualisationBayesienne(){
         ArrayList<Position> positionsCasesVue = this.prisonnier.getVision();
         ArrayList<Integer[]> casesVue = new ArrayList<>();
@@ -177,6 +180,11 @@ public class Simulation implements Jeu {
         return gardien;
     }
 
+    /**
+     * Methode permettant de recuperer la carte bayesienne d'un personnage
+     * @param p
+     * @return
+     */
     public double[][] getCarteBayesienne(Personnage p) {
         return carteBayesiennes.get(p);
     }

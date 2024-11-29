@@ -8,22 +8,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
+
 import simulation.personnages.Agent;
 import simulation.personnages.Joueur;
 
 import java.util.Arrays;
 
 public class VueBayesienne extends Pane implements DessinJeu {
+
     private Simulation simulation;
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
     private Image imagePrisonnier;
     private Image imageGardien;
+
     private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
 
     private Rectangle[][] caseBayesienne;
+
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
@@ -75,6 +79,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
 
+
                 this.getChildren().add(stackPane); // Ajout au Pane principal
             }
         }
@@ -97,6 +102,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
                 }
                 this.getChildren().add(rectangle);
                 caseBayesienne[i][j] = rectangle;
+
             }
         }
 
@@ -104,12 +110,16 @@ public class VueBayesienne extends Pane implements DessinJeu {
         prisonnierView = new ImageView(imagePrisonnier);
         prisonnierView.setFitWidth(TAILLE_CELLULE);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
+
         this.getChildren().add(prisonnierView);
+
 
         gardienView = new ImageView(imageGardien);
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
+
         this.getChildren().add(gardienView);
+
 
         // Placement initial des personnages
         updatePositions();
@@ -128,6 +138,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
         gardienView.setX(simulation.getGardien().getPosition().getX() * TAILLE_CELLULE);
         gardienView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
     }
+
 
     private void updateBayes() {
 
@@ -152,13 +163,16 @@ public class VueBayesienne extends Pane implements DessinJeu {
         this.simulation = (Simulation) jeu;
 
         if (this.getChildren().isEmpty()) {
+
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
+
             updateBayes();
         }
     }
+
 }

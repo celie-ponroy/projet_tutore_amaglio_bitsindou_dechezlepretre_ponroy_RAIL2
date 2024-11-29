@@ -8,7 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// Classe permettant de calculer la vision
+
 public class CalculVision {
+
+    /**
+     * Recuperer la vision depuis le fichier vision.txt
+     * @return la liste des cases pour toutes les positions de la carte
+     */
     public static HashMap<Position,ArrayList<Position>> recupererVision() {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
         //on recupere la vision depuis le fichier vision.txt
@@ -45,6 +52,11 @@ public class CalculVision {
         }
         return vision;
     }
+
+    /**
+     * Ecrire la vision dans un fichier (et dans le terminal)
+     * @throws IOException
+     */
     public static void ecrireVision() throws IOException {
         HashMap vision = calculerCarteVision();
         for (int y = 0; y < Simulation.CARTE.length ; y++) {
@@ -67,6 +79,11 @@ public class CalculVision {
         bos.close();
 
     }
+
+    /**
+     * Calculer la vision de chaque case de la carte
+     * @return la liste des cases pour toutes les positions de la carte
+     */
     public static HashMap calculerCarteVision(){
         int [][] carte = Simulation.CARTE;
         HashMap res = new HashMap();
@@ -82,6 +99,13 @@ public class CalculVision {
         }
         return res;
     }
+
+    /**
+     * Calculer la vision d'un personnage sur une case
+     * @param xPerso position x du personnage
+     * @param yPerso position y du personnage
+     * @return la liste des positions des cases visibles
+     */
     public static ArrayList calculerVision(int xPerso, int yPerso) {
         ArrayList res = new ArrayList();
 

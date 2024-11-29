@@ -33,6 +33,7 @@ public class Simulation implements Jeu {
     public static final int MUR = -1;
     public static final int SOL = 0;
     private boolean estFini;
+    private Deplacement derDeplacement;
 
     public Simulation(){
         this.nbTours = 0;
@@ -104,6 +105,7 @@ public class Simulation implements Jeu {
      */
 
     public boolean deplacerPersonnage(Personnage p, Deplacement d){
+        this.derDeplacement = d;
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
@@ -157,4 +159,12 @@ public class Simulation implements Jeu {
     public int getNbTours() {
         return this.nbTours;
     }
+
+    /**
+     * Méthode permettant de récupérer le dernier déplacement effectué
+     */
+    public Deplacement getDerDeplacement() {
+        return this.derDeplacement;
+    }
+
 }

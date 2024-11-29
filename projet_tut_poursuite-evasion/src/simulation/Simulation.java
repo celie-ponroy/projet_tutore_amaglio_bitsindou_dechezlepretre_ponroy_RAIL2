@@ -56,7 +56,6 @@ public class Simulation implements Jeu {
     public void deplacementJoueur(Deplacement d){
         // pour l'instant le joueur est forcément le prisonnier
         boolean deplacement = deplacerPersonnage(this.prisonnier, d);
-        System.out.println(deplacement);
         if (!deplacement){
             return;
         }

@@ -8,11 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
-
-import simulation.personnages.Agent;
 import simulation.personnages.Joueur;
 
-import java.util.Arrays;
 
 public class VueBayesienne extends Pane implements DessinJeu {
 
@@ -27,8 +24,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
     private ImageView gardienView; // Vue pour le gardien
 
     private Rectangle[][] caseBayesienne;
-
-
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
 
     /**
@@ -129,7 +124,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
      * Met à jour uniquement les positions des personnages
      */
     private void updatePositions() {
-
         // Met à jour la position du prisonnier
         prisonnierView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
         prisonnierView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);

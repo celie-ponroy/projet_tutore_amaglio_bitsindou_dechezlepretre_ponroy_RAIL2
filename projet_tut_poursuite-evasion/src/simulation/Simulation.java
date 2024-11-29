@@ -3,10 +3,7 @@ package simulation;
 import affichage.DessinJeu;
 import moteur.Clavier;
 import moteur.Jeu;
-import simulation.personnages.Agent;
-import simulation.personnages.Joueur;
-import simulation.personnages.Personnage;
-import simulation.personnages.Position;
+import simulation.personnages.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +32,8 @@ public class Simulation implements Jeu {
     public static final int SOL = 0;
     public static final HashMap<Position, ArrayList<Position>> vision = CalculVision.recupererVision();
     private boolean estFini;
+    private HashMap<Personnage, double[][]> carteBayesiennes;
+    private Bayesien bayesien;
 
     public Simulation(){
 
@@ -44,6 +43,13 @@ public class Simulation implements Jeu {
         //le prisonier est un joueur et le gardien un agent
         this.prisonnier = new Joueur(4,10);
         this.gardien = new Agent(5,4);
+
+        //Initialisation des carte bayesiennes
+        bayesien = new Bayesien();
+        this.carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesien.getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesien.getCarteBayesienne());
+
     }
 
     public void ajouterObservateur(DessinJeu dj){
@@ -73,6 +79,22 @@ public class Simulation implements Jeu {
         if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
             this.estFini = true;
         }
+
+        actualisationBayesienne();
+
+    }
+
+    public void actualisationBayesienne(){
+        ArrayList<Position> positionsCasesVue = this.prisonnier.getVision();
+        ArrayList<Integer[]> casesVue = new ArrayList<>();
+        for (Position position : positionsCasesVue) {
+            Integer present = 0;
+            if (this.gardien.getPosition().equals(position)) {
+                present = 1;
+            }
+            casesVue.add(new Integer[]{position.getY(), position.getX(),present});
+        }
+        carteBayesiennes.replace(this.prisonnier,bayesien.calculerProbaPresence( carteBayesiennes.get(this.prisonnier),casesVue));
     }
 
     /**

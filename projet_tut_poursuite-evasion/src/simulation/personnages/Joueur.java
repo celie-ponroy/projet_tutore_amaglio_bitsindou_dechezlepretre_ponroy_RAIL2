@@ -1,4 +1,5 @@
 package simulation.personnages;
+import simulation.Simulation;
 import java.util.ArrayList;
 
 public class Joueur extends Personnage {

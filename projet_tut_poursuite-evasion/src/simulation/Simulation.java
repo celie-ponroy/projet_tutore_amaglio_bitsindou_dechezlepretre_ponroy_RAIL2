@@ -9,6 +9,7 @@ import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Simulation implements Jeu {
@@ -32,6 +33,7 @@ public class Simulation implements Jeu {
     public static final int SORTIE = 2;
     public static final int MUR = -1;
     public static final int SOL = 0;
+    public static final HashMap<Position, ArrayList<Position>> vision = CalculVision.recupererVision();
     private boolean estFini;
     private Deplacement derDeplacement;
 

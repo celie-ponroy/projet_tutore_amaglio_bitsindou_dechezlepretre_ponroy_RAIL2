@@ -1,10 +1,9 @@
 package simulation.personnages;
 
-public class Agent implements Personnage {
-    private Position position;
+public class Agent extends Personnage {
 
     public Agent(int x, int y){
-        this.position = new Position(x,y);
+        super(x,y);
     }
 
 
@@ -12,6 +11,7 @@ public class Agent implements Personnage {
     public void deplacer(int x, int y) {
         this.position.deplacer(x, y);
     }
+
 
     @Override
     public void deplacer(Position p) {

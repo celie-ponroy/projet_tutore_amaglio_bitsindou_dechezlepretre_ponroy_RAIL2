@@ -1,9 +1,26 @@
 package simulation.personnages;
 
-public interface Personnage {
+import simulation.Simulation;
 
-    public void deplacer(int x, int y);
-    public void deplacer(Position p);
+import java.util.ArrayList;
+import java.util.List;
 
-    Position getPosition();
+public abstract class Personnage {
+    protected Position position;
+
+    public Personnage(int x, int y) {
+        this.position = new Position(x, y);
+    }
+
+    public abstract void deplacer(int x, int y);
+    public abstract void deplacer(Position p);
+
+    public Position getPosition() {
+        return this.position;
+    }
+    public ArrayList<Position> getVision(){
+        return Simulation.vision.get(this.position);
+    }
+
+
 }

@@ -11,8 +11,8 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        int width = 800;
-        int height = 600;
+        int width = 700;
+        int height = 700;
 
         // creation des objets
         Jeu simulation = new Simulation();

@@ -112,13 +112,13 @@ public class CalculVision {
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
         int[][] vision = new int[7][7];
-        for (int y = -4; y < 3; y++) {//a verifier les bornes
-            for (int x = -4; x < 3; x++) {
+        for (int y = -3; y <= 3; y++) {//a verifier les bornes
+            for (int x = -3; x <= 3; x++) {
                 //si on est en bordure de la carte
                 int coordoneeCarteX = xPerso + x;
                 int coordoneeCarteY = yPerso + y;
-                int coordoneeVisionX = x + 4;
-                int coordoneeVisionY = y + 4;
+                int coordoneeVisionX = x + 3;
+                int coordoneeVisionY = y + 3;
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= Simulation.CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= Simulation.CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = Simulation.MUR;
                     continue;
@@ -130,18 +130,18 @@ public class CalculVision {
 
         //determiner une liste de murs
         List<Position> murs = new ArrayList<>();
-        for (int y = -4; y < 3; y++) {
-            for (int x = -4; x < 3; x++) {
-                if (vision[y+4][x+4] == Simulation.MUR) {
+        for (int y = -3; y <= 3; y++) {
+            for (int x = -3; x <= 3; x++) {
+                if (vision[y+3][x+3] == Simulation.MUR) {
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
             }
         }
         //pour chaque case de la vision
-        for (int y = -4; y < 3; y++) {
-            for (int x = -4; x < 3; x++) {
+        for (int y = -3; y <= 3; y++) {
+            for (int x = -3; x <= 3; x++) {
                 //si la case est un mur
-                if (!(vision[y+4][x+4] == Simulation.MUR)) {//si la case est pas un mur
+                if (!(vision[y+3][x+3] == Simulation.MUR)) {//si la case est pas un mur
 
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;

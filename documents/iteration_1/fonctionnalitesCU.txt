@@ -1,0 +1,22 @@
+Itération n°1:
+
+Lors cette itération, nous avons développé des fonctionnalités du mode interactif et non interactif. Néanmoins, elles ne sont pas toutes visibles dans la simulation.
+
+- Base du projet (Célie)
+
+- Base du moteur de jeu (Célie & Luc)
+
+- Création de la vue du menu (Maëlle)
+	L'utilisateur va pour voir choisir un des modes. (dans cette itération, seulement le mode interactif)
+	
+- Création de la vue de la simulation interactive (Maëlle)
+	L’utilisateur peut voir son avancement et celui de l'adversaire sur cette vue.
+	
+- Mise en place de l’inférence bayésienne (Matias & Luc)
+	L'utilisateur va pouvoir connaître les probabilités de position de l'agent adverse.
+	
+- Création de l’arbre de décision du gardien (Célie)
+	Cette fonctionnalité n'a pas été terminé.
+	
+- Ajout du contrôle du prisonnier (Luc)
+	L'utilisateur qui prendra contrôle du prisonnier et pourra se déplacer sur toutes la carte.

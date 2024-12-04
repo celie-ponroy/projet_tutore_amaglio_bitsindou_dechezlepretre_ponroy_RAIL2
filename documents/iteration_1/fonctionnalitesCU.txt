@@ -14,6 +14,8 @@ Lors cette itération, nous avons développé des fonctionnalités du mode inter
 	
 - Mise en place de l’inférence bayésienne (Matias & Luc)
 	L'utilisateur va pouvoir connaître les probabilités de position de l'agent adverse.
+
+- Ajout de la vision des personnages (Célie)
 	
 - Création de l’arbre de décision du gardien (Célie)
 	Cette fonctionnalité n'a pas été terminé.

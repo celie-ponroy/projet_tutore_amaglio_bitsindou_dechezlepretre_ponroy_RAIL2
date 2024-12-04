@@ -122,18 +122,22 @@ public class Simulation implements Jeu {
                     if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
                         return false;
                     }
+                    break;
                 case DIAG_BAS_GAUCHE:
                     if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()+1)){
                         return false;
                     }
+                    break;
                 case DIAG_HAUT_DROITE:
                     if(murPresent(persoPos.getX()+1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
                         return false;
                     }
+                    break;
                 case DIAG_HAUT_GAUCHE:
                     if(murPresent(persoPos.getX()-1, persoPos.getY()) || murPresent(persoPos.getX(), persoPos.getY()-1)){
                         return false;
                     }
+                    break;
             }
         }
         //si oui deplacer le personnage

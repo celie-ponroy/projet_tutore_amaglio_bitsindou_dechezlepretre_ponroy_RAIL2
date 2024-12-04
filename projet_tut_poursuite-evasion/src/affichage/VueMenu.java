@@ -1,5 +1,7 @@
 package affichage;
 
+import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -7,11 +9,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import moteur.Jeu;
+import moteur.MoteurJeu;
+import simulation.Simulation;
 
 /**
  * Classe qui affiche le menu principal
  */
-public class VueMenu extends VBox{
+public class VueMenu extends VBox {
 
     public VueMenu(){
         super();
@@ -21,13 +26,12 @@ public class VueMenu extends VBox{
      * Affiche le menu principal de l'application
      * @param stage scene de l'application
      */
-    public void afficherMenu(Stage stage){
+    public void afficherMenu(){
         // Conteneur principal
-        VBox root = new VBox();
-        root.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
-        root.setSpacing(20); // Espacement entre les éléments
-        root.setPrefSize(800, 600);
-        root.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
+        this.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
+        this.setSpacing(20); // Espacement entre les éléments
+        this.setPrefSize(800, 600);
+        this.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
 
         // Titre du menu
         Label title = new Label("Veuillez choisir un mode:");
@@ -42,7 +46,17 @@ public class VueMenu extends VBox{
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
+            Platform.exit();
             // TODO: Afficher le jeu
+            int width = 700;
+            int height = 700;
+            // creation des objets
+            Jeu simulation = new Simulation();
+            simulation.init();
+            // parametrage du moteur de jeu
+            MoteurJeu.setTaille(width, height);
+            // lancement du jeu
+            MoteurJeu.launch(simulation);
         });
 
         // Bouton "Mode non interactif"
@@ -58,16 +72,15 @@ public class VueMenu extends VBox{
         // Bouton "Quitter"
         Button quitter = new Button("Quitter");
         quitter.setPrefSize(150, 50);
-        quitter.setOnAction(e -> stage.close());
+        quitter.setOnAction(e -> Platform.exit());
 
         // Ajout des éléments au VBox principal
-        root.getChildren().addAll(title, buttonBox, quitter);
+        this.getChildren().addAll(title, buttonBox, quitter);
 
         // Création et affichage de la scène
-        Scene scene = new Scene(root);
-        stage.setTitle("Menu principal");
-        stage.setScene(scene);
-        stage.show();
-
+//        Scene scene = new Scene(this);
+//        stage.setTitle("Menu principal");
+//        stage.setScene(scene);
+//        stage.show();
     }
 }

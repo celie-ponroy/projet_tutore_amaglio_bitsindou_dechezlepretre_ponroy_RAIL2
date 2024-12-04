@@ -2,6 +2,7 @@ package moteur;
 
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
+import affichage.VueMenu;
 import affichage.VuePrincipale;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -55,19 +56,17 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         // Initialisation du Pane et du conteneur principal
         VuePrincipale vp = new VuePrincipale();
+        VueMenu vm = new VueMenu();
         vp.update(MoteurJeu.jeu);
         MoteurJeu.jeu.ajouterObservateur(vp);
+        vm.afficherMenu();
         final BorderPane root = new BorderPane();
-        root.setCenter(vp);
-
+        root.setCenter(vm);
         //Création du controleur
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-
         // Création de la scène
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
-
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
-
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation");
         primaryStage.show();

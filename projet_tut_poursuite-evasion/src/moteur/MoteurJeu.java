@@ -37,11 +37,10 @@ public class MoteurJeu extends Application {
     /**
      * lancement d'un jeu
      *
-     * @param jeu    jeu a lancer
      */
-    public static void launch(Jeu jeu) {
+    public static void launch() {
         // le jeu en cours et son afficheur
-        MoteurJeu.jeu = jeu;
+        //MoteurJeu.jeu = jeu;
 
         // si le jeu existe, on lance le moteur de jeu
         if (jeu != null)
@@ -83,6 +82,8 @@ public class MoteurJeu extends Application {
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
+            Jeu simulation = new Simulation(true);
+            MoteurJeu.jeu = simulation;
             VuePrincipale vp = new VuePrincipale();
             vp.update(MoteurJeu.jeu);
             MoteurJeu.jeu.ajouterObservateur(vp);
@@ -97,6 +98,8 @@ public class MoteurJeu extends Application {
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
+            Jeu simulation = new Simulation(false);
+            MoteurJeu.jeu = simulation;
             VueBayesienne vb = new VueBayesienne();
             vb.update(MoteurJeu.jeu);
             MoteurJeu.jeu.ajouterObservateur(vb);

@@ -15,6 +15,8 @@ public class Simulation implements Jeu {
     private int nbTours;
     private Personnage gardien;
     private Personnage prisonnier;
+    private Comportement comportementGardien;
+    private Comportement comportementPrisonnier;
     public static final int[][] CARTE = new int[][]{
             {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
             {-1, 0, 0, 0, 0, 0,-1, 2,-1,-1,-1,-1,-1,-1},
@@ -37,15 +39,21 @@ public class Simulation implements Jeu {
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private Bayesien bayesien;
 
-    public Simulation(){
-
+    public Simulation(boolean interactif){
         this.observateurs = new ArrayList<>();
         this.nbTours = 0;
         this.estFini = false;
-        //le prisonier est un joueur et le gardien un agent
-        this.prisonnier = new Joueur(4,10);
-        this.gardien = new Agent(5,4);
-
+        if(interactif) {
+            //le prisonier est un joueur et le gardien un agent
+            this.prisonnier = new Joueur(4, 10);
+            this.gardien = new Agent(5, 4);
+        }
+        else{
+            this.prisonnier = new Agent(4, 10);
+            this.gardien = new Agent(5, 4);
+            this.comportementPrisonnier = new ArbreDeDecision();
+            this.comportementGardien = new ReseauDeNeurones();
+        }
         //Initialisation des carte bayesiennes pour les deux agents
         bayesien = new Bayesien();
         this.carteBayesiennes = new HashMap<>();
@@ -60,6 +68,19 @@ public class Simulation implements Jeu {
     public void notifierObservateurs(){
         for(DessinJeu dj : this.observateurs){
             dj.update(this);
+        }
+    }
+
+    public void deplacerAgents(){
+        deplacerPersonnage(this.prisonnier, this.comportementPrisonnier.prendreDecision());
+        deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision());
+        this.nbTours++;
+        //gestion des interactions et de la fin du jeu
+        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
+            this.estFini = true;
+        }
+        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
+            this.estFini = true;
         }
     }
 

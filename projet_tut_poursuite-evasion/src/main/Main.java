@@ -15,14 +15,13 @@ public class Main {
         int height = 700;
 
         // creation des objets
-        Jeu simulation = new Simulation();
 
 
         // parametrage du moteur de jeu
         MoteurJeu.setTaille(width, height);
 
         // lancement du jeu
-        MoteurJeu.launch(simulation);
+        MoteurJeu.launch();
 
     }
 

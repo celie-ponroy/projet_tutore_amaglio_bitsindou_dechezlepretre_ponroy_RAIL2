@@ -23,7 +23,6 @@ public class CalculVision {
             BufferedReader br = new BufferedReader(new FileReader("vision.txt"));
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 //2,1:[(1;1), (2;1), (3;1), (4;1), (4;2)]
                 String[] parts = line.split(":");
                 String[] coordonnees = parts[0].split(",");
@@ -59,14 +58,6 @@ public class CalculVision {
      */
     public static void ecrireVision() throws IOException {
         HashMap vision = calculerCarteVision();
-        for (int y = 0; y < Simulation.CARTE.length ; y++) {
-            for (int x = 0; x < Simulation.CARTE[0].length; x++) {
-                //afficher la position
-                System.out.print(x+","+y+":");
-                System.out.println(vision.get(new Position(x,y)));
-            }
-            System.out.println();
-        }
         //ecrire dans un fichier
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("vision.txt"));
         for (int y = 0; y < Simulation.CARTE.length ; y++) {

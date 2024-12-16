@@ -3,6 +3,7 @@ package moteur;
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
 import affichage.VueMenu;
+import affichage.VueBayesienne;
 import affichage.VuePrincipale;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -58,10 +59,6 @@ public class MoteurJeu extends Application {
      */
     public void start(Stage primaryStage) {
         // Initialisation du Pane et du conteneur principal
-        /*VuePrincipale vp = new VuePrincipale();
-        vp.update(MoteurJeu.jeu);
-        MoteurJeu.jeu.ajouterObservateur(vp);*/
-
         final VBox root = new VBox();
 
         // Création de la scène
@@ -100,6 +97,14 @@ public class MoteurJeu extends Application {
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
+            VueBayesienne vb = new VueBayesienne();
+            vb.update(MoteurJeu.jeu);
+            MoteurJeu.jeu.ajouterObservateur(vb);
+            root.getChildren().clear();
+            root.getChildren().add(vb);
+            MoteurJeu.jeu.ajouterObservateur(vb);
+            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
 
         });
 

@@ -16,10 +16,12 @@ public class ArbreDecisionGradien implements Comportement{
 
     @Override
     public Deplacement prendreDecision() {
+
         personnage.getVision();
         //si on voit l'autre personnage
         if(simulation.estVisible(personnage, false)){
             //on va vers l'autre personnage
+
             //on recupere le chemin
             Stack s =Simulation.CHEMIN.get(List.of(personnage.getPosition(),simulation.getPrisonnier().getPosition())); //on va vers l'autre personnage
             s.get(s.size()/2);
@@ -32,6 +34,7 @@ public class ArbreDecisionGradien implements Comportement{
 
         }
         return Deplacement.AUCUN;
+
     }
 
     /**

@@ -36,6 +36,8 @@ public class Simulation implements Jeu {
     public static final int SOL = 0;
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMIN = CalculChemins.recupererChemin();
+
+
     private boolean estFini;
     private Deplacement derDeplacement;
     private HashMap<Personnage, double[][]> carteBayesiennes;
@@ -53,7 +55,7 @@ public class Simulation implements Jeu {
         else{
             this.prisonnier = new Agent(4, 10);
             this.gardien = new Agent(5, 4);
-            this.comportementPrisonnier = new ArbreDeDecision();
+            //this.comportementPrisonnier = new ArbreDeDecision();
             this.comportementGardien = new ReseauDeNeurones();
         }
         //Initialisation des carte bayesiennes pour les deux agents
@@ -208,6 +210,7 @@ public class Simulation implements Jeu {
             return true;
         }
         ArrayList<Position> casesVisibles = VISION.get(pos2);
+
         for(Position pos : casesVisibles){
             if(pos.equals(pos1)){
                 return true;

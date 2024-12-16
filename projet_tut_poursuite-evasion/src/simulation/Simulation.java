@@ -51,7 +51,7 @@ public class Simulation implements Jeu {
         else{
             this.prisonnier = new Agent(4, 10);
             this.gardien = new Agent(5, 4);
-            this.comportementPrisonnier = new ArbreDeDecision();
+            //this.comportementPrisonnier = new ArbreDeDecision();
             this.comportementGardien = new ReseauDeNeurones();
         }
         //Initialisation des carte bayesiennes pour les deux agents

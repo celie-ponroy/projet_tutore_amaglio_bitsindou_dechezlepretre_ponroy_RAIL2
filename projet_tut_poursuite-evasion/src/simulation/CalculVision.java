@@ -23,7 +23,6 @@ public class CalculVision {
             BufferedReader br = new BufferedReader(new FileReader("vision.txt"));
             String line;
             while ((line = br.readLine()) != null) {
-                //2,1:[(1;1), (2;1), (3;1), (4;1), (4;2)]
                 String[] parts = line.split(":");
                 String[] coordonnees = parts[0].split(",");
                 int x = Integer.parseInt(coordonnees[0]);
@@ -102,14 +101,16 @@ public class CalculVision {
 
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
-        int[][] vision = new int[7][7];
-        for (int y = -3; y <= 3; y++) {//a verifier les bornes
-            for (int x = -3; x <= 3; x++) {
+        int tailleVision = 9;
+        int tailledecalage = (tailleVision - 1) / 2;
+        int[][] vision = new int[tailleVision][tailleVision];
+        for (int y = -tailledecalage; y <= tailledecalage; y++) {//a verifier les bornes
+            for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si on est en bordure de la carte
                 int coordoneeCarteX = xPerso + x;
                 int coordoneeCarteY = yPerso + y;
-                int coordoneeVisionX = x + 3;
-                int coordoneeVisionY = y + 3;
+                int coordoneeVisionX = x + tailledecalage;
+                int coordoneeVisionY = y + tailledecalage;
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= Simulation.CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= Simulation.CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = Simulation.MUR;
                     continue;
@@ -121,18 +122,18 @@ public class CalculVision {
 
         //determiner une liste de murs
         List<Position> murs = new ArrayList<>();
-        for (int y = -3; y <= 3; y++) {
-            for (int x = -3; x <= 3; x++) {
-                if (vision[y+3][x+3] == Simulation.MUR) {
+        for (int y = -tailledecalage; y <= tailledecalage; y++) {
+            for (int x = -tailledecalage; x <= tailledecalage; x++) {
+                if (vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR) {
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
             }
         }
         //pour chaque case de la vision
-        for (int y = -3; y <= 3; y++) {
-            for (int x = -3; x <= 3; x++) {
+        for (int y = -tailledecalage; y <= tailledecalage; y++) {
+            for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
-                if (!(vision[y+3][x+3] == Simulation.MUR)) {//si la case est pas un mur
+                if (!(vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR)) {//si la case est pas un mur
 
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;

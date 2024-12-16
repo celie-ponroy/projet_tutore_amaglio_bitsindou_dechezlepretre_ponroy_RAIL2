@@ -106,7 +106,7 @@ public class MoteurJeu extends Application {
             root.getChildren().clear();
             root.getChildren().add(vb);
             MoteurJeu.jeu.ajouterObservateur(vb);
-            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+            ClavierNonInteractif clavier = new ClavierNonInteractif((Simulation) MoteurJeu.jeu);
             scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
 
         });

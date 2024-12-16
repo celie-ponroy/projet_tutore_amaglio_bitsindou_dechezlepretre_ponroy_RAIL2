@@ -1,12 +1,12 @@
 package simulation;
 
 import affichage.DessinJeu;
-import moteur.Clavier;
 import moteur.Jeu;
+import simulation.comportement.Comportement;
+import simulation.comportement.ReseauDeNeurones;
 import simulation.personnages.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 

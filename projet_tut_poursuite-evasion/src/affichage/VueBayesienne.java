@@ -134,14 +134,13 @@ public class VueBayesienne extends Pane implements DessinJeu {
 
         Joueur prisonnier = (Joueur) simulation.getPrisonnier();
         double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
-        System.out.println(Arrays.deepToString(carteBayes));
         for (int i = 0; i < simulation.CARTE.length; i++) {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = caseBayesienne[i][j];
                 if (carteBayes[i][j] == -1) {
                     rectangle.setFill(new Color(0.0, 0, 0, 0.5));
                 } else {
-                    rectangle.setFill(Color.rgb(190, 35, 0, 1 * carteBayes[i][j]));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 1* carteBayes[i][j]));
                 }
             }
         }
@@ -153,7 +152,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
         this.simulation = (Simulation) jeu;
 
         if (this.getChildren().isEmpty()) {
-
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();

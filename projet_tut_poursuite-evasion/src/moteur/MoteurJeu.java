@@ -2,9 +2,13 @@ package moteur;
 
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
+import affichage.VueMenu;
 import affichage.VuePrincipale;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
@@ -54,19 +58,65 @@ public class MoteurJeu extends Application {
      */
     public void start(Stage primaryStage) {
         // Initialisation du Pane et du conteneur principal
-        VuePrincipale vp = new VuePrincipale();
+        /*VuePrincipale vp = new VuePrincipale();
         vp.update(MoteurJeu.jeu);
-        MoteurJeu.jeu.ajouterObservateur(vp);
-        final BorderPane root = new BorderPane();
-        root.setCenter(vp);
+        MoteurJeu.jeu.ajouterObservateur(vp);*/
 
-        //Création du controleur
-        Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+        final VBox root = new VBox();
 
         // Création de la scène
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+        //VBox root = new VBox();
+        root.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
+        root.setSpacing(20); // Espacement entre les éléments
+        //root.setPrefSize(800, 600);
+        root.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
+
+        // Titre du menu
+        Label title = new Label("Veuillez choisir un mode:");
+        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        // Conteneur pour les boutons de mode
+        HBox buttonBox = new HBox();
+        buttonBox.setSpacing(20); // Espacement entre les boutons
+        buttonBox.setAlignment(Pos.CENTER); // Centre les boutons horizontalement
+
+        // Bouton "Mode interactif"
+        Button modeInteractif = new Button("Mode interactif");
+        modeInteractif.setPrefSize(200, 100);
+        modeInteractif.setOnAction(e -> {
+            VuePrincipale vp = new VuePrincipale();
+            vp.update(MoteurJeu.jeu);
+            MoteurJeu.jeu.ajouterObservateur(vp);
+            root.getChildren().clear();
+            root.getChildren().add(vp);
+            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+
+        });
+
+        // Bouton "Mode non interactif"
+        Button modeNonInteractif = new Button("Mode non interactif");
+        modeNonInteractif.setPrefSize(200, 100);
+        modeNonInteractif.setOnAction(e -> {
+
+        });
+
+        // Ajout des boutons dans la HBox
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif);
+
+        // Bouton "Quitter"
+        Button quitter = new Button("Quitter");
+        quitter.setPrefSize(150, 50);
+        quitter.setOnAction(e -> primaryStage.close());
+
+        // Ajout des éléments au VBox principal
+        root.getChildren().addAll(title, buttonBox, quitter);
+
+        //root.setCenter(vp);
+
+        //Création du controleur
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation");

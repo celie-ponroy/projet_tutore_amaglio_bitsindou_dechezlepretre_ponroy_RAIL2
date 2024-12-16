@@ -2,6 +2,7 @@ package simulation;
 
 import affichage.DessinJeu;
 import moteur.Jeu;
+import simulation.comportement.ArbreDecisionGradien;
 import simulation.comportement.Comportement;
 import simulation.comportement.ReseauDeNeurones;
 import simulation.personnages.*;
@@ -41,7 +42,7 @@ public class Simulation implements Jeu {
     private boolean estFini;
     private Deplacement derDeplacement;
     private HashMap<Personnage, double[][]> carteBayesiennes;
-    private Bayesien bayesien;
+    private HashMap<Personnage,Bayesien> bayesiens;
 
     public Simulation(boolean interactif){
         this.observateurs = new ArrayList<>();
@@ -51,18 +52,23 @@ public class Simulation implements Jeu {
             //le prisonier est un joueur et le gardien un agent
             this.prisonnier = new Joueur(4, 10);
             this.gardien = new Agent(5, 4);
+            this.comportementGardien = new ArbreDecisionGradien(this, this.gardien);
         }
         else{
             this.prisonnier = new Agent(4, 10);
             this.gardien = new Agent(5, 4);
-            //this.comportementPrisonnier = new ArbreDeDecision();
-            this.comportementGardien = new ReseauDeNeurones();
+            this.comportementGardien = new ArbreDecisionGradien(this, this.gardien);
+            this.comportementPrisonnier = new ArbreDecisionGradien(this, this.prisonnier);
+            //this.comportementPrisonnier = new ArbreDeDecision();//TODO
+            //this.comportementGardien = new ReseauDeNeurones();
         }
         //Initialisation des carte bayesiennes pour les deux agents
-        bayesien = new Bayesien();
-        this.carteBayesiennes = new HashMap<>();
-        carteBayesiennes.put(gardien, bayesien.getCarteBayesienne());
-        carteBayesiennes.put(prisonnier, bayesien.getCarteBayesienne());
+        bayesiens = new HashMap<>();
+        bayesiens.put(this.gardien,new Bayesien());
+        bayesiens.put(this.prisonnier,new Bayesien());
+        carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
 
     }
 
@@ -80,28 +86,29 @@ public class Simulation implements Jeu {
         deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision());
         this.nbTours++;
         //gestion des interactions et de la fin du jeu
-        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
-            this.estFini = true;
-        }
-        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
-            this.estFini = true;
-        }
+        miseAJourFinJeu();
     }
 
     public void deplacementJoueur(Deplacement d){
         // pour l'instant le joueur est forcément le prisonnier
+        Deplacement deplacementAgent = this.comportementGardien.prendreDecision();
         boolean deplacement = deplacerPersonnage(this.prisonnier, d);
         if (!deplacement){
             return;
         }
         this.nbTours++;
         //actualisation des proba de présence
-        actualisationBayesienne();
-
-        this.notifierObservateurs();
+        actualisationBayesienne(this.gardien,this.prisonnier,0);
         //deplacer le gardien
-
+        deplacerPersonnage(this.gardien, deplacementAgent);
         //gestion des interactions et de la fin du jeu
+        miseAJourFinJeu();
+        this.notifierObservateurs();
+    }
+    /**
+     * Mise à jour fin du jeu
+     */
+    public void miseAJourFinJeu(){
         if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
             this.estFini = true;
         }
@@ -112,18 +119,21 @@ public class Simulation implements Jeu {
 
     /**
      * Méthode permetant de mettre a jour la carte bayesienne d'un personnage
+     * @param p1 le mis a jour
+     * @param p2 le deuxieme personnage
      */
-    public void actualisationBayesienne(){
-        ArrayList<Position> positionsCasesVue = this.prisonnier.getVision();
+    public void actualisationBayesienne(Personnage p1, Personnage p2,int i){
+        ArrayList<Position> positionsCasesVue = p1.getVision();
+
         ArrayList<Integer[]> casesVue = new ArrayList<>();
         for (Position position : positionsCasesVue) {
             Integer present = 0;
-            if (this.gardien.getPosition().equals(position)) {
+            if (p2.getPosition().equals(position)) {
                 present = 1;
             }
             casesVue.add(new Integer[]{position.getY(), position.getX(),present});
         }
-        carteBayesiennes.replace(this.prisonnier,bayesien.calculerProbaPresence( carteBayesiennes.get(this.prisonnier),casesVue));
+        carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence( carteBayesiennes.get(p1),casesVue));
     }
 
     /**
@@ -253,6 +263,12 @@ public class Simulation implements Jeu {
      */
     public Deplacement getDerDeplacement() {
         return this.derDeplacement;
+    }
+    /**
+     * Position de la sortie
+     */
+    public static Position getPosSortie(){
+        return new Position(7,1);
     }
 
 }

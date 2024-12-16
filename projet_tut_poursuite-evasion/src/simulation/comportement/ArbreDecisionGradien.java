@@ -1,15 +1,18 @@
-package simulation.personnages;
+package simulation.comportement;
 
 import simulation.Deplacement;
 import simulation.Simulation;
+import simulation.personnages.Personnage;
+import simulation.personnages.Position;
 
 import java.util.List;
 import java.util.Stack;
 
-public class ArbreDecisionGradien implements Comportement{
+public class ArbreDecisionGradien implements Comportement {
     Simulation simulation;
     Personnage personnage;
-    ArbreDecisionGradien(Simulation simulation, Personnage personnage){
+
+    public ArbreDecisionGradien(Simulation simulation, Personnage personnage){
         this.simulation = simulation;
         this.personnage = personnage;
     }
@@ -23,13 +26,15 @@ public class ArbreDecisionGradien implements Comportement{
             //on va vers l'autre personnage
 
             //on recupere le chemin
-            Stack s =Simulation.CHEMIN.get(List.of(personnage.getPosition(),simulation.getPrisonnier().getPosition())); //on va vers l'autre personnage
-            s.get(s.size()/2);
 
-            return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());
+            Stack s =Simulation.CHEMIN.get(List.of(simulation.getPrisonnier().getPosition(),Simulation.getPosSortie()));
+            if(s.size()>2){
+                return direction(personnage.getPosition(), (Position) s.get(s.size()/2));//on va vers où l'autre personnage va
+            }
+            return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());//on va vers l'autre personnage
         }else{
             //on va vers la proba la plus grande
-
+            this.simulation.getCarteBayesienne(personnage);
             //si deux probas sont égales, on va vers la plus proche de la sortie
 
         }

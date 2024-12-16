@@ -9,6 +9,5 @@ public class LancerCalculsVision {
         System.out.println("Lancer les calculs de vision");
         CalculVision.ecrireVision();
 
-
     }
 }

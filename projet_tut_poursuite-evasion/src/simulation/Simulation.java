@@ -11,6 +11,7 @@ import simulation.personnages.Position;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 public class Simulation implements Jeu {
     private List<DessinJeu> observateurs;
@@ -34,6 +35,7 @@ public class Simulation implements Jeu {
     public static final int MUR = -1;
     public static final int SOL = 0;
     public static final HashMap<Position, ArrayList<Position>> vision = CalculVision.recupererVision();
+    public static final HashMap<List<Position>, Stack> chemin = CalculChemins.recupererChemin();
     private boolean estFini;
     private Deplacement derDeplacement;
 
@@ -140,6 +142,32 @@ public class Simulation implements Jeu {
         //si oui deplacer le personnage
         p.deplacer(nvPos);
         return true;
+    }
+
+    /**
+     * Methode permettant de savoir si un personnage est visible par un autre
+     * @param p1 le personnage qui est observé
+     * @param role true si le personnage est le prisonnier, false sinon
+     * @return
+     */
+    public boolean estVisible(Personnage p1,boolean role){
+        Position pos1 = p1.getPosition();
+        Position pos2;
+        if(role){
+            pos2 = this.gardien.getPosition();
+        }else{
+            pos2 = this.prisonnier.getPosition();
+        }
+        if(pos1.equals(pos2)){
+            return true;
+        }
+        ArrayList<Position> casesVisibles = vision.get(pos2);
+        for(Position pos : casesVisibles){
+            if(pos.equals(pos1)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

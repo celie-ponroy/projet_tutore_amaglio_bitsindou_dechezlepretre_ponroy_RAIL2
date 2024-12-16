@@ -3,6 +3,9 @@ package simulation.personnages;
 import simulation.Deplacement;
 import simulation.Simulation;
 
+import java.util.List;
+import java.util.Stack;
+
 public class ArbreDecisionGradien implements Comportement{
     Simulation simulation;
     Personnage personnage;
@@ -12,18 +15,23 @@ public class ArbreDecisionGradien implements Comportement{
     }
 
     @Override
-    public int prendreDecision() {
+    public Deplacement prendreDecision() {
         personnage.getVision();
         //si on voit l'autre personnage
         if(simulation.estVisible(personnage, false)){
             //on va vers l'autre personnage
+            //on recupere le chemin
+            Stack s =Simulation.CHEMIN.get(List.of(personnage.getPosition(),simulation.getPrisonnier().getPosition())); //on va vers l'autre personnage
+            s.get(s.size()/2);
+
+            return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());
         }else{
             //on va vers la proba la plus grande
 
             //si deux probas sont égales, on va vers la plus proche de la sortie
 
         }
-        return 0;
+        return Deplacement.AUCUN;
     }
 
     /**

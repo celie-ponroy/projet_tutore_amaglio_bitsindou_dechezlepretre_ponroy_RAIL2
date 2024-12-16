@@ -1,5 +1,7 @@
 package simulation.personnages;
 
+import simulation.Deplacement;
+
 public interface Comportement {
-    public int prendreDecision();
+    public Deplacement prendreDecision();
 }

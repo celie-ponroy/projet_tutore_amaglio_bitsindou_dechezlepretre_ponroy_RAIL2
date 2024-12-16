@@ -34,8 +34,8 @@ public class Simulation implements Jeu {
     public static final int SORTIE = 2;
     public static final int MUR = -1;
     public static final int SOL = 0;
-    public static final HashMap<Position, ArrayList<Position>> vision = CalculVision.recupererVision();
-    public static final HashMap<List<Position>, Stack> chemin = CalculChemins.recupererChemin();
+    public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
+    public static final HashMap<List<Position>, Stack> CHEMIN = CalculChemins.recupererChemin();
     private boolean estFini;
     private Deplacement derDeplacement;
     private HashMap<Personnage, double[][]> carteBayesiennes;
@@ -207,7 +207,7 @@ public class Simulation implements Jeu {
         if(pos1.equals(pos2)){
             return true;
         }
-        ArrayList<Position> casesVisibles = vision.get(pos2);
+        ArrayList<Position> casesVisibles = VISION.get(pos2);
         for(Position pos : casesVisibles){
             if(pos.equals(pos1)){
                 return true;

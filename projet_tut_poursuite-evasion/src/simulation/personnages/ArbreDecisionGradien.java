@@ -3,12 +3,10 @@ package simulation.personnages;
 import simulation.Deplacement;
 import simulation.Simulation;
 
-import java.util.ArrayList;
-
-public class ArbreDeDecision implements Comportement{
+public class ArbreDecisionGradien implements Comportement{
     Simulation simulation;
     Personnage personnage;
-    ArbreDeDecision(Simulation simulation, Personnage personnage){
+    ArbreDecisionGradien(Simulation simulation, Personnage personnage){
         this.simulation = simulation;
         this.personnage = personnage;
     }
@@ -17,10 +15,8 @@ public class ArbreDeDecision implements Comportement{
     public int prendreDecision() {
         personnage.getVision();
         //si on voit l'autre personnage
-
-        if(prisonnier!=null){//position connue
-            //on va vers le prisonnier
-
+        if(simulation.estVisible(personnage, false)){
+            //on va vers l'autre personnage
         }else{
             //on va vers la proba la plus grande
 
@@ -36,7 +32,7 @@ public class ArbreDeDecision implements Comportement{
      * @param p2
      * @return
      */
-    public Deplacement direction(Position p1, Position p2){
+    public Deplacement direction(Position p1, Position p2){//TODO : recherche de chemin
         if(p1.getX() == p2.getX()){
             if(p1.getY() < p2.getY()){
                 return Deplacement.BAS;

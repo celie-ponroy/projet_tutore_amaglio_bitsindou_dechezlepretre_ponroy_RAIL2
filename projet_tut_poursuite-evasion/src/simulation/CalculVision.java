@@ -20,7 +20,7 @@ public class CalculVision {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
         //on recupere la vision depuis le fichier vision.txt
         try {
-            BufferedReader br = new BufferedReader(new FileReader("vision.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./donnees/vision.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 //2,1:[(1;1), (2;1), (3;1), (4;1), (4;2)]
@@ -59,7 +59,7 @@ public class CalculVision {
     public static void ecrireVision() throws IOException {
         HashMap vision = calculerCarteVision();
         //ecrire dans un fichier
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("vision.txt"));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision.txt"));
         for (int y = 0; y < Simulation.CARTE.length ; y++) {
             for (int x = 0; x < Simulation.CARTE[0].length; x++) {
                 //afficher la position

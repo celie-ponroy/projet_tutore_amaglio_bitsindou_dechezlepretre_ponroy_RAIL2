@@ -14,8 +14,7 @@ public class ClavierNonInteractif implements EventHandler<KeyEvent> {
 
     @Override
     public void handle(KeyEvent keyEvent) {
-        if(keyEvent.getCode() == KeyCode.RIGHT){
-            simulation.deplacerAgents();
-        }
+        simulation.deplacerAgents();
+
     }
 }

@@ -41,4 +41,13 @@ public class Case {
     public int hashCode() {
         return Objects.hash(x, y, contenu);
     }
+
+    @Override
+    public String toString() {
+        return "Case{" +
+                "x=" + x +
+                ", y=" + y +
+                ", contenu=" + contenu +
+                '}';
+    }
 }

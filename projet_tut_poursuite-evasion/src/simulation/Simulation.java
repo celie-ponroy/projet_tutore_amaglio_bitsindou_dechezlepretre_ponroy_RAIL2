@@ -2,9 +2,9 @@ package simulation;
 
 import affichage.DessinJeu;
 import moteur.Jeu;
-import simulation.comportement.ArbreDecisionGradien;
+import simulation.comportement.ArbreDecisionGardien;
+import simulation.comportement.ArbreDecisionPrisonnier;
 import simulation.comportement.Comportement;
-import simulation.comportement.ReseauDeNeurones;
 import simulation.personnages.*;
 
 import java.util.ArrayList;
@@ -52,13 +52,13 @@ public class Simulation implements Jeu {
             //le prisonier est un joueur et le gardien un agent
             this.prisonnier = new Joueur(4, 10);
             this.gardien = new Agent(5, 4);
-            this.comportementGardien = new ArbreDecisionGradien(this, this.gardien);
+            this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
         }
         else{
             this.prisonnier = new Agent(4, 10);
             this.gardien = new Agent(5, 4);
-            this.comportementGardien = new ArbreDecisionGradien(this, this.gardien);
-            this.comportementPrisonnier = new ArbreDecisionGradien(this, this.prisonnier);
+            this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+            this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
             //this.comportementPrisonnier = new ArbreDeDecision();//TODO
             //this.comportementGardien = new ReseauDeNeurones();
         }
@@ -82,11 +82,17 @@ public class Simulation implements Jeu {
     }
 
     public void deplacerAgents(){
+
         deplacerPersonnage(this.prisonnier, this.comportementPrisonnier.prendreDecision());
         deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision());
+
         this.nbTours++;
         //gestion des interactions et de la fin du jeu
         miseAJourFinJeu();
+        this.notifierObservateurs();
+        actualisationBayesienne(this.gardien,this.prisonnier);
+        actualisationBayesienne(this.prisonnier,this.gardien);
+
     }
 
     public void deplacementJoueur(Deplacement d){
@@ -97,13 +103,14 @@ public class Simulation implements Jeu {
             return;
         }
         this.nbTours++;
-        //actualisation des proba de présence
-        actualisationBayesienne(this.gardien,this.prisonnier,0);
+
         //deplacer le gardien
         deplacerPersonnage(this.gardien, deplacementAgent);
         //gestion des interactions et de la fin du jeu
         miseAJourFinJeu();
         this.notifierObservateurs();
+        //actualisation des proba de présence
+        actualisationBayesienne(this.gardien,this.prisonnier);
     }
     /**
      * Mise à jour fin du jeu
@@ -122,7 +129,7 @@ public class Simulation implements Jeu {
      * @param p1 le mis a jour
      * @param p2 le deuxieme personnage
      */
-    public void actualisationBayesienne(Personnage p1, Personnage p2,int i){
+    public void actualisationBayesienne(Personnage p1, Personnage p2){
         ArrayList<Position> positionsCasesVue = p1.getVision();
 
         ArrayList<Integer[]> casesVue = new ArrayList<>();

@@ -285,7 +285,7 @@ public class Simulation implements Jeu {
     public int getNbTours() {
         return this.nbTours;
     }
-
+    
     /**
      * Méthode permettant de renvoyer le personnage que l'on veut jouer
      */

@@ -26,7 +26,7 @@ public class VueMenu extends VBox{
         VBox root = new VBox();
         root.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
         root.setSpacing(20); // Espacement entre les éléments
-        root.setPrefSize(800, 600);
+        root.setPrefSize(1000, 600);
         root.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
 
         // Titre du menu

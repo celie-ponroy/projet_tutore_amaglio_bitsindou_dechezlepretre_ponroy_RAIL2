@@ -35,7 +35,6 @@ public class Simulation implements Jeu {
     public static final int SOL = 0;
     public static final HashMap<Position, ArrayList<Position>> vision = CalculVision.recupererVision();
     private boolean estFini;
-    private Deplacement derDeplacement;
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private Bayesien bayesien;
 
@@ -220,7 +219,6 @@ public class Simulation implements Jeu {
      */
 
     public boolean deplacerPersonnage(Personnage p, Deplacement d){
-        this.derDeplacement = d;
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
@@ -301,8 +299,8 @@ public class Simulation implements Jeu {
     /**
      * Méthode permettant de récupérer le dernier déplacement effectué
      */
-    public Deplacement getDerDeplacement() {
-        return this.derDeplacement;
-    }
+//    public Deplacement getDerDeplacement() {
+//        //return this.derDeplacement;
+//    }
 
 }

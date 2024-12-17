@@ -14,7 +14,9 @@ public class ClavierNonInteractif implements EventHandler<KeyEvent> {
 
     @Override
     public void handle(KeyEvent keyEvent) {
-        simulation.deplacerAgents();
+        if(!simulation.etreFini()) {
+            simulation.deplacerAgents();
+        }
 
     }
 }

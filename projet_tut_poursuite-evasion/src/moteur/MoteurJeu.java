@@ -135,11 +135,6 @@ public class MoteurJeu extends Application {
             // Ajout des boutons dans la HBox
             buttonBox2.getChildren().addAll(persoPrisonnier, persoGardien);
 
-//            // Bouton "Quitter"
-//            Button quitter = new Button("Quitter");
-//            quitter.setPrefSize(150, 50);
-//            quitter.setOnAction(f -> primaryStage.close());
-
             // Ajout des éléments au VBox principal
             root2.getChildren().addAll(title2, buttonBox2);
 

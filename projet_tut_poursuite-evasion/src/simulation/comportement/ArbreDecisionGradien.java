@@ -1,5 +1,6 @@
 package simulation.comportement;
 
+import simulation.Case;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
@@ -34,11 +35,18 @@ public class ArbreDecisionGradien implements Comportement {
             return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());//on va vers l'autre personnage
         }else{
             //on va vers la proba la plus grande
-            this.simulation.getCarteBayesienne(personnage);
-            //si deux probas sont égales, on va vers la plus proche de la sortie
-
+            List<Case> probas = this.simulation.getBayesiens().get(personnage).getPlusGrandeProbas();
+            if(probas.size() == 1){
+                return direction(personnage.getPosition(), new Position(probas.get(0).getX(), probas.get(0).getY()));
+            }
+            //si deux probas (ou plus) sont égales, on va vers la plus proche de la sortie
+            Position sortie = Simulation.getPosSortie();
+            //on cherche la case la plus proche de la liste des cases
+            Case c = probas.stream().min((c1, c2) -> {
+                return (int) (Math.abs(c1.getX() - sortie.getX()) + Math.abs(c1.getY() - sortie.getY()) - Math.abs(c2.getX() - sortie.getX()) - Math.abs(c2.getY() - sortie.getY()));
+            }).orElse(probas.get(0));
+            return direction(personnage.getPosition(), new Position(c.getX(), c.getY()));
         }
-        return Deplacement.AUCUN;
 
     }
 

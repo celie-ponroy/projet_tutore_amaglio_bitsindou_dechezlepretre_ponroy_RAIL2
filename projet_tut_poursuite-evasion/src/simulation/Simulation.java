@@ -271,4 +271,7 @@ public class Simulation implements Jeu {
         return new Position(7,1);
     }
 
+    public HashMap<Personnage, Bayesien> getBayesiens() {
+        return bayesiens;
+    }
 }

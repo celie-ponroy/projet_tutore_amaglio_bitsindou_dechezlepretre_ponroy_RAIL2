@@ -139,6 +139,13 @@ public class Bayesien {
         return casesVoisinesValides;
     }
 
+    public List<Case> getPlusGrandeProbas() {
+        double max = casesValides.stream().mapToDouble(caseValide -> carteBayesienne[caseValide.getY()][caseValide.getX()]).filter(caseValide -> caseValide >= 0).max().orElse(0);
+
+        return casesValides.stream().filter(c -> carteBayesienne[c.getY()][c.getX()] == max).toList();
+    }
+
+
     public double[][] getCarteBayesienne() {
         double[][] d = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];
         for (int i = 0; i < carteBayesienne.length; i++) {

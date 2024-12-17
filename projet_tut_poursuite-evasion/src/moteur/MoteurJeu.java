@@ -82,15 +82,76 @@ public class MoteurJeu extends Application {
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
-            Jeu simulation = new Simulation(true);
-            MoteurJeu.jeu = simulation;
-            VuePrincipale vp = new VuePrincipale();
-            vp.update(MoteurJeu.jeu);
-            MoteurJeu.jeu.ajouterObservateur(vp);
-            root.getChildren().clear();
-            root.getChildren().add(vp);
-            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-            scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+//            Jeu simulation = new Simulation(false);
+//            MoteurJeu.jeu = simulation;
+
+            //Menu pour choisir le personnage que l'on veut jouer
+            // Conteneur principal
+            VBox root2 = new VBox();
+            // Création de la scène
+            final Scene scene2 = new Scene(root2, WIDTH, HEIGHT);
+            root2.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
+            root2.setSpacing(20); // Espacement entre les éléments
+            root2.setPrefSize(800, 600);
+            root2.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
+
+            // Titre du menu
+            Label title2 = new Label("Veuillez choisir un personnage:");
+            title2.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+            // Conteneur pour les boutons de mode
+            HBox buttonBox2 = new HBox();
+            buttonBox2.setSpacing(20); // Espacement entre les boutons
+            buttonBox2.setAlignment(Pos.CENTER); // Centre les boutons horizontalement
+
+            // Bouton "Prisonnier"
+            Button persoPrisonnier = new Button("Prisonnier");
+            persoPrisonnier.setPrefSize(200, 100);
+            persoPrisonnier.setOnAction(f -> {
+                Jeu simulation = new Simulation(true);
+                MoteurJeu.jeu = simulation;
+                //Affichage du jeu
+                VuePrincipale vp = new VuePrincipale();
+                vp.update(MoteurJeu.jeu);
+                MoteurJeu.jeu.ajouterObservateur(vp);
+                root2.getChildren().clear();
+                root2.getChildren().add(vp);
+                Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+            });
+
+            // Bouton "Gardien"
+            Button persoGardien = new Button("Gardien");
+            persoGardien.setPrefSize(200, 100);
+            persoGardien.setOnAction(f -> {
+                Jeu simulation = new Simulation(false);
+                MoteurJeu.jeu = simulation;
+                //Affichage du jeu
+                VuePrincipale vp = new VuePrincipale();
+                vp.update(MoteurJeu.jeu);
+                MoteurJeu.jeu.ajouterObservateur(vp);
+                root2.getChildren().clear();
+                root2.getChildren().add(vp);
+                Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+            });
+
+            // Ajout des boutons dans la HBox
+            buttonBox2.getChildren().addAll(persoPrisonnier, persoGardien);
+
+//            // Bouton "Quitter"
+//            Button quitter = new Button("Quitter");
+//            quitter.setPrefSize(150, 50);
+//            quitter.setOnAction(f -> primaryStage.close());
+
+            // Ajout des éléments au VBox principal
+            root2.getChildren().addAll(title2, buttonBox2);
+
+            // Création et affichage de la scène
+            primaryStage.setScene(scene2);
+            primaryStage.setTitle("Choix du personnage");
+            primaryStage.show();
+
 
         });
 

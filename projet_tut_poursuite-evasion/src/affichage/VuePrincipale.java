@@ -104,8 +104,12 @@ public class VuePrincipale extends Pane implements DessinJeu {
         prisonnierView.setFitWidth(TAILLE_CELLULE);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
         this.getChildren().add(prisonnierView);
-
         gardienView = new ImageView(imageGardien);
+
+        //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
+        if (simulation.getJoueur().getNom().equals("prisonnier")) {
+            gardienView.setOpacity(0);
+        }
         //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
         if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
             gardienView.setOpacity(1);
@@ -184,7 +188,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
                 rectangle.setLayoutY(i * TAILLE_CELLULE);
                 this.filtreVision[j][i] = rectangle;
                 // Si la case n'est pas visible
-                if (!simulation.getPrisonnier().getVision().contains(new Position(j, i))) {
+                if (!simulation.getJoueur().getVision().contains(new Position(j, i))) {
                     // Création d'un filtre pour cacher la case
 
                     rectangle.setOpacity(0.5);
@@ -205,7 +209,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = this.filtreVision[j][i];
                 // Si la case n'est pas visible
-                if (!simulation.getPrisonnier().getVision().contains(new Position(j, i))) {
+                if (!simulation.getJoueur().getVision().contains(new Position(j, i))) {
                     // Création d'un filtre pour cacher la case
 
                     rectangle.setOpacity(0.5);

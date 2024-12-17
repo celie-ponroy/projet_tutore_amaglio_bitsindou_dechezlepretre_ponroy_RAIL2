@@ -39,21 +39,20 @@ public class Simulation implements Jeu {
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private Bayesien bayesien;
 
-    public Simulation(boolean interactif){
+    /**
+     * Constructeur par deéfaut (mode non interactif)
+     */
+    public Simulation(){
         this.observateurs = new ArrayList<>();
         this.nbTours = 0;
         this.estFini = false;
-        if(interactif) {
-            //le prisonier est un joueur et le gardien un agent
-            this.prisonnier = new Joueur(4, 10);
-            this.gardien = new Agent(5, 4);
-        }
-        else{
-            this.prisonnier = new Agent(4, 10);
-            this.gardien = new Agent(5, 4);
-            //this.comportementPrisonnier = new ArbreDeDecision();
-            this.comportementGardien = new ReseauDeNeurones();
-        }
+
+        //les 2 personnages sont des agents
+        this.prisonnier = new Agent(4, 10);
+        this.gardien = new Agent(5, 4);
+
+        //this.comportementPrisonnier = new ArbreDeDecision();
+        this.comportementGardien = new ReseauDeNeurones();
         //Initialisation des carte bayesiennes pour les deux agents
         bayesien = new Bayesien();
         this.carteBayesiennes = new HashMap<>();
@@ -61,6 +60,33 @@ public class Simulation implements Jeu {
         carteBayesiennes.put(prisonnier, bayesien.getCarteBayesienne());
 
     }
+
+    /**
+     * Constructeur secondaire pour le mode interactif
+     * @param perso true si le personnage est le prisonnier et false sinon
+     */
+    public Simulation(boolean perso){
+        this.observateurs = new ArrayList<>();
+        this.nbTours = 0;
+        this.estFini = false;
+
+        if (perso) {
+            this.prisonnier = new Joueur(4, 10);
+            this.gardien = new Agent(5, 4);
+        }else{
+            this.prisonnier = new Agent(4, 10);
+            this.gardien = new Joueur(5, 4);
+        }
+
+        //Initialisation des carte bayesiennes pour les deux agents
+        bayesien = new Bayesien();
+        this.carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesien.getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesien.getCarteBayesienne());
+
+    }
+
+
 
     public void ajouterObservateur(DessinJeu dj){
         this.observateurs.add(dj);
@@ -84,26 +110,71 @@ public class Simulation implements Jeu {
         }
     }
 
+    /**
+     * Permet de déplacer le joueur (prisonnier ou gardien) en fonction du déplacement
+     * @param d déplacement souhaité
+     */
     public void deplacementJoueur(Deplacement d){
-        // pour l'instant le joueur est forcément le prisonnier
-        boolean deplacement = deplacerPersonnage(this.prisonnier, d);
-        if (!deplacement){
-            return;
-        }
-        this.nbTours++;
-        //actualisation des proba de présence
-        actualisationBayesienne();
+        //initialisation du déplacement
+        boolean deplacement = true;
 
-        this.notifierObservateurs();
-        //deplacer le gardien
+        //si le joueur est un gardien
+        if(this.prisonnier instanceof Joueur){
+            deplacerPersonnage(this.prisonnier, d);
+            if(!deplacement){
+                return;
+            }
 
-        //gestion des interactions et de la fin du jeu
-        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
-            this.estFini = true;
+            //actualisation des proba de présence
+            actualisationBayesienne();
+
+            this.notifierObservateurs();
+
+            //gestion des interactions et de la fin du jeu
+            if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
+                this.estFini = true;
+            }
+            if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
+                this.estFini = true;
+            }
+        }else{
+            deplacerPersonnage(this.gardien, d);
+            if(!deplacement){
+                return;
+            }
+            this.nbTours++;
+            //actualisation des proba de présence
+            actualisationBayesienne();
+
+            this.notifierObservateurs();
+
+            //gestion des interactions et de la fin du jeu
+            if(this.gardien.getPosition().equals(this.prisonnier.getPosition())){
+                this.estFini = true;
+            }
         }
-        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
-            this.estFini = true;
-        }
+
+
+
+//        // pour l'instant le joueur est forcément le prisonnier
+//        boolean deplacement = deplacerPersonnage(this.prisonnier, d);
+//        if (!deplacement){
+//            return;
+//        }
+//        this.nbTours++;
+//        //actualisation des proba de présence
+//        actualisationBayesienne();
+//
+//        this.notifierObservateurs();
+//        //deplacer le gardien
+//
+//        //gestion des interactions et de la fin du jeu
+//        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
+//            this.estFini = true;
+//        }
+//        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
+//            this.estFini = true;
+//        }
     }
 
     /**
@@ -217,6 +288,16 @@ public class Simulation implements Jeu {
         return this.nbTours;
     }
 
+    /**
+     * Méthode permettant de renvoyer le personnage que l'on veut jouer
+     */
+    public Personnage getJoueur() {
+        if (this.prisonnier instanceof Joueur) {
+            return this.prisonnier;
+        } else {
+            return this.gardien;
+        }
+    }
     /**
      * Méthode permettant de récupérer le dernier déplacement effectué
      */

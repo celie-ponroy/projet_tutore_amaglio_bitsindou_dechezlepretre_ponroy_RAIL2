@@ -19,7 +19,7 @@ public class Main {
 
 
         // parametrage du moteur de jeu
-        MoteurJeu.setTaille(width, height);
+        //MoteurJeu.setTaille(width, height);
 
         // lancement du jeu
         MoteurJeu.launch(simulation);

@@ -29,7 +29,12 @@ public class VuePrincipale extends Pane implements DessinJeu {
 
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
+    private boolean afficherVision;
 
+    //constructeur
+    public VuePrincipale(boolean afficherVision){
+        this.afficherVision = afficherVision;
+    }
     /**
      * Initialise les images
      */
@@ -106,12 +111,16 @@ public class VuePrincipale extends Pane implements DessinJeu {
         this.getChildren().add(prisonnierView);
 
         gardienView = new ImageView(imageGardien);
-        //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
-        if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
-            gardienView.setOpacity(1);
-        } else {
-            gardienView.setOpacity(0);
+        if (afficherVision){
+            //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
+            if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
+                gardienView.setOpacity(1);
+            } else {
+                gardienView.setOpacity(0);
+            }
+
         }
+
         gardienView.setFitWidth(TAILLE_CELLULE);
         gardienView.setFitHeight(TAILLE_CELLULE);
         this.getChildren().add(gardienView);
@@ -146,18 +155,25 @@ public class VuePrincipale extends Pane implements DessinJeu {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
-            initFiltreVision();
+            if (this.afficherVision){
+                initFiltreVision();
+            }
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
             updateIteration();
-            setFiltreVision();
-            //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
-            if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
+            if (this.afficherVision){
+                setFiltreVision();
+                //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
+                if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
+                    gardienView.setOpacity(1);
+                } else {
+                    gardienView.setOpacity(0);
+                }
+            }else{
                 gardienView.setOpacity(1);
-            } else {
-                gardienView.setOpacity(0);
             }
+
         }
 
     }

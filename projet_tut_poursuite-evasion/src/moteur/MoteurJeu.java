@@ -2,10 +2,9 @@ package moteur;
 
 //https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
 
-import affichage.VueMenu;
-import affichage.VueBayesienne;
-import affichage.VuePrincipale;
+import affichage.*;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,7 +13,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Simulation;
-
+import simulation.personnages.Agent;
+import simulation.personnages.Personnage;
 
 
 // copied from: https://gist.github.com/james-d/8327842
@@ -23,10 +23,10 @@ import simulation.Simulation;
 public class MoteurJeu extends Application {
 
     /**
-     * taille par defaut
+     * taille par defaut de la fenetre
      */
-    private static double WIDTH = 1000;
-    private static double HEIGHT = 600;
+    private static double WIDTH = 1540;
+    private static double HEIGHT = 1200;
 
     /**
      * jeu en Cours et renderer du jeu
@@ -58,70 +58,87 @@ public class MoteurJeu extends Application {
      * creation de l'application avec juste un canvas et des statistiques
      */
     public void start(Stage primaryStage) {
-        // Initialisation du Pane et du conteneur principal
         final VBox root = new VBox();
-
-        // Création de la scène
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        //VBox root = new VBox();
-        root.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
-        root.setSpacing(20); // Espacement entre les éléments
-        //root.setPrefSize(800, 600);
-        root.setAlignment(Pos.CENTER); // Centre tous les éléments du VBox
+        final HBox rootAnalyse = new HBox();
+        final Scene sceneAnalyse = new Scene(rootAnalyse, WIDTH, HEIGHT);
 
-        // Titre du menu
+        root.setStyle("-fx-background-color: #d3d3d3;");
+        root.setSpacing(20);
+        root.setPadding(new Insets(10)); // Ajout d'un padding
+        root.setAlignment(Pos.CENTER);
+
         Label title = new Label("Veuillez choisir un mode:");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Conteneur pour les boutons de mode
         HBox buttonBox = new HBox();
-        buttonBox.setSpacing(20); // Espacement entre les boutons
-        buttonBox.setAlignment(Pos.CENTER); // Centre les boutons horizontalement
+        buttonBox.setSpacing(20);
+        buttonBox.setAlignment(Pos.CENTER);
 
-        // Bouton "Mode interactif"
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
-            VuePrincipale vp = new VuePrincipale();
+            VuePrincipale vp = new VuePrincipale(true);
             vp.update(MoteurJeu.jeu);
             MoteurJeu.jeu.ajouterObservateur(vp);
+
             root.getChildren().clear();
+            VBox.setVgrow(vp, Priority.ALWAYS); // Ajustement automatique de la vue
             root.getChildren().add(vp);
+
             Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
             scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
-
         });
 
-        // Bouton "Mode non interactif"
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
-            VueBayesienne vb = new VueBayesienne();
-            vb.update(MoteurJeu.jeu);
-            MoteurJeu.jeu.ajouterObservateur(vb);
-            root.getChildren().clear();
-            root.getChildren().add(vb);
-            MoteurJeu.jeu.ajouterObservateur(vb);
-            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-            scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+            //Personnage prisonnier = new Agent(4, 10);
+            //Personnage gardien = new Agent(5, 4);
+            VuePrincipale vb = new VuePrincipale(false);
+            VueAnalyse va1 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getPrisonnier());
+            VueAnalyse va2 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getGardien());
 
+            vb.update(MoteurJeu.jeu);
+            va1.update(MoteurJeu.jeu);
+            va2.update(MoteurJeu.jeu);
+
+            MoteurJeu.jeu.ajouterObservateur(vb);
+            MoteurJeu.jeu.ajouterObservateur(va1);
+            MoteurJeu.jeu.ajouterObservateur(va2);
+
+            HBox hboxBayesienne = new HBox(vb);
+            hboxBayesienne.setAlignment(Pos.CENTER);
+            HBox.setHgrow(vb, Priority.ALWAYS);
+
+            HBox hboxAnalyse = new HBox(va1, va2);
+            hboxAnalyse.setSpacing(20); // Réduction de l'espacement excessif
+            hboxAnalyse.setAlignment(Pos.CENTER);
+            HBox.setHgrow(va1, Priority.ALWAYS);
+            HBox.setHgrow(va2, Priority.ALWAYS);
+
+            VBox vbox = new VBox(hboxBayesienne, hboxAnalyse);
+            vbox.setSpacing(20);
+            VBox.setVgrow(hboxBayesienne, Priority.ALWAYS);
+            VBox.setVgrow(hboxAnalyse, Priority.ALWAYS);
+
+            rootAnalyse.getChildren().clear();
+            rootAnalyse.getChildren().add(vbox);
+
+            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+            sceneAnalyse.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+
+            primaryStage.setScene(sceneAnalyse);
         });
 
-        // Ajout des boutons dans la HBox
         buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif);
 
-        // Bouton "Quitter"
         Button quitter = new Button("Quitter");
         quitter.setPrefSize(150, 50);
         quitter.setOnAction(e -> primaryStage.close());
 
-        // Ajout des éléments au VBox principal
         root.getChildren().addAll(title, buttonBox, quitter);
-
-        //root.setCenter(vp);
-
-        //Création du controleur
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Simulation");

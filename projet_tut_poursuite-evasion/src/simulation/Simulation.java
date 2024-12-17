@@ -3,7 +3,7 @@ package simulation;
 import affichage.DessinJeu;
 import moteur.Jeu;
 import simulation.comportement.Comportement;
-import simulation.comportement.ReseauDeNeurones;
+import simulation.comportement.reseau_neurones.ReseauDeNeurones;
 import simulation.personnages.*;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class Simulation implements Jeu {
             this.prisonnier = new Agent(4, 10);
             this.gardien = new Agent(5, 4);
             //this.comportementPrisonnier = new ArbreDeDecision();
-            this.comportementGardien = new ReseauDeNeurones();
+            //this.comportementGardien = new ReseauDeNeurones();
         }
         //Initialisation des carte bayesiennes pour les deux agents
         bayesien = new Bayesien();

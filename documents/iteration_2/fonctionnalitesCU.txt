@@ -1,1 +1,8 @@
 - Mise en place réseau de neurones (Matias & Luc)
+- Création de l'arbre de décisions du gardien (Célie)
+- Création de l'arbre de décisions du prisonnier (Célie)
+- Ajout de calculs de chemins (Célie)
+- Ajout Historique (avec vues) (Célie & Maëlle)
+- Implémentation du systeme d'analyse (Maêlle)
+
+

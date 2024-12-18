@@ -4,6 +4,7 @@ import affichage.DessinJeu;
 import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
+import simulation.comportement.ArbreDecision;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
 import outils.Outil;
@@ -113,9 +114,9 @@ public class Simulation implements Jeu {
         this.estFini = false;
         if (apprentissagePrisonnier) {
             this.comportementPrisonnier = rn;
-            this.comportementGardien = new ArbreDeDecision();
+            this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
         } else {
-            //this.comportementPrisonnier = new ArbreDeDecision();
+            this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
             this.comportementGardien = rn;
         }
         //Initialisation des carte bayesiennes pour les deux agents
@@ -220,11 +221,14 @@ public class Simulation implements Jeu {
 
         while (this.nbTours < nbIte && !this.estFini) {
             //creation de l'arbre de decision pour l'apprenant pour comparer avec choix rn
-            ArbreDecisionGradien tmpArbre;
+            Deplacement depArbre;
             if (this.comportementGardien instanceof ReseauDeNeurones) {
-                tmpArbre = new ArbreDecisionGradien(this,personnageApprenant);
+                ArbreDecisionGardien tmpArbre = new ArbreDecisionGardien(this,personnageApprenant);
+                //Prise de descision de l'arbre pour comparaison avec reseaux
+                depArbre = tmpArbre.prendreDecision();
             } else {
-                tmpArbre = new ArbreDecisionGradien(this,personnageApprenant);
+                ArbreDecisionPrisonnier tmpArbre = new ArbreDecisionPrisonnier(this, personnageApprenant);
+                depArbre = tmpArbre.prendreDecision();
             }
             //Creation des entrees du reseaux
             double[][] carteBayesienne = this.carteBayesiennes.get(personnageApprenant);
@@ -239,9 +243,7 @@ public class Simulation implements Jeu {
 
             //Prise de descision du reseaux
             Deplacement depRn = comportementApprenant.prendreDecision(entrees);
-
-            //Prise de descision de l'arbre pour comparaison avec reseaux
-            Deplacement depArbre = tmpArbre.prendreDecision();
+            
             //Creation sortie voulue (descision de l'abre)
             double[] sortieVoulues = new double[Deplacement.values().length];
             int i = 0;

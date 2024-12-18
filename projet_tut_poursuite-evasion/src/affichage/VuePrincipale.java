@@ -264,6 +264,12 @@ public class VuePrincipale extends Pane implements DessinJeu {
             }
         }
     }
+    /**
+     * Methode pour historique à la fin du jeu
+     */
+    public void historique(){
+        //TODO
+    }
 
 
 }

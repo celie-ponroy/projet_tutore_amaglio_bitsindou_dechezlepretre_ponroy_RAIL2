@@ -1,8 +1,9 @@
 package outils;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import simulation.comportement.Comportement;
+import simulation.comportement.reseau_neurones.ReseauDeNeurones;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,5 +47,32 @@ public class Outil {
             flatCarte[i] = list.get(i);
         }
         return flatCarte;
+    }
+
+    public static void afficher_tab(double[] tab){
+        for(int i = 0; i < tab.length; i++){
+            System.out.printf("%5f\t", tab[i]);
+        }
+        System.out.println();
+    }
+
+    public static ReseauDeNeurones chargerRn(String nomFichier) {
+        ReseauDeNeurones rn = null;
+        try {
+            // creer le flux de lecture ( fichier puis flux d ’ objet )
+            FileInputStream is = new FileInputStream("Sauvegardes_reseaux/" + nomFichier);
+            ObjectInputStream ois = new ObjectInputStream(is);
+            // lit l ’ objet et le cast en point
+            rn = (ReseauDeNeurones) (ois.readObject());
+            // referme le flux de lecture
+            ois.close();
+        } catch (IOException e) {
+            System.out.println(" erreur d ’E / S ");
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println(" erreur hors E / S ");
+            e.printStackTrace();
+        }
+        return rn;
     }
 }

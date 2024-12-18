@@ -6,7 +6,11 @@ import simulation.comportement.reseau_neurones.ReseauDeNeurones;
 
 public class ApprentissageDeArbre {
     public static void main(String[] args) {
-        int[] couches = new int[Integer.parseInt(args[0])+2];
+        //Args  0 : nb couches cachées
+        //Args 1 : nb neurones par couches cachées
+        //Args 2: nb parties jouées
+        int nbCouches = Integer.parseInt(args[0])+2;
+        int[] couches = new int[nbCouches];
         couches[0] = 14*12+2;
         couches[couches.length-1] = 9;
         for(int i = 1; i < couches.length-1; i++){
@@ -22,6 +26,6 @@ public class ApprentissageDeArbre {
             System.out.println("Prisonnier : " + simulation.getPrisonnier());
             compteur++;
         }
-        Outil.sauve(("Sauvegardes_reseaux/rnArbre"+args[2]+"-"+Integer.parseInt(args[0])+2)+"-"+args[1]+".save", rn);
+        Outil.sauve("Sauvegardes_reseaux/rnArbre"+args[2]+"-"+nbCouches+"-"+args[1]+".save", rn);
     }
 }

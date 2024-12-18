@@ -56,10 +56,14 @@ public class Simulation implements Jeu {
         this.prisonnier = new Agent(4, 10);
         this.gardien = new Agent(5, 4);
 
-        this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
-        this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+        //this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+        //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
 
-        //this.comportementGardien = new ReseauDeNeurones();
+            //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+            this.comportementGardien = Outil.chargerRn("rnArbre10-8-100.save");
+            this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+
+
         //Initialisation des carte bayesiennes pour les deux agents
         bayesiens = new HashMap<>();
         bayesiens.put(this.gardien,new Bayesien());
@@ -205,7 +209,7 @@ public class Simulation implements Jeu {
             deplacerPersonnage(personnageApprenant, depRn);
             deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
             //On compare
-            ((ReseauDeNeurones) comportementApprenant).retroPropagation(Outil.applatissement(carteBayesienne), sortieVoulues);
+            ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);
             this.nbTours++;
             this.miseAJourFinJeu();
         }
@@ -214,13 +218,30 @@ public class Simulation implements Jeu {
      * Methode de deplacement non interactif
      */
     public void deplacerAgents(){
+        /*
         System.out.println("Deplacement des agents");
         Deplacement d1 = this.comportementPrisonnier.prendreDecision();
         System.out.println(d1);
         Deplacement d2 = this.comportementGardien.prendreDecision();
         System.out.println(d2);
         deplacerPersonnage(this.prisonnier, d1);
-        deplacerPersonnage(this.gardien, d2);
+        deplacerPersonnage(this.gardien, d2);*/
+
+
+        deplacerPersonnage(this.prisonnier, this.comportementPrisonnier.prendreDecision());
+
+        double[][] carteBayesienne = this.carteBayesiennes.get(this.gardien);
+        double[] carteApplatie = Outil.applatissement(carteBayesienne);
+        double[] entrees = new double[carteApplatie.length + 2];
+        for (int i = 0; i < carteApplatie.length; i++) {
+            entrees[i] = carteApplatie[i];
+        }
+        //Ajout de la position dans les entrées du réseau de neurones
+        entrees[entrees.length - 1] = (double) this.gardien.getPosition().getY() / CARTE.length;
+        entrees[entrees.length - 2] = (double) this.gardien.getPosition().getX() / CARTE[0].length;
+        System.out.println(this.comportementGardien.prendreDecision(entrees));
+        deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision(entrees));
+
 
         this.nbTours++;
         //gestion des interactions et de la fin du jeu

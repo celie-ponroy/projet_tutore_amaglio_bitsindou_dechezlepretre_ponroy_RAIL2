@@ -113,7 +113,7 @@ public class Simulation implements Jeu {
         this.estFini = false;
         if (apprentissagePrisonnier) {
             this.comportementPrisonnier = rn;
-            //this.comportementGardien = new ArbreDeDecision();
+            this.comportementGardien = new ArbreDeDecision();
         } else {
             //this.comportementPrisonnier = new ArbreDeDecision();
             this.comportementGardien = rn;
@@ -233,6 +233,7 @@ public class Simulation implements Jeu {
             for (int i = 0; i < carteApplatie.length; i++) {
                 entrees[i] = carteApplatie[i];
             }
+            //Ajout de la position dans les entrées du réseau de neurones
             entrees[entrees.length - 1] = (double) personnageApprenant.getPosition().getY() / CARTE.length;
             entrees[entrees.length - 2] = (double) personnageApprenant.getPosition().getX() / CARTE[0].length;
 

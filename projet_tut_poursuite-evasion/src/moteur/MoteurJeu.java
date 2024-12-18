@@ -150,10 +150,12 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setOnAction(e -> {
             Jeu simulation = new Simulation();
             MoteurJeu.jeu = simulation;
+            // Création de la vue principale
+            VuePrincipale vb = new VuePrincipale(false); //false car on n'affiche pas la vision
 
-            VuePrincipale vb = new VuePrincipale(false);
-            VueAnalyse va1 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getPrisonnier());
-            VueAnalyse va2 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getGardien());
+            // Création des vues pour le prisonnier et le gardien
+            VueBayesienne va1 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getPrisonnier());
+            VueBayesienne va2 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getGardien());
 
             vb.update(MoteurJeu.jeu);
             va1.update(MoteurJeu.jeu);

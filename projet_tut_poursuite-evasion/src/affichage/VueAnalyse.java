@@ -28,7 +28,9 @@ public class VueAnalyse extends Pane implements DessinJeu {
     private Rectangle[][] caseBayesienne;
     private static final int TAILLE_CELLULE = 40; // Taille des cases du labyrinthe
 
-    //constructeur
+    /**
+     * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
+     */
     public VueAnalyse(Simulation s, Personnage p) {
         if (s.getGardien() == p) {
             this.perso = s.getGardien();
@@ -158,6 +160,7 @@ public class VueAnalyse extends Pane implements DessinJeu {
             personnage = (Personnage) simulation.getGardien();
         }
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
+
         for (int i = 0; i < simulation.CARTE.length; i++) {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = caseBayesienne[i][j];

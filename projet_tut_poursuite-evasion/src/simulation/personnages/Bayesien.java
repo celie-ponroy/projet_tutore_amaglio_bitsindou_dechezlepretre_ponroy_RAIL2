@@ -16,7 +16,7 @@ public class Bayesien {
      */
     public Bayesien() {
         int[][] carte = Simulation.CARTE;
-        casesValides = new ArrayList<Case>();
+        casesValides = new ArrayList<>();
         carteBayesienne = new double[carte.length][carte[0].length];
         for (int i = 0; i < carte.length; i++) {
             for (int j = 0; j < carte[0].length; j++) {
@@ -141,7 +141,6 @@ public class Bayesien {
 
     public List<Case> getPlusGrandeProbas() {
         double max = casesValides.stream().mapToDouble(caseValide -> carteBayesienne[caseValide.getY()][caseValide.getX()]).filter(caseValide -> caseValide >= 0).max().orElse(0);
-
         return casesValides.stream().filter(c -> carteBayesienne[c.getY()][c.getX()] == max).toList();
     }
 

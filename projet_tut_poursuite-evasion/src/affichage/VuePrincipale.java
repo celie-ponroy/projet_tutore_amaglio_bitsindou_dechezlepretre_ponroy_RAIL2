@@ -1,7 +1,9 @@
 package affichage;
 
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -15,6 +17,7 @@ import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class VuePrincipale extends Pane implements DessinJeu {
     private Simulation simulation;
@@ -27,6 +30,9 @@ public class VuePrincipale extends Pane implements DessinJeu {
     private ImageView gardienView; // Vue pour le gardien
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
+    private int tour;
+    private Rectangle[][] caseBayesienneHisto;
+
 
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
@@ -154,12 +160,8 @@ public class VuePrincipale extends Pane implements DessinJeu {
      */
     private void updatePositions() {
         // Met à jour la position du prisonnier
-        prisonnierView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
-        prisonnierView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);
-
-        // Met à jour la position du gardien
-        gardienView.setX(simulation.getGardien().getPosition().getX() * TAILLE_CELLULE);
-        gardienView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
+        setPositions(simulation.getPrisonnier().getPosition(), prisonnierView);
+        setPositions(simulation.getGardien().getPosition(), gardienView);
     }
 
     /**
@@ -208,10 +210,9 @@ public class VuePrincipale extends Pane implements DessinJeu {
             }
 
         }
-        if(simulation.etreFini()){
+        if(simulation.etreFini()&& this.afficherVision){
             historique();
         }
-
     }
 
     /**
@@ -271,8 +272,74 @@ public class VuePrincipale extends Pane implements DessinJeu {
      * Methode pour historique à la fin du jeu en mode interactif
      */
     public void historique(){
-        //TODO
-    }
+        tour=0;
+        //initaliser la map (enlever la vision)
+        Arrays.stream(filtreVision).forEach(rectangles -> Arrays.stream(rectangles).forEach(rectangle -> rectangle.setOpacity(0)));
+        //on mets la première carte bayesienne
+        caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.historiqueBayesien.get(0),TAILLE_CELLULE);
+        for (Rectangle[] rect : caseBayesienneHisto) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
+            }
+        }
+        //on mets les perso à l'emplacement ini
+        Position pPrisonnier = simulation.historiquePosition.get(0).get(0);
+        Position pGardien= simulation.historiquePosition.get(0).get(1);
+        setPositions(pPrisonnier,prisonnierView);
+        prisonnierView.setOpacity(1);
+        setPositions(pGardien,gardienView);
+        gardienView.setOpacity(1);
 
+
+        //ajout boutons pour precedent et suivant
+        javafx.scene.control.Button precedent = new Button("Précédent");
+        precedent.setPrefSize(200, 75);
+        precedent.setOnAction(e -> {
+            tour-=1;
+            updateHistorique();
+            });
+        javafx.scene.control.Button suivant = new Button("Suivant");
+        suivant.setPrefSize(200, 75);
+        suivant.setOnAction(e -> {
+            tour+=1;
+            updateHistorique();
+        });
+        //ajout des boutons
+        HBox hboxBouttons = new HBox();
+        hboxBouttons.setLayoutX(10);
+        hboxBouttons.setLayoutY(620);
+        hboxBouttons.getChildren().add(precedent);
+        hboxBouttons.getChildren().add(suivant);
+        this.getChildren().add(hboxBouttons);
+
+
+
+    }
+    /**
+     * Update de l'historique (par rapport à un tour)
+     */
+    public void updateHistorique(){
+        //on mets a jour position et bayes
+        if(tour<0){
+            tour=0;
+        }
+        if(tour>=simulation.historiquePosition.size()){
+            tour=simulation.historiquePosition.size()-1;
+        }
+        //on mets a jour la carte bayesienne
+        FiltreBayesien.updateBayes(caseBayesienneHisto,simulation.historiqueBayesien.get(tour));
+
+        setPositions(simulation.historiquePosition.get(tour).get(0),prisonnierView);
+        setPositions(simulation.historiquePosition.get(tour).get(1),gardienView);
+
+        //si negatif ou out of bound
+    }
+    /**
+     * Methode set positions imagewiew
+     */
+    public void setPositions(Position p, ImageView im) {
+        im.setX(p.getX() * TAILLE_CELLULE);
+        im.setY(p.getY() * TAILLE_CELLULE);
+    }
 
 }

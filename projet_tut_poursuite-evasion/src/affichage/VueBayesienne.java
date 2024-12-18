@@ -21,8 +21,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
-    //private Image imagePrisonnier;
-    //private Image imageGardien;
     private Image imagePerso;
     //private ImageView prisonnierView; // Vue pour le prisonnier
     private ImageView gardienView; // Vue pour le gardien
@@ -110,21 +108,10 @@ public class VueBayesienne extends Pane implements DessinJeu {
 
         // Initialisation de la carte bayesienne
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
-        caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
-
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
-                rectangle.setX(j * TAILLE_CELLULE);
-                rectangle.setY(i * TAILLE_CELLULE);
-                if (carteBayes[i][j] == -1) {
-                    rectangle.setFill(new Color(0.0, 0, 0, 0.5));
-                } else {
-                    rectangle.setFill(Color.rgb(190, 35, 0, 1 * carteBayes[i][j]));
-                }
-                this.getChildren().add(rectangle);
-                caseBayesienne[i][j] = rectangle;
-
+        caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE);
+        for (Rectangle[] rect : caseBayesienne) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
             }
         }
 
@@ -159,26 +146,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
      * Met à jour les probabilités bayesiennes uniquement du joueur
      */
     private void updateBayes() {
-
-        //Création du personnage
-        Personnage personnage;
-        // Mise à jour des probabilités bayesiennes en fonction du perosnnage
-        if (this.perso == simulation.getPrisonnier()){
-            personnage = simulation.getPrisonnier();
-        }else{
-            personnage = simulation.getGardien();
-        }
-        double[][] carteBayes = simulation.getCarteBayesienne(personnage);
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = caseBayesienne[i][j];
-                if (carteBayes[i][j] == -1) {
-                    rectangle.setFill(new Color(0.0, 0, 0, 0.5));
-                } else {
-                    rectangle.setFill(Color.rgb(190, 35, 0, 1* carteBayes[i][j]));
-                }
-            }
-        }
+        FiltreBayesien.updateBayes(caseBayesienne, simulation.getCarteBayesienne(this.perso));
     }
 
     /**

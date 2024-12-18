@@ -329,8 +329,6 @@ public class Simulation implements Jeu {
         return this.nbTours;
     }
 
-<<<<<<< HEAD
-
     /**
      * Méthode permettant de renvoyer le personnage que l'on veut jouer
      */
@@ -341,8 +339,7 @@ public class Simulation implements Jeu {
             return this.gardien;
         }
     }
-=======
->>>>>>> d3ad33b (Début analyse)
+
 
     public static Position getPosSortie(){
         return new Position(7,1);

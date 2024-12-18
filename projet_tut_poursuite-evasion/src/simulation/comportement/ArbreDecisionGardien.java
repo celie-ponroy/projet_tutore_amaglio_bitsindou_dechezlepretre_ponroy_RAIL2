@@ -27,12 +27,12 @@
             if(simulation.estVisible(personnage, false)){
                 //on va vers l'autre personnage
                 //on recupere le chemin
-                Stack<Position> s =Simulation.CHEMINS.get(List.of(simulation.getPrisonnier().getPosition(),Simulation.getPosSortie()));
-                if(s.size()>2){
-                    Stack<Position> sMoitie =Simulation.CHEMINS.get(List.of(simulation.getPrisonnier().getPosition(),s.get(s.size()/2)));
-                    return direction(personnage.getPosition(), sMoitie.getLast()); //on va vers où l'autre personnage va
+                Stack<Position> s =Simulation.CHEMINS.get(List.of(simulation.getGardien().getPosition(),simulation.getPrisonnier().getPosition()));
+                if(s.size()<2){
+                    return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());
                 }
-                return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());//on va vers l'autre personnage
+                Stack<Position> sMoitie =Simulation.CHEMINS.get(List.of(simulation.getPrisonnier().getPosition(),s.get(s.size()/2)));
+                return direction(personnage.getPosition(), sMoitie.getLast()); //on va vers où l'autre personnage va
             }else{
                 //on va vers la proba la plus grande
                 List<Case> probas = this.simulation.getBayesiens().get(personnage).getPlusGrandeProbas();
@@ -47,9 +47,6 @@
                     return (int) (Math.abs(c1.getX() - sortie.getX()) + Math.abs(c1.getY() - sortie.getY()) - Math.abs(c2.getX() - sortie.getX()) - Math.abs(c2.getY() - sortie.getY()));
                 }).orElse(probas.get(0));
                 Stack<Position> s2 = Simulation.CHEMINS.get(List.of(personnage.getPosition(), new Position(c.getX(), c.getY())));
-                if (s2.empty()){
-                    return direction(personnage.getPosition(), new Position(c.getX(), c.getY()));
-                }
                 return direction(personnage.getPosition(),s2.getLast());
             }
 

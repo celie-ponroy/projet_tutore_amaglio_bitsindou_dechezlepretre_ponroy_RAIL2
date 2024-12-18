@@ -122,9 +122,13 @@ public class Simulation implements Jeu {
      * Methode de deplacement non interactif
      */
     public void deplacerAgents(){
-
-        deplacerPersonnage(this.prisonnier, this.comportementPrisonnier.prendreDecision());
-        deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision());
+        System.out.println("Deplacement des agents");
+        Deplacement d1 = this.comportementPrisonnier.prendreDecision();
+        System.out.println(d1);
+        Deplacement d2 = this.comportementGardien.prendreDecision();
+        System.out.println(d2);
+        deplacerPersonnage(this.prisonnier, d1);
+        deplacerPersonnage(this.gardien, d2);
 
         this.nbTours++;
         //gestion des interactions et de la fin du jeu
@@ -163,7 +167,6 @@ public class Simulation implements Jeu {
         }
         this.nbTours++;
 
-        deplacerPersonnage(joueur, d);
         deplacerPersonnage(agent, deplacementAgent);
 
         //gestion des interactions et de la fin du jeu

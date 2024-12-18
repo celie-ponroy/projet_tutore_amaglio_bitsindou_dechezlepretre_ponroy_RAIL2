@@ -186,9 +186,7 @@ public class CalculChemins {
             row = nextNode.getY();
             col = nextNode.getX();
         } while (cellDetails[row][col].parent != nextNode);
-        //on retire la première position
         //on retire la dernière position
-        path.remove(0);
         path.remove(path.size()-1);
 
         return path;

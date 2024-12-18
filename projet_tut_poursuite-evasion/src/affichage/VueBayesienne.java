@@ -30,7 +30,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
     private Personnage perso; // Personnage à afficher
     private Rectangle[][] caseBayesienne;
     private static final int TAILLE_CELLULE = 45; // Taille des cases du labyrinthe
-<<<<<<< HEAD
 
     /**
      * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
@@ -43,8 +42,6 @@ public class VueBayesienne extends Pane implements DessinJeu {
         }
     }
 
-=======
->>>>>>> 923b2580e7b69ae09cfd3f66da0baaacb73e1341
 
     /**
      * Initialise les images

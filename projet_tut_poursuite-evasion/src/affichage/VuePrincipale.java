@@ -105,6 +105,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
         rectangle.setLayoutY(620);
         this.getChildren().add(rectangle);
 
+
         // Initialisation des personnages
         //prisonnier
         prisonnierView = new ImageView(imagePrisonnier);
@@ -116,27 +117,30 @@ public class VuePrincipale extends Pane implements DessinJeu {
         gardienView.setFitWidth(TAILLE_CELLULE); // Taille de l'image
         gardienView.setFitHeight(TAILLE_CELLULE); // Taille de l'image
 
-        //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
-        Personnage p1 = simulation.getGardien();
-        Personnage p2 = simulation.getPrisonnier();
-        ImageView imageP2 = prisonnierView;
+        if (afficherVision){
+            //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
+            Personnage p1 = simulation.getGardien();
+            Personnage p2 = simulation.getPrisonnier();
+            ImageView imageP2 = prisonnierView;
 
-        System.out.println();
-        if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
-            p1 = simulation.getPrisonnier();
-            p2 = simulation.getGardien();
-            imageP2 = gardienView;
+            if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
+                p1 = simulation.getPrisonnier();
+                p2 = simulation.getGardien();
+                imageP2 = gardienView;
+            }
+
+            //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
+
+            //si le gardient est sur des cases non visibles par le prisonnier on ne l'affiche pas sinon on l'affiche
+            if (p1.getVision().contains(p2.getPosition())) {
+                imageP2.setOpacity(1);
+            } else {
+                imageP2.setOpacity(0);
+            }
+        }else {
+            gardienView.setOpacity(1);
+            prisonnierView.setOpacity(1);
         }
-
-        //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
-
-        //si le gardient est sur des cases non visibles par le prisonnier on ne l'affiche pas sinon on l'affiche
-        if (p1.getVision().contains(p2.getPosition())) {
-            imageP2.setOpacity(1);
-        } else {
-            imageP2.setOpacity(0);
-        }
-
         this.getChildren().addAll(prisonnierView, gardienView);
 
 
@@ -179,14 +183,28 @@ public class VuePrincipale extends Pane implements DessinJeu {
             updateIteration();
             if (this.afficherVision){
                 setFiltreVision();
-                //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
-                if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
-                    gardienView.setOpacity(1);
+                //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
+                Personnage p1 = simulation.getGardien();
+                Personnage p2 = simulation.getPrisonnier();
+                ImageView imageP2 = prisonnierView;
+
+                if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
+                    p1 = simulation.getPrisonnier();
+                    p2 = simulation.getGardien();
+                    imageP2 = gardienView;
+                }
+
+                //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
+
+                //si le gardient est sur des cases non visibles par le prisonnier on ne l'affiche pas sinon on l'affiche
+                if (p1.getVision().contains(p2.getPosition())) {
+                    imageP2.setOpacity(1);
                 } else {
-                    gardienView.setOpacity(0);
+                    imageP2.setOpacity(0);
                 }
             }else{
                 gardienView.setOpacity(1);
+                prisonnierView.setOpacity(1);
             }
 
         }

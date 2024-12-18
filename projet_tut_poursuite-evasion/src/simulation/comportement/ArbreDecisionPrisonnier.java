@@ -25,20 +25,42 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
     public Deplacement prendreDecision() {
         Stack<Position> s = Simulation.CHEMIN.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty())
-            return direction(personnage.getPosition(),Simulation.getPosSortie());//toujours là :,(
+            return direction(personnage.getPosition(),Simulation.getPosSortie());
         //si on voit le gardien
-        if(simulation.estVisible(personnage, true)){
+        if(!simulation.estVisible(personnage, true)){
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());
         }
 
         //sinon est ce qu'il est sur le chemin de la sortie ?
-        if( s.contains(simulation.getGardien().getPosition())){
+        if(s.contains(simulation.getGardien().getPosition())){
             //on fui le gardien
-            return direction(personnage.getPosition(), s.getLast());// a changer
+            return oppose(direction(personnage.getPosition(), s.getLast()));// a changer
         }else{
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());
         }
+    }
+    public Deplacement oppose(Deplacement d){
+        switch (d){
+            case HAUT:
+                return Deplacement.BAS;
+            case BAS:
+                return Deplacement.HAUT;
+            case GAUCHE:
+                return Deplacement.DROITE;
+            case DROITE:
+                return Deplacement.GAUCHE;
+            case DIAG_BAS_DROITE:
+                return Deplacement.DIAG_HAUT_GAUCHE;
+            case DIAG_BAS_GAUCHE:
+                return Deplacement.DIAG_HAUT_DROITE;
+            case DIAG_HAUT_DROITE:
+                return Deplacement.DIAG_BAS_GAUCHE;
+            case DIAG_HAUT_GAUCHE:
+                return Deplacement.DIAG_BAS_DROITE;
+
+        }
+        return Deplacement.AUCUN;
     }
 }

@@ -16,7 +16,7 @@ public class ApprentissageDeArbre {
         for(int i = 1; i < couches.length-1; i++){
             couches[i] = Integer.parseInt(args[1]);
         }
-        ReseauDeNeurones rn = new ReseauDeNeurones(couches, 0.6);
+        ReseauDeNeurones rn = new ReseauDeNeurones(couches, 0.3);
         int compteur = 0;
         while(compteur < Integer.parseInt(args[2])) {
             Simulation simulation = new Simulation(rn, false);

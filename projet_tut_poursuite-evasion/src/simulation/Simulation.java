@@ -5,7 +5,6 @@ import moteur.Jeu;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
 import outils.Outil;
-import simulation.comportement.ArbreDecisionGradien;
 import simulation.comportement.Comportement;
 
 import simulation.personnages.*;

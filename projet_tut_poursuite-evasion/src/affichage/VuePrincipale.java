@@ -1,5 +1,6 @@
 package affichage;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -212,8 +213,33 @@ public class VuePrincipale extends Pane implements DessinJeu {
             }
 
         }
+
+        //Pop up pour afficher la fin de la partie
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()&& this.afficherVision){
+
+            alert.setContentText("Fin de la partie !\n" +
+                    "Cliquez sur OK pour voir l'historique");
+
+            //if (victoire) {
+//                alert.setHeaderText("Félicitations !");
+//                alert.setContentText("Vous avez gagné !");
+            //} else {
+//                alert.setHeaderText("Dommage...");
+//                alert.setContentText("Vous avez perdu !");
+            //}
+            //affiche l'alerte avec les messagesge pendant 2 secondes
+            alert.showAndWait();
+            //Affichage de l'historique
             historique();
+        }
+        if(simulation.etreFini()){ //si on est en mode non interactif
+            alert.setContentText("Fin de la partie !\n" +
+                    "Cliquez sur OK pour quitter");
+            alert.showAndWait();
+            //Quand on clique sur le bouton ok, on quitte le jeu
+            System.exit(0);
+
         }
     }
 
@@ -330,7 +356,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
         if(tour>=simulation.historiquePosition.size()){
             tour=simulation.historiquePosition.size()-1;
         }
-        //on mets a jour la carte bayesienne
+        //on met a jour la carte bayesienne
         FiltreBayesien.updateBayes(caseBayesienneHisto,simulation.historiqueBayesien.get(tour));
 
         setPositions(simulation.historiquePosition.get(tour).get(0),prisonnierView);
@@ -344,6 +370,22 @@ public class VuePrincipale extends Pane implements DessinJeu {
     public void setPositions(Position p, ImageView im) {
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);
+    }
+
+    /**
+     * Méthode pour afficher un pop up à la fin de la partie
+     */
+    private void afficherPopFinDePartie(boolean victoire) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Fin de la partie");
+        if (victoire) {
+            alert.setHeaderText("Félicitations !");
+            alert.setContentText("Vous avez gagné !");
+        } else {
+            alert.setHeaderText("Dommage...");
+            alert.setContentText("Vous avez perdu !");
+        }
+        alert.showAndWait();
     }
 
 }

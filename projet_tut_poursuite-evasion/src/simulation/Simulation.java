@@ -367,4 +367,10 @@ public class Simulation implements Jeu {
     public HashMap<Personnage, Bayesien> getBayesiens() {
         return bayesiens;
     }
+
+    /**
+     * Méthode permettant de savoir si le joueur ou l'agent a gagné
+     */
+
+
 }

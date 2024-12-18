@@ -12,7 +12,6 @@ public abstract class Personnage {
         this.position = new Position(x, y);
     }
 
-    public abstract void deplacer(int x, int y);
     public abstract void deplacer(Position p);
 
     public Position getPosition() {

@@ -18,8 +18,6 @@ public class CalculChemins {
             BufferedReader br = new BufferedReader(new FileReader("./donnees/chemins.txt"));
             String line;
             while ((line = br.readLine()) != null) {
-                //System.out.println(line);
-                //0,11|11,0:[(11;0), (10;1), (10;2), (11;3), (11;4), (11;5), (11;6), (10;7), (9;8), (8;9), (8;10), (7;11), (7;12), (6;13), (5;13), (4;13), (3;13), (2;13), (1;12), (0;11)];
                 String[] parts = line.split(":");
                 //positions 1 et 2
                 String[] positions = parts[0].split("\\|");

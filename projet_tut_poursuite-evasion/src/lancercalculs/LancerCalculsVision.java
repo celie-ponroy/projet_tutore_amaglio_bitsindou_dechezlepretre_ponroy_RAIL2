@@ -1,4 +1,4 @@
-package main;
+package lancercalculs;
 
 import simulation.CalculVision;
 

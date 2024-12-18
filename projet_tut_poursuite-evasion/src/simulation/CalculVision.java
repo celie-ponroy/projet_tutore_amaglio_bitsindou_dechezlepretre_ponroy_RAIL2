@@ -127,8 +127,8 @@ public class CalculVision {
 
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
-                if (coordoneeCarteY < 0 || coordoneeCarteY >= Simulation.CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= Simulation.CARTE[0].length) {
-                    vision[coordoneeVisionY][coordoneeVisionX] = Simulation.MUR;
+                if (coordoneeCarteY < 0 || coordoneeCarteY >= carte.length ||coordoneeCarteX < 0 || coordoneeCarteX >= carte[0].length) {
+                    vision[coordoneeVisionY][coordoneeVisionX] = mur;
 
                     continue;
                 }
@@ -141,7 +141,7 @@ public class CalculVision {
         List<Position> murs = new ArrayList<>();
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
-                if (vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR) {
+                if (vision[y+tailledecalage][x+tailledecalage] == mur) {
 
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
@@ -152,7 +152,7 @@ public class CalculVision {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
 
-                if (!(vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR)) {//si la case est pas un mur
+                if (!(vision[y+tailledecalage][x+tailledecalage] == mur)) {//si la case est pas un mur
 
 
                     //on trace une droite entre le personnage et la case

@@ -5,7 +5,6 @@ import moteur.Jeu;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
 import simulation.comportement.Comportement;
-import simulation.comportement.reseau_neurones.ReseauDeNeurones;
 
 import simulation.personnages.*;
 
@@ -38,7 +37,7 @@ public class Simulation implements Jeu {
     public static final int MUR = -1;
     public static final int SOL = 0;
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
-    public static final HashMap<List<Position>, Stack> CHEMIN = CalculChemins.recupererChemin();
+    public static final HashMap<List<Position>, Stack> CHEMINS = CalculChemins.recupererChemin();
 
 
     private boolean estFini;
@@ -75,15 +74,26 @@ public class Simulation implements Jeu {
 
     }
 
+    /**
+     * Methode permettant d'ajouter un observateur
+     * @param dj
+     */
     public void ajouterObservateur(DessinJeu dj){
         this.observateurs.add(dj);
     }
+
+    /**
+     * Methode permettant de notifier les observateurs
+     */
     public void notifierObservateurs(){
         for(DessinJeu dj : this.observateurs){
             dj.update(this);
         }
     }
 
+    /**
+     * Methode de deplacement non interactif
+     */
     public void deplacerAgents(){
 
         deplacerPersonnage(this.prisonnier, this.comportementPrisonnier.prendreDecision());
@@ -98,6 +108,10 @@ public class Simulation implements Jeu {
 
     }
 
+    /**
+     * Methode de deplacement interactif
+     * @param d
+     */
     public void deplacementJoueur(Deplacement d){
         // pour l'instant le joueur est forcément le prisonnier
         Deplacement deplacementAgent = this.comportementGardien.prendreDecision();
@@ -264,16 +278,15 @@ public class Simulation implements Jeu {
         return carteBayesiennes.get(p);
     }
 
+    /**
+     * Methode permettant de recuperer le nombre de tours actuels
+     * @return
+     */
     public int getNbTours() {
         return this.nbTours;
     }
 
-    /**
-     * Méthode permettant de récupérer le dernier déplacement effectué
-     */
-    public Deplacement getDerDeplacement() {
-        return this.derDeplacement;
-    }
+
     /**
      * Position de la sortie
      */
@@ -281,6 +294,10 @@ public class Simulation implements Jeu {
         return new Position(7,1);
     }
 
+    /**
+     * Methode permettant les bayesiens
+     * @return
+     */
     public HashMap<Personnage, Bayesien> getBayesiens() {
         return bayesiens;
     }

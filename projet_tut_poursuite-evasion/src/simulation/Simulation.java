@@ -354,7 +354,7 @@ public class Simulation implements Jeu {
             casesVue.add(new Integer[]{position.getY(), position.getX(),present});
         }
         carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence( carteBayesiennes.get(p1),casesVue));
-    }
+ }
 
     /**
      * Methode permettant d'initialiser le jeu

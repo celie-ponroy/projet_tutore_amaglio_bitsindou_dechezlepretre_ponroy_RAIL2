@@ -42,6 +42,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
         }
     }
 
+
     /**
      * Initialise les images
      */

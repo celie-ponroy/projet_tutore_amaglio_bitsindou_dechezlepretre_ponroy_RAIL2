@@ -78,6 +78,7 @@ public class MoteurJeu extends Application {
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
+<<<<<<< HEAD
 //            Jeu simulation = new Simulation(false);
 //            MoteurJeu.jeu = simulation;
 
@@ -143,11 +144,24 @@ public class MoteurJeu extends Application {
             primaryStage.setTitle("Choix du personnage");
             primaryStage.show();
 
+=======
+            VuePrincipale vp = new VuePrincipale(true);
+            vp.update(MoteurJeu.jeu);
+            MoteurJeu.jeu.ajouterObservateur(vp);
+
+            root.getChildren().clear();
+            VBox.setVgrow(vp, Priority.ALWAYS); // Ajustement automatique de la vue
+            root.getChildren().add(vp);
+
+            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+            scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+>>>>>>> d3ad33b (Début analyse)
         });
 
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
+<<<<<<< HEAD
             Jeu simulation = new Simulation();
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
@@ -157,6 +171,14 @@ public class MoteurJeu extends Application {
             VueBayesienne va1 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getPrisonnier());
             VueBayesienne va2 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getGardien());
 
+=======
+            //Personnage prisonnier = new Agent(4, 10);
+            //Personnage gardien = new Agent(5, 4);
+            VuePrincipale vb = new VuePrincipale(false);
+            VueAnalyse va1 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getPrisonnier());
+            VueAnalyse va2 = new VueAnalyse((Simulation) jeu,((Simulation) jeu).getGardien());
+
+>>>>>>> d3ad33b (Début analyse)
             vb.update(MoteurJeu.jeu);
             va1.update(MoteurJeu.jeu);
             va2.update(MoteurJeu.jeu);
@@ -183,7 +205,11 @@ public class MoteurJeu extends Application {
             rootAnalyse.getChildren().clear();
             rootAnalyse.getChildren().add(vbox);
 
+<<<<<<< HEAD
             ClavierNonInteractif clavier = new ClavierNonInteractif((Simulation) MoteurJeu.jeu);
+=======
+            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+>>>>>>> d3ad33b (Début analyse)
             sceneAnalyse.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
 
             primaryStage.setScene(sceneAnalyse);

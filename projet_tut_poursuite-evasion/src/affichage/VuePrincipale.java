@@ -139,6 +139,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
 
         this.getChildren().addAll(prisonnierView, gardienView);
 
+
         // Placement initial des personnages
         updatePositions();
 

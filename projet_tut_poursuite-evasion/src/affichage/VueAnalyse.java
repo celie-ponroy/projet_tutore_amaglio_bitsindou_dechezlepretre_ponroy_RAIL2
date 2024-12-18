@@ -31,6 +31,7 @@ public class VueAnalyse extends Pane implements DessinJeu {
     /**
      * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
      */
+
     public VueAnalyse(Simulation s, Personnage p) {
         if (s.getGardien() == p) {
             this.perso = s.getGardien();

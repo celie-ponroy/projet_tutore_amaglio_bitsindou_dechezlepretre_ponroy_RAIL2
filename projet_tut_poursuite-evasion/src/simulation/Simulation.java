@@ -166,6 +166,13 @@ public class Simulation implements Jeu {
         }
 
         while (this.nbTours < nbIte && !this.estFini) {
+            //creation de l'arbre de decision pour l'apprenant pour comparer avec choix rn
+            ArbreDecisionGradien tmpArbre;
+            if (this.comportementGardien instanceof ReseauDeNeurones) {
+                tmpArbre = new ArbreDecisionGradien(this,personnageApprenant);
+            } else {
+                tmpArbre = new ArbreDecisionGradien(this,personnageApprenant);
+            }
             //Creation des entrees du reseaux
             double[][] carteBayesienne = this.carteBayesiennes.get(personnageApprenant);
             double[] carteApplatie = Outil.applatissement(carteBayesienne);
@@ -180,8 +187,7 @@ public class Simulation implements Jeu {
             Deplacement depRn = comportementApprenant.prendreDecision(entrees);
 
             //Prise de descision de l'arbre pour comparaison avec reseaux
-            ArbreDeDecision tmpArbre = new ArbreDeDecisionGardien(this, personnageApprenant);
-            Deplacement depArbre = tmpArbre.prendreDesicion();
+            Deplacement depArbre = tmpArbre.prendreDecision();
             //Creation sortie voulue (descision de l'abre)
             double[] sortieVoulues = new double[Deplacement.values().length];
             int i = 0;

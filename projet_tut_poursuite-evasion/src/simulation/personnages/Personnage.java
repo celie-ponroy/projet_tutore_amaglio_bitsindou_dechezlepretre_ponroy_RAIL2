@@ -19,7 +19,7 @@ public abstract class Personnage {
         return this.position;
     }
     public ArrayList<Position> getVision(){
-        return Simulation.vision.get(this.position);
+        return Simulation.VISION.get(this.position);
     }
 
 

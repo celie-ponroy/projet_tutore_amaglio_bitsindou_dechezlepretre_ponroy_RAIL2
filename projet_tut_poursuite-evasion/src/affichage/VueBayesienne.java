@@ -5,11 +5,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
 
 import simulation.personnages.Joueur;
+import simulation.personnages.Personnage;
 
 import java.util.Arrays;
 
@@ -80,7 +82,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
         }
 
         //Ajout filtre couleur bayes
-        Joueur prisonnier = (Joueur) simulation.getPrisonnier();
+        Personnage prisonnier = (Personnage) simulation.getPrisonnier();
         double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
         caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
@@ -132,7 +134,7 @@ public class VueBayesienne extends Pane implements DessinJeu {
 
     private void updateBayes() {
 
-        Joueur prisonnier = (Joueur) simulation.getPrisonnier();
+        Personnage prisonnier =(Personnage) simulation.getPrisonnier();
         double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
         for (int i = 0; i < simulation.CARTE.length; i++) {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {

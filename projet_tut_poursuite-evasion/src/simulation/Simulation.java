@@ -10,6 +10,7 @@ import simulation.comportement.ArbreDecisionPrisonnier;
 import outils.Outil;
 import simulation.comportement.Comportement;
 
+import simulation.comportement.reseau_neurones.ReseauDeNeurones;
 import simulation.personnages.*;
 
 import java.util.*;

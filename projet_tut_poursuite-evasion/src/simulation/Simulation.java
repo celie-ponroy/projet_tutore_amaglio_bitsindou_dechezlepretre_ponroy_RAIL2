@@ -41,7 +41,6 @@ public class Simulation implements Jeu {
 
 
     private boolean estFini;
-    private Deplacement derDeplacement;
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private HashMap<Personnage,Bayesien> bayesiens;
 
@@ -141,9 +140,17 @@ public class Simulation implements Jeu {
      * @param d déplacement souhaité
      */
     public void deplacementJoueur(Deplacement d){
+
         Deplacement deplacementAgent = this.comportementGardien.prendreDecision();
 
         Joueur joueur = (Joueur) this.getJoueur();
+        Personnage agent;
+        if(joueur.equals(this.prisonnier)){
+            agent = this.gardien;
+        }else{
+            agent = this.prisonnier;
+        }
+        actualisationBayesienne(agent,joueur);
 
         //initialisation du déplacement du joueur
         boolean deplacement = deplacerPersonnage(joueur, d);
@@ -151,12 +158,7 @@ public class Simulation implements Jeu {
             return;
         }
         this.nbTours++;
-        Personnage agent;
-        if(joueur.equals(this.prisonnier)){
-            agent = this.gardien;
-        }else{
-            agent = this.prisonnier;
-        }
+
         deplacerPersonnage(joueur, d);
         deplacerPersonnage(agent, deplacementAgent);
 
@@ -164,7 +166,6 @@ public class Simulation implements Jeu {
         miseAJourFinJeu();
         this.notifierObservateurs();
         //actualisation des proba de présence
-        actualisationBayesienne(agent,joueur);
 
     }
 
@@ -226,7 +227,6 @@ public class Simulation implements Jeu {
      */
 
     public boolean deplacerPersonnage(Personnage p, Deplacement d){
-        this.derDeplacement = d;
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
@@ -336,13 +336,11 @@ public class Simulation implements Jeu {
             return this.gardien;
         }
     }
-    /**
-     * Méthode permettant de récupérer le dernier déplacement effectué
-     * Position de la sortie
-     */
+
     public static Position getPosSortie(){
         return new Position(7,1);
     }
+
 
     /**
      * Methode permettant les bayesiens

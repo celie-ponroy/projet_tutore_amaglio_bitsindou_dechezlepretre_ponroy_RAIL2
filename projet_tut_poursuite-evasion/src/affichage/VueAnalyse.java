@@ -5,7 +5,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import moteur.Jeu;
 import simulation.Simulation;
@@ -15,20 +14,28 @@ import simulation.personnages.Personnage;
 
 import java.util.Arrays;
 
-public class VueBayesienne extends Pane implements DessinJeu {
+public class VueAnalyse extends Pane implements DessinJeu {
 
     private Simulation simulation;
     private Image imageMur;
     private Image imageSol;
     private Image imageSortie;
-    private Image imagePrisonnier;
-    private Image imageGardien;
-
-    private ImageView prisonnierView; // Vue pour le prisonnier
-    private ImageView gardienView; // Vue pour le gardien
-
+    private Image imagePerso;
+    //private Image imageGardien;
+    //private ImageView prisonnierView; // Vue pour le prisonnier
+    private ImageView persoView; // Vue pour le gardien
+    private Personnage perso; // Personnage à afficher
     private Rectangle[][] caseBayesienne;
-    private static final int TAILLE_CELLULE = 45; // Taille des cases du labyrinthe
+    private static final int TAILLE_CELLULE = 40; // Taille des cases du labyrinthe
+
+    //constructeur
+    public VueAnalyse(Simulation s, Personnage p) {
+        if (s.getGardien() == p) {
+            this.perso = s.getGardien();
+        } else {
+            this.perso = s.getPrisonnier();
+        }
+    }
 
     /**
      * Initialise les images
@@ -37,8 +44,12 @@ public class VueBayesienne extends Pane implements DessinJeu {
         this.imageMur = new Image("file:images/murs.png");
         this.imageSol = new Image("file:images/sol.png");
         this.imageSortie = new Image("file:images/sortie.png");
-        this.imagePrisonnier = new Image("file:images/prisonnier.png");
-        this.imageGardien = new Image("file:images/gardien.png");
+        //si le personnage est un prisonnier on affiche
+        if (this.perso == simulation.getPrisonnier()) {
+            this.imagePerso= new Image("file:images/prisonnier.png");
+        } else {
+            this.imagePerso= new Image("file:images/gardien.png"); //sinon on affiche le gardien
+        }
     }
 
     /**
@@ -81,9 +92,16 @@ public class VueBayesienne extends Pane implements DessinJeu {
             }
         }
 
-        //Ajout filtre couleur bayes
-        Personnage prisonnier = (Personnage) simulation.getPrisonnier();
-        double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
+        //Création du personnage
+        Personnage personnage;
+
+        //Ajout filtre couleur bayes en fonction du personnage
+        if (this.perso == simulation.getPrisonnier()){
+            personnage = (Personnage) simulation.getPrisonnier();
+        }else{
+            personnage = (Personnage) simulation.getGardien();
+        }
+        double[][] carteBayes = simulation.getCarteBayesienne(personnage);
         caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
         for (int i = 0; i < simulation.CARTE.length; i++) {
@@ -102,40 +120,44 @@ public class VueBayesienne extends Pane implements DessinJeu {
             }
         }
 
-        // Initialisation des personnages
-        prisonnierView = new ImageView(imagePrisonnier);
-        prisonnierView.setFitWidth(TAILLE_CELLULE);
-        prisonnierView.setFitHeight(TAILLE_CELLULE);
+        // Initialisation du personnage
+        persoView = new ImageView(imagePerso);
+        persoView.setFitWidth(TAILLE_CELLULE);
+        persoView.setFitHeight(TAILLE_CELLULE);
 
-        this.getChildren().add(prisonnierView);
-
-        gardienView = new ImageView(imageGardien);
-        gardienView.setFitWidth(TAILLE_CELLULE);
-        gardienView.setFitHeight(TAILLE_CELLULE);
-
-        this.getChildren().add(gardienView);
+        this.getChildren().add(persoView);
 
         // Placement initial des personnages
         updatePositions();
     }
 
     /**
-     * Met à jour uniquement les positions des personnages
+     * Met à jour uniquement la position du peronnage
      */
     private void updatePositions() {
-        // Met à jour la position du prisonnier
-        prisonnierView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
-        prisonnierView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);
 
-        // Met à jour la position du gardien
-        gardienView.setX(simulation.getGardien().getPosition().getX() * TAILLE_CELLULE);
-        gardienView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
+        if (this.perso == simulation.getPrisonnier()) {
+            persoView.setX(simulation.getPrisonnier().getPosition().getX() * TAILLE_CELLULE);
+            persoView.setY(simulation.getPrisonnier().getPosition().getY() * TAILLE_CELLULE);
+        } else {
+            persoView.setX(simulation.getGardien().getPosition().getX() * TAILLE_CELLULE);
+            persoView.setY(simulation.getGardien().getPosition().getY() * TAILLE_CELLULE);
+        }
     }
 
+    /**
+     * Met à jour les probabilités bayesiennes uniquement du joueur
+     */
     private void updateBayes() {
-
-        Personnage prisonnier = simulation.getPrisonnier();
-        double[][] carteBayes = simulation.getCarteBayesienne(prisonnier);
+        //Création du personnage
+        Personnage personnage;
+        // Mise à jour des probabilités bayesiennes en fonction du perosnnage
+        if (this.perso == simulation.getPrisonnier()){
+            personnage = (Personnage) simulation.getPrisonnier();
+        }else{
+            personnage = (Personnage) simulation.getGardien();
+        }
+        double[][] carteBayes = simulation.getCarteBayesienne(personnage);
         for (int i = 0; i < simulation.CARTE.length; i++) {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = caseBayesienne[i][j];
@@ -148,6 +170,10 @@ public class VueBayesienne extends Pane implements DessinJeu {
         }
     }
 
+    /**
+     * Met à jour l'affichage du jeu
+     * @param jeu jeu a afficher
+     */
     @Override
     public void update(Jeu jeu) {
         // Récuperation de la simulation
@@ -165,3 +191,4 @@ public class VueBayesienne extends Pane implements DessinJeu {
     }
 
 }
+

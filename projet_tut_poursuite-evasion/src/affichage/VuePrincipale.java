@@ -30,7 +30,12 @@ public class VuePrincipale extends Pane implements DessinJeu {
 
 
     private static final int TAILLE_CELLULE = 50; // Taille des cases du labyrinthe
+    private boolean afficherVision;
 
+    //constructeur
+    public VuePrincipale(boolean afficherVision){
+        this.afficherVision = afficherVision;
+    }
     /**
      * Initialise les images
      */
@@ -164,14 +169,15 @@ public class VuePrincipale extends Pane implements DessinJeu {
             // Si le labyrinthe n'est pas encore initialisé
             initImages();
             initLabyrinthe();
-            initFiltreVision();
+            if (this.afficherVision){
+                initFiltreVision();
+            }
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
             updateIteration();
-            setFiltreVision();
-            //si le joueur choisit le personnage prisonnier, on cache le gardien du champ de vision
-            if (simulation.getJoueur().equals(simulation.getPrisonnier())) {
+            if (this.afficherVision){
+                setFiltreVision();
                 //si le gardien est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
                 if (simulation.getPrisonnier().getVision().contains(simulation.getGardien().getPosition())) {
                     gardienView.setOpacity(1);
@@ -179,13 +185,9 @@ public class VuePrincipale extends Pane implements DessinJeu {
                     gardienView.setOpacity(0);
                 }
             }else{
-                //si le prisonnier est sur des cases non visibles on ne l'affiche pas sinon on l'affiche
-                if (simulation.getGardien().getVision().contains(simulation.getPrisonnier().getPosition())) {
-                    prisonnierView.setOpacity(1);
-                } else {
-                    prisonnierView.setOpacity(0);
-                }
+                gardienView.setOpacity(1);
             }
+
         }
 
     }

@@ -14,12 +14,10 @@ public class ReseauDeNeurones implements Comportement, Serializable {
     private Couche[] couches;
     private FonctionActivation fonctionActivation;
 
-
     /**
      * @param Couches              Nb neurones par couches
      * @param vitesseApprentissage tx d'apprentissage
      */
-
     public ReseauDeNeurones(int[] Couches, double vitesseApprentissage) {
         this.vitesseApprentissage = vitesseApprentissage;
         fonctionActivation = new Sigmoide();
@@ -33,7 +31,6 @@ public class ReseauDeNeurones implements Comportement, Serializable {
             }
         }
     }
-
 
     /**
      * Réponse à une entrée
@@ -71,7 +68,6 @@ public class ReseauDeNeurones implements Comportement, Serializable {
         return output;
     }
 
-
     /**
      * Rétropropagation
      *
@@ -79,12 +75,10 @@ public class ReseauDeNeurones implements Comportement, Serializable {
      * @param sortie  Sortie souhaitée (apprentissage supervisé !)
      * @return Error différence entre la sortie calculée et la sortie souhaitée
      */
-
     public double retroPropagation(double[] entrees, double[] sortie) {
         double nouvelle_sorties[] = execute(entrees);
         double error;
         int i, j, k;
-
 
         // Erreur de sortie
         for (i = 0; i < couches[couches.length - 1].Length; i++) {
@@ -178,13 +172,4 @@ public class ReseauDeNeurones implements Comportement, Serializable {
         return Deplacement.values()[indiceMax];
     }
 
-    public static double[] applatissement(double[][] tab) {
-        List<Double> list = new ArrayList<>();
-        Arrays.stream(tab).forEach(array -> Arrays.stream(array).forEach(list::add));
-        double[] flatCarte = new double[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            flatCarte[i] = list.get(i);
-        }
-        return flatCarte;
-    }
 }

@@ -4,6 +4,7 @@ import affichage.DessinJeu;
 import moteur.Jeu;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
+import outils.Outil;
 import simulation.comportement.Comportement;
 
 import simulation.personnages.*;
@@ -68,17 +69,21 @@ public class Simulation implements Jeu {
         carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
         carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
     }
-    
-    public Simulation(ReseauDeNeurones rn, boolean apprentissagePrisonnier){
+    /**
+     * Constructeur utiliser pour l'apprentissage
+     *
+     * @param rn                      Reseaux de neurones selectione pour l'apprentissage
+     * @param apprentissagePrisonnier Vrai si on fais apprendre au prisonnier, faux sinon.
+     */
+    public Simulation(ReseauDeNeurones rn, boolean apprentissagePrisonnier) {
         this.prisonnier = new Agent(4, 10);
         this.gardien = new Agent(5, 4);
         this.nbTours = 0;
         this.estFini = false;
-        if(apprentissagePrisonnier){
+        if (apprentissagePrisonnier) {
             this.comportementPrisonnier = rn;
             //this.comportementGardien = new ArbreDeDecision();
-        }
-        else{
+        } else {
             //this.comportementPrisonnier = new ArbreDeDecision();
             this.comportementGardien = rn;
         }
@@ -138,6 +143,65 @@ public class Simulation implements Jeu {
         }
     }
 
+    /**
+     * Méthode permettant de faire apprendre l'arbre de descision au réseau de neurones selectionee
+     *
+     * @param nbIte Nombre d'itération
+     */
+    public void apprentissage(int nbIte) {
+        //On differentie quelle personnage apprend et lequel n'apprend pas
+        Personnage personnageApprenant;
+        Personnage personnageNonApprenant;
+        Comportement comportementApprenant;
+        Comportement comportementNonApprenant;
+        if (this.comportementGardien instanceof ReseauDeNeurones) {
+            personnageApprenant = this.gardien;
+            comportementApprenant = this.comportementGardien;
+            personnageNonApprenant = this.prisonnier;
+            comportementNonApprenant = this.comportementPrisonnier;
+        } else {
+            personnageApprenant = this.prisonnier;
+            comportementApprenant = this.comportementPrisonnier;
+            personnageNonApprenant = this.gardien;
+            comportementNonApprenant = this.comportementGardien;
+        }
+
+        while (this.nbTours < nbIte && !this.estFini) {
+            //Creation des entrees du reseaux
+            double[][] carteBayesienne = this.carteBayesiennes.get(personnageApprenant);
+            double[] carteApplatie = Outil.applatissement(carteBayesienne);
+            double[] entrees = new double[carteApplatie.length + 2];
+            for (int i = 0; i < carteApplatie.length; i++) {
+                entrees[i] = carteApplatie[i];
+            }
+            entrees[entrees.length - 1] = (double) personnageApprenant.getPosition().getY() / CARTE.length;
+            entrees[entrees.length - 2] = (double) personnageApprenant.getPosition().getX() / CARTE[0].length;
+
+            //Prise de descision du reseaux
+            Deplacement depRn = comportementApprenant.prendreDecision(entrees);
+
+            //Prise de descision de l'arbre pour comparaison avec reseaux
+            ArbreDeDecision tmpArbre = new ArbreDeDecisionGardien(this, personnageApprenant);
+            Deplacement depArbre = tmpArbre.prendreDesicion();
+            //Creation sortie voulue (descision de l'abre)
+            double[] sortieVoulues = new double[Deplacement.values().length];
+            int i = 0;
+            for (Deplacement dep : Deplacement.values()) {
+                if (depArbre.equals(dep)) {
+                    sortieVoulues[i] = 1.;
+                } else {
+                    sortieVoulues[i] = 0.;
+                }
+                i++;
+            }
+            deplacerPersonnage(personnageApprenant, depRn);
+            deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
+            //On compare
+            ((ReseauDeNeurones) comportementApprenant).retroPropagation(Outil.applatissement(carteBayesienne), sortieVoulues);
+            this.nbTours++;
+            this.miseAJourFinJeu();
+        }
+    }
     /**
      * Methode de deplacement non interactif
      */

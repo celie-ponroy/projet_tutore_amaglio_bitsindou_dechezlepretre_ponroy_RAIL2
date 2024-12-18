@@ -208,6 +208,9 @@ public class VuePrincipale extends Pane implements DessinJeu {
             }
 
         }
+        if(simulation.etreFini()){
+            historique();
+        }
 
     }
 
@@ -265,7 +268,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
         }
     }
     /**
-     * Methode pour historique à la fin du jeu
+     * Methode pour historique à la fin du jeu en mode interactif
      */
     public void historique(){
         //TODO

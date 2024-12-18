@@ -183,12 +183,14 @@ public class VuePrincipale extends Pane implements DessinJeu {
             // Sinon, il met juste a jour les positions des personnages
             updatePositions();
             updateIteration();
+
             if (this.afficherVision){
                 setFiltreVision();
                 //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
                 Personnage p1 = simulation.getGardien();
                 Personnage p2 = simulation.getPrisonnier();
                 ImageView imageP2 = prisonnierView;
+
 
                 if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
                     p1 = simulation.getPrisonnier();
@@ -272,6 +274,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
      * Methode pour historique à la fin du jeu en mode interactif
      */
     public void historique(){
+
         tour=0;
         //initaliser la map (enlever la vision)
         Arrays.stream(filtreVision).forEach(rectangles -> Arrays.stream(rectangles).forEach(rectangle -> rectangle.setOpacity(0)));
@@ -289,6 +292,7 @@ public class VuePrincipale extends Pane implements DessinJeu {
         prisonnierView.setOpacity(1);
         setPositions(pGardien,gardienView);
         gardienView.setOpacity(1);
+
 
 
         //ajout boutons pour precedent et suivant

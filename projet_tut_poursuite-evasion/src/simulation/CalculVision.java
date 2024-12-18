@@ -11,6 +11,20 @@ import java.util.List;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
+    static int[][] carte = new int[][]{
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1, 0, 0, 0, 0, 0,-1, 2,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1},
+        {-1, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
+        {-1, 0,-1,-1, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
+        {-1, 0,-1,-1, 0, 0, 0, 0, 0, 0,-1,-1, 0,-1},
+        {-1, 0, 0, 0, 0,-1,-1,-1,-1, 0, 0, 0, 0,-1},
+        {-1,-1, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
+        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};//carte de simulation
+    static int mur =-1;
 
     /**
      * Recuperer la vision depuis le fichier vision.txt
@@ -20,7 +34,7 @@ public class CalculVision {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
         //on recupere la vision depuis le fichier vision.txt
         try {
-            BufferedReader br = new BufferedReader(new FileReader("vision.txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./donnees/vision.txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(":");
@@ -58,9 +72,9 @@ public class CalculVision {
     public static void ecrireVision() throws IOException {
         HashMap vision = calculerCarteVision();
         //ecrire dans un fichier
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("vision.txt"));
-        for (int y = 0; y < Simulation.CARTE.length ; y++) {
-            for (int x = 0; x < Simulation.CARTE[0].length; x++) {
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision.txt"));
+        for (int y = 0; y < carte.length ; y++) {
+            for (int x = 0; x < carte[0].length; x++) {
                 //afficher la position
                 bos.write((x+","+y+":").getBytes());
                 bos.write((vision.get(new Position(x,y))+";"+"\n").getBytes());
@@ -75,12 +89,12 @@ public class CalculVision {
      * @return la liste des cases pour toutes les positions de la carte
      */
     public static HashMap calculerCarteVision(){
-        int [][] carte = Simulation.CARTE;
+
         HashMap res = new HashMap();
         for (int y = 0; y < carte.length ; y++) {
             for (int x = 0; x < carte[0].length; x++) {
                //si la case est un mur
-                if (carte[y][x] == Simulation.MUR) {
+                if (carte[y][x] == mur) {
                     res.put(new Position(x,y),new ArrayList());
                     continue;
                 }
@@ -99,6 +113,7 @@ public class CalculVision {
     public static ArrayList calculerVision(int xPerso, int yPerso) {
         ArrayList res = new ArrayList();
 
+
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
         int tailleVision = 9;
@@ -109,13 +124,15 @@ public class CalculVision {
                 //si on est en bordure de la carte
                 int coordoneeCarteX = xPerso + x;
                 int coordoneeCarteY = yPerso + y;
+
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
-                if (coordoneeCarteY < 0 || coordoneeCarteY >= Simulation.CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= Simulation.CARTE[0].length) {
-                    vision[coordoneeVisionY][coordoneeVisionX] = Simulation.MUR;
+                if (coordoneeCarteY < 0 || coordoneeCarteY >= carte.length ||coordoneeCarteX < 0 || coordoneeCarteX >= carte[0].length) {
+                    vision[coordoneeVisionY][coordoneeVisionX] = mur;
+
                     continue;
                 }
-                vision[coordoneeVisionY][coordoneeVisionX] = Simulation.CARTE[coordoneeCarteY][coordoneeCarteX];
+                vision[coordoneeVisionY][coordoneeVisionX] = carte[coordoneeCarteY][coordoneeCarteX];
 
             }
         }
@@ -124,7 +141,8 @@ public class CalculVision {
         List<Position> murs = new ArrayList<>();
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
-                if (vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR) {
+                if (vision[y+tailledecalage][x+tailledecalage] == mur) {
+
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
             }
@@ -133,7 +151,9 @@ public class CalculVision {
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
-                if (!(vision[y+tailledecalage][x+tailledecalage] == Simulation.MUR)) {//si la case est pas un mur
+
+                if (!(vision[y+tailledecalage][x+tailledecalage] == mur)) {//si la case est pas un mur
+
 
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;

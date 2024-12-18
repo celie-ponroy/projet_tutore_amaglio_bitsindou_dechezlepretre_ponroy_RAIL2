@@ -6,13 +6,6 @@ public class Agent extends Personnage {
         super(x,y);
     }
 
-
-    @Override
-    public void deplacer(int x, int y) {
-        this.position.deplacer(x, y);
-    }
-
-
     @Override
     public void deplacer(Position p) {
         this.position = p;

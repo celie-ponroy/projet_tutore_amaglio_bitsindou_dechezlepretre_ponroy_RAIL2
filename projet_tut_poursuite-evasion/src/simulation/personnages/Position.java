@@ -16,14 +16,6 @@ public class Position {
         this.y = y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public int getX() {
         return x;
     }
@@ -32,11 +24,6 @@ public class Position {
         return y;
     }
 
-    //se déplace de x, y
-    public void deplacer(int x, int y){
-        this.x = this.x + x;
-        this.y = this.y + y;
-    }
 
     public void deplacement(Deplacement d) {
         switch (d){

@@ -8,12 +8,6 @@ import affichage.DessinJeu;
  */
 public interface Jeu {
 
-//    /**
-//     * methode mise a jour du jeu
-//     *
-//     * @param clavier  objet contenant l'état du clavier'
-//     */
-    //void update(Clavier clavier);
     void ajouterObservateur(DessinJeu dj);
     void notifierObservateurs();
 

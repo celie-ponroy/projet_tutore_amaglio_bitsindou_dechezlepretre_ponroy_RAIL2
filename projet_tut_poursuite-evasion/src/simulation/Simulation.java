@@ -67,7 +67,27 @@ public class Simulation implements Jeu {
         carteBayesiennes = new HashMap<>();
         carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
         carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
-
+    }
+    
+    public Simulation(ReseauDeNeurones rn, boolean apprentissagePrisonnier){
+        this.prisonnier = new Agent(4, 10);
+        this.gardien = new Agent(5, 4);
+        this.nbTours = 0;
+        this.estFini = false;
+        if(apprentissagePrisonnier){
+            this.comportementPrisonnier = rn;
+            //this.comportementGardien = new ArbreDeDecision();
+        }
+        else{
+            //this.comportementPrisonnier = new ArbreDeDecision();
+            this.comportementGardien = rn;
+        }
+        //Initialisation des carte bayesiennes pour les deux agents
+        bayesienGardien = new Bayesien();
+        bayesienPrisonnier = new Bayesien();
+        this.carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesienGardien.getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesienPrisonnier.getCarteBayesienne());
     }
 
     /**

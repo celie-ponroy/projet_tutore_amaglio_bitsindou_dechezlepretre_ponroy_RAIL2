@@ -15,4 +15,5 @@ public class Agent extends Personnage {
     public Position getPosition() {
         return position;
     }
+
 }

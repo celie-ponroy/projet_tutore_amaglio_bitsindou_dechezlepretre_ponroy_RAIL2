@@ -11,7 +11,7 @@ import simulation.personnages.Position;
 public class VueBayesienne extends VueSimulation {
 
     private Simulation simulation;
-    private ImageView persoView; // Vue pour le gardien
+rm    private ImageView persoView; // Vue pour le gardien
     private Personnage perso; // Personnage à afficher
     private Image imagePerso;
     private Rectangle[][] caseBayesienne;

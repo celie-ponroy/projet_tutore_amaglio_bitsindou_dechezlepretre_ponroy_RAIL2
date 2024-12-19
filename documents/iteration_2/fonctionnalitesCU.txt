@@ -1,16 +1,11 @@
 - Mise en place réseau de neurones (Matias & Luc)
-<<<<<<< HEAD
 - Création de l'arbre de décisions du gardien (Célie)
 - Création de l'arbre de décisions du prisonnier (Célie)
 - Ajout de calculs de chemins (Célie)
 - Ajout Historique (avec vues) (Célie & Maëlle)
 - Implémentation du systeme d'analyse (Maêlle)
-
-
-=======
 - Mise en place de l'apprentissage de l'arbre (Matias & Luc)
   Apprentissage du réseau de neurones des décisions de l'arbre de décision
 - Lancement de l'apprentissage dans le terminal (Matias & Luc)
   Choix du nombre d'itération , le nombre de couche et leur taille
 - Enregistrement du réseau de neurones dans un fichier (Matias & Luc)
->>>>>>> 9d03375 (rebasage apprentissageArbre)

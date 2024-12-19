@@ -20,7 +20,13 @@ package "moteur"{
     + start(Stage): void
   }
 }
-
+package "outil"{
+    class Outil{
+      + {static} sauve(String, Object): void
+      + {static} applatissement(double[][]): double[]
+      + {static} chargerRn(String): ReseauDeNeurones
+    }
+}
 package "simulation"{
   enum Deplacement{
     HAUT
@@ -32,7 +38,52 @@ package "simulation"{
     DIAG_BAS_GAUCHE
     DIAG_BAS_DROITE
     AUCUN
-}
+  }
+  package "apprentissage"{
+    class ApprentissageDeArbre{
+        + main(): void
+    }
+  }
+  package "comportement"{
+    package reseau_neurones{
+        class Neurone{
+          + Value: double
+          + Weights : double[]
+          + Biais : double
+          + Delta : double
+          + Neurone()
+        }
+        class Couche{
+          + Length : int
+          + Couche(int, int)
+        }
+        Interface FonctionActivation{
+           + evaluate(double): double
+           + evaluateDer(double): double
+        }
+        class Sigmoide{}
+        class ReseauDeNeurones{
+          + vitesseApprentissage: double
+          + ReseauDeNeurones(int[], double)
+          + execute(double[]): double[]
+          + retroPropagation(double[], double[]): double
+        }
+    }
+    Interface Comportement{
+        + prendreDecision(): Deplacement
+        + prendreDecision(double[]): Deplacement
+    }
+    class ArbreDecision{
+        + direction(Position, Position): Deplacement
+    }
+    class ArbreDecisionGardien{
+      + ArbreDecisionGardien(Simulation, Personnage)
+    }
+    class ArbreDecisionPrisonnier{
+          + ArbreDecisionPrisonnier(Simulation, Personnage)
+          + oppose(Deplacement): Deplacement
+    }
+  }
   class Simulation{
     - nbTours : int
     - estFini : boolean
@@ -65,6 +116,7 @@ package "simulation"{
       + Bayesien()
       + calculerProbaPresence(double[][], List<Integer[]>): double[][]
       + getCasesVoisineValide(int, int): List<Case>
+      + getPlusGrandeProbas(): List<Case>
       + getCarteBayesienne(): double[][]
     }
     class Position{
@@ -95,20 +147,10 @@ package "simulation"{
 }
 
 
-package "animation" {
+package "affichage" {
   Interface DessinJeu{
     + update(Jeu): void
   }
-
-  class VueMenu{
-    + afficherMenu(Stage): void
-  }
-
-  class VueAnalyse{
-    - imageMur: Image
-    - imageSol: Image
-    - imageSortie: Image
-    - imagePerso: Image
     
   class VuePrincipale{
     - imageMur: Image
@@ -156,6 +198,19 @@ DessinJeu <|.. VueBayesienne
 Simulation "1" --> "1" Personnage: gardien
 Simulation "1" --> "1" Personnage: prisonnier
 Clavier "1" --> "1" Simulation : simulation
-Jeu <|-- Simulation
+Jeu <|.. Simulation
+Couche "1" --> "*" Neurone : neurones
+Sigmoide ..|> FonctionActivation
+ReseauDeNeurones ..|> Comportement
+ReseauDeNeurones "1" --> "*" Couche: couches
+ReseauDeNeurones "1" --> "1" FonctionActivation: fonctionActivation
+ArbreDecisionPrisonnier --|> ArbreDecision
+ArbreDecisionGardien --|> ArbreDecision
+ArbreDecisionPrisonnier ..|> Comportement
+ArbreDecisionGardien ..|> Comportement
+ArbreDecisionPrisonnier "1" --> "1" Simulation: simulation
+ArbreDecisionPrisonnier "1" --> "1" Personnage: personnage
+ArbreDecisionGardien "1" --> "1" Simulation: simulation
+ArbreDecisionGardien "1" --> "1" Personnage: personnage
 
 @enduml

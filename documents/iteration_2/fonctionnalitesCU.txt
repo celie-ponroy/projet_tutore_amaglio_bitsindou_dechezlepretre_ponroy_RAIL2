@@ -4,14 +4,19 @@ Lors de cette itération, nous avons pu ratrappé notre retard.
 
 - Mise en place réseau de neurones (Matias & Luc)
 - Création de l'arbre de décisions du gardien (Célie)
+	Le gardien a maintenant un comportement automatique
+	
 - Création de l'arbre de décisions du prisonnier (Célie)
+	Le prisonnier a maintenant un comportement automatique
+	
 - Ajout de calculs de chemins (Célie)
-
+	Pour pouvoir implémenter les deux arbres il faillait qu'ils puissent trouver un chemin pour aller d'une case A a une case B.
+	
 - Ajout de l'historique des positions (avec vues) (Célie & Maëlle)
 	Dans le mode interactif, l'utilisateur va pouvoir consulter après sa partie tous les déplacements de chaque personnage avec la réflexion de son adversaire sur sa position.
 	
-- Implémentation du système d'analyse (Maëlle)
-	Dans le mode non interactif, l'utilisateur va pouvoir consulter en même tant que la vus de la simulation principale, 2 vues pour voir chacun des personnages avec sa propre 
+- Implémentation du système d'analyse (Maëlle, Célie)
+	Dans le mode non interactif, l'utilisateur va pouvoir consulter en même tant que la vue de la simulation principale, 2 vues pour voir chacun des personnages avec leur vue bayesienne. Il est possible de se déplacer entre les différents tours.
 	
 - Ajout des messages d'alerte de fin de partie (Maëlle)
 	A chaque fin de partie dans les 2 modes, l'utilisateur va voir un message d'alerte lui indiquant si la partie est terminée ou non.

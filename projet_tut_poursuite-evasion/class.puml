@@ -104,6 +104,12 @@ package "animation" {
     + afficherMenu(Stage): void
   }
 
+  class VueAnalyse{
+    - imageMur: Image
+    - imageSol: Image
+    - imageSortie: Image
+    - imagePerso: Image
+    
   class VuePrincipale{
     - imageMur: Image
     - imageSol: Image

@@ -20,6 +20,14 @@ package "moteur"{
     + start(Stage): void
   }
 }
+package "lancercalculs"{
+  class LancerCalculsChemins{
+    + main(): void
+  }
+  class LancerCalculsVision{
+      + main(): void
+  }
+}
 package "outil"{
     class Outil{
       + {static} sauve(String, Object): void
@@ -110,6 +118,11 @@ package "simulation"{
     + {static} calculerCarteVision(): HashMap
     + {static} calculerVision(int, int): ArrayList
   }
+  class CalculChemins{
+    + {static} recupererChemin(): HashMap<List<Position>, Stack>
+    + {static} ecrireChemins(): void
+    + {static} calculerChemins
+  }
   package "personnage"{
     class Bayesien{
       - carteBayesienne: double[][]
@@ -151,7 +164,10 @@ package "affichage" {
   Interface DessinJeu{
     + update(Jeu): void
   }
-    
+  class FiltreBayesien{
+    + {static} initFiltre(double[][], int): Rectangle[][]
+    + {static} updateBayes(Rectangle[][], double[][])
+  }
   class VuePrincipale{
     - imageMur: Image
     - imageSol: Image

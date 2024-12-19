@@ -1,8 +1,26 @@
+Itération n°2:
+
+Lors de cette itération, nous avons pu ratrappé notre retard.
+
 - Mise en place réseau de neurones (Matias & Luc)
 - Création de l'arbre de décisions du gardien (Célie)
 - Création de l'arbre de décisions du prisonnier (Célie)
 - Ajout de calculs de chemins (Célie)
-- Ajout Historique (avec vues) (Célie & Maëlle)
-- Implémentation du systeme d'analyse (Maêlle)
+
+- Ajout de l'historique des positions (avec vues) (Célie & Maëlle)
+	Dans le mode interactif, l'utilisateur va pouvoir consulter après sa partie tous les déplacements de chaque personnage avec la réflexion de son adversaire sur sa position.
+	
+- Implémentation du système d'analyse (Maëlle)
+	Dans le mode non interactif, l'utilisateur va pouvoir consulter en même tant que la vus de la simulation principale, 2 vues pour voir chacun des personnages avec sa propre 
+	
+- Ajout des messages d'alerte de fin de partie (Maëlle)
+	A chaque fin de partie dans les 2 modes, l'utilisateur va voir un message d'alerte lui indiquant si la partie est terminée ou non.
+	
+- Mise en place de l'apprentissage de l'arbre (Matias & Luc)
+  Apprentissage du réseau de neurones des décisions de l'arbre de décision
+- Lancement de l'apprentissage dans le terminal (Matias & Luc)
+  Choix du nombre d'itération , le nombre de couche et leur taille
+- Enregistrement du réseau de neurones dans un fichier (Matias & Luc)
+	
 
 

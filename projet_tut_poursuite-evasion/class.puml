@@ -269,6 +269,8 @@ Simulation "1" --> "*" DessinJeu : observateurs
 DessinJeu <|.. VuePrincipale
 VuePrincipale --|> VueSimulation
 VueBayesienne --|> VueSimulation
+VuePrincipaleNonInteractive --|> VueSimulation
+VuePrincipaleNonInteractive ..|> DessinJeu
 VueBayesienne "1"-->"1" Simulation : simulation
 VuePrincipale "1"-->"1" Simulation : simulation
 VueBayesienne "1"-->"1" Personnage : perso

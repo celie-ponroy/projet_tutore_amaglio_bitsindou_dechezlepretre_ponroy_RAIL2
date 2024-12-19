@@ -13,8 +13,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Simulation;
-import simulation.personnages.Agent;
-import simulation.personnages.Personnage;
 
 
 // copied from: https://gist.github.com/james-d/8327842
@@ -59,6 +57,9 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         final VBox root = new VBox();
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
+        scene.getStylesheets().add("test.css");
+        scene.setUserAgentStylesheet("test.css");
+
 
         final HBox rootAnalyse = new HBox();
         final Scene sceneAnalyse = new Scene(rootAnalyse, WIDTH, HEIGHT);
@@ -76,16 +77,15 @@ public class MoteurJeu extends Application {
         buttonBox.setAlignment(Pos.CENTER);
 
         Button modeInteractif = new Button("Mode interactif");
+        modeInteractif.setStyle("<Button id=\"glass-grey\" fx:id=\"button\" />\n");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
-//            Jeu simulation = new Simulation(false);
-//            MoteurJeu.jeu = simulation;
-
             //Menu pour choisir le personnage que l'on veut jouer
             // Conteneur principal
             VBox root2 = new VBox();
             // Création de la scène
             final Scene scene2 = new Scene(root2, WIDTH, HEIGHT);
+
             root2.setStyle("-fx-background-color: #d3d3d3;"); // Fond gris
             root2.setSpacing(20); // Espacement entre les éléments
             root2.setPrefSize(800, 600);
@@ -142,8 +142,6 @@ public class MoteurJeu extends Application {
             primaryStage.setScene(scene2);
             primaryStage.setTitle("Choix du personnage");
             primaryStage.show();
-
-
         });
 
         Button modeNonInteractif = new Button("Mode non interactif");

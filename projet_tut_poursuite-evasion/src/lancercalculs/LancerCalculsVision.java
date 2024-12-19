@@ -1,6 +1,6 @@
 package lancercalculs;
 
-import simulation.CalculVision;
+import calculs.CalculVision;
 
 import java.io.IOException;
 

@@ -1,4 +1,4 @@
-package simulation;
+package calculs;
 
 import simulation.personnages.Position;
 
@@ -116,7 +116,7 @@ public class CalculVision {
 
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
-        int tailleVision = 9;
+        int tailleVision = 9;//29 pour toute la carte 9 default
         int tailledecalage = (tailleVision - 1) / 2;
         int[][] vision = new int[tailleVision][tailleVision];
         for (int y = -tailledecalage; y <= tailledecalage; y++) {//a verifier les bornes

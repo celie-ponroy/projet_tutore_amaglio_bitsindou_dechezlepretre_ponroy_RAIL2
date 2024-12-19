@@ -1,6 +1,8 @@
 package simulation;
 
 import affichage.DessinJeu;
+import calculs.CalculChemins;
+import calculs.CalculVision;
 import moteur.Jeu;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;

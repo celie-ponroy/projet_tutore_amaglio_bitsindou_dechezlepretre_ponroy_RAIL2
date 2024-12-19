@@ -1,6 +1,6 @@
 package lancercalculs;
 
-import simulation.CalculChemins;
+import calculs.CalculChemins;
 
 import java.io.IOException;
 

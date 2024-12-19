@@ -1,9 +1,9 @@
-package simulation;
+package calculs;
 
+import simulation.Simulation;
 import simulation.personnages.Position;
 
 import java.io.*;
-import java.nio.file.Path;
 import java.util.*;
 //basé sur https://codegym.cc/groups/posts/a-search-algorithm-in-java
 public class CalculChemins {

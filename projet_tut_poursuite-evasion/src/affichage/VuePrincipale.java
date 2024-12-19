@@ -22,9 +22,11 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     private Rectangle[][] caseBayesienneHisto;
 
 
+
     //constructeur
     public VuePrincipale(){
         super();
+        TAILLE_CELLULE = 50;
     }
 
     /**

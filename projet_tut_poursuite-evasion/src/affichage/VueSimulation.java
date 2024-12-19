@@ -17,7 +17,7 @@ public abstract class VueSimulation extends Pane {
     protected Image imageGardien;// Pane principal pour afficher le jeu
     protected ImageView prisonnierView; // Vue pour le prisonnier
     protected ImageView gardienView; // Vue pour le gardien
-    protected static final int TAILLE_CELLULE = 30; // Taille des cases du labyrinthe
+    protected int TAILLE_CELLULE = 30; // Taille des cases du labyrinthe
 
 
     VueSimulation(){

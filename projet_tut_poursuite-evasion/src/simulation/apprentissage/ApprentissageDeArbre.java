@@ -12,13 +12,11 @@ public class ApprentissageDeArbre {
         int[] couches = new int[nbCouches];
         couches[0] = 14*12+2;
         couches[couches.length-1] = 9;
-        couches[1] = 100;
-        couches[2] = 75;
-        couches[3]= 50;
-        couches[4]= 25;
-        couches[5] = 10;
+        couches[1] = 10;
+        couches[2] = 5;
 
-        ReseauDeNeurones rn = new ReseauDeNeurones(couches, 0.3);
+
+        ReseauDeNeurones rn = new ReseauDeNeurones(couches, 0.03);
         int compteur = 0;
         while(compteur < Integer.parseInt(args[1])) {
             Simulation simulation = new Simulation(rn, false);

@@ -61,7 +61,8 @@ public class Simulation implements Jeu {
         //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
 
             //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
-            this.comportementGardien = Outil.chargerRn("rnArbre10000-6-0.save");
+
+        this.comportementGardien = Outil.chargerRn("rnArbre100-4-2.save");
             this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
 
 
@@ -207,7 +208,7 @@ public class Simulation implements Jeu {
                 }
                 i++;
             }
-            deplacerPersonnage(personnageApprenant, depRn);
+            deplacerPersonnage(personnageApprenant, depArbre);
             deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
             //On compare
             ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);
@@ -221,12 +222,12 @@ public class Simulation implements Jeu {
      * Methode de deplacement non interactif
      */
     public void deplacerAgents(){
-        /*
+/*
         System.out.println("Deplacement des agents");
         Deplacement d1 = this.comportementPrisonnier.prendreDecision();
-        System.out.println(d1);
+        //System.out.println(d1);
         Deplacement d2 = this.comportementGardien.prendreDecision();
-        System.out.println(d2);
+        //System.out.println(d2);
         deplacerPersonnage(this.prisonnier, d1);
         deplacerPersonnage(this.gardien, d2);*/
 

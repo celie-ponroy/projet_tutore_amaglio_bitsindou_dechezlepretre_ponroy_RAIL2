@@ -6,6 +6,7 @@ import simulation.comportement.Comportement;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,6 +69,14 @@ public class ReseauDeNeurones implements Comportement, Serializable {
         for (i = 0; i < couches[couches.length - 1].Length; i++) {
             output[i] = couches[couches.length - 1].Neurons[i].Value;
         }
+       /* for (int a=0; a<couches[couches.length-1].Neurons.length;a++){
+            System.out.println("Neurone "+a+" :");
+
+        }*/
+        //System.out.println(couches.length);
+        //System.out.println(couches[3].Neurons[0].Weights[0]);
+        Outil.afficher_tab(couches[couches.length-1].Neurons[0].Weights);
+
         return output;
     }
 
@@ -80,16 +89,20 @@ public class ReseauDeNeurones implements Comportement, Serializable {
      */
     public double retroPropagation(double[] entrees, double[] sortie) {
         double nouvelle_sorties[] = execute(entrees);
-       /* System.out.println("Sortie Reseaux : ");
+        System.out.println("Sortie Reseaux : ");
         Outil.afficher_tab(nouvelle_sorties);
         System.out.println("Sortie Arbre : ");
-        Outil.afficher_tab(sortie);*/
+        Outil.afficher_tab(sortie);
         double error;
         int i, j, k;
 
         // Erreur de sortie
         for (i = 0; i < couches[couches.length - 1].Length; i++) {
-            error = sortie[i] - nouvelle_sorties[i];
+            error = sortie[i] - nouvelle_sorties[i];//Neuroph a voir ou DJL
+            System.out.println("Attendue : "+sortie[i]);
+            System.out.println("Sortie Nouvelle : ");
+            System.out.print(nouvelle_sorties[i]+" ");
+            System.out.print("error : " + error);
             couches[couches.length - 1].Neurons[i].Delta = error * fonctionActivation.evaluateDer(nouvelle_sorties[i]);
         }
 
@@ -166,7 +179,6 @@ public class ReseauDeNeurones implements Comportement, Serializable {
     }
 
     @Override
-
     public Deplacement prendreDecision(double[] entrees) {
         double[] sortie = this.execute(entrees);
         int indiceMax = -1;
@@ -178,8 +190,13 @@ public class ReseauDeNeurones implements Comportement, Serializable {
                 indiceMax = i;
             }
         }
-     //   System.out.println(Deplacement.values()[indiceMax]);
-       // System.out.println("fin descision");
+       /*System.out.println("entrees : ");
+        Outil.afficher_tab(entrees);
+        System.out.println("sortie : ");
+        Outil.afficher_tab(sortie);
+        System.out.println("\n");/*
+       // System.out.println(Deplacement.values()[indiceMax]);
+       // System.out.println("fin descision");*/
         return Deplacement.values()[indiceMax];
     }
 }

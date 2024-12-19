@@ -5,6 +5,12 @@ import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
 
 public class FiltreBayesien {
+    /**
+     * Initialiste le filtre
+     * @param carteBayes
+     * @param TAILLE_CELLULE
+     * @return
+     */
     static Rectangle[][] initFiltre(double[][] carteBayes,int TAILLE_CELLULE) {
         Rectangle[][] caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
@@ -24,6 +30,12 @@ public class FiltreBayesien {
         }
         return caseBayesienne;
     }
+
+    /**
+     * mets à jour le filtre
+     * @param caseBayesienne
+     * @param carteBayes
+     */
     static void updateBayes(Rectangle[][] caseBayesienne, double[][] carteBayes) {
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {

@@ -1,8 +1,7 @@
 package moteur;
 
-//https://github.com/zarandok/megabounce/blob/master/MainCanvas.java
-
-import affichage.*;
+import affichage.VuePrincipale;
+import affichage.VuePrincipaleNonInteractive;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,12 +12,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Simulation;
-import simulation.personnages.Agent;
-import simulation.personnages.Personnage;
 
 
-// copied from: https://gist.github.com/james-d/8327842
-// and modified to use canvas drawing instead of shapes
 
 public class MoteurJeu extends Application {
 
@@ -32,25 +27,6 @@ public class MoteurJeu extends Application {
      * jeu en Cours et renderer du jeu
      */
     private static Jeu jeu = null;
-
-
-    /**
-     * lancement d'un jeu
-     *
-     */
-    public static void launch() {
-        // le jeu en cours et son afficheur
-        //MoteurJeu.jeu = jeu;
-
-        // si le jeu existe, on lance le moteur de jeu
-        if (jeu != null)
-            launch();
-    }
-
-    public static void setTaille(double width, double height) {
-        WIDTH = width;
-        HEIGHT = height;
-    }
 
 
     /**
@@ -78,11 +54,6 @@ public class MoteurJeu extends Application {
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> {
-//            Jeu simulation = new Simulation(false);
-//            MoteurJeu.jeu = simulation;
-
-            //Menu pour choisir le personnage que l'on veut jouer
-            // Conteneur principal
             VBox root2 = new VBox();
             // Création de la scène
             final Scene scene2 = new Scene(root2, WIDTH, HEIGHT);
@@ -104,10 +75,10 @@ public class MoteurJeu extends Application {
             Button persoPrisonnier = new Button("Prisonnier");
             persoPrisonnier.setPrefSize(200, 100);
             persoPrisonnier.setOnAction(f -> {
-                Jeu simulation = new Simulation(true);
+                Simulation simulation = new Simulation(true);
                 MoteurJeu.jeu = simulation;
                 //Affichage du jeu
-                VuePrincipale vp = new VuePrincipale(true);
+                VuePrincipale vp = new VuePrincipale();
                 vp.update(MoteurJeu.jeu);
                 MoteurJeu.jeu.ajouterObservateur(vp);
                 root2.getChildren().clear();
@@ -123,7 +94,7 @@ public class MoteurJeu extends Application {
                 Jeu simulation = new Simulation(false);
                 MoteurJeu.jeu = simulation;
                 //Affichage du jeu
-                VuePrincipale vp = new VuePrincipale(true);
+                VuePrincipale vp = new VuePrincipale();
                 vp.update(MoteurJeu.jeu);
                 MoteurJeu.jeu.ajouterObservateur(vp);
                 root2.getChildren().clear();
@@ -150,44 +121,16 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
 
-            Jeu simulation = new Simulation();
+            Simulation simulation = new Simulation();
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
-            VuePrincipale vb = new VuePrincipale(false); //false car on n'affiche pas la vision
-
-            // Création des vues pour le prisonnier et le gardien
-            VueBayesienne va1 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getPrisonnier());
-            VueBayesienne va2 = new VueBayesienne((Simulation) simulation, ((Simulation)simulation).getGardien());
-
+            VuePrincipaleNonInteractive vb = new VuePrincipaleNonInteractive();
             vb.update(MoteurJeu.jeu);
-            va1.update(MoteurJeu.jeu);
-            va2.update(MoteurJeu.jeu);
 
             MoteurJeu.jeu.ajouterObservateur(vb);
-            MoteurJeu.jeu.ajouterObservateur(va1);
-            MoteurJeu.jeu.ajouterObservateur(va2);
-
-            HBox hboxBayesienne = new HBox(vb);
-            hboxBayesienne.setAlignment(Pos.CENTER);
-            HBox.setHgrow(vb, Priority.ALWAYS);
-
-            HBox hboxAnalyse = new HBox(va1, va2);
-            hboxAnalyse.setSpacing(20); // Réduction de l'espacement excessif
-            hboxAnalyse.setAlignment(Pos.CENTER);
-            HBox.setHgrow(va1, Priority.ALWAYS);
-            HBox.setHgrow(va2, Priority.ALWAYS);
-
-            VBox vbox = new VBox(hboxBayesienne, hboxAnalyse);
-            vbox.setSpacing(20);
-            VBox.setVgrow(hboxBayesienne, Priority.ALWAYS);
-            VBox.setVgrow(hboxAnalyse, Priority.ALWAYS);
 
             rootAnalyse.getChildren().clear();
-            rootAnalyse.getChildren().add(vbox);
-
-            ClavierNonInteractif clavier = new ClavierNonInteractif((Simulation) MoteurJeu.jeu);
-
-            sceneAnalyse.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+            rootAnalyse.getChildren().add(vb);
 
             primaryStage.setScene(sceneAnalyse);
         });

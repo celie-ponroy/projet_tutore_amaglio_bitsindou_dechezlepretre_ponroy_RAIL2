@@ -218,22 +218,19 @@ public class VuePrincipale extends Pane implements DessinJeu {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()&& this.afficherVision){
 
-            alert.setContentText("Fin de la partie !\n" +
-                    "Cliquez sur OK pour voir l'historique");
-
-            //if (victoire) {
-//                alert.setHeaderText("Félicitations !");
-//                alert.setContentText("Vous avez gagné !");
-            //} else {
-//                alert.setHeaderText("Dommage...");
-//                alert.setContentText("Vous avez perdu !");
-            //}
-            //affiche l'alerte avec les messagesge pendant 2 secondes
+            if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
+                alert.setHeaderText("Félicitations !");
+                alert.setContentText("Vous avez gagné la partie !\n" +
+                        "Cliquez sur OK pour voir l'historique");
+            } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
+                alert.setHeaderText("Dommage...");
+                alert.setContentText("L'IA a été plus maligne, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
+            }
+            //affiche l'alerte avec les messages pendant 2 secondes
             alert.showAndWait();
             //Affichage de l'historique
             historique();
-        }
-        if(simulation.etreFini()){ //si on est en mode non interactif
+        }else if(simulation.etreFini()){ //si on est en mode non interactif
             alert.setContentText("Fin de la partie !\n" +
                     "Cliquez sur OK pour quitter");
             alert.showAndWait();

@@ -15,6 +15,8 @@ public class Simulation implements Jeu {
     private int nbTours;
     private Personnage gardien;
     private Personnage prisonnier;
+    private boolean victoirePrisonnier;
+    private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
     public static final int[][] CARTE = new int[][]{
@@ -59,6 +61,10 @@ public class Simulation implements Jeu {
         this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
         this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
 
+        //initialisation des victoires
+        this.victoireGardien = false;
+        this.victoirePrisonnier = false;
+
         //this.comportementGardien = new ReseauDeNeurones();
         //Initialisation des carte bayesiennes pour les deux agents
         bayesiens = new HashMap<>();
@@ -82,6 +88,10 @@ public class Simulation implements Jeu {
         bayesiens = new HashMap<>();
         this.carteBayesiennes = new HashMap<>();
         historiqueBayesien = new ArrayList<>();
+
+        //initialisation des victoires
+        this.victoireGardien = false;
+        this.victoirePrisonnier = false;
 
         if (perso) {
             this.prisonnier = new Joueur(4, 10);
@@ -193,9 +203,11 @@ public class Simulation implements Jeu {
     public void miseAJourFinJeu(){
         if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
             this.estFini = true;
+            this.victoireGardien = true;
         }
         if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
             this.estFini = true;
+            this.victoirePrisonnier = true;
         }
     }
 
@@ -369,8 +381,18 @@ public class Simulation implements Jeu {
     }
 
     /**
-     * Méthode permettant de savoir si le joueur ou l'agent a gagné
+     * Méthode qui récupère la victoire du prisonnier
      */
+    public boolean getVictoirePrisonnier() {
+        return this.victoirePrisonnier;
+    }
+
+    /**
+     * Méthode qui récupère la victoire du gardien
+     */
+    public boolean getVictoireGardien() {
+        return this.victoireGardien;
+    }
 
 
 }

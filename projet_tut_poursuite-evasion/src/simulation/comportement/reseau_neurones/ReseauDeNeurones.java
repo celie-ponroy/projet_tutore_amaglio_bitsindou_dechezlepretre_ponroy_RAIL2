@@ -80,10 +80,10 @@ public class ReseauDeNeurones implements Comportement, Serializable {
      */
     public double retroPropagation(double[] entrees, double[] sortie) {
         double nouvelle_sorties[] = execute(entrees);
-        System.out.println("Sortie Reseaux : ");
+       /* System.out.println("Sortie Reseaux : ");
         Outil.afficher_tab(nouvelle_sorties);
         System.out.println("Sortie Arbre : ");
-        Outil.afficher_tab(sortie);
+        Outil.afficher_tab(sortie);*/
         double error;
         int i, j, k;
 
@@ -170,7 +170,7 @@ public class ReseauDeNeurones implements Comportement, Serializable {
     public Deplacement prendreDecision(double[] entrees) {
         double[] sortie = this.execute(entrees);
         int indiceMax = -1;
-        double max = -2;
+        double max = -200;
         for (int i = 0; i < sortie.length; i++) {
             //System.out.println("sortie descision :"+sortie[i]);
             if (sortie[i] > max) {
@@ -178,8 +178,8 @@ public class ReseauDeNeurones implements Comportement, Serializable {
                 indiceMax = i;
             }
         }
-        System.out.println(Deplacement.values()[indiceMax]);
-        System.out.println("fin descision");
+     //   System.out.println(Deplacement.values()[indiceMax]);
+       // System.out.println("fin descision");
         return Deplacement.values()[indiceMax];
     }
 }

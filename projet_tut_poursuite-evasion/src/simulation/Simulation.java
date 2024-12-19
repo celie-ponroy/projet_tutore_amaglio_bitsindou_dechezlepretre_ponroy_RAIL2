@@ -61,7 +61,7 @@ public class Simulation implements Jeu {
         //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
 
             //this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
-            this.comportementGardien = Outil.chargerRn("rnArbre10-8-100.save");
+            this.comportementGardien = Outil.chargerRn("rnArbre10000-6-0.save");
             this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
 
 
@@ -211,6 +211,8 @@ public class Simulation implements Jeu {
             deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
             //On compare
             ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);
+            actualisationBayesienne(personnageApprenant,personnageNonApprenant);
+            actualisationBayesienne(personnageNonApprenant,personnageApprenant);
             this.nbTours++;
             this.miseAJourFinJeu();
         }
@@ -240,7 +242,7 @@ public class Simulation implements Jeu {
         //Ajout de la position dans les entrées du réseau de neurones
         entrees[entrees.length - 1] = (double) this.gardien.getPosition().getY() / CARTE.length;
         entrees[entrees.length - 2] = (double) this.gardien.getPosition().getX() / CARTE[0].length;
-        System.out.println(this.comportementGardien.prendreDecision(entrees));
+       // System.out.println(this.comportementGardien.prendreDecision(entrees));
         deplacerPersonnage(this.gardien, this.comportementGardien.prendreDecision(entrees));
 
 

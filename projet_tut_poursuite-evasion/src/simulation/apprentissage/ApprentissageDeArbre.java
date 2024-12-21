@@ -1,32 +1,29 @@
 package simulation.apprentissage;
 
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.data.DataSet;
+import org.neuroph.nnet.MultiLayerPerceptron;
+import org.neuroph.nnet.learning.BackPropagation;
+import org.neuroph.util.TransferFunctionType;
 import outils.Outil;
 import simulation.Simulation;
 import simulation.comportement.reseau_neurones.ReseauDeNeurones;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ApprentissageDeArbre {
     public static void main(String[] args) {
-        //Args  0 : nb couches cachées
-        //Args 1 : nb parties jouées
-        int nbCouches = Integer.parseInt(args[0])+2;
-        int[] couches = new int[nbCouches];
-        couches[0] = 14*12+2;
-        couches[couches.length-1] = 9;
-        couches[1] = 10;
-        couches[2] = 5;
 
+        List<Integer> couches = new ArrayList<Integer>();
+        couches.add(170);//entrées
+        couches.add(100);//couche caché 1
+        couches.add(50);//couche caché 2
+        couches.add(10);//couche caché 3
+        couches.add(9);//sortie
+        NeuralNetwork<BackPropagation> rn = new MultiLayerPerceptron(couches, TransferFunctionType.SIGMOID);
+        DataSet ds = new DataSet();
 
-        ReseauDeNeurones rn = new ReseauDeNeurones(couches, 0.03);
-        int compteur = 0;
-        while(compteur < Integer.parseInt(args[1])) {
-            Simulation simulation = new Simulation(rn, false);
-            simulation.apprentissage(500);
-            /*System.out.println("Nombre de tours : " + simulation.getNbTours() + "\nSimulation finie : " + simulation.etreFini() + "\n");
-            System.out.println("Gardien : " + simulation.getGardien());
-            System.out.println("Prisonnier : " + simulation.getPrisonnier());*/
-            System.out.println(compteur);
-            compteur++;
-        }
-        Outil.sauve("Sauvegardes_reseaux/rnArbre"+args[1]+"-"+nbCouches+"-"+args[0]+".save", rn);
+        Simulation sim = new Simulation(rn);
     }
 }

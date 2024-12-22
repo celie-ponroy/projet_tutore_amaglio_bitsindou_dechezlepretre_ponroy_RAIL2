@@ -1,6 +1,8 @@
 package simulation.comportement.reseau_neurones;
 
-public class Sigmoide implements FonctionActivation{
+import java.io.Serializable;
+
+public class Sigmoide implements FonctionActivation, Serializable {
     @Override
     public double evaluate(double value) {
         return 1/(1+Math.exp(-value));

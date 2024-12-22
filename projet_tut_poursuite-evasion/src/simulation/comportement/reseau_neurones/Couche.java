@@ -1,6 +1,8 @@
 package simulation.comportement.reseau_neurones;
 
-class Couche {
+import java.io.Serializable;
+
+class Couche implements Serializable {
     public Neurone Neurons[];
     public int Length;
 

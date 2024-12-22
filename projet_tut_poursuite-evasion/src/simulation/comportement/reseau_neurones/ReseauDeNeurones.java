@@ -1,5 +1,6 @@
 package simulation.comportement.reseau_neurones;
 
+import outils.Outil;
 import simulation.Deplacement;
 import simulation.comportement.Comportement;
 
@@ -45,7 +46,6 @@ public class ReseauDeNeurones implements Comportement, Serializable {
         double new_value;
 
         double output[] = new double[couches[couches.length - 1].Length];
-
         // input en entrée du réseau
         for (i = 0; i < couches[0].Length; i++) {
             couches[0].Neurons[i].Value = input[i];
@@ -80,6 +80,10 @@ public class ReseauDeNeurones implements Comportement, Serializable {
      */
     public double retroPropagation(double[] entrees, double[] sortie) {
         double nouvelle_sorties[] = execute(entrees);
+        System.out.println("Sortie Reseaux : ");
+        Outil.afficher_tab(nouvelle_sorties);
+        System.out.println("Sortie Arbre : ");
+        Outil.afficher_tab(sortie);
         double error;
         int i, j, k;
 
@@ -168,11 +172,14 @@ public class ReseauDeNeurones implements Comportement, Serializable {
         int indiceMax = -1;
         double max = -2;
         for (int i = 0; i < sortie.length; i++) {
+            //System.out.println("sortie descision :"+sortie[i]);
             if (sortie[i] > max) {
                 max = sortie[i];
                 indiceMax = i;
             }
         }
+        System.out.println(Deplacement.values()[indiceMax]);
+        System.out.println("fin descision");
         return Deplacement.values()[indiceMax];
     }
 }

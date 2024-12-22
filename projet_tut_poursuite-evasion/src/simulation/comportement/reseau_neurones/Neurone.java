@@ -1,7 +1,9 @@
 package simulation.comportement.reseau_neurones;
 
 
-class Neurone {
+import java.io.Serializable;
+
+class Neurone implements Serializable {
     public double    Value;
     public double[]  Weights;
     public double    Bias;

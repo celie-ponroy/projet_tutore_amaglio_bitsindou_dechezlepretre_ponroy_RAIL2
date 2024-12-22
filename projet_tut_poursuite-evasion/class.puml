@@ -210,6 +210,15 @@ package "affichage" {
     + {static} initFiltre(double[][], int): Rectangle[][]
     + {static} updateBayes(Rectangle[][], double[][])
   }
+
+  class VueAnalyse{
+    - imageMur: Image
+    - imageSol: Image
+    - imageSortie: Image
+    - imagePerso: Image
+    
+}
+
   class VuePrincipale{
     - iterationLabel: Label
     - filtreVision: Rectangle[][]

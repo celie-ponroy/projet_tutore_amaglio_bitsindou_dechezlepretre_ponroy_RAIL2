@@ -20,6 +20,7 @@ package "moteur"{
     + start(Stage): void
   }
 }
+<<<<<<< HEAD
 package "lancercalculs"{
   class LancerCalculsChemins{
     + main(): void
@@ -28,6 +29,8 @@ package "lancercalculs"{
       + main(): void
   }
 }
+=======
+>>>>>>> 627bbc1 (modif diagramme de classe)
 package "outil"{
     class Outil{
       + {static} sauve(String, Object): void
@@ -216,7 +219,6 @@ package "affichage" {
     - imageSol: Image
     - imageSortie: Image
     - imagePerso: Image
-    
 }
 
   class VuePrincipale{

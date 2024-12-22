@@ -260,6 +260,8 @@ public class Simulation implements Jeu {
             deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
             //On compare
             ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);
+            actualisationBayesienne(personnageApprenant,personnageNonApprenant);
+            actualisationBayesienne(personnageNonApprenant,personnageApprenant);
             this.nbTours++;
             this.miseAJourFinJeu();
         }

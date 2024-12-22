@@ -4,10 +4,8 @@ import affichage.DessinJeu;
 import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
-import simulation.comportement.ArbreDecision;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
-import outils.Outil;
 import simulation.comportement.Comportement;
 
 import simulation.comportement.reseau_neurones.ReseauDeNeurones;
@@ -198,75 +196,6 @@ public class Simulation implements Jeu {
     }
 
     /**
-     * Méthode permettant de faire apprendre l'arbre de descision au réseau de neurones selectionee
-     *
-     * @param nbIte Nombre d'itération
-     */
-    public void apprentissage(int nbIte) {
-        //On differentie quelle personnage apprend et lequel n'apprend pas
-        Personnage personnageApprenant;
-        Personnage personnageNonApprenant;
-        Comportement comportementApprenant;
-        Comportement comportementNonApprenant;
-        if (this.comportementGardien instanceof ReseauDeNeurones) {
-            personnageApprenant = this.gardien;
-            comportementApprenant = this.comportementGardien;
-            personnageNonApprenant = this.prisonnier;
-            comportementNonApprenant = this.comportementPrisonnier;
-        } else {
-            personnageApprenant = this.prisonnier;
-            comportementApprenant = this.comportementPrisonnier;
-            personnageNonApprenant = this.gardien;
-            comportementNonApprenant = this.comportementGardien;
-        }
-
-        while (this.nbTours < nbIte && !this.estFini) {
-            //creation de l'arbre de decision pour l'apprenant pour comparer avec choix rn
-            Deplacement depArbre;
-            if (this.comportementGardien instanceof ReseauDeNeurones) {
-                ArbreDecisionGardien tmpArbre = new ArbreDecisionGardien(this,personnageApprenant);
-                //Prise de descision de l'arbre pour comparaison avec reseaux
-                depArbre = tmpArbre.prendreDecision();
-            } else {
-                ArbreDecisionPrisonnier tmpArbre = new ArbreDecisionPrisonnier(this, personnageApprenant);
-                depArbre = tmpArbre.prendreDecision();
-            }
-            //Creation des entrees du reseaux
-            double[][] carteBayesienne = this.carteBayesiennes.get(personnageApprenant);
-            double[] carteApplatie = Outil.applatissement(carteBayesienne);
-            double[] entrees = new double[carteApplatie.length + 2];
-            for (int i = 0; i < carteApplatie.length; i++) {
-                entrees[i] = carteApplatie[i];
-            }
-            //Ajout de la position dans les entrées du réseau de neurones
-            entrees[entrees.length - 1] = (double) personnageApprenant.getPosition().getY() / CARTE.length;
-            entrees[entrees.length - 2] = (double) personnageApprenant.getPosition().getX() / CARTE[0].length;
-
-            //Prise de descision du reseaux
-            Deplacement depRn = comportementApprenant.prendreDecision(entrees);
-            
-            //Creation sortie voulue (descision de l'abre)
-            double[] sortieVoulues = new double[Deplacement.values().length];
-            int i = 0;
-            for (Deplacement dep : Deplacement.values()) {
-                if (depArbre.equals(dep)) {
-                    sortieVoulues[i] = 1.;
-                } else {
-                    sortieVoulues[i] = 0.;
-                }
-                i++;
-            }
-            deplacerPersonnage(personnageApprenant, depArbre);
-            deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
-            //On compare
-            ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);
-            actualisationBayesienne(personnageApprenant,personnageNonApprenant);
-            actualisationBayesienne(personnageNonApprenant,personnageApprenant);
-            this.nbTours++;
-            this.miseAJourFinJeu();
-        }
-    }
-    /**
      * Methode de deplacement non interactif
      */
     public void deplacerAgents(){
@@ -291,8 +220,8 @@ public class Simulation implements Jeu {
             this.notifierObservateurs();
         }
         this.notifierObservateurs();
-        actualisationBayesienne(this.gardien,this.prisonnier);
-        actualisationBayesienne(this.prisonnier,this.gardien);
+
+
     }
 
     /**
@@ -366,7 +295,7 @@ public class Simulation implements Jeu {
             casesVue.add(new Integer[]{position.getY(), position.getX(),present});
         }
         carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence( carteBayesiennes.get(p1),casesVue));
- }
+    }
 
     /**
      * Methode permettant d'initialiser le jeu
@@ -451,6 +380,7 @@ public class Simulation implements Jeu {
             return true;
         }
         ArrayList<Position> casesVisibles = VISION.get(pos2);
+
         for(Position pos : casesVisibles){
             if(pos.equals(pos1)){
                 return true;

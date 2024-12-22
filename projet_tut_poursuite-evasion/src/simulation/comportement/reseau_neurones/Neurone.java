@@ -12,8 +12,8 @@ class Neurone implements Serializable {
     public Neurone(int prevLayerSize) {
         Weights = new double[prevLayerSize];
         Bias = Math.random();
-        Delta = Math.random() / 10000000000000.0;
-        Value = Math.random() / 10000000000000.0;
+        Delta = Math.random() / 10;
+        Value = Math.random() / 10;
 
         for(int i = 0; i < Weights.length; i++)
             Weights[i] = Math.random()/ Weights.length;

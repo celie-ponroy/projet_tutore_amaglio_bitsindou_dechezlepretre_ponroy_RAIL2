@@ -66,7 +66,7 @@ public class Simulation implements Jeu {
         List<Position> posP = new ArrayList<>();
         posP.add(this.prisonnier.getPosition());
         historiquePosition.put(this.prisonnier,posP );
-
+        
         List<Position> posG = new ArrayList<>();
         posG.add(this.gardien.getPosition());
         historiquePosition.put(this.gardien, posG);
@@ -256,7 +256,7 @@ public class Simulation implements Jeu {
                 }
                 i++;
             }
-            deplacerPersonnage(personnageApprenant, depRn);
+            deplacerPersonnage(personnageApprenant, depArbre);
             deplacerPersonnage(personnageNonApprenant, comportementNonApprenant.prendreDecision());
             //On compare
             ((ReseauDeNeurones) comportementApprenant).retroPropagation(entrees, sortieVoulues);

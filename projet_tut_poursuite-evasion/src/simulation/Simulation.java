@@ -44,7 +44,6 @@ public class Simulation implements Jeu {
     public HashMap<Personnage,List<Position>> historiquePosition ;
     public HashMap<Personnage,List<double[][]>> historiqueBayesien;
 
-
     private boolean estFini;
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private HashMap<Personnage,Bayesien> bayesiens;
@@ -439,7 +438,6 @@ public class Simulation implements Jeu {
             return true;
         }
         ArrayList<Position> casesVisibles = VISION.get(pos2);
-
         for(Position pos : casesVisibles){
             if(pos.equals(pos1)){
                 return true;

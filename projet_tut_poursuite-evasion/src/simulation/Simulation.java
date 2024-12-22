@@ -119,11 +119,12 @@ public class Simulation implements Jeu {
             this.comportementGardien = rn;
         }
         //Initialisation des carte bayesiennes pour les deux agents
-        bayesienGardien = new Bayesien();
-        bayesienPrisonnier = new Bayesien();
-        this.carteBayesiennes = new HashMap<>();
-        carteBayesiennes.put(gardien, bayesienGardien.getCarteBayesienne());
-        carteBayesiennes.put(prisonnier, bayesienPrisonnier.getCarteBayesienne());
+        bayesiens = new HashMap<>();
+        bayesiens.put(this.gardien,new Bayesien());
+        bayesiens.put(this.prisonnier,new Bayesien());
+        carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
     }
 
     /**
@@ -278,8 +279,8 @@ public class Simulation implements Jeu {
             this.notifierObservateurs();
         }
         this.notifierObservateurs();
-
-
+        actualisationBayesienne(this.gardien,this.prisonnier);
+        actualisationBayesienne(this.prisonnier,this.gardien);
     }
 
     /**

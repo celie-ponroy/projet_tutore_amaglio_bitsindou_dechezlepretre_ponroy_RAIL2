@@ -21,6 +21,9 @@ package "moteur"{
   }
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ed929b6 (correction fonc)
 package "lancercalculs"{
   class LancerCalculsChemins{
     + main(): void
@@ -29,8 +32,11 @@ package "lancercalculs"{
       + main(): void
   }
 }
+<<<<<<< HEAD
 =======
 >>>>>>> 627bbc1 (modif diagramme de classe)
+=======
+>>>>>>> ed929b6 (correction fonc)
 package "outil"{
     class Outil{
       + {static} sauve(String, Object): void
@@ -133,6 +139,18 @@ package "simulation"{
     - contenu: int
   }
 
+
+  class CalculVision{
+    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
+    + {static} ecrireVision(): void
+    + {static} calculerCarteVision(): HashMap
+    + {static} calculerVision(int, int): ArrayList
+  }
+  class CalculChemins{
+    + {static} recupererChemin(): HashMap<List<Position>, Stack>
+    + {static} ecrireChemins(): void
+    + {static} calculerChemins
+  }
 
   package "personnage"{
     class Bayesien{

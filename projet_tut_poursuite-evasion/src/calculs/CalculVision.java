@@ -101,6 +101,7 @@ public class CalculVision {
                 res.put(new Position(x,y),calculerVision(x, y));
             }
         }
+        cleanVision(res);
         return res;
     }
 
@@ -112,7 +113,6 @@ public class CalculVision {
      */
     public static ArrayList calculerVision(int xPerso, int yPerso) {
         ArrayList res = new ArrayList();
-
 
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
@@ -176,5 +176,80 @@ public class CalculVision {
         }
         return res;
     }
+    private static void cleanVision(HashMap<Position,ArrayList<Position>> vision){
+        //on retire les cases non voulues
+        for (Position pPerso: vision.keySet()) {
+            ArrayList<Position> visionCur = vision.get(pPerso);
+
+            //si la case n'as pas un chemin qui part de la case au personnage qui passe par que des cases visibles
+            //on retire la case
+
+            for (int j = 0; j < visionCur.size(); j++) {
+                Position position = visionCur.get(j);
+                System.out.println("Clean vision de :"+pPerso +" "+position);
+                ArrayList<Position> casesVisites = new ArrayList<>();
+                if (!parcours(pPerso,position,visionCur, casesVisites)){
+                    System.out.println("ok");
+                    visionCur.remove(j);
+                }
+
+            }
+
+        }
+    }
+
+    /**
+     * Parcours de la carte pour voir si il y a un chemin entre la case et le personnage
+     * @param pPerso
+     * @param positionCur
+     * @param visionCur
+     * @param casesVisites
+     * @return true si il y a un chemin entre la case et le personnage
+     */
+    private static boolean parcours(Position pPerso, Position positionCur, ArrayList<Position> visionCur, ArrayList<Position> casesVisites){
+        System.out.println(positionCur+" : "+visionCur+" "+casesVisites);
+        if(positionCur.equals(pPerso)){
+            return true;
+        }
+        ArrayList<Position> casesAdjacentes = casesAdjacentes(positionCur);
+        casesVisites.add(positionCur);
+        boolean res = false;
+
+        //on parcours les cases visibles adjacentes si elles ne sont pas déjà visités
+        for (Position caseAdjacente :casesAdjacentes) {
+            if(casesVisites.contains(caseAdjacente)){//si la case est déjà visitée on passe
+                continue;
+            }
+            if(!visionCur.contains(caseAdjacente)){//si la case n'est pas dans la vision on passe
+                continue;
+            }
+            //si la case est celle du perso on garde la case sinon on la retire
+            if(pPerso.equals(caseAdjacente)){
+                return true;
+            }
+            //si la case a un chemin de la case adjacente au perso qui passe par que des cases visibles
+            if(parcours(pPerso,caseAdjacente,visionCur,casesVisites))
+                res = true;
+        }
+        return res;
+    }
+
+    private static ArrayList<Position> casesAdjacentes(Position position){
+        ArrayList<Position> res = new ArrayList<>();
+        int x = position.getX();
+        int y = position.getY();
+        for(int y1=-1;y1<=1;y1++){
+            for(int x1=-1;x1<=1;x1++){
+                if(x1==0 && y1==0){
+                    continue;
+                }
+                res.add(new Position(x+x1,y+y1));
+            }
+        }
+        return res;
+    }
+
+
+
 
 }

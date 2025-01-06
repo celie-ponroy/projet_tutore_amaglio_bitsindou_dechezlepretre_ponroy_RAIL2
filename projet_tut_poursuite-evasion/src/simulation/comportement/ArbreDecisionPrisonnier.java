@@ -26,7 +26,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty())
             return direction(personnage.getPosition(),Simulation.getPosSortie());
-        //si on voit le gardien
+        //si on voit pas le gardien
         if(!simulation.estVisible(personnage, true)){
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());

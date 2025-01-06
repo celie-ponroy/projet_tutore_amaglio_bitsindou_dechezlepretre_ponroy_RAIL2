@@ -2,6 +2,9 @@ module com.example.projet_tut_poursuiteevasion {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.sql;
+    requires neuroph.core;
+    requires commons.lang3;
 
     opens moteur to javafx.fxml;
     exports moteur;

@@ -21,5 +21,8 @@ public abstract class Personnage {
         return Simulation.VISION.get(this.position);
     }
 
-
+    @Override
+    public String toString() {
+        return position.toString();
+    }
 }

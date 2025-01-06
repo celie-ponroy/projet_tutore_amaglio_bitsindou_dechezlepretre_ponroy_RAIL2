@@ -1,5 +1,4 @@
 package simulation.comportement;
-
 import simulation.Deplacement;
 import simulation.personnages.Position;
 
@@ -10,7 +9,7 @@ public class ArbreDecision {
      * @param p2
      * @return
      */
-    public Deplacement direction(Position p1, Position p2){
+    public Deplacement direction(Position p1, Position p2){//TODO : recherche de chemin
         if(p1.getX() == p2.getX()){
             if(p1.getY() < p2.getY()){
                 return Deplacement.BAS;

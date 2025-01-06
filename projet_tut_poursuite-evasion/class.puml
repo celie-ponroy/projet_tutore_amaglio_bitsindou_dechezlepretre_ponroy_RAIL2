@@ -131,6 +131,18 @@ package "simulation"{
   }
 
 
+  class CalculVision{
+    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
+    + {static} ecrireVision(): void
+    + {static} calculerCarteVision(): HashMap
+    + {static} calculerVision(int, int): ArrayList
+  }
+  class CalculChemins{
+    + {static} recupererChemin(): HashMap<List<Position>, Stack>
+    + {static} ecrireChemins(): void
+    + {static} calculerChemins
+  }
+
   package "personnage"{
     class Bayesien{
       - carteBayesienne: double[][]
@@ -210,6 +222,14 @@ package "affichage" {
     + {static} initFiltre(double[][], int): Rectangle[][]
     + {static} updateBayes(Rectangle[][], double[][])
   }
+
+  class VueAnalyse{
+    - imageMur: Image
+    - imageSol: Image
+    - imageSortie: Image
+    - imagePerso: Image
+}
+
   class VuePrincipale{
     - iterationLabel: Label
     - filtreVision: Rectangle[][]
@@ -269,6 +289,8 @@ Simulation "1" --> "*" DessinJeu : observateurs
 DessinJeu <|.. VuePrincipale
 VuePrincipale --|> VueSimulation
 VueBayesienne --|> VueSimulation
+VuePrincipaleNonInteractive --|> VueSimulation
+VuePrincipaleNonInteractive ..|> DessinJeu
 VueBayesienne "1"-->"1" Simulation : simulation
 VuePrincipale "1"-->"1" Simulation : simulation
 VueBayesienne "1"-->"1" Personnage : perso

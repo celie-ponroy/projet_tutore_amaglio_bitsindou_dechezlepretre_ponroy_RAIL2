@@ -10,9 +10,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Simulation;
+
+import java.awt.*;
 
 
 // copied from: https://gist.github.com/james-d/8327842
@@ -55,6 +58,8 @@ public class MoteurJeu extends Application {
      * creation de l'application avec juste un canvas et des statistiques
      */
     public void start(Stage primaryStage) {
+        setTaille((int) Screen.getPrimary().getBounds().getWidth(), (int) Screen.getPrimary().getBounds().getHeight());
+
         final VBox root = new VBox();
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
         scene.getStylesheets().add("test.css");

@@ -111,7 +111,7 @@ public class MoteurJeu extends Application {
 
             // Création et affichage de la scène
             primaryStage.setScene(scene2);
-            primaryStage.setTitle("Choix du personnage");
+            primaryStage.setTitle("Simulation");
             primaryStage.show();
 
 

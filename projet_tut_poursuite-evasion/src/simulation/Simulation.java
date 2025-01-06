@@ -6,11 +6,8 @@ import calculs.CalculVision;
 import moteur.Jeu;
 import org.apache.commons.lang3.ArrayUtils;
 import outils.Outil;
-import simulation.comportement.ArbreDecisionGardien;
-import simulation.comportement.ArbreDecisionPrisonnier;
-import simulation.comportement.Comportement;
+import simulation.comportement.*;
 
-import simulation.comportement.ReseauDeNeurones;
 import simulation.personnages.*;
 
 import java.util.*;
@@ -80,6 +77,8 @@ public class Simulation implements Jeu {
 
         this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
         this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+        //this.comportementPrisonnier = new Aleatoire(this,this.prisonnier);
+        //this.comportementGardien = new Aleatoire(this,this.gardien);
 
         //initialisation des victoires
         this.victoireGardien = false;

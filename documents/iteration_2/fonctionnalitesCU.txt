@@ -10,6 +10,7 @@ Lors de cette itération, nous avons pu ratrappé notre retard.
 	Le prisonnier a maintenant un comportement automatique
 	
 - Ajout de calculs de chemins (Célie)
+<<<<<<< HEAD
 	Pour pouvoir implémenter les deux arbres il faillait qu'ils puissent trouver un chemin pour aller d'une case A a une case B.
 	
 - Ajout de l'historique des positions (avec vues) (Célie & Maëlle)
@@ -29,3 +30,13 @@ Lors de cette itération, nous avons pu ratrappé notre retard.
 	
 
 
+=======
+=======
+- Ajout Historique (avec vues) (Célie & Maëlle)
+- Implémentation du systeme d'analyse (Maêlle)
+>>>>>>> ed929b6 (correction fonc)
+- Mise en place de l'apprentissage de l'arbre (Matias & Luc)
+  Apprentissage du réseau de neurones des décisions de l'arbre de décision
+- Lancement de l'apprentissage dans le terminal (Matias & Luc)
+  Choix du nombre d'itération , le nombre de couche et leur taille
+- Enregistrement du réseau de neurones dans un fichier (Matias & Luc)

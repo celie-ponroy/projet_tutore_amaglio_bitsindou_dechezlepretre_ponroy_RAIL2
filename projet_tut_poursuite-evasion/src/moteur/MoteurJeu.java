@@ -12,7 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Simulation;
-
+import simulation.comportement.ReseauDeNeurones;
 
 
 public class MoteurJeu extends Application {
@@ -121,12 +121,11 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
 
-            Simulation simulation = new Simulation();
+            Simulation simulation = new Simulation(new ReseauDeNeurones("Sauvegardes_NeuralNetwork/nr"),false);
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
             VuePrincipaleNonInteractive vb = new VuePrincipaleNonInteractive();
             vb.update(MoteurJeu.jeu);
-
             MoteurJeu.jeu.ajouterObservateur(vb);
 
             rootAnalyse.getChildren().clear();

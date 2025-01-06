@@ -99,7 +99,7 @@ public class CalculChemins {
                         var res = aStarSearch(carte, carte.length , carte[0].length, src, dest);
                         //liste de positions avec src et dest
                         mapStack.put( List.of(src,dest), res);
-                        System.out.println("Chemin de "+src+" à "+dest+" : "+res);
+                        //System.out.println("Chemin de "+src+" à "+dest+" : "+res);
                     }
                 }
             }
@@ -146,11 +146,8 @@ public class CalculChemins {
             return (point.getY() >= 0) && (point.getY() < rows)
                     && (point.getX() >= 0)
                     && (point.getX() < cols);
-
         return false;
     }
-
-
 
     static boolean isUnBlocked(int[][] grid, int rows, int cols, Position point)
     {
@@ -172,6 +169,7 @@ public class CalculChemins {
 
 
 
+
     static Stack tracePath(Cell[][] cellDetails, Position dest)
     {
         Stack<Position> path = new Stack<>();
@@ -188,11 +186,8 @@ public class CalculChemins {
         } while (cellDetails[row][col].parent != nextNode);
         //on retire la dernière position
         path.remove(path.size()-1);
-
         return path;
     }
-
-
 
     static Stack aStarSearch(int[][] grid, int rows, int cols, Position src, Position dest)
     {

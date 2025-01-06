@@ -53,7 +53,7 @@
         }
 
         @Override
-        public Deplacement prendreDecision(double[][] carte) {
+        public Deplacement prendreDecision(double[] entrees) {
             return null;
         }
 

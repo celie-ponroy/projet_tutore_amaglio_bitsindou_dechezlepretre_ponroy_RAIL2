@@ -11,6 +11,9 @@ import java.util.List;
 
 public class ApprentissageDeArbre {
     public static void main(String[] args) {
+        //args[0] : personnage a faire apprendre (P ou G)
+        //args[1] : arbre a faire apprendre (ArbreDeterministe ou ArbreAleatoire)
+
         List<Integer> nbNeuronesCouches = new ArrayList<Integer>();
         nbNeuronesCouches.add(170);
         nbNeuronesCouches.add(50);
@@ -18,9 +21,9 @@ public class ApprentissageDeArbre {
         nbNeuronesCouches.add(9);
         NeuralNetwork<BackPropagation> neuralNetwork = new MultiLayerPerceptron(nbNeuronesCouches, TransferFunctionType.SIGMOID);
 
-        DataSet ds = DataSet.load("Sauvegardes_DataSet/dataSetTest");
+        DataSet ds = DataSet.load("donnees/sauvegardes_DataSet/" + args[0] + "-DataSet-" + args[1]);
         neuralNetwork.learn(ds);
         System.out.println("enregistrer les neurones");
-        neuralNetwork.save("Sauvegardes_NeuralNetwork/nr");
+        neuralNetwork.save("donnees/sauvegardes_NeuralNetwork/" + args[0] + "-RN-" + args[1]);
     }
 }

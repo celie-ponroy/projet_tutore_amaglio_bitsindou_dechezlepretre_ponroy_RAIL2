@@ -48,8 +48,4 @@ public class Aleatoire implements Comportement{
         }
         return deplacement;
     }
-    @Override
-    public Deplacement prendreDecision(double[] entrees) {
-        return Deplacement.AUCUN;
-    }
 }

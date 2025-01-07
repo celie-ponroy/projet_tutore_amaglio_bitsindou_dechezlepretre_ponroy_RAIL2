@@ -42,11 +42,6 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         }
     }
 
-    @Override
-    public Deplacement prendreDecision(double[] entrees) {
-        return null;
-    }
-
     public Deplacement oppose(Deplacement d){
         switch (d){
             case HAUT:

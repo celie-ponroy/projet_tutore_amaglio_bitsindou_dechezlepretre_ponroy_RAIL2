@@ -3,6 +3,7 @@ package lancercalculs;
 import org.apache.commons.lang3.ArrayUtils;
 import org.neuroph.core.data.DataSet;
 import outils.Outil;
+import simulation.Comportements;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
@@ -15,18 +16,27 @@ public class LancerCalculsDataset {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Lancer le du dataset");
-        //Pour le moment limité car par assez de position différentes (pas de spawn aléatoire)
         DataSet ds = new DataSet(170, 9);
-
         for (int i = 0; i < 1; i++) {
-            Simulation simulation = new Simulation();
+            //Choix du dataset a composer
+            Simulation simulation = null;
+            if (args[1].equals("ArbreDeterministe")) {
+                simulation = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministe);
+            } else {
+                simulation = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreAleatoire);
+            }
 
-            //Pour le moment seul le gardient a un rn
-            Personnage ga = simulation.getGardien();
+            Personnage perso = null;
+            if (args[0].equals("P")) {
+                perso = simulation.getPrisonnier();
+            } else {
+                perso = simulation.getGardien();
+            }
+
             //ajouter un historique des déplacement choisit
-            List<double[][]> histoBayes = simulation.historiqueBayesien.get(ga);
-            List<Position> histoPos = simulation.historiquePosition.get(ga);
-            List<Deplacement> histoDep = simulation.historiqueDeplacement.get(ga);
+            List<double[][]> histoBayes = simulation.historiqueBayesien.get(perso);
+            List<Position> histoPos = simulation.historiquePosition.get(perso);
+            List<Deplacement> histoDep = simulation.historiqueDeplacement.get(perso);
 
             for (int j = 0; j < histoDep.size() - 1; j++) {
                 Position p = histoPos.get(j);
@@ -43,11 +53,12 @@ public class LancerCalculsDataset {
                     }
                     k++;
                 }
-                Outil.afficher_tab(deplacement);
                 ds.add(dsr, deplacement);
             }
-            //enregistrement du dataset
-            ds.save("Sauvegardes_DataSet/dataSetTest");
+            //args[0] : P ou G
+            //args[1] : ArbreDeterministe ou ArbreAleatoire
+            ds.save("donnees/sauvegardes_DataSet/" + args[0] + "-DataSet-" + args[1]);
+            System.out.println("fin enregistrement du dataset");
         }
     }
 }

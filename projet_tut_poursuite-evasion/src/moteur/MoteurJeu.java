@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
+import simulation.Comportements;
 import simulation.Simulation;
 import simulation.comportement.ReseauDeNeurones;
 
@@ -121,7 +122,7 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
 
-            Simulation simulation = new Simulation(new ReseauDeNeurones("Sauvegardes_NeuralNetwork/nr"),false);
+            Simulation simulation = new Simulation(Comportements.ArbreClassique,Comportements.ArbreClassique);
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
             VuePrincipaleNonInteractive vb = new VuePrincipaleNonInteractive();

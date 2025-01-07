@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import simulation.CaseEnum;
 import simulation.Simulation;
 import simulation.personnages.Position;
 
@@ -37,16 +38,12 @@ public abstract class VueSimulation extends Pane {
 
                 // Sélection de l'image en fonction de la case
                 Image image = null;
-                switch (Simulation.CARTE[i][j]) {
-                    case Simulation.MUR:
-                        image = this.imageMur;
-                        break;
-                    case Simulation.SOL:
-                        image = this.imageSol;
-                        break;
-                    case Simulation.SORTIE:
-                        image = this.imageSortie;
-                        break;
+                if(Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()){
+                    image = this.imageMur;
+                } else if (Simulation.CARTE[i][j] == CaseEnum.SOL.ordinal() || Simulation.CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
+                    image = this.imageSol;
+                } else if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
+                    image = this.imageSortie;
                 }
 
                 if (image != null) {

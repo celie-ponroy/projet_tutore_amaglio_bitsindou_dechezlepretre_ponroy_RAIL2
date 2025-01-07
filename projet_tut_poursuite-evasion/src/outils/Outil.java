@@ -9,30 +9,6 @@ import java.util.List;
 
 public class Outil {
     /**
-     * Methode qui permet d'enregistrer un object dans un fichier
-     *
-     * @param nomFichier nom du fichier où l'object sera sauvegarde
-     * @param obj        object a sauvegarder
-     */
-    public static void sauve(String nomFichier, Object obj) {
-        try {
-            // cree un flux de sortie ( fichier puis flux d ’ objet )
-            FileOutputStream os = new FileOutputStream(nomFichier);
-            ObjectOutputStream oos = new ObjectOutputStream(os);
-            // ecrit l ’ objet
-            oos.writeObject(obj);
-            // referme le flux
-            oos.close();
-        } catch (IOException e) {
-            System.out.println(" erreur d ’E / S ");
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println(" erreur hors E / S ");
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Méthode qui permet de transformer un tableau a double entree en tableau a 1 entree
      *
      * @param tab tableau a transformer
@@ -54,24 +30,13 @@ public class Outil {
         }
         System.out.println();
     }
-
-    public static ReseauDeNeurones chargerRn(String nomFichier) {
-        ReseauDeNeurones rn = null;
-        try {
-            // creer le flux de lecture ( fichier puis flux d ’ objet )
-            FileInputStream is = new FileInputStream("Sauvegardes_reseaux/" + nomFichier);
-            ObjectInputStream ois = new ObjectInputStream(is);
-            // lit l ’ objet et le cast en point
-            rn = (ReseauDeNeurones) (ois.readObject());
-            // referme le flux de lecture
-            ois.close();
-        } catch (IOException e) {
-            System.out.println(" erreur d ’E / S ");
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.out.println(" erreur hors E / S ");
-            e.printStackTrace();
+    public static void afficher_doubleTab(int[][] tab){
+        for(int i = 0; i < tab.length; i++){
+            for(int j = 0; j < tab[0].length; j++) {
+                System.out.printf("%d\t", tab[i][j]);
+            }
+            System.out.println();
         }
-        return rn;
+
     }
 }

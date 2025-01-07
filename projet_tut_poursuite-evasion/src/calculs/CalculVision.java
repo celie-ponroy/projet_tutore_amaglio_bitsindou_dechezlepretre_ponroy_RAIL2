@@ -1,5 +1,7 @@
 package calculs;
 
+import outils.ChargementCarte;
+import simulation.CaseEnum;
 import simulation.personnages.Position;
 
 import java.awt.geom.Line2D;
@@ -11,21 +13,7 @@ import java.util.List;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
-    static int[][] carte = new int[][]{
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1, 0, 0, 0, 0, 0,-1, 2,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1},
-        {-1, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
-        {-1, 0,-1,-1, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
-        {-1, 0,-1,-1, 0, 0, 0, 0, 0, 0,-1,-1, 0,-1},
-        {-1, 0, 0, 0, 0,-1,-1,-1,-1, 0, 0, 0, 0,-1},
-        {-1,-1, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
-        {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};//carte de simulation
-    static int mur =-1;
-
+    static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     /**
      * Recuperer la vision depuis le fichier vision.txt
      * @return la liste des cases pour toutes les positions de la carte
@@ -73,8 +61,8 @@ public class CalculVision {
         HashMap vision = calculerCarteVision();
         //ecrire dans un fichier
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision.txt"));
-        for (int y = 0; y < carte.length ; y++) {
-            for (int x = 0; x < carte[0].length; x++) {
+        for (int y = 0; y < CARTE.length ; y++) {
+            for (int x = 0; x < CARTE[0].length; x++) {
                 //afficher la position
                 bos.write((x+","+y+":").getBytes());
                 bos.write((vision.get(new Position(x,y))+";"+"\n").getBytes());
@@ -91,10 +79,10 @@ public class CalculVision {
     public static HashMap calculerCarteVision(){
 
         HashMap res = new HashMap();
-        for (int y = 0; y < carte.length ; y++) {
-            for (int x = 0; x < carte[0].length; x++) {
+        for (int y = 0; y < CARTE.length ; y++) {
+            for (int x = 0; x < CARTE[0].length; x++) {
                //si la case est un mur
-                if (carte[y][x] == mur) {
+                if (CARTE[y][x] == CaseEnum.MUR.ordinal()) {
                     res.put(new Position(x,y),new ArrayList());
                     continue;
                 }
@@ -127,12 +115,12 @@ public class CalculVision {
 
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
-                if (coordoneeCarteY < 0 || coordoneeCarteY >= carte.length ||coordoneeCarteX < 0 || coordoneeCarteX >= carte[0].length) {
-                    vision[coordoneeVisionY][coordoneeVisionX] = mur;
+                if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
+                    vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
 
                     continue;
                 }
-                vision[coordoneeVisionY][coordoneeVisionX] = carte[coordoneeCarteY][coordoneeCarteX];
+                vision[coordoneeVisionY][coordoneeVisionX] = CARTE[coordoneeCarteY][coordoneeCarteX];
 
             }
         }
@@ -141,7 +129,7 @@ public class CalculVision {
         List<Position> murs = new ArrayList<>();
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
-                if (vision[y+tailledecalage][x+tailledecalage] == mur) {
+                if (vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal()) {
 
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
@@ -152,7 +140,7 @@ public class CalculVision {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
 
-                if (!(vision[y+tailledecalage][x+tailledecalage] == mur)) {//si la case est pas un mur
+                if (!(vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
 
 
                     //on trace une droite entre le personnage et la case

@@ -37,29 +37,36 @@
                 // on recupere les probas
                 //on associe à chaque proba un déplacement
                 double[][] probas = this.simulation.getBayesiens().get(personnage).getCarteBayesienne();
-                Deplacement[][] deplacements = new Deplacement[probas.length][probas[0].length];
 
-                for(int i = 0; i < probas.length; i++){
-                    for(int j = 0; j < probas[i].length; j++){
-                        deplacements[i][j] = direction(personnage.getPosition(), new Position(i, j));
-                    }
-                }
-                return choixDeplacementAleatoire(deplacements, probas);
+                int[] deplacement = choixDeplacementAleatoire(probas);
+                Stack<Position> s =Simulation.CHEMINS.get(List.of(personnage.getPosition(),new Position(deplacement[0],deplacement[1])));
+                return direction(personnage.getPosition(), s.getLast());
 
             }
         }
-        private Deplacement choixDeplacementAleatoire(Deplacement[][] deplacements,double[][] probas){//faux il faut prendre en compte les probas
+
+        /**
+         * Choisit une case vers où se deplacer en fonction des probas
+         * @param probas
+         * @return
+         */
+        private int[] choixDeplacementAleatoire(double[][] probas){
             var choix = Math.random();
+
             double somme = 0.0;
             for(int i = 0; i < probas.length; i++){
                 for(int j = 0; j < probas[i].length; j++){
+                    if(probas[i][j] == -1){
+                        continue;
+                    }
                     somme += probas[i][j];
-                    if(choix < somme){
-                        return deplacements[i][j];
+
+                    if(choix <= somme){
+                        return new int[]{j,i};
                     }
                 }
             }
-            return deplacements[deplacements.length-1][deplacements[0].length-1];
+            return new int[]{probas.length-1,probas[0].length-1};
         }
 
     }

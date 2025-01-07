@@ -12,7 +12,7 @@ import java.util.List;
 public class ApprentissageDeArbre {
     public static void main(String[] args) {
         //args[0] : personnage a faire apprendre (P ou G)
-        //args[1] : arbre a faire apprendre (Deterministe ou Aleatoire)
+        //args[1] : arbre a faire apprendre (ArbreDeterministe ou ArbreAleatoire)
 
         List<Integer> nbNeuronesCouches = new ArrayList<Integer>();
         nbNeuronesCouches.add(170);

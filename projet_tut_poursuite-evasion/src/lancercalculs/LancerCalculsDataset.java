@@ -20,10 +20,10 @@ public class LancerCalculsDataset {
         for (int i = 0; i < 1; i++) {
             //Choix du dataset a composer
             Simulation simulation = null;
-            if (args[1].equals("deterministe")) {
+            if (args[1].equals("ArbreDeterministe")) {
                 simulation = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministe);
             } else {
-                simulation = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministe);
+                simulation = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreAleatoire);
             }
 
             Personnage perso = null;
@@ -53,11 +53,12 @@ public class LancerCalculsDataset {
                     }
                     k++;
                 }
-                Outil.afficher_tab(deplacement);
                 ds.add(dsr, deplacement);
             }
-            //enregistrement du dataset
+            //args[0] : P ou G
+            //args[1] : ArbreDeterministe ou ArbreAleatoire
             ds.save("donnees/sauvegardes_DataSet/" + args[0] + "-DataSet-" + args[1]);
+            System.out.println("fin enregistrement du dataset");
         }
     }
 }

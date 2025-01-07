@@ -4,10 +4,7 @@ import affichage.DessinJeu;
 import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
-import simulation.comportement.ArbreDecisionGardien;
-import simulation.comportement.ArbreDecisionPrisonnier;
-import simulation.comportement.Comportement;
-import simulation.comportement.ReseauDeNeurones;
+import simulation.comportement.*;
 import simulation.personnages.*;
 
 import java.util.ArrayList;
@@ -80,56 +77,41 @@ public class Simulation implements Jeu {
 
         switch (ComportementGardien) {
             case Comportements.Aleatoire:
-                //TODO: Modifier pour comportement aleatoire
-                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+                this.comportementGardien = new Aleatoire(this,this.gardien);
                 break;
-<<<<<<< HEAD
             case Comportements.ArbreDeterministe:
-=======
-            case Comportements.ArbreClassique:
->>>>>>> fbe96282363233de446ec4bb3bbd82509aa76f30
-                System.out.println("azdzefsdfzefseg");
-                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-Deterministe",this, this.gardien);
+                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
             case Comportements.ArbreAleatoire:
-                //TODO: Modifier pour arbre aléatoire
-                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+                //TODO: Ajouter arbre aléatoire
                 break;
-            case Comportements.ReseauArbreClassique:
-                this.comportementGardien = new ReseauDeNeurones("", this, this.gardien);
+            case Comportements.ReseauArbreDeterministe:
+                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire",this, this.gardien);
                 break;
             default:
-                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
         }
 
         switch (ComportementPrisonier) {
             case Comportements.Aleatoire:
-                //TODO: Modifier pour comportement aleatoire
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+                this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
-<<<<<<< HEAD
             case Comportements.ArbreDeterministe:
-=======
-            case Comportements.ArbreClassique:
->>>>>>> fbe96282363233de446ec4bb3bbd82509aa76f30
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
             case Comportements.ArbreAleatoire:
-                //TODO: Modifier pour arbre aléatoire
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+                //TODO: ajouter arbre aléatoire
                 break;
-            case Comportements.ReseauArbreClassique:
-                this.comportementPrisonnier = new ReseauDeNeurones("", this, this.prisonnier);
+            case Comportements.ReseauArbreDeterministe:
+                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                 break;
             default:
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
         }
 

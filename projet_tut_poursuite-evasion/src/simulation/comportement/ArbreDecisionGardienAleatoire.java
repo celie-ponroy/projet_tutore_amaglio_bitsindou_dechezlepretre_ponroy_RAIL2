@@ -37,7 +37,6 @@
                 // on recupere les probas
                 //on associe à chaque proba un déplacement
                 double[][] probas = this.simulation.getBayesiens().get(personnage).getCarteBayesienne();
-
                 int[] deplacement = choixDeplacementAleatoire(probas);
                 Stack<Position> s =Simulation.CHEMINS.get(List.of(personnage.getPosition(),new Position(deplacement[0],deplacement[1])));
                 return direction(personnage.getPosition(), s.getLast());
@@ -67,6 +66,7 @@
                 }
             }
             return new int[]{probas.length-1,probas[0].length-1};
+
         }
 
     }

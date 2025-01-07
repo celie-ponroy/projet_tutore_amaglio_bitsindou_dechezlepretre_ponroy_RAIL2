@@ -133,7 +133,6 @@ public class Simulation implements Jeu {
 
 
 
-
     /**
      * Constructeur secondaire pour le mode interactif
      *

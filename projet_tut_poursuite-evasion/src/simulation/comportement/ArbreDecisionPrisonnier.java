@@ -42,6 +42,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
             deplacementRes = direction(personnage.getPosition(), s.getLast());
         }
         return deplacementRes;
+
     }
 
     public Deplacement oppose(Deplacement d){

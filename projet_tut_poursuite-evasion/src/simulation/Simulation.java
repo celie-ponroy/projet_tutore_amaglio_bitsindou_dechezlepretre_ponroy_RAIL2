@@ -132,7 +132,6 @@ public class Simulation implements Jeu {
     }
 
 
-
     /**
      * Constructeur secondaire pour le mode interactif
      *
@@ -165,7 +164,6 @@ public class Simulation implements Jeu {
 
         } else {
             this.gardien = new Joueur(5, 4);
-
             this.prisonnier = new Agent(9, 18);
             comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
             bayesiens.put(this.prisonnier,new Bayesien());
@@ -272,7 +270,6 @@ public class Simulation implements Jeu {
         }
 
         this.nbTours++;
-
         actualisationBayesienne(agent,joueur);
 
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
@@ -363,6 +360,7 @@ public class Simulation implements Jeu {
 
         return valide;
     }
+
 
     /**
      * permets de savoir si le deplacement est valide

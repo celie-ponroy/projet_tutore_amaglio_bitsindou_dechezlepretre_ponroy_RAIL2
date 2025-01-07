@@ -326,7 +326,7 @@ public class Simulation implements Jeu {
             return;
         }
         this.nbTours++;
-
+        miseAJourFinJeu();
         deplacerPersonnage(agent, deplacementAgent);
         actualisationBayesienne(agent,joueur);
 
@@ -505,9 +505,10 @@ public class Simulation implements Jeu {
     public Personnage getJoueur() {
         if (this.prisonnier instanceof Joueur) {
             return this.prisonnier;
-        } else {
+        } if(this.gardien instanceof Joueur){
             return this.gardien;
         }
+        return null;
     }
 
 

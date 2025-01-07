@@ -116,7 +116,7 @@ public class CalculVision {
 
         //recuperrer la carte autour du personnage
         //pour chaque case de la carte où le personnage etre
-        int tailleVision = 9;//29 pour toute la carte 9 default
+        int tailleVision = 29;//29 pour toute la carte 9 default
         int tailledecalage = (tailleVision - 1) / 2;
         int[][] vision = new int[tailleVision][tailleVision];
         for (int y = -tailledecalage; y <= tailledecalage; y++) {//a verifier les bornes
@@ -186,10 +186,8 @@ public class CalculVision {
 
             for (int j = 0; j < visionCur.size(); j++) {
                 Position position = visionCur.get(j);
-                System.out.println("Clean vision de :"+pPerso +" "+position);
                 ArrayList<Position> casesVisites = new ArrayList<>();
                 if (!parcours(pPerso,position,visionCur, casesVisites)){
-                    System.out.println("ok");
                     visionCur.remove(j);
                 }
 
@@ -207,7 +205,6 @@ public class CalculVision {
      * @return true si il y a un chemin entre la case et le personnage
      */
     private static boolean parcours(Position pPerso, Position positionCur, ArrayList<Position> visionCur, ArrayList<Position> casesVisites){
-        System.out.println(positionCur+" : "+visionCur+" "+casesVisites);
         if(positionCur.equals(pPerso)){
             return true;
         }

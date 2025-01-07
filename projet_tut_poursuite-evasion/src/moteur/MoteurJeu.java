@@ -121,8 +121,8 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
 
-            //Simulation simulation = new Simulation(new ReseauDeNeurones("Sauvegardes_NeuralNetwork/nr"),false);
-            Simulation simulation = new Simulation();
+            Simulation simulation = new Simulation(new ReseauDeNeurones("Sauvegardes_NeuralNetwork/nr"),false);
+            //Simulation simulation = new Simulation();
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
             VuePrincipaleNonInteractive vb = new VuePrincipaleNonInteractive();

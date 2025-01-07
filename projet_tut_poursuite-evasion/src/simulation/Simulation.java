@@ -104,6 +104,10 @@ public class Simulation implements Jeu {
                 break;
         }
 
+        this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+        this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+        //this.comportementPrisonnier = new Aleatoire(this,this.prisonnier);
+        //this.comportementGardien = new Aleatoire(this,this.gardien);
 
         //initialisation des victoires
         this.victoireGardien = false;
@@ -131,7 +135,33 @@ public class Simulation implements Jeu {
         deplacerAgents();
     }
 
-
+    /**
+     * Constructeur utiliser pour mode non interactif reseau
+     *
+     * @param rn                      Reseaux de neurones selectione pour l'apprentissage
+     * @param apprentissagePrisonnier Vrai si on fais apprendre au prisonnier, faux sinon.
+     */
+    public Simulation(ReseauDeNeurones rn, boolean apprentissagePrisonnier) {
+        this.observateurs = new ArrayList<>();
+        this.prisonnier = new Agent(4, 10);
+        this.gardien = new Agent(5, 4);
+        this.nbTours = 0;
+        this.estFini = false;
+        if (apprentissagePrisonnier) {
+            this.comportementPrisonnier = rn;
+            this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+        } else {
+            this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+            this.comportementGardien = rn;
+        }
+        //Initialisation des carte bayesiennes pour les deux agents
+        bayesiens = new HashMap<>();
+        bayesiens.put(this.gardien, new Bayesien());
+        bayesiens.put(this.prisonnier, new Bayesien());
+        carteBayesiennes = new HashMap<>();
+        carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
+        carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
+    }
 
     /**
      * Constructeur secondaire pour le mode interactif

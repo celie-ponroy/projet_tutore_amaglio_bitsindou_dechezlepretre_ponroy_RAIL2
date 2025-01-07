@@ -36,14 +36,19 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         if(s.contains(simulation.getGardien().getPosition())){
             //on fui le gardien
             //on cherche la meilleure solution des cases à coté de nous
+<<<<<<< HEAD
             return fuir();
 
+=======
+            //return oppose(direction(personnage.getPosition(), s.getLast()));
+>>>>>>> 296daa7 (debugg decision prisonnier)
         }else{
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());
         }
     }
 
+<<<<<<< HEAD
 
     /**
      * choisit le meilleur deplacement pour fuir
@@ -51,15 +56,34 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
      */
     private Deplacement fuir(){
 
+=======
+    @Override
+    public Deplacement prendreDecision(double[] entrees) {
+        return null;
+    }
+
+    public Deplacement fuir(){
+>>>>>>> 296daa7 (debugg decision prisonnier)
         //on cherche la meilleure solution des cases à coté de nous
         Position position = this.personnage.getPosition();
         Position sortie = Simulation.getPosSortie();
 
         for (Position p: position.casesAdjacentes()){
             Stack<Position> s = Simulation.CHEMINS.get(List.of(p,sortie));
+<<<<<<< HEAD
 
             if(!s.empty()&&!s.contains(simulation.getGardien().getPosition()))//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
                 return direction(position, s.getLast());
+=======
+            if(s.empty())//cas si aucun chemin (dont murs)
+               continue;
+
+            //si le gardien bloque on cherche une autre case
+            if(s.contains(simulation.getGardien().getPosition())){
+                continue;
+            }
+            return direction(position, s.getLast());
+>>>>>>> 296daa7 (debugg decision prisonnier)
 
         }
         return Deplacement.AUCUN;

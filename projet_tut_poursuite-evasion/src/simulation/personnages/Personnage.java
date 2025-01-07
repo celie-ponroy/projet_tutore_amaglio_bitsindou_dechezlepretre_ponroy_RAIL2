@@ -14,6 +14,10 @@ public abstract class Personnage {
 
     public abstract void deplacer(Position p);
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public Position getPosition() {
         return this.position;
     }

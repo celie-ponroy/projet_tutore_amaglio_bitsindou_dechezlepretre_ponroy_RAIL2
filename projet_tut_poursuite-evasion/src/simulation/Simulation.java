@@ -48,7 +48,7 @@ public class Simulation implements Jeu {
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(4, 10);
         this.gardien = new Agent(5, 4);
-
+        this.positionnerAgentsSpawnAleatoire();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
         List<Deplacement> depG = new ArrayList<>();
@@ -133,9 +133,9 @@ public class Simulation implements Jeu {
     /**
      * Constructeur secondaire pour le mode interactif
      *
-     * @param perso true si le personnage est le prisonnier et false sinon
+     * @param prisonnier true si le personnage est le prisonnier et false sinon
      */
-    public Simulation(boolean perso) {
+    public Simulation(boolean prisonnier) {
         this.observateurs = new ArrayList<>();
         this.nbTours = 0;
         this.estFini = false;
@@ -149,9 +149,10 @@ public class Simulation implements Jeu {
         this.victoireGardien = false;
         this.victoirePrisonnier = false;
 
-        if (perso) {
+        if (prisonnier) {
             this.prisonnier = new Joueur(4, 10);
             this.gardien = new Agent(5, 4);
+            this.positionnerAgentsSpawnAleatoire();
             comportementGardien = new ArbreDecisionGardien(this, this.gardien);
             bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
@@ -162,13 +163,14 @@ public class Simulation implements Jeu {
         } else {
             this.gardien = new Joueur(5, 4);
             this.prisonnier = new Agent(4, 10);
+            this.positionnerAgentsSpawnAleatoire();
             comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
             bayesiens.put(this.prisonnier, new Bayesien());
-            carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
+            carteBayesiennes.put(this.prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
 
             ArrayList<double[][]> list1 = new ArrayList<>();
-            list1.add(carteBayesiennes.get(prisonnier).clone());
-            historiqueBayesien.put(prisonnier, list1);
+            list1.add(carteBayesiennes.get(this.prisonnier).clone());
+            historiqueBayesien.put(this.prisonnier, list1);
 
         }
         //historique
@@ -198,6 +200,44 @@ public class Simulation implements Jeu {
         for (DessinJeu dj : this.observateurs) {
             dj.update(this);
         }
+    }
+    /**
+     * Méthode qui positionne de manière aléatoire les deux perso sur un spawn
+     */
+    private void positionnerAgentsSpawnAleatoire(){
+        List<Case> spawnsGardien = new ArrayList<>();
+        List<Case> spawnsPrisonnier = new ArrayList<>();
+        for(int i = 0; i < CARTE.length; i++){
+            for(int j = 0; j < CARTE[0].length; j++){
+                if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal()){
+                    spawnsGardien.add(new Case(j, i, 0));
+                } else if (CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
+                    spawnsPrisonnier.add(new Case(j, i, 0));
+                }
+            }
+        }
+        Case spawnGardien = spawnsGardien.get((int)(Math.random()*spawnsGardien.size()));
+        Case spawnPrisonnier = spawnsPrisonnier.get((int)(Math.random()*spawnsPrisonnier.size()));
+        this.prisonnier.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
+        this.gardien.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
+    }
+    /**
+     * Méthode qui positionne de manière aléatoire les deux agents pour l'apprentissage
+     */
+    private void positionnerAleatoirement(){
+        List<Case> casesValides = new ArrayList<>();
+
+        for(int i = 0; i < CARTE.length; i++){
+            for(int j = 0; j < CARTE[0].length; j++){
+                if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal() || CARTE[i][j] == CaseEnum.SOL.ordinal()) {
+                    casesValides.add(new Case(j, i, 0));
+                }
+            }
+        }
+        Case spawnGardien = casesValides.get((int)(Math.random()*casesValides.size()));
+        Case spawnPrisonnier = casesValides.get((int)(Math.random()*casesValides.size()));
+        this.prisonnier.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
+        this.gardien.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
     }
 
     /**

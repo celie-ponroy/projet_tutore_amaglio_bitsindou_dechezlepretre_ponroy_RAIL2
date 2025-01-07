@@ -37,6 +37,7 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
             //on fui le gardien
             //on cherche la meilleure solution des cases à coté de nous
             return fuir();
+
         }else{
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());
@@ -48,19 +49,23 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         return null;
     }
 
+
     /**
      * choisit le meilleur deplacement pour fuir
      * @return
      */
     private Deplacement fuir(){
+
         //on cherche la meilleure solution des cases à coté de nous
         Position position = this.personnage.getPosition();
         Position sortie = Simulation.getPosSortie();
 
         for (Position p: position.casesAdjacentes()){
             Stack<Position> s = Simulation.CHEMINS.get(List.of(p,sortie));
+
             if(!s.empty()&&!s.contains(simulation.getGardien().getPosition()))//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
                 return direction(position, s.getLast());
+
         }
         return Deplacement.AUCUN;
     }

@@ -23,6 +23,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
      */
     @Override
     public Deplacement prendreDecision() {
+
         Deplacement deplacementRes = Deplacement.AUCUN;
         Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty()) {
@@ -39,6 +40,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         }else{
             //on va vers la sortie
             deplacementRes = direction(personnage.getPosition(), s.getLast());
+
         }
         return deplacementRes;
     }

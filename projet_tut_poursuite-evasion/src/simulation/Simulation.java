@@ -72,7 +72,7 @@ public class Simulation implements Jeu {
                 this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
             case Comportements.ArbreAleatoire:
-                //TODO: Ajouter arbre aléatoire
+                this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
                 this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
@@ -104,6 +104,7 @@ public class Simulation implements Jeu {
                 break;
         }
 
+
         //initialisation des victoires
         this.victoireGardien = false;
         this.victoirePrisonnier = false;
@@ -129,6 +130,8 @@ public class Simulation implements Jeu {
 
         deplacerAgents();
     }
+
+
 
     /**
      * Constructeur secondaire pour le mode interactif

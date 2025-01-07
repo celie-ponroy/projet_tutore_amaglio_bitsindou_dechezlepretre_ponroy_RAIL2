@@ -23,23 +23,33 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
      */
     @Override
     public Deplacement prendreDecision() {
-        Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
-        if(s.empty())
-            return direction(personnage.getPosition(),Simulation.getPosSortie());
-        //si on voit pas le gardien
-        if(!simulation.estVisible(personnage, true)){
-            //on va vers la sortie
-            return direction(personnage.getPosition(), s.getLast());
-        }
+        boolean valide = false;
+        Deplacement deplacementRes = Deplacement.AUCUN;
+        while (!valide){
+            Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
+            if(s.empty()) {
+                deplacementRes = direction(personnage.getPosition(), Simulation.getPosSortie());
+                //si on voit pas le gardien
+            }else if(!simulation.estVisible(personnage, true)){
+                //on va vers la sortie
+                deplacementRes = direction(personnage.getPosition(), s.getLast());
 
-        //sinon est ce qu'il est sur le chemin de la sortie ?
-        if(s.contains(simulation.getGardien().getPosition())){
-            //on fui le gardien
-            return oppose(direction(personnage.getPosition(), s.getLast()));// a changer
-        }else{
-            //on va vers la sortie
-            return direction(personnage.getPosition(), s.getLast());
+            //sinon est ce qu'il est sur le chemin de la sortie ?
+            }else if(s.contains(simulation.getGardien().getPosition())){
+                //on fui le gardien
+                deplacementRes = oppose(direction(personnage.getPosition(), s.getLast()));// a changer
+            }else{
+                //on va vers la sortie
+                deplacementRes = direction(personnage.getPosition(), s.getLast());
+            }
+            Position ptmp = new Position(personnage.getPosition().getX(), personnage.getPosition().getY());
+            ptmp.deplacement(deplacementRes);
+
+            if(!simulation.murPresent(ptmp.getX(), ptmp.getY())){
+                valide = true;
+            }
         }
+        return deplacementRes;
     }
 
     public Deplacement oppose(Deplacement d){

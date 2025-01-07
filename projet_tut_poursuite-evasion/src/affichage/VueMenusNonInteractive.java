@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import moteur.MoteurJeu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import simulation.Comportements;
 import simulation.Simulation;
 
 import java.awt.*;
@@ -122,7 +123,7 @@ public class VueMenusNonInteractive {
                     okButton.setOnAction(f -> {
                         switch (gardienComboBox.getValue() + " " + prisonnierComboBox.getValue()) {
                             case "Arbre de décision déterministe Arbre de décision déterministe":
-                                Simulation simulationGard = new Simulation();
+                                Simulation simulationGard = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministe);
                                 MoteurJeu.jeu = simulationGard;
                                 //Affichage du jeu
                                 VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive();

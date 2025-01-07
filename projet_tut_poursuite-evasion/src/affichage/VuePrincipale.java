@@ -255,9 +255,11 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         if(tour<0){
             tour=0;
         }
-        int taille =simulation.historiquePosition.get(simulation.getJoueur()).size();
-        if(tour>=taille){
+        int taille = simulation.historiquePosition.get(simulation.getJoueur()).size();
+        this.iterationLabel.setText("Nombre d'itération: " + tour);
+        if(tour>=taille-1){
             tour=taille-1;
+            this.iterationLabel.setText("Fin");
         }
         //on mets a jour la carte bayesienne
         Personnage agent = simulation.getPrisonnier();

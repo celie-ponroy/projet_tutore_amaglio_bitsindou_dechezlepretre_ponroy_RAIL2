@@ -104,7 +104,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             javafx.scene.control.Button suivant = new Button("Suivant");
             suivant.setPrefSize(200, 75);
             suivant.setOnAction(e -> {
-                if (tour < simulation.getNbTours() - 1) {
+                if (tour < simulation.getNbTours()) {
                     tour += 1;
                     updatePositions();
                     updateIteration();
@@ -128,6 +128,9 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     public void updateIteration() {
         // Mise à jour du texte du label
         this.iterationLabel.setText("Tour: " + tour);
+        if(tour == simulation.getNbTours() ){
+            this.iterationLabel.setText("Fin");
+        }
     }
 
     /**

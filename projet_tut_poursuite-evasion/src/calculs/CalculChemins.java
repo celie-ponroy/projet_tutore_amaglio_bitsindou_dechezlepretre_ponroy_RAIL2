@@ -1,13 +1,14 @@
 package calculs;
 
 import outils.ChargementCarte;
-import simulation.Simulation;
+import simulation.CaseEnum;
 import simulation.personnages.Position;
 
 import java.io.*;
 import java.util.*;
 //basé sur https://codegym.cc/groups/posts/a-search-algorithm-in-java
 public class CalculChemins {
+    static int [][] carte = ChargementCarte.charger("donnees/laby.txt");
     /**
      * Recuperer la vision depuis le fichier chemin.txt
      * @return la liste des chemins pour toutes les paires de positions de la carte
@@ -58,10 +59,10 @@ public class CalculChemins {
         //ecrire dans un fichier
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/chemins.txt"));
         HashMap vision = calculerChemins();
-        for (int y1 = 0; y1 < Simulation.CARTE.length; y1++) {
-            for (int x1 = 0; x1 < Simulation.CARTE[0].length; x1++) {
-                for (int y2 = 0; y2 < Simulation.CARTE.length; y2++) {
-                    for (int x2 = 0; x2 < Simulation.CARTE[0].length; x2++) {
+        for (int y1 = 0; y1 < carte.length; y1++) {
+            for (int x1 = 0; x1 < carte[0].length; x1++) {
+                for (int y2 = 0; y2 < carte.length; y2++) {
+                    for (int x2 = 0; x2 < carte[0].length; x2++) {
                         Position src = new Position(x1,y1);
                         Position dest = new Position(x2, y2);
                         //System.out.println("Chemin de "+src+" à "+dest+" : "+vision.get(List.of(src,dest)));
@@ -76,8 +77,17 @@ public class CalculChemins {
     }
 
     public static HashMap<List<Position>,Stack> calculerChemins(){
+
+        //changer la carte pour prendre en compte la sortie
+        for(int i = 0; i < carte.length; i++){
+            for(int j = 0; j < carte[0].length; j++){
+                if(carte[i][j] == CaseEnum.SORTIE.ordinal()){
+                    carte[i][j]=CaseEnum.SOL.ordinal();
+                }
+            }
+        }
+
         var mapStack = new HashMap<List<Position>,Stack>();
-        int[][] carte = ChargementCarte.charger("donnees/laby.txt");
 
         for (int y1 = 0; y1 < carte.length; y1++) {
             for (int x1 = 0; x1 < carte[0].length; x1++) {

@@ -176,8 +176,6 @@ public class Simulation implements Jeu {
         //initialisation des victoires
         this.victoireGardien = false;
         this.victoirePrisonnier = false;
-
-
         if (prisonnier) {
             this.prisonnier = new Joueur(4, 10);
             this.gardien = new Agent(5, 4);

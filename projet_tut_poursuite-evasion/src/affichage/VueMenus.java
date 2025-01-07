@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import moteur.Clavier;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import simulation.Comportements;
 import simulation.Simulation;
 
 public class VueMenus {
@@ -24,6 +25,7 @@ public class VueMenus {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     protected Stage primaryStage; //scene
+    private String choixPersonnage;
 
     /**
      * Initialisation de la fenêtre
@@ -40,6 +42,7 @@ public class VueMenus {
         this.jeu = j;
         //Initialisation de la fenêtre
         initPrimaryStage();
+        this.choixPersonnage = "";
     }
 
     /**
@@ -47,6 +50,7 @@ public class VueMenus {
      */
     public VueMenus() {
         initPrimaryStage();
+        this.choixPersonnage = "";
     }
 
     /**
@@ -124,41 +128,29 @@ public class VueMenus {
         Button persoPrisonnier = new Button("Prisonnier");
         persoPrisonnier.setPrefSize(200, 100);
         persoPrisonnier.setOnAction(f -> {
+            setChoixPersonnage("Prisonnier");
             afficherMenuIA(); // Menu de difficulté
 
-            //on change le nom de la scene
-            setScene(scene2, "Simulation interactive");
-            Simulation simulation = new Simulation(true);
-            MoteurJeu.jeu = simulation;
-
-            VuePrincipale vp = new VuePrincipale();
-            vp.update(MoteurJeu.jeu);
-            MoteurJeu.jeu.ajouterObservateur(vp);
-            root2.getChildren().clear();
-            root2.getChildren().add(vp);
-
-            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-            scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+//            //on change le nom de la scene
+//            setScene(scene2, "Simulation interactivfidvbsive");
+//            Simulation simulation = new Simulation(true);
+//            MoteurJeu.jeu = simulation;
+//
+//            VuePrincipale vp = new VuePrincipale();
+//            vp.update(MoteurJeu.jeu);
+//            MoteurJeu.jeu.ajouterObservateur(vp);
+//            root2.getChildren().clear();
+//            root2.getChildren().add(vp);
+//
+//            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+//            scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
         });
 
         Button persoGardien = new Button("Gardien");
         persoGardien.setPrefSize(200, 100);
         persoGardien.setOnAction(f -> {
+            setChoixPersonnage("Gardien");
             afficherMenuIA(); // Menu de difficulté
-
-            //on change le nom de la scene
-            setScene(scene2, "Simulation interactive");
-            Jeu simulation = new Simulation(false);
-            MoteurJeu.jeu = simulation;
-
-            VuePrincipale vp = new VuePrincipale();
-            vp.update(MoteurJeu.jeu);
-            MoteurJeu.jeu.ajouterObservateur(vp);
-            root2.getChildren().clear();
-            root2.getChildren().add(vp);
-
-            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-            scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
         });
 
         buttonBox2.getChildren().addAll(persoPrisonnier, persoGardien);
@@ -205,7 +197,36 @@ public class VueMenus {
         okButton.setOnAction(e -> {
             switch (comboBox.getValue()) {
                 case "Arbre de décision déterministe":
-                    //Va lancer une méthode qui la simulation avec l'IA arbre de décision
+                    //on recupere le choix du personnage
+                    choixPersonnage = getChoixPersonnage();
+
+                    if (choixPersonnage == "Prisonnier") {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        Simulation simulation = new Simulation(true);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        VuePrincipale vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    } else {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        Simulation simulation = new Simulation(false);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        VuePrincipale vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    }
                     break;
                 case "Arbre de décision aléatoire":
                     //Va lancer une méthode qui la simulation avec une IA avec un arbre de décision aléatoire
@@ -233,4 +254,20 @@ public class VueMenus {
 
         setScene(scene, "Choix de la difficulté de l'IA adverse");
     }
+
+    /**
+     * Permet de récupérer le choix du personnage
+     * @return le choix du personnage
+     */
+    public String getChoixPersonnage(){
+        return this.choixPersonnage;
+    }
+
+    /**
+     * Permet de changer le choix du personnage
+     * @param choixPersonnage le choix du personnage
+     */
+     public void setChoixPersonnage(String choixPersonnage) {
+         this.choixPersonnage = choixPersonnage;
+     }
 }

@@ -130,7 +130,6 @@ public class VueMenus {
         persoPrisonnier.setOnAction(f -> {
             setChoixPersonnage("Prisonnier");
             afficherMenuIA(); // Menu de difficulté
-
         });
 
         Button persoGardien = new Button("Gardien");
@@ -190,7 +189,6 @@ public class VueMenus {
         //Bouton "OK" pour valider le choix
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
-
 
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {

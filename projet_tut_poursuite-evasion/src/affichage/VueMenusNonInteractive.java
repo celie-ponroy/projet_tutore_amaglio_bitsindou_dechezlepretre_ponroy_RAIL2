@@ -75,7 +75,6 @@ public class VueMenusNonInteractive {
         gardienComboBox.getItems().add("Comportement aléatoire");
         gardienComboBox.getItems().add("Réseau de neurones 1.0");
 
-
         gardienBox.getChildren().addAll(gardienLabel, gardienComboBox);
 
         // Colonne pour le choix de difficulté du prisonnier

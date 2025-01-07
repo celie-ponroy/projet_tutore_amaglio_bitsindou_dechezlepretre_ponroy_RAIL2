@@ -5,6 +5,7 @@ import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
 import org.apache.commons.lang3.ArrayUtils;
+import outils.ChargementCarte;
 import outils.Outil;
 import simulation.comportement.ArbreDecisionGardien;
 import simulation.comportement.ArbreDecisionPrisonnier;
@@ -24,22 +25,20 @@ public class Simulation implements Jeu {
     private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
-    public static final int[][] CARTE = new int[][]{
-            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-            {-1, 0, 0, 0, 0, 0,-1, 2,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1},
-            {-1, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
-            {-1, 0,-1,-1, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
-            {-1, 0,-1,-1, 0, 0, 0, 0, 0, 0,-1,-1, 0,-1},
-            {-1, 0, 0, 0, 0,-1,-1,-1,-1, 0, 0, 0, 0,-1},
-            {-1,-1, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
-            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
-    public static final int SORTIE = 2;
-    public static final int MUR = -1;
-    public static final int SOL = 0;
+    public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+//    public static final int[][] CARTE = new int[][]{
+//            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+//            {-1, 0, 0, 0, 0, 0,-1, 2,-1,-1,-1,-1,-1,-1},
+//            {-1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1},
+//            {-1, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
+//            {-1, 0,-1,-1, 0, 0,-1,-1,-1,-1,-1,-1, 0,-1},
+//            {-1, 0,-1,-1, 0, 0, 0, 0, 0, 0,-1,-1, 0,-1},
+//            {-1, 0, 0, 0, 0,-1,-1,-1,-1, 0, 0, 0, 0,-1},
+//            {-1,-1, 0, 0, 0, 0, 0, 0,-1,-1,-1,-1,-1,-1},
+//            {-1,-1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1,-1},
+//            {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
+//            {-1,-1,-1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1},
+//            {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}};
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS = CalculChemins.recupererChemin();
 
@@ -320,7 +319,7 @@ public class Simulation implements Jeu {
             agent = this.prisonnier;
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
-
+        System.out.println(deplacementAgent);
         //initialisation du déplacement du joueur
         boolean deplacement = deplacerPersonnage(joueur, d);
         if (!deplacement) {
@@ -350,7 +349,7 @@ public class Simulation implements Jeu {
             this.estFini = true;
             this.victoireGardien = true;
         }
-        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == Simulation.SORTIE){
+        if(Simulation.CARTE[this.prisonnier.getPosition().getY()][this.prisonnier.getPosition().getX()] == CaseEnum.SORTIE.ordinal()){
             this.estFini = true;
             this.victoirePrisonnier = true;
         }
@@ -392,7 +391,7 @@ public class Simulation implements Jeu {
 
 
     public boolean murPresent(int x , int y){
-        return Simulation.CARTE[y][x] == Simulation.MUR;
+        return Simulation.CARTE[y][x] == CaseEnum.MUR.ordinal();
     }
 
     /**
@@ -513,7 +512,14 @@ public class Simulation implements Jeu {
 
 
     public static Position getPosSortie(){
-        return new Position(7,1);
+        for(int i = 0; i < CARTE.length; i++){
+            for(int j = 0; j < CARTE[0].length; j++){
+                if(CARTE[i][j] == CaseEnum.SORTIE.ordinal()){
+                    return new Position(j, i);
+                }
+            }
+        }
+        return new Position(0, 0);
     }
 
 

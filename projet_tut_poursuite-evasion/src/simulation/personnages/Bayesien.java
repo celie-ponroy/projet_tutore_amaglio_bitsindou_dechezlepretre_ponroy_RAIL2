@@ -1,6 +1,7 @@
 package simulation.personnages;
 
 import simulation.Case;
+import simulation.CaseEnum;
 import simulation.Simulation;
 
 import java.util.ArrayList;
@@ -109,22 +110,22 @@ public class Bayesien {
                     //On regarde si la case exploré appartient au case valide
                     if (casesValides.contains(new Case(j, i, 0))) {
                         if ((k == -1) && (l == -1)) {
-                            if (!(Simulation.CARTE[i][j + 1] == -1 || Simulation.CARTE[i + 1][j] == -1)) {
+                            if (!(Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
                                 casesVoisinesValides.add(new Case(j, i, 0));
                                 ;
                             }
                         } else if ((k == 1) && (l == -1)) {
-                            if (!(Simulation.CARTE[i - 1][j] == -1 || Simulation.CARTE[i][j + 1] == -1)) {
+                            if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal())) {
                                 casesVoisinesValides.add(new Case(j, i, 0));
                                 ;
                             }
                         } else if ((k == -1) && (l == 1)) {
-                            if (!(Simulation.CARTE[i][j - 1] == -1 || Simulation.CARTE[i + 1][j] == -1)) {
+                            if (!(Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
                                 casesVoisinesValides.add(new Case(j, i, 0));
                                 ;
                             }
                         } else if ((k == 1) && (l == 1)) {
-                            if (!(Simulation.CARTE[i - 1][j] == -1 || Simulation.CARTE[i][j - 1] == -1)) {
+                            if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal())) {
                                 casesVoisinesValides.add(new Case(j, i, 0));
                                 ;
                             }

@@ -1,5 +1,6 @@
 package calculs;
 
+import outils.ChargementCarte;
 import simulation.Simulation;
 import simulation.personnages.Position;
 
@@ -76,19 +77,7 @@ public class CalculChemins {
 
     public static HashMap<List<Position>,Stack> calculerChemins(){
         var mapStack = new HashMap<List<Position>,Stack>();
-        int[][] carte = new int[][]{
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                { 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-                { 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-                { 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0},
-                { 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0},
-                { 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+        int[][] carte = ChargementCarte.charger("donnees/laby.txt");
 
         for (int y1 = 0; y1 < carte.length; y1++) {
             for (int x1 = 0; x1 < carte[0].length; x1++) {

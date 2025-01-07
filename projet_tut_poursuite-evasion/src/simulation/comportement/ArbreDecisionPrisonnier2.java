@@ -37,17 +37,14 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
             //on fui le gardien
             //on cherche la meilleure solution des cases à coté de nous
             return fuir();
+            //return oppose(direction(personnage.getPosition(), s.getLast()));
         }else{
             //on va vers la sortie
             return direction(personnage.getPosition(), s.getLast());
         }
     }
 
-    /**
-     * choisit le meilleur deplacement pour fuir
-     * @return
-     */
-    private Deplacement fuir(){
+    public Deplacement fuir(){
         //on cherche la meilleure solution des cases à coté de nous
         Position position = this.personnage.getPosition();
         Position sortie = Simulation.getPosSortie();

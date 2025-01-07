@@ -23,6 +23,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
      */
     @Override
     public Deplacement prendreDecision() {
+<<<<<<< HEAD
         Deplacement deplacementRes = Deplacement.AUCUN;
         Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty()) {
@@ -41,6 +42,40 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
             deplacementRes = direction(personnage.getPosition(), s.getLast());
         }
         return deplacementRes;
+=======
+        boolean valide = false;
+        Deplacement deplacementRes = Deplacement.AUCUN;
+        while (!valide){
+            Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
+            if(s.empty()) {
+                deplacementRes = direction(personnage.getPosition(), Simulation.getPosSortie());
+                //si on voit pas le gardien
+            }else if(!simulation.estVisible(personnage, true)){
+                //on va vers la sortie
+                deplacementRes = direction(personnage.getPosition(), s.getLast());
+
+            //sinon est ce qu'il est sur le chemin de la sortie ?
+            }else if(s.contains(simulation.getGardien().getPosition())){
+                //on fui le gardien
+                deplacementRes = oppose(direction(personnage.getPosition(), s.getLast()));// a changer
+            }else{
+                //on va vers la sortie
+                deplacementRes = direction(personnage.getPosition(), s.getLast());
+            }
+            Position ptmp = new Position(personnage.getPosition().getX(), personnage.getPosition().getY());
+            ptmp.deplacement(deplacementRes);
+
+            if(!simulation.murPresent(ptmp.getX(), ptmp.getY())){
+                valide = true;
+            }
+        }
+        return deplacementRes;
+    }
+
+    @Override
+    public Deplacement prendreDecision(double[] entrees) {
+        return null;
+>>>>>>> 35cc62c (debugg decision prisonnier)
     }
 
     public Deplacement oppose(Deplacement d){

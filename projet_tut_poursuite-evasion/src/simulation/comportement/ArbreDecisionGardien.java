@@ -51,10 +51,4 @@
             }
 
         }
-
-        @Override
-        public Deplacement prendreDecision(double[] entrees) {
-            return null;
-        }
-
     }

@@ -23,7 +23,7 @@ public class Bayesien {
             for (int j = 0; j < carte[0].length; j++) {
                 //Initialisation du tableau a -1
                 carteBayesienne[i][j] = -1.0;
-                if (carte[i][j] == 0) {
+                if (!(carte[i][j]==CaseEnum.MUR.ordinal())) {
                     casesValides.add(new Case(j, i, 0));
                 }
             }

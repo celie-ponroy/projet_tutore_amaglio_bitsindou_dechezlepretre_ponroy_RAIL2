@@ -208,7 +208,7 @@ public class CalculVision {
         if(positionCur.equals(pPerso)){
             return true;
         }
-        ArrayList<Position> casesAdjacentes = casesAdjacentes(positionCur);
+        ArrayList<Position> casesAdjacentes = positionCur.casesAdjacentes();
         casesVisites.add(positionCur);
         boolean res = false;
 
@@ -231,20 +231,7 @@ public class CalculVision {
         return res;
     }
 
-    private static ArrayList<Position> casesAdjacentes(Position position){
-        ArrayList<Position> res = new ArrayList<>();
-        int x = position.getX();
-        int y = position.getY();
-        for(int y1=-1;y1<=1;y1++){
-            for(int x1=-1;x1<=1;x1++){
-                if(x1==0 && y1==0){
-                    continue;
-                }
-                res.add(new Position(x+x1,y+y1));
-            }
-        }
-        return res;
-    }
+
 
 
 

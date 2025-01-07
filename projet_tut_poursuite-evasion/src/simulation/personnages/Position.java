@@ -3,6 +3,7 @@ package simulation.personnages;
 
 import simulation.Deplacement;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Position {
@@ -73,6 +74,21 @@ public class Position {
     @Override
     public String toString() {
         return "("+x+";"+y+")";
+    }
+
+    public ArrayList<Position> casesAdjacentes(){
+        ArrayList<Position> res = new ArrayList<>();
+        int x = this.x;
+        int y = this.y;
+        for(int y1=-1;y1<=1;y1++){
+            for(int x1=-1;x1<=1;x1++){
+                if(x1==0 && y1==0){
+                    continue;
+                }
+                res.add(new Position(x+x1,y+y1));
+            }
+        }
+        return res;
     }
 
 }

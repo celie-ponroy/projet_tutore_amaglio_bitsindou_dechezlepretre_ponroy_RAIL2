@@ -120,12 +120,9 @@ public class MoteurJeu extends Application {
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
-
-
             Simulation simulation = new Simulation(Comportements.ArbreDeterministe,Comportements.ArbreDeterministe);
 
             //Simulation simulation = new Simulation(new ReseauDeNeurones("Sauvegardes_NeuralNetwork/nr"),false);
-
             MoteurJeu.jeu = simulation;
             // Création de la vue principale
             VuePrincipaleNonInteractive vb = new VuePrincipaleNonInteractive();

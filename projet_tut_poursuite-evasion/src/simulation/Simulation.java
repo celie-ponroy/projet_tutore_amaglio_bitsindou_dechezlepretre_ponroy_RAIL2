@@ -106,8 +106,7 @@ public class Simulation implements Jeu {
 
         this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
         this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
-        //this.comportementPrisonnier = new Aleatoire(this,this.prisonnier);
-        //this.comportementGardien = new Aleatoire(this,this.gardien);
+
 
         //initialisation des victoires
         this.victoireGardien = false;
@@ -149,7 +148,7 @@ public class Simulation implements Jeu {
         this.estFini = false;
         if (apprentissagePrisonnier) {
             this.comportementPrisonnier = rn;
-            this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+            this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
         } else {
             this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
             this.comportementGardien = rn;
@@ -181,6 +180,7 @@ public class Simulation implements Jeu {
         //initialisation des victoires
         this.victoireGardien = false;
         this.victoirePrisonnier = false;
+
 
         if (prisonnier) {
             this.prisonnier = new Joueur(4, 10);

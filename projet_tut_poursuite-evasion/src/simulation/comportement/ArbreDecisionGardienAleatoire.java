@@ -67,7 +67,6 @@
                 }
             }
             return new int[]{probas.length-1,probas[0].length-1};
-
         }
 
     }

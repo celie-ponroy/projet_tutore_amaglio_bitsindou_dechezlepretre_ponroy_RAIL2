@@ -83,7 +83,11 @@ public class Simulation implements Jeu {
                 //TODO: Modifier pour comportement aleatoire
                 this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
+<<<<<<< HEAD
             case Comportements.ArbreDeterministe:
+=======
+            case Comportements.ArbreClassique:
+>>>>>>> fbe96282363233de446ec4bb3bbd82509aa76f30
                 System.out.println("azdzefsdfzefseg");
                 this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-Deterministe",this, this.gardien);
                 break;
@@ -107,7 +111,11 @@ public class Simulation implements Jeu {
                 //TODO: Modifier pour comportement aleatoire
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
+<<<<<<< HEAD
             case Comportements.ArbreDeterministe:
+=======
+            case Comportements.ArbreClassique:
+>>>>>>> fbe96282363233de446ec4bb3bbd82509aa76f30
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
             case Comportements.ArbreAleatoire:

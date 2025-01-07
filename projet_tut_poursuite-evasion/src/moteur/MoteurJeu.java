@@ -148,7 +148,6 @@ public class MoteurJeu extends Application {
 //        primaryStage.setTitle("Simulation");
 //        primaryStage.show();
 
-
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
     }

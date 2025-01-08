@@ -112,6 +112,7 @@ public class CalculVision {
                 int coordoneeCarteY = yPerso + y;
 
                 int coordoneeVisionX = x + tailledecalage;
+                int coordoneeVisionY = y + tailledecalage;
 
 
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
@@ -173,10 +174,11 @@ public class CalculVision {
 
         for (Position pPerso: vision.keySet()) {
             ArrayList<Position> visionCur = vision.get(pPerso);
-
+            
             Iterator<Position> iterator = visionCur.iterator();
             while (iterator.hasNext()) {
                 Position position = iterator.next();
+
                 ArrayList<Position> casesVisites = new ArrayList<>();
                 if (!parcours(pPerso, position, visionCur, casesVisites)) {
                     iterator.remove();

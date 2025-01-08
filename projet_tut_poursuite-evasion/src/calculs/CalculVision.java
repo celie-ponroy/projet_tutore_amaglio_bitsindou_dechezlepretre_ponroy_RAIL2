@@ -114,8 +114,10 @@ public class CalculVision {
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
 
+
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
+
 
                     continue;
                 }
@@ -139,7 +141,9 @@ public class CalculVision {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
 
+
                 if (!(vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
+
 
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;

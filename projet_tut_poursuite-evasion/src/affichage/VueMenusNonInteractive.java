@@ -16,8 +16,6 @@ import javafx.scene.image.ImageView;
 import simulation.Comportements;
 import simulation.Simulation;
 
-import java.awt.*;
-
 /**
  * Classe qui affiche les menus non interactifs
  */
@@ -31,6 +29,7 @@ public class VueMenusNonInteractive {
      */
     public VueMenusNonInteractive(MoteurJeu j) {
         this.jeu = j;
+
     }
 
     /**
@@ -108,6 +107,7 @@ public class VueMenusNonInteractive {
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
 
+        // Événement lié au bouton de validation
         okButton.setOnAction(e -> {
             //si aucun choix de difficulté n'est fait pour le gardien
             if (gardienComboBox.getValue() == null || prisonnierComboBox.getValue() == null || (prisonnierComboBox.getValue() == null && gardienComboBox.getValue() == null)) {
@@ -175,10 +175,12 @@ public class VueMenusNonInteractive {
             }
         });
 
+        // Ajout des éléments à la racine
         root.getChildren().addAll(title, container, okButton);
 
+        // Création et affichage de la scène
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Simulation");
+        primaryStage.setTitle("Choix de la difficulté de l'IA");
         primaryStage.show();
     }
 

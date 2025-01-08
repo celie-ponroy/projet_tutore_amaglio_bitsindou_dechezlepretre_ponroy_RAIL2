@@ -1,5 +1,10 @@
 package simulation;
 
 public enum Comportements {
-    Aleatoire, ArbreDeterministe,ArbreAleatoire,ReseauArbreDeterministe,ReseauArbreAleatoire
+    ArbreDeterministe,
+    ArbreDeterministev2,
+    Aleatoire,
+    ArbreAleatoire,
+    ReseauArbreDeterministe,
+    ReseauArbreAleatoire;
 }

@@ -1,0 +1,21 @@
+Itération n°3:
+
+- Arbre de décision du Prisonnier amélioré (Arbre de décision 2) (Célie)
+	Le premier arbre de décision était trop simple, nous avons donc améliorer sa façon 
+	de fuire
+
+- Amélioration de la vision (Célie)
+	Des cases étaient visibles mais pas "naturelles", il a dû alors filtrer les cases
+	voulues.
+	
+- Ajout de raccourcis pour le gardien (Célie)
+	Comme le prisonnier gagnait trop facilement , nous avons ajouté un avantage pour le
+	gardien. Il peut maintenant traverser des cases spéciales.(représentés par des
+	grillages)
+	
+- Ajout d'un comportement aléatoire (Célie)
+	Nous avons ajouté un comportement (pour les deux personnages) qui choisit au hasard où
+	il va se diriger.
+
+
+

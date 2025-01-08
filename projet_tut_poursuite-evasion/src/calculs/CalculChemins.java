@@ -151,7 +151,7 @@ public class CalculChemins {
     static boolean isUnBlocked(int[][] grid, int rows, int cols, Position point)
     {
         return isValid(rows, cols, point) //si la position est valide (dans le tableau
-                && grid[point.getY()][point.getX()] == 1;//si la case n'est pas un mur
+                && grid[point.getY()][point.getX()] != CaseEnum.MUR.ordinal();//si la case n'est pas un mur
     }
 
 

@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import moteur.Jeu;
 import simulation.Simulation;
 import simulation.personnages.Position;
@@ -111,12 +112,25 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                     vB2.update(tour);
                 }
             });
+
+            javafx.scene.control.Button retourMenuBtn = new Button("Revenir au menu principal");
+            retourMenuBtn.setPrefSize(200, 75);
+            retourMenuBtn.setOnAction(e -> {
+                //Ferme la fenetre actuelle
+                Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
+                stage.close();
+                //retour au menu principal
+                VueMenus vm = new VueMenus();
+                vm.afficherMenuPrincipal();
+            });
+
             //ajout des boutons
             HBox hboxBouttons = new HBox();
             hboxBouttons.setLayoutX(10);
             hboxBouttons.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
+            hboxBouttons.getChildren().add(retourMenuBtn);
             this.getChildren().add(hboxBouttons);
         }
     }

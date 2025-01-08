@@ -327,10 +327,12 @@ public class Simulation implements Jeu {
         if(this.prisonnier.equals(getJoueur())){
             deplacerPersonnage(joueur, d);
             miseAJourFinJeu();
+            if(!this.estFini)
             deplacerPersonnage(agent, deplacementAgent);
         }else {
             deplacerPersonnage(agent, deplacementAgent);
             miseAJourFinJeu();
+            if(!this.estFini)
             deplacerPersonnage(joueur, d);
         }
 

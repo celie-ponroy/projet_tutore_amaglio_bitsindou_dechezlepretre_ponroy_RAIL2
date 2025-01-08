@@ -27,11 +27,11 @@
             if(simulation.estVisible(personnage, false)){
                 //on va vers l'autre personnage
                 //on recupere le chemin
-                Stack<Position> s =Simulation.CHEMINS.get(List.of(simulation.getGardien().getPosition(),simulation.getPrisonnier().getPosition()));
+                Stack<Position> s =Simulation.CHEMINS_G.get(List.of(simulation.getGardien().getPosition(),simulation.getPrisonnier().getPosition()));
                 if(s.size()<2){
                     return direction(personnage.getPosition(), simulation.getPrisonnier().getPosition());
                 }
-                Stack<Position> sMoitie =Simulation.CHEMINS.get(List.of(simulation.getPrisonnier().getPosition(),s.get(s.size()/2)));
+                Stack<Position> sMoitie =Simulation.CHEMINS_G.get(List.of(simulation.getPrisonnier().getPosition(),s.get(s.size()/2)));
                 return direction(personnage.getPosition(), sMoitie.getLast()); //on va vers où l'autre personnage va
             }else {
                 // on recupere les probas
@@ -39,7 +39,7 @@
                 double[][] probas = this.simulation.getBayesiens().get(personnage).getCarteBayesienne();
 
                 int[] deplacement = choixDeplacementAleatoire(probas);
-                Stack<Position> s =Simulation.CHEMINS.get(List.of(personnage.getPosition(),new Position(deplacement[0],deplacement[1])));
+                Stack<Position> s =Simulation.CHEMINS_G.get(List.of(personnage.getPosition(),new Position(deplacement[0],deplacement[1])));
                 return direction(personnage.getPosition(), s.getLast());
 
             }

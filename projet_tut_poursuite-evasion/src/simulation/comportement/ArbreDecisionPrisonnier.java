@@ -25,7 +25,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
     public Deplacement prendreDecision() {
 
         Deplacement deplacementRes = Deplacement.AUCUN;
-        Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
+        Stack<Position> s = Simulation.CHEMINS_P.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty()) {
             deplacementRes = direction(personnage.getPosition(), Simulation.getPosSortie());
             //si on voit pas le gardien

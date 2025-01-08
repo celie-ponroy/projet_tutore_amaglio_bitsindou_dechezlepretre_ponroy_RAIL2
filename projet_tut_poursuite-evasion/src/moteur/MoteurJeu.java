@@ -24,5 +24,6 @@ public class MoteurJeu extends Application {
 //        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 //        scene.getStylesheets().add("style.css");
 //racine.getStylesheets().add("style.css");
+
     }
 }

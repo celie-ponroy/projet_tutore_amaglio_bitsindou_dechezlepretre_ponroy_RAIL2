@@ -10,10 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Comportements;
 import simulation.Simulation;
+
+import java.awt.*;
 
 
 public class MoteurJeu extends Application {
@@ -30,6 +33,12 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
+//        setTaille((int) Screen.getPrimary().getBounds().getWidth(), (int) Screen.getPrimary().getBounds().getHeight());
+//
+//        final VBox root = new VBox();
+//        final Scene scene = new Scene(root, WIDTH, HEIGHT);
+//        scene.getStylesheets().add("test.css");
+//        scene.setUserAgentStylesheet("test.css");
 
     }
 }

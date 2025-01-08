@@ -4,9 +4,7 @@ import simulation.personnages.Position;
 
 import java.awt.geom.Line2D;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 // Classe permettant de calculer la vision
 
@@ -181,16 +179,17 @@ public class CalculVision {
      */
     private static void cleanVision(HashMap<Position,ArrayList<Position>> vision){
         //on retire les cases non voulues
+
         for (Position pPerso: vision.keySet()) {
             ArrayList<Position> visionCur = vision.get(pPerso);
 
-            for (int j = 0; j < visionCur.size(); j++) {
-                Position position = visionCur.get(j);
+            Iterator<Position> iterator = visionCur.iterator();
+            while (iterator.hasNext()) {
+                Position position = iterator.next();
                 ArrayList<Position> casesVisites = new ArrayList<>();
-                if (!parcours(pPerso,position,visionCur, casesVisites)){
-                    visionCur.remove(j);
+                if (!parcours(pPerso, position, visionCur, casesVisites)) {
+                    iterator.remove();
                 }
-
             }
 
         }
@@ -204,6 +203,7 @@ public class CalculVision {
      * @param casesVisites
      * @return true si il y a un chemin entre la case et le personnage
      */
+
     private static boolean parcours(Position pPerso, Position positionCur, ArrayList<Position> visionCur, ArrayList<Position> casesVisites){
         if(positionCur.equals(pPerso)){
             return true;

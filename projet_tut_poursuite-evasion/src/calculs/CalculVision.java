@@ -107,14 +107,15 @@ public class CalculVision {
         int tailleVision = 29;//29 pour toute la carte 9 default
         int tailledecalage = (tailleVision - 1) / 2;
         int[][] vision = new int[tailleVision][tailleVision];
-        for (int y = -tailledecalage; y <= tailledecalage; y++) {//a verifier les bornes
+        for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
-                //si on est en bordure de la carte
+
                 int coordoneeCarteX = xPerso + x;
                 int coordoneeCarteY = yPerso + y;
 
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
+
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
 
@@ -142,7 +143,6 @@ public class CalculVision {
 
                 if (!(vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
 
-
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;
                     int yCaseCourante = yPerso + y;
@@ -156,7 +156,7 @@ public class CalculVision {
                             visible=false;
                         }
                     }
-                    if (visible) {//si visible
+                    if (visible) {
                         res.add(new Position(xCaseCourante, yCaseCourante));
                     }
                 }
@@ -164,13 +164,15 @@ public class CalculVision {
         }
         return res;
     }
+
+    /**
+     * Nettoyer la vision pour ne garder que les cases voulues
+     * @param vision
+     */
     private static void cleanVision(HashMap<Position,ArrayList<Position>> vision){
         //on retire les cases non voulues
         for (Position pPerso: vision.keySet()) {
             ArrayList<Position> visionCur = vision.get(pPerso);
-
-            //si la case n'as pas un chemin qui part de la case au personnage qui passe par que des cases visibles
-            //on retire la case
 
             for (int j = 0; j < visionCur.size(); j++) {
                 Position position = visionCur.get(j);
@@ -218,10 +220,5 @@ public class CalculVision {
         }
         return res;
     }
-
-
-
-
-
 
 }

@@ -1,28 +1,8 @@
 package moteur;
 
 import affichage.VueMenus;
-import affichage.VuePrincipale;
-import affichage.VuePrincipaleNonInteractive;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyEvent;
-import simulation.Comportements;
-import simulation.Simulation;
-<<<<<<< HEAD
-=======
-
-import java.awt.*;
->>>>>>> 33b0cea5677da4a37137bdba894f2b1de0508040
-
-import java.awt.*;
-
 
 public class MoteurJeu extends Application {
 
@@ -44,6 +24,6 @@ public class MoteurJeu extends Application {
 //        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 //        scene.getStylesheets().add("test.css");
 //        scene.setUserAgentStylesheet("test.css");
-        
+
     }
 }

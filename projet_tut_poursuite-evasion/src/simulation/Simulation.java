@@ -153,8 +153,9 @@ public class Simulation implements Jeu {
         if (perso) {
             this.prisonnier = new Joueur(9, 18);
             this.gardien = new Agent(5, 4);
+
+            //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
-            comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
 
             switch (ComportementAdversaire) {
                 case Comportements.ArbreDeterministe:
@@ -186,9 +187,6 @@ public class Simulation implements Jeu {
             this.prisonnier = new Agent(9, 18);
 
             this.positionnerAgentsSpawnAleatoire();
-            comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
-
-
 
             switch (ComportementAdversaire) {
                 case Comportements.ArbreDeterministe:

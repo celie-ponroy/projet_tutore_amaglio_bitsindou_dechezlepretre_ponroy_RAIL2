@@ -15,7 +15,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import simulation.Comportements;
 import simulation.Simulation;
-
 /**
  * Classe qui affiche les menus non interactifs
  */
@@ -29,7 +28,6 @@ public class VueMenusNonInteractive {
      */
     public VueMenusNonInteractive(MoteurJeu j) {
         this.jeu = j;
-
     }
 
     /**

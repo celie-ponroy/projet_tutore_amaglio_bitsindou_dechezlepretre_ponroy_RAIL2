@@ -24,6 +24,7 @@ public class VueMenus {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     private static  MoteurJeu jeu;
+
     protected Stage primaryStage; //scene
     private String choixPersonnage;
 
@@ -91,6 +92,7 @@ public class VueMenus {
         modeInteractif.setPrefSize(200, 100);
         modeInteractif.setOnAction(e -> afficherMenuPersonnage()); // Appel le menu des choix des personnages
 
+
         //Bouton du mode non interactif
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
@@ -134,6 +136,7 @@ public class VueMenus {
         buttonBox2.setSpacing(20);
         buttonBox2.setAlignment(Pos.CENTER);
 
+
         //Bouton "Prisonnier"
         Button persoPrisonnier = new Button("Prisonnier");
         persoPrisonnier.setPrefSize(200, 100);
@@ -174,7 +177,6 @@ public class VueMenus {
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
-
     /**
      * Affiche le menu de choix de la difficulté de l'IA
      */

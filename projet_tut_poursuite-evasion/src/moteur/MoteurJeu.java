@@ -19,12 +19,6 @@ import simulation.Simulation;
 public class MoteurJeu extends Application {
 
     /**
-     * Taille par defaut de la fenetre
-     */
-    private static double WIDTH = 1540;
-    private static double HEIGHT = 1200;
-
-    /**
      * Jeu en Cours et renderer du jeu
      */
     public static Jeu jeu = null;

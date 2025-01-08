@@ -92,6 +92,7 @@ public class CalculChemins {
     }
 
     public static HashMap<List<Position>,Stack> calculerChemins(Boolean gardien){
+         carte = ChargementCarte.charger("donnees/laby.txt");
 
         //changer la carte pour prendre en compte les raccourcis
 

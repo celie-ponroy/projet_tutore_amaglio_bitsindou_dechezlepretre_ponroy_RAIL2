@@ -73,7 +73,7 @@ public class VueMenusNonInteractive {
         gardienComboBox.getItems().add("Arbre de décision déterministe");
         gardienComboBox.getItems().add("Arbre de décision aléatoire");
         gardienComboBox.getItems().add("Comportement aléatoire");
-        gardienComboBox.getItems().add("Réseau de neurones v1");
+        gardienComboBox.getItems().add("Réseau de neurones 1.0");
 
         gardienBox.getChildren().addAll(gardienLabel, gardienComboBox);
 
@@ -94,10 +94,10 @@ public class VueMenusNonInteractive {
 
         //Combobox pour le choix de difficulté du prisonnier
         ComboBox<String> prisonnierComboBox = new ComboBox<>();
-        prisonnierComboBox.getItems().add("Arbre de décision déterministe");
-        prisonnierComboBox.getItems().add("Arbre de décision aléatoire");
+        prisonnierComboBox.getItems().add("Arbre de décision déterministe 1.0");
+        prisonnierComboBox.getItems().add("Arbre de décision déterministe 2.0");
         prisonnierComboBox.getItems().add("Comportement aléatoire");
-        prisonnierComboBox.getItems().add("Réseau de neurones v1");
+        prisonnierComboBox.getItems().add("Réseau de neurones 1.0");
 
         prisonnierBox.getChildren().addAll(prisonnierLabel, prisonnierComboBox);
 
@@ -121,39 +121,60 @@ public class VueMenusNonInteractive {
                 if (gardienComboBox.getValue() != null && prisonnierComboBox.getValue() != null) {
                     //Évenements lier au choix de difficulté
                     okButton.setOnAction(f -> {
-                        switch (gardienComboBox.getValue() + " " + prisonnierComboBox.getValue()) {
-                            case "Arbre de décision déterministe Arbre de décision déterministe":
-                                Simulation simulationGard = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministe);
-                                MoteurJeu.jeu = simulationGard;
-                                //Affichage du jeu
-                                VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive();
-                                vp.update(MoteurJeu.jeu);
-                                MoteurJeu.jeu.ajouterObservateur(vp);
-                                root.getChildren().clear();
-                                root.getChildren().add(vp);
-                                primaryStage.setScene(scene);
+                        Comportements comportementP; //stocke le comportement du prisonnier choisi
+                        Comportements comportementG; //stocke le comportement du gardien choisi
+
+                        //Switch pour le choix de difficulté du gardien
+                        switch (gardienComboBox.getValue()) {
+                            case "Arbre de décision déterministe":
+                                comportementG = Comportements.ArbreDeterministe;
                                 break;
                             case "Arbre de décision aléatoire":
-                                //Va lancer une méthode qui la simulation avec une IA avec un arbre de décision aléatoire
+                                comportementG = Comportements.ArbreAleatoire;
                                 break;
                             case "Comportement aléatoire":
-                                //Va lancer une méthode qui la simulation avec une IA avec   un comportement aléatoire
+                                comportementG = Comportements.Aleatoire;
                                 break;
-                            case "Réseau de neurones v1":
-                                //Va lancer une méthode qui la simulation avec une IA avec un réseau de neurones (version 1)
-                                break;
-                            case null:
-                                //Pop up pour afficher un message d'alerte si aucun choix n'est fait
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Information");
-                                alert.setHeaderText("Attention !");
-                                alert.setContentText("Veuillez choisir un niveau de difficulté");
-                                alert.showAndWait();
+                            case "Réseau de neurones 1.0":
+                                comportementG = Comportements.ReseauArbreDeterministe;
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + gardienComboBox.getValue());
                         }
+                        System.out.println("Gardien: " + gardienComboBox.getValue());
+
+                        //Switch pour le choix de difficulté du prisonnier
+                        switch (prisonnierComboBox.getValue()) {
+                            case "Arbre de décision déterministe 1.0":
+                                comportementP = Comportements.ArbreDeterministe;
+                                break;
+                            case "Arbre de décision déterministe 2.0":
+                                comportementP = Comportements.ArbreDeterministev2;
+                                break;
+                            case "Comportement aléatoire":
+                                comportementP = Comportements.Aleatoire;
+                                break;
+                            case "Réseau de neurones v1":
+                                comportementP = Comportements.ReseauArbreDeterministe;
+                                break;
+                            default:
+                                throw new IllegalStateException("Unexpected value: " + prisonnierComboBox.getValue());
+                        }
+
+                        System.out.println("Prisonnier: " + prisonnierComboBox.getValue());
+
+                        //Création de la simulation
+                        Simulation simulation = new Simulation(comportementG, comportementP);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        primaryStage.setScene(scene);
                     });
+
                 }
             }
         });

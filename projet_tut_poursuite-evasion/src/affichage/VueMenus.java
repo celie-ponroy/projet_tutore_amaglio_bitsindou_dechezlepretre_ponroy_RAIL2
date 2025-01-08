@@ -177,13 +177,24 @@ public class VueMenus {
         Label title = new Label("Veuillez choisir un niveau de difficulté:");
         title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        //Création de la combobox pour choisir le niveau de difficulté
+        //on recupere le choix du personnage que l'utilisateur a joue
+        choixPersonnage = getChoixPersonnage();
+
         ComboBox<String> comboBox = new ComboBox<>();
-        //Ajout de chaque choix possible
-        comboBox.getItems().add("Arbre de décision déterministe");
-        comboBox.getItems().add("Arbre de décision aléatoire");
-        comboBox.getItems().add("Comportement aléatoire");
-        comboBox.getItems().add("Réseau de neurones v1");
+        //si le choix du personnage est le prisonnier, on adapte la combobox
+        if (choixPersonnage == "Prisonnier"){
+            //Ajout de chaque choix possible
+            comboBox.getItems().add("Arbre de décision déterministe");
+            comboBox.getItems().add("Arbre de décision aléatoire");
+            comboBox.getItems().add("Comportement aléatoire");
+            comboBox.getItems().add("Réseau de neurones 1.0");
+        }else{
+            //Ajout de chaque choix possible
+            comboBox.getItems().add("Arbre de décision déterministe 1.0");
+            comboBox.getItems().add("Arbre de décision déterministe 2.0");
+            comboBox.getItems().add("Comportement aléatoire");
+            comboBox.getItems().add("Réseau de neurones 1.0");
+        }
 
         HBox buttonBox = new HBox(comboBox);
         buttonBox.setSpacing(20);
@@ -193,49 +204,134 @@ public class VueMenus {
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
 
+
+
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
+            //Déclaration de la simulation
+            Simulation simulation;
+
+            //Déclaration de la vue principale
+            VuePrincipale vp;
+
+            //Déclaration de la classe Clavier
+            Clavier clavier;
+
             switch (comboBox.getValue()) {
                 case "Arbre de décision déterministe":
-                    //on recupere le choix du personnage
-                    choixPersonnage = getChoixPersonnage();
-
                     if (choixPersonnage == "Prisonnier") {
                         //on change le nom de la scene
                         setScene(scene, "Simulation interactive");
-                        Simulation simulation = new Simulation(true);
+                        simulation = new Simulation(true, Comportements.ArbreDeterministe);
                         MoteurJeu.jeu = simulation;
                         //Affichage du jeu
-                        VuePrincipale vp = new VuePrincipale();
+                        vp = new VuePrincipale();
                         vp.update(MoteurJeu.jeu);
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();
                         root.getChildren().add(vp);
-                        Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
                         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
                     } else {
                         //on change le nom de la scene
                         setScene(scene, "Simulation interactive");
-                        Simulation simulation = new Simulation(false);
+                        simulation = new Simulation(false, Comportements.ArbreDeterministe);
                         MoteurJeu.jeu = simulation;
                         //Affichage du jeu
-                        VuePrincipale vp = new VuePrincipale();
+                        vp = new VuePrincipale();
                         vp.update(MoteurJeu.jeu);
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();
                         root.getChildren().add(vp);
-                        Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
                         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
                     }
                     break;
+                case "Arbre de décision déterministe 2.0":
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(true, Comportements.ArbreDeterministev2);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    break;
                 case "Arbre de décision aléatoire":
-                    //Va lancer une méthode qui la simulation avec une IA avec un arbre de décision aléatoire
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(true, Comportements.ArbreAleatoire);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
                     break;
                 case "Comportement aléatoire":
-                    //Va lancer une méthode qui la simulation avec une IA avec   un comportement aléatoire
+                    if (choixPersonnage == "Prisonnier") {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(true, Comportements.Aleatoire);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    } else {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(false, Comportements.Aleatoire);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    }
                     break;
-                case "Réseau de neurones v1":
-                    //Va lancer une méthode qui la simulation avec une IA avec un réseau de neurones (version 1)
+                case "Réseau de neurones 1.0":
+                    if (choixPersonnage == "Prisonnier") {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    } else {
+                        //on change le nom de la scene
+                        setScene(scene, "Simulation interactive");
+                        simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
+                        MoteurJeu.jeu = simulation;
+                        //Affichage du jeu
+                        vp = new VuePrincipale();
+                        vp.update(MoteurJeu.jeu);
+                        MoteurJeu.jeu.ajouterObservateur(vp);
+                        root.getChildren().clear();
+                        root.getChildren().add(vp);
+                        clavier = new Clavier((Simulation) MoteurJeu.jeu);
+                        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+                    }
                     break;
                 case null:
                     //Pop up pour afficher un message d'alerte si aucun choix n'est fait

@@ -15,6 +15,11 @@ import javafx.stage.Stage;
 import javafx.scene.input.KeyEvent;
 import simulation.Comportements;
 import simulation.Simulation;
+<<<<<<< HEAD
+=======
+
+import java.awt.*;
+>>>>>>> 33b0cea5677da4a37137bdba894f2b1de0508040
 
 import java.awt.*;
 
@@ -39,6 +44,6 @@ public class MoteurJeu extends Application {
 //        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 //        scene.getStylesheets().add("test.css");
 //        scene.setUserAgentStylesheet("test.css");
-
+        
     }
 }

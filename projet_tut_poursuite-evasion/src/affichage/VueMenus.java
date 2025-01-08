@@ -204,8 +204,6 @@ public class VueMenus {
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
 
-
-
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
             //Déclaration de la simulation

@@ -16,6 +16,13 @@ Itération n°3:
 - Ajout d'un comportement aléatoire (Célie)
 	Nous avons ajouté un comportement (pour les deux personnages) qui choisit au hasard où
 	il va se diriger.
+	
+-Amélioration de l'interface (Célie et Maelle)
+	-Ajout d'un style.css qui va rendre l'interface plus agréable en général
+	-Modification des ratio de l'application due à la modification de la carte
+	-Ajout de bouttons pour revenir au menu principal à partir de la partie
+	
+- Ajout menu choix difficultés (Maelle)
 
 
 

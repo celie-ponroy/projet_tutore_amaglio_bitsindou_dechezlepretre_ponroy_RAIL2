@@ -14,6 +14,7 @@ import moteur.MoteurJeu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import simulation.Comportements;
+
 import simulation.Simulation;
 
 import java.awt.*;
@@ -74,6 +75,7 @@ public class VueMenusNonInteractive {
         gardienComboBox.getItems().add("Arbre de décision aléatoire");
         gardienComboBox.getItems().add("Comportement aléatoire");
         gardienComboBox.getItems().add("Réseau de neurones 1.0");
+
 
         gardienBox.getChildren().addAll(gardienLabel, gardienComboBox);
 
@@ -171,7 +173,6 @@ public class VueMenusNonInteractive {
                         root.getChildren().add(vp);
                         primaryStage.setScene(scene);
                     });
-
                 }
             }
         });

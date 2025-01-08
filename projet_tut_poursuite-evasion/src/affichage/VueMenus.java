@@ -17,6 +17,7 @@ import moteur.Clavier;
 import moteur.Jeu;
 import moteur.MoteurJeu;
 import simulation.Comportements;
+
 import simulation.Simulation;
 
 public class VueMenus {
@@ -26,6 +27,7 @@ public class VueMenus {
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     protected Stage primaryStage; //scene
     private String choixPersonnage;
+
 
     /**
      * Initialisation de la fenêtre
@@ -43,6 +45,7 @@ public class VueMenus {
         //Initialisation de la fenêtre
         initPrimaryStage();
         this.choixPersonnage = "";
+
     }
 
     /**
@@ -131,19 +134,6 @@ public class VueMenus {
             setChoixPersonnage("Prisonnier");
             afficherMenuIA(); // Menu de difficulté
 
-//            //on change le nom de la scene
-//            setScene(scene2, "Simulation interactivfidvbsive");
-//            Simulation simulation = new Simulation(true);
-//            MoteurJeu.jeu = simulation;
-//
-//            VuePrincipale vp = new VuePrincipale();
-//            vp.update(MoteurJeu.jeu);
-//            MoteurJeu.jeu.ajouterObservateur(vp);
-//            root2.getChildren().clear();
-//            root2.getChildren().add(vp);
-//
-//            Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-//            scene2.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
         });
 
         Button persoGardien = new Button("Gardien");
@@ -203,7 +193,6 @@ public class VueMenus {
         //Bouton "OK" pour valider le choix
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
-
 
 
         //Évenements lier au choix de difficulté

@@ -22,8 +22,7 @@ public class MoteurJeu extends Application {
 //
 //        final VBox root = new VBox();
 //        final Scene scene = new Scene(root, WIDTH, HEIGHT);
-//        scene.getStylesheets().add("test.css");
-//        scene.setUserAgentStylesheet("test.css");
-
+//        scene.getStylesheets().add("style.css");
+//racine.getStylesheets().add("style.css");
     }
 }

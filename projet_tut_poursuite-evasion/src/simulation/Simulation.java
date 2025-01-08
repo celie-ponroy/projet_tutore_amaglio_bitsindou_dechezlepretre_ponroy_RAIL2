@@ -335,7 +335,6 @@ public class Simulation implements Jeu {
             agent = this.prisonnier;
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
-        System.out.println(deplacementAgent);
         //initialisation du déplacement du joueur
         if(!verifierDeplacemnt(joueur,d))
             return;

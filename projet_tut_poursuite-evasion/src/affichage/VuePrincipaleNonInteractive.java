@@ -18,7 +18,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private Rectangle[][] caseBayesienneHisto;
-    private static final int TAILLE_CELLULE = 30; // Taille des cases du labyrinthe
+
     private VueBayesienne vB1,vB2;
 
 
@@ -56,7 +56,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         vB2 = new VueBayesienne(this.simulation,simulation.getGardien());
         HBox hBox = new HBox(vB1,vB2);
         hBox.setSpacing(20);
-        hBox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+200);
+        hBox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+90);
         hBox.setAlignment(Pos.CENTER);
         HBox.setHgrow(vB1, Priority.ALWAYS);
         HBox.setHgrow(vB2, Priority.ALWAYS);

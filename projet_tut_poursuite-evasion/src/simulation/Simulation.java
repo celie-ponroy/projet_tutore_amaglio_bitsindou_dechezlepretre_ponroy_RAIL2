@@ -5,6 +5,7 @@ import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
 import outils.ChargementCarte;
+import outils.Outil;
 import simulation.comportement.*;
 import simulation.personnages.*;
 
@@ -156,7 +157,7 @@ public class Simulation implements Jeu {
             this.gardien = new Agent(5, 4);
             this.positionnerAgentsSpawnAleatoire();
             comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
-            bayesiens.put(this.gardien,new Bayesien());
+            bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(gardien).clone());
@@ -167,7 +168,7 @@ public class Simulation implements Jeu {
             this.prisonnier = new Agent(9, 18);
             this.positionnerAgentsSpawnAleatoire();
             comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
-            bayesiens.put(this.prisonnier,new Bayesien());
+            bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
 
             ArrayList<double[][]> list1 = new ArrayList<>();
@@ -207,38 +208,39 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui positionne de manière aléatoire les deux perso sur un spawn
      */
-    private void positionnerAgentsSpawnAleatoire(){
+    private void positionnerAgentsSpawnAleatoire() {
         List<Case> spawnsGardien = new ArrayList<>();
         List<Case> spawnsPrisonnier = new ArrayList<>();
-        for(int i = 0; i < CARTE.length; i++){
-            for(int j = 0; j < CARTE[0].length; j++){
-                if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal()){
+        for (int i = 0; i < CARTE.length; i++) {
+            for (int j = 0; j < CARTE[0].length; j++) {
+                if (CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal()) {
                     spawnsGardien.add(new Case(j, i));
                 } else if (CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
                     spawnsPrisonnier.add(new Case(j, i));
                 }
             }
         }
-        Case spawnGardien = spawnsGardien.get((int)(Math.random()*spawnsGardien.size()));
-        Case spawnPrisonnier = spawnsPrisonnier.get((int)(Math.random()*spawnsPrisonnier.size()));
+        Case spawnGardien = spawnsGardien.get((int) (Math.random() * spawnsGardien.size()));
+        Case spawnPrisonnier = spawnsPrisonnier.get((int) (Math.random() * spawnsPrisonnier.size()));
         this.prisonnier.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
         this.gardien.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
     }
+
     /**
      * Méthode qui positionne de manière aléatoire les deux agents pour l'apprentissage
      */
-    private void positionnerAleatoirement(){
+    private void positionnerAleatoirement() {
         List<Case> casesValides = new ArrayList<>();
 
-        for(int i = 0; i < CARTE.length; i++){
-            for(int j = 0; j < CARTE[0].length; j++){
-                if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal() || CARTE[i][j] == CaseEnum.SOL.ordinal()) {
+        for (int i = 0; i < CARTE.length; i++) {
+            for (int j = 0; j < CARTE[0].length; j++) {
+                if (CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal() || CARTE[i][j] == CaseEnum.SOL.ordinal()) {
                     casesValides.add(new Case(j, i));
                 }
             }
         }
-        Case spawnGardien = casesValides.get((int)(Math.random()*casesValides.size()));
-        Case spawnPrisonnier = casesValides.get((int)(Math.random()*casesValides.size()));
+        Case spawnGardien = casesValides.get((int) (Math.random() * casesValides.size()));
+        Case spawnPrisonnier = casesValides.get((int) (Math.random() * casesValides.size()));
         this.prisonnier.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
         this.gardien.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
     }
@@ -254,24 +256,25 @@ public class Simulation implements Jeu {
             Deplacement d1 = this.comportementPrisonnier.prendreDecision();
             Deplacement d2 = this.comportementGardien.prendreDecision();
 
-            deplacerPersonnage(this.prisonnier, d1);
-            miseAJourFinJeu();
-            deplacerPersonnage(this.gardien, d2);
-
             historiqueDeplacement.get(prisonnier).add(d1);
             historiqueDeplacement.get(gardien).add(d2);
 
             historiquePosition.get(prisonnier).add(prisonnier.getPosition());
             historiquePosition.get(gardien).add(gardien.getPosition());
 
-            this.nbTours++;
-            //gestion des interactions et de la fin du jeu
-            miseAJourFinJeu();
-
             var cartebay = bayesiens.get(gardien).getCarteBayesienne().clone();
             historiqueBayesien.get(gardien).add(cartebay);
             var cartebay2 = bayesiens.get(prisonnier).getCarteBayesienne().clone();
             historiqueBayesien.get(prisonnier).add(cartebay2);
+
+            deplacerPersonnage(this.prisonnier, d1);
+            miseAJourFinJeu();
+            deplacerPersonnage(this.gardien, d2);
+
+            this.nbTours++;
+            //gestion des interactions et de la fin du jeu
+            miseAJourFinJeu();
+
             this.notifierObservateurs();
         }
         this.notifierObservateurs();
@@ -296,25 +299,24 @@ public class Simulation implements Jeu {
             agent = this.prisonnier;
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
-        System.out.println(deplacementAgent);
         //initialisation du déplacement du joueur
-        if(!verifierDeplacemnt(joueur,d))
+        if (!verifierDeplacemnt(joueur, d))
             return;
         //on déplace d'abbord le joueur
-        if(this.prisonnier.equals(getJoueur())){
+        if (this.prisonnier.equals(getJoueur())) {
             deplacerPersonnage(joueur, d);
             miseAJourFinJeu();
-            if(!this.estFini)
-            deplacerPersonnage(agent, deplacementAgent);
-        }else {
+            if (!this.estFini)
+                deplacerPersonnage(agent, deplacementAgent);
+        } else {
             deplacerPersonnage(agent, deplacementAgent);
             miseAJourFinJeu();
-            if(!this.estFini)
-            deplacerPersonnage(joueur, d);
+            if (!this.estFini)
+                deplacerPersonnage(joueur, d);
         }
 
         this.nbTours++;
-        actualisationBayesienne(agent,joueur);
+        actualisationBayesienne(agent, joueur);
 
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
         historiqueBayesien.get(agent).add(cartebay);
@@ -331,11 +333,11 @@ public class Simulation implements Jeu {
      * Mise à jour fin du jeu
      */
 
-    public void miseAJourFinJeu(){
-        if(nbTours>=100)
-            this.estFini=true;
+    public void miseAJourFinJeu() {
+        if (nbTours >= 100)
+            this.estFini = true;
 
-        if(this.prisonnier.getPosition().equals(this.gardien.getPosition())){
+        if (this.prisonnier.getPosition().equals(this.gardien.getPosition())) {
             this.estFini = true;
             this.victoireGardien = true;
         }
@@ -397,9 +399,9 @@ public class Simulation implements Jeu {
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
-        boolean valide = verifierDeplacemnt(p,d);
+        boolean valide = verifierDeplacemnt(p, d);
         //si oui deplacer le personnage
-        if(valide)
+        if (valide)
             p.deplacer(nvPos);
 
         return valide;
@@ -408,11 +410,12 @@ public class Simulation implements Jeu {
 
     /**
      * permets de savoir si le deplacement est valide
+     *
      * @param p
      * @param d
      * @return
      */
-    public boolean verifierDeplacemnt(Personnage p, Deplacement d){
+    public boolean verifierDeplacemnt(Personnage p, Deplacement d) {
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);

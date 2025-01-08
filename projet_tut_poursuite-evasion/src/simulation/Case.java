@@ -9,12 +9,10 @@ import java.util.Objects;
 public class Case {
     private int x;
     private int y;
-    private int contenu;
 
-    public Case(int x, int y, int contenu) {
+    public Case(int x, int y) {
         this.x = x;
         this.y = y;
-        this.contenu = contenu;
     }
 
     public int getX() {
@@ -25,21 +23,17 @@ public class Case {
         return y;
     }
 
-    public int getContenu() {
-        return contenu;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Case aCase = (Case) o;
-        return x == aCase.x && y == aCase.y && contenu == aCase.contenu;
+        return x == aCase.x && y == aCase.y;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y, contenu);
+        return Objects.hash(x, y);
     }
 
     @Override
@@ -47,7 +41,6 @@ public class Case {
         return "Case{" +
                 "x=" + x +
                 ", y=" + y +
-                ", contenu=" + contenu +
                 '}';
     }
 }

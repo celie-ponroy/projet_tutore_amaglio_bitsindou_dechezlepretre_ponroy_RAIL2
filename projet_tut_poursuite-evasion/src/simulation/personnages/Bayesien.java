@@ -5,8 +5,9 @@ import simulation.CaseEnum;
 import simulation.Simulation;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Bayesien {
     double[][] carteBayesienne;
@@ -23,12 +24,12 @@ public class Bayesien {
             for (int j = 0; j < carte[0].length; j++) {
                 //Initialisation du tableau a -1
                 carteBayesienne[i][j] = -1.0;
-                if (!(carte[i][j]==CaseEnum.MUR.ordinal())) {
-                    casesValides.add(new Case(j, i, 0));
+                if (!(carte[i][j] == CaseEnum.MUR.ordinal())) {
+                    casesValides.add(new Case(j, i));
                 }
             }
         }
-        //On remplace les cases valides par la proba de présence initiale
+        //On remplace les cases possible par la proba de présence initiale
         for (Case cases : casesValides) {
             carteBayesienne[cases.getY()][cases.getX()] = 1.0 / casesValides.size();
         }
@@ -43,38 +44,61 @@ public class Bayesien {
      */
     public double[][] calculerProbaPresence(double[][] ancienneCarteProba, List<Integer[]> casesVues) {
         double sommeProba = 0;
-        for (int i = 0; i < ancienneCarteProba.length; i++) {
-            for (int j = 0; j < ancienneCarteProba[0].length; j++) {
-                //On regarde si la case est une case valide
-                if (casesValides.contains(new Case(j, i, 0))) {
 
-                    List<Case> caseVoisineValide = getCasesVoisineValide(j, i);
-                    for (Case caseVoisine : caseVoisineValide) {
-                        //On calcule la probabilité de transition d'une case a une autre de chaque case voisine
-                        double probaTransition = 1.0 / getCasesVoisineValide(caseVoisine.getX(), caseVoisine.getY()).size();
-                        sommeProba += ancienneCarteProba[caseVoisine.getY()][caseVoisine.getX()] * probaTransition;
-                    }
-                    carteBayesienne[i][j] = sommeProba;
-                    sommeProba = 0;
-                }
+        // Ajout des cases possibles pour le déplacement
+        List<Case> casesValideVoisine = new ArrayList<>();
+        for (Case caseVoisine : casesValides) {
+            casesValideVoisine.addAll(getCasesVoisineValide(caseVoisine.getX(), caseVoisine.getY()));
+        }
+
+        // Suppression des doublons en utilisant un HashSet
+        Set<Case> uniqueCases = new HashSet<>(casesValides);
+        uniqueCases.addAll(casesValideVoisine);
+
+        // Mise à jour de casesValides avec des cases uniques
+        casesValides = new ArrayList<>(uniqueCases);
+
+        for (Case ca : casesValides) {
+            //On regarde si la case est une case valide
+            List<Case> caseValideVoisine = getCasesVoisineValide(ca.getX(), ca.getY());
+            for (Case caseVoisine : caseValideVoisine) {
+                //On calcule la probabilité de transition d'une case a une autre de chaque case voisine
+                double probaTransition = 1.0 / getCasesVoisineValide(caseVoisine.getX(), caseVoisine.getY()).size();
+                sommeProba += ancienneCarteProba[caseVoisine.getY()][caseVoisine.getX()] * probaTransition;
             }
+            carteBayesienne[ca.getY()][ca.getX()] = sommeProba;
+            sommeProba = 0;
+
         }
 
         //On actualise nos probabilité en fonction des classes vues
         for (Integer[] caseVue : casesVues) {
             if (caseVue[2] == 0) {
+                // La case vue est vide, on ajuste les probabilités
                 for (Case caseValide : casesValides) {
-                    // On divise la proba actuelle par la somme des proba sans la case vue
+                    // On divise la probabilité actuelle par la somme des probabilités sans la case vue
                     double probaTotalSansCaseVue = 1 - carteBayesienne[caseVue[0]][caseVue[1]];
                     double probaCaseModifier = carteBayesienne[caseValide.getY()][caseValide.getX()];
                     carteBayesienne[caseValide.getY()][caseValide.getX()] = probaCaseModifier / probaTotalSansCaseVue;
                 }
+                // On retire la case vue des cases valides
+                casesValides.remove(new Case(caseVue[1], caseVue[0]));
                 carteBayesienne[caseVue[0]][caseVue[1]] = 0;
             } else {
-                for (Case caseValide : casesValides) {
-                    carteBayesienne[caseValide.getY()][caseValide.getX()] = 0;
+                // La case vue contient le personnage adverse
+                for (int i = 0; i < carteBayesienne.length; i++) {
+                    for (int j = 0; j < carteBayesienne[0].length; j++) {
+                        // Toutes les cases sont mises à 0
+                        if (carteBayesienne[i][j] != CaseEnum.MUR.ordinal()) {
+                            carteBayesienne[i][j] = 0;
+                        }
+                    }
                 }
+                // Seule la case vue a une probabilité de 1
                 carteBayesienne[caseVue[0]][caseVue[1]] = 1;
+                // On retire toutes les cases valides sauf celles autour de la case vue
+                casesValides.clear();
+                casesValides.add(new Case(caseVue[1], caseVue[0]));
                 break;
             }
         }
@@ -108,29 +132,26 @@ public class Bayesien {
                 int i = y + k, j = x + l;
                 if (x >= 0 && x < Simulation.CARTE[0].length && y >= 0 && y < Simulation.CARTE.length) {
                     //On regarde si la case exploré appartient au case valide
-                    if (casesValides.contains(new Case(j, i, 0))) {
+                    if (Simulation.CARTE[i][j] != CaseEnum.MUR.ordinal()) {
                         if ((k == -1) && (l == -1)) {
                             if (!(Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i, 0));
-                                ;
+                                casesVoisinesValides.add(new Case(j, i));
                             }
                         } else if ((k == 1) && (l == -1)) {
                             if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i, 0));
-                                ;
+                                casesVoisinesValides.add(new Case(j, i));
+
                             }
                         } else if ((k == -1) && (l == 1)) {
                             if (!(Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i, 0));
-                                ;
+                                casesVoisinesValides.add(new Case(j, i));
                             }
                         } else if ((k == 1) && (l == 1)) {
                             if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i, 0));
-                                ;
+                                casesVoisinesValides.add(new Case(j, i));
                             }
                         } else {
-                            casesVoisinesValides.add(new Case(j, i, 0));
+                            casesVoisinesValides.add(new Case(j, i));
                         }
 
                     }
@@ -144,7 +165,6 @@ public class Bayesien {
         double max = casesValides.stream().mapToDouble(caseValide -> carteBayesienne[caseValide.getY()][caseValide.getX()]).filter(caseValide -> caseValide >= 0).max().orElse(0);
         return casesValides.stream().filter(c -> carteBayesienne[c.getY()][c.getX()] == max).toList();
     }
-
 
     public double[][] getCarteBayesienne() {
         double[][] d = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];

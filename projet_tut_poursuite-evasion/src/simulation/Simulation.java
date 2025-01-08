@@ -213,9 +213,9 @@ public class Simulation implements Jeu {
         for(int i = 0; i < CARTE.length; i++){
             for(int j = 0; j < CARTE[0].length; j++){
                 if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal()){
-                    spawnsGardien.add(new Case(j, i, 0));
+                    spawnsGardien.add(new Case(j, i));
                 } else if (CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
-                    spawnsPrisonnier.add(new Case(j, i, 0));
+                    spawnsPrisonnier.add(new Case(j, i));
                 }
             }
         }
@@ -233,7 +233,7 @@ public class Simulation implements Jeu {
         for(int i = 0; i < CARTE.length; i++){
             for(int j = 0; j < CARTE[0].length; j++){
                 if(CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal() || CARTE[i][j] == CaseEnum.SOL.ordinal()) {
-                    casesValides.add(new Case(j, i, 0));
+                    casesValides.add(new Case(j, i));
                 }
             }
         }
@@ -248,6 +248,9 @@ public class Simulation implements Jeu {
      */
     public void deplacerAgents() {
         while (!estFini) {
+            actualisationBayesienne(this.gardien, this.prisonnier);
+            actualisationBayesienne(this.prisonnier, this.gardien);
+
             Deplacement d1 = this.comportementPrisonnier.prendreDecision();
             Deplacement d2 = this.comportementGardien.prendreDecision();
 
@@ -264,8 +267,7 @@ public class Simulation implements Jeu {
             this.nbTours++;
             //gestion des interactions et de la fin du jeu
             miseAJourFinJeu();
-            actualisationBayesienne(this.gardien, this.prisonnier);
-            actualisationBayesienne(this.prisonnier, this.gardien);
+
             var cartebay = bayesiens.get(gardien).getCarteBayesienne().clone();
             historiqueBayesien.get(gardien).add(cartebay);
             var cartebay2 = bayesiens.get(prisonnier).getCarteBayesienne().clone();
@@ -360,7 +362,7 @@ public class Simulation implements Jeu {
             }
             casesVue.add(new Integer[]{position.getY(), position.getX(), present});
         }
-        carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence(carteBayesiennes.get(p1), casesVue));
+        carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence(carteBayesiennes.get(p1).clone(), casesVue));
     }
 
     /**
@@ -380,7 +382,7 @@ public class Simulation implements Jeu {
         return this.estFini;
     }
 
-    public boolean murPresent(int x, int y) {
+    public static boolean murPresent(int x, int y) {
         return Simulation.CARTE[y][x] == CaseEnum.MUR.ordinal();
     }
 

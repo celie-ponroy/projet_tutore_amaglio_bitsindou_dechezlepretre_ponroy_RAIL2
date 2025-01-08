@@ -65,14 +65,14 @@ public class Simulation implements Jeu {
         historiquePosition.put(this.gardien, posG);
 
         switch (ComportementGardien) {
-            case Comportements.Aleatoire:
-                this.comportementGardien = new Aleatoire(this, this.gardien);
-                break;
             case Comportements.ArbreDeterministe:
                 this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
             case Comportements.ArbreAleatoire:
                 this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+                break;
+            case Comportements.Aleatoire:
+                this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
                 this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
@@ -85,14 +85,14 @@ public class Simulation implements Jeu {
         }
 
         switch (ComportementPrisonier) {
-            case Comportements.Aleatoire:
-                this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
-                break;
             case Comportements.ArbreDeterministe:
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
-            case Comportements.ArbreAleatoire:
-                //TODO: ajouter arbre aléatoire
+            case Comportements.ArbreDeterministev2:
+                this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
+                break;
+            case Comportements.Aleatoire:
+                this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreDeterministe:
                 this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
@@ -103,7 +103,6 @@ public class Simulation implements Jeu {
             default:
                 break;
         }
-
 
         //initialisation des victoires
         this.victoireGardien = false;
@@ -137,7 +136,7 @@ public class Simulation implements Jeu {
      *
      * @param perso true si le personnage est le prisonnier et false sinon
      */
-    public Simulation(boolean perso) {
+    public Simulation(boolean perso, Comportements ComportementAdversaire) {
         this.observateurs = new ArrayList<>();
         this.nbTours = 0;
         this.estFini = false;
@@ -154,8 +153,29 @@ public class Simulation implements Jeu {
         if (perso) {
             this.prisonnier = new Joueur(9, 18);
             this.gardien = new Agent(5, 4);
+
+            //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
-            comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+
+            switch (ComportementAdversaire) {
+                case Comportements.ArbreDeterministe:
+                    this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+                    break;
+                case Comportements.ArbreAleatoire:
+                    this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+                    break;
+                case Comportements.Aleatoire:
+                    this.comportementGardien = new Aleatoire(this, this.gardien);
+                    break;
+                case Comportements.ReseauArbreDeterministe:
+                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                    break;
+                case Comportements.ReseauArbreAleatoire:
+                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                    break;
+                default:
+                    break;
+            }
             bayesiens.put(this.gardien,new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
@@ -165,8 +185,29 @@ public class Simulation implements Jeu {
         } else {
             this.gardien = new Joueur(5, 4);
             this.prisonnier = new Agent(9, 18);
+
             this.positionnerAgentsSpawnAleatoire();
-            comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
+
+            switch (ComportementAdversaire) {
+                case Comportements.ArbreDeterministe:
+                    this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+                    break;
+                case Comportements.ArbreDeterministev2:
+                    this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
+                    break;
+                case Comportements.Aleatoire:
+                    this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
+                    break;
+                case Comportements.ReseauArbreDeterministe:
+                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                    break;
+                case Comportements.ReseauArbreAleatoire:
+                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                    break;
+                default:
+                    break;
+            }
+
             bayesiens.put(this.prisonnier,new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
 

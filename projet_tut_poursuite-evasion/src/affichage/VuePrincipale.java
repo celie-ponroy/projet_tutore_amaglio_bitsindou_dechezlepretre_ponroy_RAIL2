@@ -222,8 +222,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         setPositions(pGardien,gardienView);
         gardienView.setOpacity(1);
 
-
-
         //ajout boutons pour precedent, suivant et revenir au menu principal
         Button precedent = new Button("Précédent");
         precedent.setPrefSize(200, 75);
@@ -250,7 +248,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         });
         HBox hboxBouttons = new HBox();
         hboxBouttons.setLayoutX(10);
-        hboxBouttons.setLayoutY(620);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
         hboxBouttons.getChildren().add(retourMenuBtn);

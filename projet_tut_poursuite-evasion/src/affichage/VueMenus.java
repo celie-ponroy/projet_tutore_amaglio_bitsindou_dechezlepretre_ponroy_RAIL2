@@ -75,13 +75,12 @@ public class VueMenus {
         final VBox root = new VBox();
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        root.setStyle("-fx-background-color: #d3d3d3;");
+        root.getStylesheets().add("style.css");
         root.setSpacing(20);
         root.setPadding(new Insets(10)); // Ajout d'un padding
         root.setAlignment(Pos.CENTER);
 
         Label title = new Label("Veuillez choisir un mode:");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(20);
@@ -124,13 +123,12 @@ public class VueMenus {
         VBox root2 = new VBox();
         final Scene scene2 = new Scene(root2, WIDTH, HEIGHT);
 
-        root2.setStyle("-fx-background-color: #d3d3d3;");
+        root2.getStylesheets().add("style.css");
         root2.setSpacing(20);
         root2.setPrefSize(800, 600);
         root2.setAlignment(Pos.CENTER);
 
         Label title2 = new Label("Veuillez choisir un personnage:");
-        title2.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         HBox buttonBox2 = new HBox();
         buttonBox2.setSpacing(20);
@@ -184,7 +182,7 @@ public class VueMenus {
         final VBox root = new VBox();
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        root.setStyle("-fx-background-color: #d3d3d3;");
+        root.getStylesheets().add("style.css");
         root.setSpacing(20);
         root.setPadding(new Insets(10)); // Ajout d'un padding
         root.setAlignment(Pos.CENTER);

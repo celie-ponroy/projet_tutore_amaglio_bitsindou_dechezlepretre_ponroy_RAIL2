@@ -1,20 +1,8 @@
 package moteur;
 
 import affichage.VueMenus;
-import affichage.VuePrincipale;
-import affichage.VuePrincipaleNonInteractive;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import javafx.scene.input.KeyEvent;
-import simulation.Comportements;
-import simulation.Simulation;
-
 
 public class MoteurJeu extends Application {
 
@@ -30,5 +18,11 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
+//        setTaille((int) Screen.getPrimary().getBounds().getWidth(), (int) Screen.getPrimary().getBounds().getHeight());
+//
+//        final VBox root = new VBox();
+//        final Scene scene = new Scene(root, WIDTH, HEIGHT);
+//        scene.getStylesheets().add("style.css");
+//racine.getStylesheets().add("style.css");
     }
 }

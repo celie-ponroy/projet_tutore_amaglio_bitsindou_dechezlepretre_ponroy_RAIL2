@@ -17,7 +17,6 @@ import moteur.Clavier;
 import moteur.Jeu;
 import moteur.MoteurJeu;
 import simulation.Comportements;
-
 import simulation.Simulation;
 
 public class VueMenus {
@@ -27,7 +26,6 @@ public class VueMenus {
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     protected Stage primaryStage; //scene
     private String choixPersonnage;
-
 
     /**
      * Initialisation de la fenêtre
@@ -45,7 +43,6 @@ public class VueMenus {
         //Initialisation de la fenêtre
         initPrimaryStage();
         this.choixPersonnage = "";
-
     }
 
     /**
@@ -220,6 +217,7 @@ public class VueMenus {
                         root.getChildren().clear();
                         root.getChildren().add(vp);
                         clavier = new Clavier((Simulation) MoteurJeu.jeu);
+
                         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
                     } else {
                         //on change le nom de la scene

@@ -14,7 +14,6 @@ import moteur.MoteurJeu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import simulation.Comportements;
-
 import simulation.Simulation;
 
 import java.awt.*;

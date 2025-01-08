@@ -11,7 +11,7 @@ public class FabriqueSimulation {
      * constructeur
      */
     public FabriqueSimulation() {
-        this.simulation = new Simulation();
+        //this.simulation = new Simulation();
     }
 
     /**
@@ -30,7 +30,7 @@ public class FabriqueSimulation {
                 this.simulation = new Simulation(false);//si l'utilisateur est gardien
             }
         } else {
-            this.simulation = new Simulation(); //constructeur du mode non interactif
+            //this.simulation = new Simulation(); //constructeur du mode non interactif
         }
 
         return this.simulation;

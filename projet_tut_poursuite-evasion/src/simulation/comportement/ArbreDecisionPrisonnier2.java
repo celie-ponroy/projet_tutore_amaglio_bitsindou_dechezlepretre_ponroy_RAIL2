@@ -57,11 +57,21 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
 
         for (Position p: position.casesAdjacentes()){
             Stack<Position> s = Simulation.CHEMINS.get(List.of(p,sortie));
+            Position pG = simulation.getGardien().getPosition();
+            boolean croiserG = s.contains(pG);
+            for (Position p2: pG.casesAdjacentes()){
+                if(s.contains(p2)) {
+                    croiserG = true;
+                    System.out.println("croiserG");
+                    break;
+                }
 
-            if(!s.empty()&&!s.contains(simulation.getGardien().getPosition()))//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
+            }
+            if(!s.empty()&&!croiserG)//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
                 return direction(position, s.getLast());
 
         }
-        return Deplacement.AUCUN;
+        System.out.println("Aucun chemin trouvé");
+        return oppose(direction(position,simulation.getGardien().getPosition()));
     }
 }

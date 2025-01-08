@@ -30,5 +30,6 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
+
     }
 }

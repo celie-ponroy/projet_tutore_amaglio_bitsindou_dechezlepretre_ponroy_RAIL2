@@ -7,17 +7,29 @@ import simulation.personnages.Position;
 import java.io.*;
 import java.util.*;
 //basé sur https://codegym.cc/groups/posts/a-search-algorithm-in-java
+
 public class CalculChemins {
     static int [][] carte = ChargementCarte.charger("donnees/laby.txt");
     /**
-     * Recuperer la vision depuis le fichier chemin.txt
+     * Recuperer la vision depuis le fichier cheminP.txt du prisonnier
      * @return la liste des chemins pour toutes les paires de positions de la carte
      */
-    public static HashMap<List<Position>,Stack> recupererChemin(){
+    public static HashMap<List<Position>,Stack> recupererCheminPrisonnier(){
+        return lirefichier("./donnees/cheminsP.txt");
+    }
+    /**
+     * Recuperer la vision depuis le fichier cheminG.txt du gardien
+     * @return la liste des chemins pour toutes les paires de positions de la carte
+     */
+    public static HashMap<List<Position>,Stack> recupererCheminGardien(){
+        return lirefichier("./donnees/cheminsG.txt");
+    }
+
+    private static HashMap<List<Position>,Stack> lirefichier(String nomFichier){
         HashMap<List<Position>,Stack> chemins = new HashMap<List<Position>,Stack>();
         //on recupere la chemins depuis le fichier chemins.txt
         try {
-            BufferedReader br = new BufferedReader(new FileReader("./donnees/chemins.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(nomFichier));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(":");
@@ -56,9 +68,13 @@ public class CalculChemins {
      * @throws IOException
      */
     public static void ecrireChemins() throws IOException {
-        //ecrire dans un fichier
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/chemins.txt"));
-        HashMap vision = calculerChemins();
+        //ecrire dans les fichiers
+        ecrireFichier("./donnees/cheminsP.txt",false);
+        ecrireFichier("./donnees/cheminsG.txt",true);
+    }
+    private static void ecrireFichier(String nomFichier,Boolean gardien) throws IOException {
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(nomFichier));
+        HashMap vision = calculerChemins(gardien);
         for (int y1 = 0; y1 < carte.length; y1++) {
             for (int x1 = 0; x1 < carte[0].length; x1++) {
                 for (int y2 = 0; y2 < carte.length; y2++) {
@@ -73,19 +89,23 @@ public class CalculChemins {
             }
         }
         bos.close();
-
     }
 
-    public static HashMap<List<Position>,Stack> calculerChemins(){
+    public static HashMap<List<Position>,Stack> calculerChemins(Boolean gardien){
 
-        //changer la carte pour prendre en compte la sortie
+        //changer la carte pour prendre en compte les raccourcis
+
         for(int i = 0; i < carte.length; i++){
             for(int j = 0; j < carte[0].length; j++){
-                if(carte[i][j] == CaseEnum.SORTIE.ordinal()){
-                    carte[i][j]=CaseEnum.SOL.ordinal();
+                if(carte[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+                    if(!gardien)
+                        carte[i][j]=CaseEnum.MUR.ordinal();
+                    else
+                        carte[i][j]=CaseEnum.SOL.ordinal();
                 }
             }
         }
+
 
         var mapStack = new HashMap<List<Position>,Stack>();
 
@@ -151,7 +171,7 @@ public class CalculChemins {
     static boolean isUnBlocked(int[][] grid, int rows, int cols, Position point)
     {
         return isValid(rows, cols, point) //si la position est valide (dans le tableau
-                && grid[point.getY()][point.getX()] == 1;//si la case n'est pas un mur
+                && grid[point.getY()][point.getX()] != CaseEnum.MUR.ordinal();//si la case n'est pas un mur
     }
 
 
@@ -192,23 +212,19 @@ public class CalculChemins {
     {
 
         if (!isValid(rows, cols, src)) {
-            System.out.println("Source is invalid...");
             return new Stack();
         }
 
         if (!isValid( rows, cols, dest)) {
-            System.out.println("Destination is invalid...");
             return new Stack();
         }
 
         if (!isUnBlocked(grid, rows, cols, src)
                 || !isUnBlocked(grid, rows, cols, dest)) {
-            System.out.println("Source or destination is blocked...");// "+src + " "+dest);
             return new Stack();
         }
 
         if (isDestination(src, dest)) {
-            System.out.println("We're already (t)here...");
             return new Stack();
         }
 
@@ -267,7 +283,6 @@ public class CalculChemins {
                     if (isDestination(neighbour, dest)) {//si on est arrivé
                         if(!diagbloquee){
                             cellDetails[neighbour.getY()][neighbour.getX()].parent = new Position ( j, i );
-                            System.out.println("The destination cell is found");
                             return tracePath(cellDetails, dest);
                         }
 
@@ -295,8 +310,6 @@ public class CalculChemins {
             }
 
         }
-
-        System.out.println("Failed to find the Destination Cell");
         return new Stack();
     }
 

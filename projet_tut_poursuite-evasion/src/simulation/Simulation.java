@@ -24,7 +24,8 @@ public class Simulation implements Jeu {
     private Comportement comportementPrisonnier;
     public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
-    public static final HashMap<List<Position>, Stack> CHEMINS = CalculChemins.recupererChemin();
+    public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
+    public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
     public HashMap<Personnage, List<Position>> historiquePosition;
     public HashMap<Personnage, List<double[][]>> historiqueBayesien;
@@ -273,6 +274,7 @@ public class Simulation implements Jeu {
 
         this.nbTours++;
         actualisationBayesienne(agent,joueur);
+        System.out.println(deplacementAgent);
 
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
         historiqueBayesien.get(agent).add(cartebay);
@@ -374,6 +376,10 @@ public class Simulation implements Jeu {
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
+
+        if(p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+            return false;
+        }
 
         //verifier si le deplacement est possible
         if (murPresent(nvPos.getX(), nvPos.getY())) {

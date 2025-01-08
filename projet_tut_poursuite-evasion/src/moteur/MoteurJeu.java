@@ -121,7 +121,7 @@ public class MoteurJeu extends Application {
         modeNonInteractif.setPrefSize(200, 100);
         modeNonInteractif.setOnAction(e -> {
 
-            Simulation simulation = new Simulation(Comportements.ArbreDeterministe,Comportements.ArbreDeterministe);
+            Simulation simulation = new Simulation(Comportements.ArbreAleatoire,Comportements.ArbreDeterministe);
 
             MoteurJeu.jeu = simulation;
             // Création de la vue principale

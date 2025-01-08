@@ -16,6 +16,7 @@ public abstract class VueSimulation extends Pane {
     protected Image imageSortie;
     protected Image imagePrisonnier;
     protected Image imageGardien;// Pane principal pour afficher le jeu
+    protected Image imageRaccourciGardien;
     protected ImageView prisonnierView; // Vue pour le prisonnier
     protected ImageView gardienView; // Vue pour le gardien
     protected int TAILLE_CELLULE = 30; // Taille des cases du labyrinthe
@@ -27,6 +28,7 @@ public abstract class VueSimulation extends Pane {
         this.imageSortie = new Image("file:images/sortie.png");
         this.imagePrisonnier = new Image("file:images/prisonnier.png");
         this.imageGardien = new Image("file:images/gardien.png");
+        this.imageRaccourciGardien = new Image("file:images/raccourciGardien.png");
     }
     protected void initLabyrinthe() {
         // Création du labyrinthe à partir de la carte
@@ -44,6 +46,9 @@ public abstract class VueSimulation extends Pane {
                     image = this.imageSol;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     image = this.imageSortie;
+                } else if (Simulation.CARTE[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
+                    image = this.imageRaccourciGardien;
+
                 }
 
                 if (image != null) {

@@ -23,7 +23,7 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
      */
     @Override
     public Deplacement prendreDecision() {
-        Stack<Position> s = Simulation.CHEMINS.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
+        Stack<Position> s = Simulation.CHEMINS_P.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
         if(s.empty())
             return direction(personnage.getPosition(),Simulation.getPosSortie());
         //si on voit pas le gardien
@@ -56,7 +56,7 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         Position sortie = Simulation.getPosSortie();
 
         for (Position p: position.casesAdjacentes()){
-            Stack<Position> s = Simulation.CHEMINS.get(List.of(p,sortie));
+            Stack<Position> s = Simulation.CHEMINS_P.get(List.of(p,sortie));
 
             if(!s.empty()&&!s.contains(simulation.getGardien().getPosition()))//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
                 return direction(position, s.getLast());

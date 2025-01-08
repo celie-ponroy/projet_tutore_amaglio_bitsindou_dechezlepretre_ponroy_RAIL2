@@ -8,6 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import moteur.Jeu;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
@@ -223,7 +224,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
 
 
-        //ajout boutons pour precedent et suivant
+        //ajout boutons pour precedent, suivant et revenir au menu principal
         Button precedent = new Button("Précédent");
         precedent.setPrefSize(200, 75);
         precedent.setOnAction(e -> {
@@ -237,15 +238,23 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             updateHistorique();
         });
 
+        Button retourMenuBtn = new Button("Revenir au menu principal");
+        retourMenuBtn.setPrefSize(200, 75);
+        retourMenuBtn.setOnAction(e -> {
+            //Ferme la fenetre actuelle
+            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
+            stage.close();
+            //retour au menu principal
+            VueMenus vm = new VueMenus();
+            vm.afficherMenuPrincipal();
+        });
         HBox hboxBouttons = new HBox();
         hboxBouttons.setLayoutX(10);
         hboxBouttons.setLayoutY(620);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
+        hboxBouttons.getChildren().add(retourMenuBtn);
         this.getChildren().add(hboxBouttons);
-
-
-
     }
     /**
      * Update de l'historique (par rapport à un tour)
@@ -270,22 +279,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
         setPositions(simulation.historiquePosition.get(simulation.getPrisonnier()).get(tour),prisonnierView);
         setPositions(simulation.historiquePosition.get(simulation.getGardien()).get(tour),gardienView);
-    }
-
-    /**
-     * Méthode pour afficher un pop up à la fin de la partie
-     */
-    private void afficherPopFinDePartie(boolean victoire) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Fin de la partie");
-        if (victoire) {
-            alert.setHeaderText("Félicitations !");
-            alert.setContentText("Vous avez gagné !");
-        } else {
-            alert.setHeaderText("Dommage...");
-            alert.setContentText("Vous avez perdu !");
-        }
-        alert.showAndWait();
     }
 
 }

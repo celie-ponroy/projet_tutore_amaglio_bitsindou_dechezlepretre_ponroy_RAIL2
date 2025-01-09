@@ -26,6 +26,7 @@ public class Bayesien {
                 carteBayesienne[i][j] = -1.0;
                 if (!(carte[i][j] == CaseEnum.MUR.ordinal())) {
                     casesValides.add(new Case(j, i));
+                    carteBayesienne[i][j] = 0;
                 }
             }
         }
@@ -78,8 +79,10 @@ public class Bayesien {
                 for (Case caseValide : casesValides) {
                     // On divise la probabilité actuelle par la somme des probabilités sans la case vue
                     double probaTotalSansCaseVue = 1 - carteBayesienne[caseVue[0]][caseVue[1]];
+
                     double probaCaseModifier = carteBayesienne[caseValide.getY()][caseValide.getX()];
                     carteBayesienne[caseValide.getY()][caseValide.getX()] = probaCaseModifier / probaTotalSansCaseVue;
+
                 }
                 // On retire la case vue des cases valides
                 casesValides.remove(new Case(caseVue[1], caseVue[0]));
@@ -89,7 +92,7 @@ public class Bayesien {
                 for (int i = 0; i < carteBayesienne.length; i++) {
                     for (int j = 0; j < carteBayesienne[0].length; j++) {
                         // Toutes les cases sont mises à 0
-                        if (carteBayesienne[i][j] != CaseEnum.MUR.ordinal()) {
+                        if (Simulation.CARTE[i][j] != CaseEnum.MUR.ordinal()) {
                             carteBayesienne[i][j] = 0;
                         }
                     }
@@ -101,6 +104,7 @@ public class Bayesien {
                 casesValides.add(new Case(caseVue[1], caseVue[0]));
                 break;
             }
+
         }
 
         //Porba total des cases valides (doit etre egale a 1)
@@ -126,40 +130,32 @@ public class Bayesien {
      * @return list de case coisine n'étant pas des murs
      */
     public List<Case> getCasesVoisineValide(int x, int y) {
+        // Créer une liste pour les cases voisines valides
         ArrayList<Case> casesVoisinesValides = new ArrayList<>();
-        for (int k = -1; k < 2; k++) {
-            for (int l = -1; l < 2; l++) {
-                int i = y + k, j = x + l;
-                if (x >= 0 && x < Simulation.CARTE[0].length && y >= 0 && y < Simulation.CARTE.length) {
-                    //On regarde si la case exploré appartient au case valide
+
+        // Parcourir les voisins dans un rayon de 1 (y compris diagonales)
+        for (int k = -1; k <= 1; k++) {
+            for (int l = -1; l <= 1; l++) {
+                int i = y + k;
+                int j = x + l;
+
+                // Vérifier que les indices sont dans les limites de la carte
+                if (i >= 0 && i < Simulation.CARTE.length && j >= 0 && j < Simulation.CARTE[0].length) {
+                    // Ne pas ajouter la case si c'est un mur ou si elle est déjà dans la liste
                     if (Simulation.CARTE[i][j] != CaseEnum.MUR.ordinal()) {
-                        if ((k == -1) && (l == -1)) {
-                            if (!(Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i));
-                            }
-                        } else if ((k == 1) && (l == -1)) {
-                            if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j + 1] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i));
-
-                            }
-                        } else if ((k == -1) && (l == 1)) {
-                            if (!(Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i + 1][j] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i));
-                            }
-                        } else if ((k == 1) && (l == 1)) {
-                            if (!(Simulation.CARTE[i - 1][j] == CaseEnum.MUR.ordinal() || Simulation.CARTE[i][j - 1] == CaseEnum.MUR.ordinal())) {
-                                casesVoisinesValides.add(new Case(j, i));
-                            }
-                        } else {
-                            casesVoisinesValides.add(new Case(j, i));
+                        Case voisine = new Case(j, i);
+                        if (!casesVoisinesValides.contains(voisine)) {
+                            casesVoisinesValides.add(voisine);
                         }
-
                     }
                 }
             }
         }
+
+        // Retourner la liste des cases voisines valides (y compris la case d'origine)
         return casesVoisinesValides;
     }
+
 
     public List<Case> getPlusGrandeProbas() {
         double max = casesValides.stream().mapToDouble(caseValide -> carteBayesienne[caseValide.getY()][caseValide.getX()]).filter(caseValide -> caseValide >= 0).max().orElse(0);

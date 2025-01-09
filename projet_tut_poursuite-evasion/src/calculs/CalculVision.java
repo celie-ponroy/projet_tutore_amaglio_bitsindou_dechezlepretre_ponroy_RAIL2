@@ -118,6 +118,7 @@ public class CalculVision {
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
 
+
                     continue;
                 }
                 vision[coordoneeVisionY][coordoneeVisionX] = CARTE[coordoneeCarteY][coordoneeCarteX];
@@ -139,6 +140,7 @@ public class CalculVision {
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
+
 
                 if (!(vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
 
@@ -174,11 +176,10 @@ public class CalculVision {
 
         for (Position pPerso: vision.keySet()) {
             ArrayList<Position> visionCur = vision.get(pPerso);
-            
+
             Iterator<Position> iterator = visionCur.iterator();
             while (iterator.hasNext()) {
                 Position position = iterator.next();
-
                 ArrayList<Position> casesVisites = new ArrayList<>();
                 if (!parcours(pPerso, position, visionCur, casesVisites)) {
                     iterator.remove();

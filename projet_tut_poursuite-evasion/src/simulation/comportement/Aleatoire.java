@@ -1,5 +1,6 @@
 package simulation.comportement;
 
+import simulation.CaseEnum;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
@@ -19,10 +20,23 @@ public class Aleatoire implements Comportement{
         Deplacement deplacement = deplacementAleatoire();
         Position position = new Position(perso.getPosition().getX(), perso.getPosition().getY());
         position.deplacement(deplacement);
-        while(simulation.murPresent(position.getX(), position.getY())){
+        boolean gardien = perso.equals(simulation.getGardien());
+        boolean invalide = simulation.murPresent(position.getX(), position.getY());
+        if(!gardien){
+            if(Simulation.CARTE[position.getX()][position.getY()]== CaseEnum.SPAWN_PRISONNIER.ordinal()){
+                invalide = true;
+            }
+        }
+        while(invalide){
             deplacement = deplacementAleatoire();
             position = new Position(perso.getPosition().getX(), perso.getPosition().getY());
             position.deplacement(deplacement);
+            invalide = simulation.murPresent(position.getX(), position.getY());
+            if(!gardien){
+                if(Simulation.CARTE[position.getX()][position.getY()]== CaseEnum.SPAWN_PRISONNIER.ordinal()){
+                    invalide = true;
+                }
+            }
         }
         return deplacement;
     }

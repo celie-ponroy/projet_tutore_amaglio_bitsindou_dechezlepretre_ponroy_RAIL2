@@ -36,7 +36,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
-        initLabyrinthe();
+        this.getChildren().add(initLabyrinthe());
         //affichage itération
         VBox vbox = new VBox();
         vbox.setLayoutX(10);

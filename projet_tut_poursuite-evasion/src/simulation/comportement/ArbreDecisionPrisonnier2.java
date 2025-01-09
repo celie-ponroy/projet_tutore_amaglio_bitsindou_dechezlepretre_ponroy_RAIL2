@@ -67,11 +67,13 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         List<Position> casesAVisiter = positionPerso.casesAdjacentes();
         boolean end = false;
         int i = 0;
-        int ite = 0;
+
         while(!end){
             i++;
             for (Position p: casesAVisiter){
-                ite++;
+                if(casesVisites.contains(p)){
+                    continue;
+                }
                 casesVisites.add(p);
                 Stack<Position> s = Simulation.CHEMINS_P.get(List.of(p,sortie));
 
@@ -81,6 +83,9 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
                     croiserG = true;
                 }
                 for (Position positionAdjacenteGardien: pG.casesAdjacentes()){
+                    if(casesVisites.contains(positionAdjacenteGardien)){
+                        continue;
+                    }
                     casesVisites.add(positionAdjacenteGardien);
                     if(cheminRecherché.contains(positionAdjacenteGardien)||s.contains(positionAdjacenteGardien)) {
                         croiserG = true;
@@ -89,7 +94,7 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
 
                 }
                 if(!cheminRecherché.empty()&&!croiserG) {//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
-                    System.out.println("chemin trouvé : "+direction(positionPerso, cheminRecherché.getLast()));
+                    //System.out.println("chemin trouvé : "+direction(positionPerso, cheminRecherché.getLast()));
                     return direction(positionPerso, cheminRecherché.getLast());//ne prends pas en compte les diagonales
                 }
             }
@@ -117,9 +122,9 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
                 end = true;
             }
         }
+        
+        //System.out.println("Aucun chemin trouvé");
 
-        System.out.println("Aucun chemin trouvé");
-        System.out.println(ite);
         return oppose(direction(positionPerso,simulation.getGardien().getPosition()));
     }
 }

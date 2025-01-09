@@ -67,7 +67,6 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
                     break;
                 }
 
-
             }
             if(!s.empty()&&!croiserG)//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
                 return direction(position, s.getLast());

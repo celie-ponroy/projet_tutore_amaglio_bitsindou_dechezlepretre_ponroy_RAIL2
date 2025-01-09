@@ -29,6 +29,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public VuePrincipale(){
         super();
         TAILLE_CELLULE = 50;
+
     }
 
     /**
@@ -88,6 +89,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
+        System.out.println(this.simulation);
 
         if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé

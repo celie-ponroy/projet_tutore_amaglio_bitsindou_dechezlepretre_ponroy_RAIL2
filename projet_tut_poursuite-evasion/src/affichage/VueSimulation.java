@@ -18,7 +18,8 @@ public abstract class VueSimulation extends Pane {
     protected Image imageGardien;// Pane principal pour afficher le jeu
     protected ImageView prisonnierView; // Vue pour le prisonnier
     protected ImageView gardienView; // Vue pour le gardien
-    protected int TAILLE_CELLULE = 30; // Taille des cases du labyrinthe
+    protected int TAILLE_CELLULE = 30;
+    private Pane labyrinthePane;// Taille des cases du labyrinthe
 
 
     VueSimulation(){
@@ -28,7 +29,17 @@ public abstract class VueSimulation extends Pane {
         this.imagePrisonnier = new Image("file:images/prisonnier.png");
         this.imageGardien = new Image("file:images/gardien.png");
     }
-    protected void initLabyrinthe() {
+
+    /**
+     * Initialise le labyrinthe et les personnages
+     */
+
+    protected Pane initLabyrinthe() {
+        // Création d'un conteneur pour le labyrinthe
+        labyrinthePane = new Pane();
+        labyrinthePane.setPrefSize(TAILLE_CELLULE * Simulation.CARTE[0].length,
+                TAILLE_CELLULE * Simulation.CARTE.length);
+        System.out.println("Avant" + labyrinthePane.getChildren());
         // Création du labyrinthe à partir de la carte
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
@@ -38,9 +49,11 @@ public abstract class VueSimulation extends Pane {
 
                 // Sélection de l'image en fonction de la case
                 Image image = null;
-                if(Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()){
+                if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
                     image = this.imageMur;
-                } else if (Simulation.CARTE[i][j] == CaseEnum.SOL.ordinal() || Simulation.CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() || Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
+                } else if (Simulation.CARTE[i][j] == CaseEnum.SOL.ordinal() ||
+                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() ||
+                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
                     image = this.imageSol;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     image = this.imageSortie;
@@ -58,30 +71,31 @@ public abstract class VueSimulation extends Pane {
                 rectangle.setFill(Color.TRANSPARENT);
                 stackPane.getChildren().add(rectangle);
 
-                this.getChildren().add(stackPane); // Ajout au Pane principal
-
+                labyrinthePane.getChildren().add(stackPane); // Ajout au conteneur labyrinthe
             }
         }
 
         // Initialisation des personnages
-        //prisonnier
         prisonnierView = new ImageView(imagePrisonnier);
-        prisonnierView.setFitWidth(TAILLE_CELLULE); // Taille de l'image
-        prisonnierView.setFitHeight(TAILLE_CELLULE); // Taille de l'image
+        prisonnierView.setFitWidth(TAILLE_CELLULE);
+        prisonnierView.setFitHeight(TAILLE_CELLULE);
 
-        //gardien
         gardienView = new ImageView(imageGardien);
-        gardienView.setFitWidth(TAILLE_CELLULE); // Taille de l'image
-        gardienView.setFitHeight(TAILLE_CELLULE); // Taille de l'image
+        gardienView.setFitWidth(TAILLE_CELLULE);
+        gardienView.setFitHeight(TAILLE_CELLULE);
 
         setOpacityPersonnage();
-        this.getChildren().addAll(prisonnierView, gardienView);
 
+        // Ajouter les personnages au conteneur labyrinthe
+        labyrinthePane.getChildren().addAll(prisonnierView, gardienView);
+        System.out.println("Après" + labyrinthePane.getChildren());
 
         // Placement initial des personnages
         updatePositions();
 
+        return labyrinthePane;
     }
+
 
     /**
      * Methode qui change l'opacité des personnages selon certains criteres

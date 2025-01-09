@@ -3,14 +3,13 @@ package affichage;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
 import simulation.Simulation;
+import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
 public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu {
@@ -29,40 +28,103 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         this.tour = 0;
     }
 
-
     /**
-     * Initialise le labyrinthe et les personnages
+     * Initialise la vue avec les deux vues bayésiennes et le labyrinthe positionné entre elles.
      */
     private void init() {
-        initLabyrinthe();
+        Pane labyPane = initLabyrinthe();
 
-        //Ajout d'une vbox pour afficher le nombre d'itération sous le labyrinthe
+        // Ajout d'une VBox pour afficher le nombre d'itérations sous le labyrinthe
         VBox vbox = new VBox();
         vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
+        vbox.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + 100);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         vbox.getChildren().add(this.iterationLabel);
-        this.getChildren().add(vbox);
 
-        //Ajout d'un encadré pour afficher le nombre d'itération
-        Rectangle rectangle = new Rectangle(150, 20);
-        rectangle.setFill(Color.TRANSPARENT);
-        rectangle.setStroke(Color.DARKGREY);
-        rectangle.setLayoutX(10);
-        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
-        this.getChildren().add(rectangle);
+        // Vérifiez si `vbox` est déjà présent avant de l'ajouter
+        if (!this.getChildren().contains(vbox)) {
+            this.getChildren().add(vbox);
+        }
 
-        //vues d'en bas bayesien
+        //Ajout de la vbox de l'iteration au Pane
+        labyPane.getChildren().add(vbox);
+
+        //
+        // Création des deux vues bayésiennes dans des VBox distinctes
+
+        //Création des vues bayesiennes
         vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier());
         vB2 = new VueBayesienne(this.simulation,simulation.getGardien());
-        HBox hBox = new HBox(vB1,vB2);
-        hBox.setSpacing(20);
-        hBox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+200);
-        hBox.setAlignment(Pos.CENTER);
-        HBox.setHgrow(vB1, Priority.ALWAYS);
-        HBox.setHgrow(vB2, Priority.ALWAYS);
-        this.getChildren().add(hBox);
+
+        VBox vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
+        VBox vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier",vB2);
+        // Mise en forme des VBox
+        vBoxGardien.setAlignment(Pos.TOP_LEFT);
+        vBoxPrisonnier.setAlignment(Pos.TOP_RIGHT);
+
+        //Style
+        vBoxGardien.setStyle("-fx-border-color: black; -fx-padding: 10;");
+        vBoxPrisonnier.setStyle("-fx-border-color: black; -fx-padding: 10;");
+
+        // HBox pour aligner les éléments (vue bayésienne 1, labyrinthe, vue bayésienne 2)
+        HBox hbox = new HBox(20); // Espacement de 20px entre les éléments
+
+
+        // Ajout des éléments à la HBox
+        hbox.getChildren().add(vBoxGardien);
+        hbox.getChildren().add(labyPane);
+        hbox.getChildren().add(vBoxPrisonnier);
+        hbox.setAlignment(Pos.CENTER);
+
+        System.out.println("Avant ajout de hbox: " + this.getChildren());
+        System.out.println("INstance"+this.getTypeSelector());
+        this.getChildren().clear();
+        this.getChildren().addAll(hbox);
+        System.out.println("Après ajout de hbox: " + this.getChildren());
+
     }
+
+    /**
+     * Crée la vue du labyrinthe et l'entoure avec des informations supplémentaires.
+     */
+    private VBox createLabyrintheView() {
+        VBox labyrintheVBox = new VBox();
+        labyrintheVBox.setSpacing(10); // Espacement entre les éléments de la VBox
+        labyrintheVBox.setAlignment(Pos.TOP_CENTER);
+
+        // Initialisation du labyrinthe
+        Pane labyPane = initLabyrinthe();
+
+        // Ajout du labyrinthe à la VBox
+        labyrintheVBox.getChildren().add(labyPane);
+
+        // Ajout d'un label pour le nombre d'itérations
+        this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
+        labyrintheVBox.getChildren().addAll(this, iterationLabel); // Ajouter le labyrinthe et le label
+
+        // Style
+        labyrintheVBox.setStyle("-fx-border-color: darkgrey; -fx-padding: 10;");
+
+        return labyrintheVBox;
+    }
+
+    /**
+     * Crée une vue Bayesienne associée à un personnage.
+     */
+    private VBox createBayesienneView(Personnage personnage, String titre, VueBayesienne vueBayesienne) {
+        VBox vueBayesienneVBox = new VBox();
+        vueBayesienneVBox.setSpacing(10);
+        vueBayesienneVBox.setAlignment(Pos.TOP_CENTER);
+
+        // Titre de la vue
+        Label titleLabel = new Label(titre);
+        titleLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        vueBayesienneVBox.getChildren().addAll(titleLabel, vueBayesienne);
+
+        return vueBayesienneVBox;
+    }
+
 
     @Override
     protected void setOpacityPersonnage() {
@@ -88,6 +150,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
+        System.out.println(this.simulation);
         if(simulation.etreFini()){
             init();
             javafx.scene.control.Button precedent = new Button("Précédent");

@@ -67,11 +67,14 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         List<Position> casesAVisiter = positionPerso.casesAdjacentes();
         boolean end = false;
         int i = 0;
+
         while(!end){
             i++;
             for (Position p: casesAVisiter){
+                if(casesVisites.contains(p)){
+                    continue;
+                }
                 casesVisites.add(p);
-                System.out.println("p : "+p);
                 Stack<Position> s = Simulation.CHEMINS_P.get(List.of(p,sortie));
 
                 boolean croiserG = s.contains(pG);
@@ -80,6 +83,10 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
                     croiserG = true;
                 }
                 for (Position positionAdjacenteGardien: pG.casesAdjacentes()){
+                    if(casesVisites.contains(positionAdjacenteGardien)){
+                        continue;
+                    }
+                    casesVisites.add(positionAdjacenteGardien);
                     if(cheminRecherché.contains(positionAdjacenteGardien)||s.contains(positionAdjacenteGardien)) {
                         croiserG = true;
                         break;
@@ -87,13 +94,14 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
 
                 }
                 if(!cheminRecherché.empty()&&!croiserG) {//cas si aucun chemin (dont murs)  //si le gardien bloque on cherche une autre case
-                    System.out.println("chemin trouvé : "+direction(positionPerso, cheminRecherché.getLast()));
+                    //System.out.println("chemin trouvé : "+direction(positionPerso, cheminRecherché.getLast()));
                     return direction(positionPerso, cheminRecherché.getLast());//ne prends pas en compte les diagonales
                 }
             }
             List<Position> casesAVisiter2 = new ArrayList<>();
             for (Position p: casesAVisiter){
                 for (Position p2: p.casesAdjacentes()){
+
                     if(Simulation.CARTE[0].length<=p2.getX()||Simulation.CARTE.length<=p2.getY()||p2.getX()<0||p2.getY()<0){
                         continue;
                     }
@@ -105,16 +113,17 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
                     }
                 }
             }
+            casesAVisiter.clear();
             casesAVisiter = casesAVisiter2;
             if(casesAVisiter.isEmpty()){
                 end = true;
             }
-            if (i>100){
+            if (i>15){
                 end = true;
             }
         }
 
-        System.out.println("Aucun chemin trouvé");
+        //System.out.println("Aucun chemin trouvé");
         return oppose(direction(positionPerso,simulation.getGardien().getPosition()));
     }
 }

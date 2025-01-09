@@ -188,7 +188,6 @@ public class Simulation implements Jeu {
             this.prisonnier = new Agent(9, 18);
 
             this.positionnerAgentsSpawnAleatoire();
-
             switch (ComportementAdversaire) {
                 case Comportements.ArbreDeterministe:
                     this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);

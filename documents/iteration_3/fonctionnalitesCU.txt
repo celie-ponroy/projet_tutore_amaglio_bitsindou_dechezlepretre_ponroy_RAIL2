@@ -17,12 +17,25 @@ Itération n°3:
 	Nous avons ajouté un comportement (pour les deux personnages) qui choisit au hasard où
 	il va se diriger.
 	
--Amélioration de l'interface (Célie et Maelle)
+-Amélioration de l'interface (Célie et Maëlle)
 	-Ajout d'un style.css qui va rendre l'interface plus agréable en général
 	-Modification des ratio de l'application due à la modification de la carte
-	-Ajout de bouttons pour revenir au menu principal à partir de la partie
+	-Ajout de boutons pour revenir au menu principal à partir de la partie
 	
-- Ajout menu choix difficultés (Maelle)
+- Ajout menu choix difficultés (Maëlle)
+    Le joueur peut maintenant choisir la difficulté de l'IA de la partie parmi nos différentes
+    versions, que ce soit en mode interactif ou en non interactif.
+    Le prisonnier a les versions suivantes :
+        - Version 1 : Arbre de décision déterministe 1.0
+        - Version 2 : Arbre de décision déterministe 2.0
+        - Version 3 : Comportement aléatoire
+        - Version 4 : Réseau de neurones 1.0
+
+    Le gardien a les versions suivantes :
+        - Version 1 : Arbre de décision déterministe
+        - Version 2 : Arbre de décision aléatoire
+        - Version 3 : Comportement aléatoire
+        - Version 4 : Réseau de neurones 1.0
 
 
 

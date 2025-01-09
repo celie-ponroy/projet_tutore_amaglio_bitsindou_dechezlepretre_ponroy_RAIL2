@@ -38,4 +38,13 @@ Itération n°3:
         - Version 4 : Réseau de neurones 1.0
 
 
+- Ajout du spawn aleatoire pour le gardien et le prisonnier. Les deux personnages apparaissent aleatoirement sur la carte
+
+- Ajout d'une classe permettant de charger la carte à partir d'un fichier texte
+
+- Correction de l'inférence bayésienne qui prend maintenant en compte la capacité de déplacement de l'autre agent
+
+- Implémentation de Neuroph dans le projet
+
+- Paramétrage des entrées du réseau de neurone en fonction de la taille de la carte
 

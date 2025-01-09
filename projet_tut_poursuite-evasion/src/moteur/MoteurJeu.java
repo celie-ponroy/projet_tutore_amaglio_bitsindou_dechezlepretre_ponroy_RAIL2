@@ -18,12 +18,6 @@ public class MoteurJeu extends Application {
     public void start(Stage primaryStage) {
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
-//        setTaille((int) Screen.getPrimary().getBounds().getWidth(), (int) Screen.getPrimary().getBounds().getHeight());
-//
-//        final VBox root = new VBox();
-//        final Scene scene = new Scene(root, WIDTH, HEIGHT);
-//        scene.getStylesheets().add("style.css");
-//racine.getStylesheets().add("style.css");
 
     }
 }

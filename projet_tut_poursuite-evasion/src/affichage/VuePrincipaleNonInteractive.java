@@ -39,6 +39,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         vbox.setLayoutX(10);
         vbox.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + 100);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
+        iterationLabel.setStyle("-fx-font-size: 11px;");
+
         vbox.getChildren().add(this.iterationLabel);
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter

@@ -37,13 +37,12 @@ public class VueMenusNonInteractive {
         final VBox root = new VBox();
         final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
-        root.setStyle("-fx-background-color: #d3d3d3;");
+        root.getStylesheets().add("style.css");
         root.setSpacing(20);
         root.setPadding(new Insets(10));
         root.setAlignment(Pos.CENTER);
 
         Label title = new Label("Veuillez choisir un niveau de difficulté pour chaque personnage:");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         // Conteneur principal pour les deux colonnes
         HBox container = new HBox();
@@ -63,7 +62,6 @@ public class VueMenusNonInteractive {
         gardienBox.getChildren().add(imgViewGard);
         //Label du gardien
         Label gardienLabel = new Label("Gardien");
-        gardienLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         //Combobox pour le choix de difficulté du gardien
         ComboBox<String> gardienComboBox = new ComboBox<>();
@@ -87,7 +85,6 @@ public class VueMenusNonInteractive {
         prisonnierBox.getChildren().add(imgViewPri);
         //Label du prisonnier
         Label prisonnierLabel = new Label("Prisonnier");
-        prisonnierLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
         //Combobox pour le choix de difficulté du prisonnier
         ComboBox<String> prisonnierComboBox = new ComboBox<>();

@@ -39,7 +39,6 @@ public abstract class VueSimulation extends Pane {
         labyrinthePane = new Pane();
         labyrinthePane.setPrefSize(TAILLE_CELLULE * Simulation.CARTE[0].length,
                 TAILLE_CELLULE * Simulation.CARTE.length);
-        System.out.println("Avant" + labyrinthePane.getChildren());
         // Création du labyrinthe à partir de la carte
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
@@ -88,7 +87,6 @@ public abstract class VueSimulation extends Pane {
 
         // Ajouter les personnages au conteneur labyrinthe
         labyrinthePane.getChildren().addAll(prisonnierView, gardienView);
-        System.out.println("Après" + labyrinthePane.getChildren());
 
         // Placement initial des personnages
         updatePositions();

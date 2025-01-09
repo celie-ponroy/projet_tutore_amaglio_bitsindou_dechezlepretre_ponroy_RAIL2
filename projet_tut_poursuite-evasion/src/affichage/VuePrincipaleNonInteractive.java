@@ -78,11 +78,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         hbox.getChildren().add(vBoxPrisonnier);
         hbox.setAlignment(Pos.CENTER);
 
-        System.out.println("Avant ajout de hbox: " + this.getChildren());
-        System.out.println("INstance"+this.getTypeSelector());
         this.getChildren().clear();
         this.getChildren().addAll(hbox);
-        System.out.println("Après ajout de hbox: " + this.getChildren());
 
     }
 
@@ -152,7 +149,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        System.out.println(this.simulation);
         if(simulation.etreFini()){
             init();
             javafx.scene.control.Button precedent = new Button("Précédent");

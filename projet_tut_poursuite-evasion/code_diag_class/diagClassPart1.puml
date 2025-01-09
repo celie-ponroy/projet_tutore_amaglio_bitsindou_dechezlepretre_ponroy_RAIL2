@@ -1,0 +1,129 @@
+@startuml
+
+package "moteur"{
+  Interface Jeu{
+    + init(): void
+    + etreFini(): boolean
+    + ajouterObservateur(DessinJeu): void
+    - notifierObservateurs(): void
+  }
+  class Clavier{
+    - simulation : Simulation
+    + handle(KeyEvent): void
+  }
+  class ClavierNonInteractif{
+    - simulation : Simulation
+    + handle(KeyEvent): void
+  }
+  class MoteurJeu{
+    + start(Stage): void
+  }
+}
+
+package "affichage" {
+  Interface DessinJeu{
+    + update(Jeu): void
+  }
+  class VueSimulation{
+    # imageMur: Image
+    # imageSol : Image
+    # imageSortie : Image
+    # imagePrisonnier : Image
+    # imageGardien : Image
+    # prisonnierView : ImageView
+    # gardienView : ImageView
+    # TAILLE_CELLULE : int
+    + VueSimulation()
+    # initLabyrinthe(): void
+    # {abstract} setOpacityPersonnage(): void
+    # {abstract} updatePositions(): void
+    # setPositions(Position, ImageView): void
+  }
+  class FiltreBayesien{
+    + {static} initFiltre(double[][], int): Rectangle[][]
+    + {static} updateBayes(Rectangle[][], double[][])
+  }
+
+  class VuePrincipale{
+    - simulation : Simulation
+    - iterationLabel: Label
+    - filtreVision: Rectangle[][]
+    - tour: int
+    - caseBayesienneHisto : Rectangle[][]
+    + VuePrincipale()
+    - init(): void
+    + update(Jeu): void=
+    + updateIteration(): void
+    + initFiltreVision(): void
+    + setFiltreVision(): void
+    + historique(): void
+    + updateHistorique(): void
+
+  }
+
+  class VueBayesienne{
+      - simulation : Simulation
+      - perso : Personnage
+      - persoView: ImageView
+      - imagePerso: Image
+      - caseBayesienne: Rectangle[][]
+      - tour: int
+      + VueBayesienne(Simulation, Personnage)
+      - init(): void
+      # updatePositions(): void
+      - updateBayes(): void
+      + update(int): void
+  }
+  class VuePrincipaleNonInteractive{
+    - simulation : Simulation
+    - iterationLabel : Label
+    - tour : int
+    - caseBayesienneHisto : Rectangle[][]
+    + VuePrincipaleNonInteractive()
+    - init(): void
+    # updatePositions(): void
+    + update(Jeu): void
+    + updateIteration(): void
+    + setPositions(Position, ImageView): void
+  }
+  class VueMenus{
+    - {static} WIDTH : double
+    - {static} HEIGHT : double
+    - {static} jeu : MoteurJeu
+    # primaryStage: Stage
+    - choixPersonnage : String
+    + VueMenus(MoteurJeu)
+    + VueMenus()
+    - initPrimayStage(): void
+    - setScene(Scene, String): void
+    + afficherMenuPrincipal(): void
+    + afficherMenuPersonnage(): void
+    + afficherJeu(Jeu, Pane, Scene): void
+    + afficherMenuIA(): void
+    + getChoixPersonnage(): String
+    + setChoixPersonnage(String): void
+  }
+  class VueMenusNonInteractive{
+    - {static} WIDTH : double
+    - {static} HEIGHT : double
+    - {static} jeu: MoteurJeu
+    + VuePrincipaleNonInteractive(MoteurJeu)
+    + afficherMenuIA(Stage): void
+  }
+}
+
+
+Jeu <|.. Simulation
+MoteurJeu --|> Application
+MoteurJeu "1" --> "1" Jeu: jeu
+
+
+DessinJeu <|.. VuePrincipale
+VuePrincipale --|> VueSimulation
+VueBayesienne --|> VueSimulation
+VuePrincipaleNonInteractive --|> VueSimulation
+VuePrincipaleNonInteractive ..|> DessinJeu
+VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB1
+VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB2
+
+@enduml

@@ -29,13 +29,14 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public VuePrincipale(){
         super();
         TAILLE_CELLULE = 50;
+
     }
 
     /**
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
-        initLabyrinthe();
+        this.getChildren().add(initLabyrinthe());
         //affichage itération
         VBox vbox = new VBox();
         vbox.setLayoutX(10);
@@ -89,6 +90,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
+        System.out.println(this.simulation);
 
         if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé

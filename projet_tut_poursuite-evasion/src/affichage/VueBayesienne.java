@@ -56,7 +56,7 @@ public class VueBayesienne extends VueSimulation {
         }
 
 
-        initLabyrinthe();
+        this.getChildren().add(initLabyrinthe());
         // Initialisation de la carte bayesienne
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
         caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE);

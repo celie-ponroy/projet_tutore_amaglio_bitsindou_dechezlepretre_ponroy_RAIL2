@@ -248,7 +248,7 @@ public class VueMenus {
                 case "Arbre de décision déterministe 2.0":
                         //on change le nom de la scene
                         setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ArbreDeterministev2);
+                        simulation = new Simulation(false, Comportements.ArbreDeterministev2);
                         MoteurJeu.jeu = simulation;
                         //Affichage du jeu
                         afficherJeu(MoteurJeu.jeu, root, scene);

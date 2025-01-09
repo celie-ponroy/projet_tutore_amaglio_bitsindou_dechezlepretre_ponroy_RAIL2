@@ -12,11 +12,10 @@ package "moteur"{
   class Clavier{
     + handle(KeyEvent): void
   }
+  class ClavierNonInteractif{
+    + handle(KeyEvent): void
+  }
   class MoteurJeu{
-    - {static} WIDTH : double
-    - {static} HEIGHT : double
-    + {static} launch(Jeu): void
-    + {static} setTaille(double, double): void
     + start(Stage): void
   }
 }
@@ -27,12 +26,16 @@ package "lancercalculs"{
   class LancerCalculsVision{
       + main(): void
   }
+  class LancerCalculsDataset{
+        + main(): void
+  }
 }
 package "outil"{
+    class ChargementCarte{
+        + {static} charger(String): int[][]
+    }
     class Outil{
-      + {static} sauve(String, Object): void
       + {static} applatissement(double[][]): double[]
-      + {static} chargerRn(String): ReseauDeNeurones
     }
 }
 package "simulation"{
@@ -47,39 +50,37 @@ package "simulation"{
     DIAG_BAS_DROITE
     AUCUN
   }
+  enum Comportements{
+    ARBREDETERMINISTE
+    ARBREDETERMINISTEV
+    ALEATOIRE
+    ARBREALEATOIRE
+    RESEAUARBREDETERMINISTE
+    RESEAUARBREALEATOIRE
+  }
+  enum CaseEnum{
+    MUR
+    SOL
+    SORTIE
+    SPAWN_PRISONNIER
+    SPAWN_GARDIEN
+  }
+
   package "apprentissage"{
     class ApprentissageDeArbre{
         + main(): void
     }
   }
   package "comportement"{
-    package reseau_neurones{
-        class Neurone{
-          + Value: double
-          + Weights : double[]
-          + Biais : double
-          + Delta : double
-          + Neurone()
-        }
-        class Couche{
-          + Length : int
-          + Couche(int, int)
-        }
-        Interface FonctionActivation{
-           + evaluate(double): double
-           + evaluateDer(double): double
-        }
-        class Sigmoide{}
-        class ReseauDeNeurones{
-          + vitesseApprentissage: double
-          + ReseauDeNeurones(int[], double)
-          + execute(double[]): double[]
-          + retroPropagation(double[], double[]): double
-        }
+    class ReseauDeNeurones{
+        + ReseauDeNeurones(String, Simulation, Personnage)
+        - neuralNetwork : NeuralNetwork
     }
     Interface Comportement{
         + prendreDecision(): Deplacement
-        + prendreDecision(double[]): Deplacement
+    }
+    class Aleatoire{
+        - deplacementAleatoire(): Deplacement
     }
     class ArbreDecision{
         + direction(Position, Position): Deplacement
@@ -87,31 +88,42 @@ package "simulation"{
     class ArbreDecisionGardien{
       + ArbreDecisionGardien(Simulation, Personnage)
     }
+    class ArbreDecisionGardienAleatoire{
+        + ArbreDecisionGardienAleatoire(Simulation, Personnage)
+        - choixDeplacementAleatoire(double[][]): int[]
+    }
     class ArbreDecisionPrisonnier{
           + ArbreDecisionPrisonnier(Simulation, Personnage)
           + oppose(Deplacement): Deplacement
+    }
+    class ArbreDecisionPrisonnier2{
+          + ArbreDecisionPrisonnier(Simulation, Personnage)
+          + fuir(): Deplacement
     }
   }
   class Simulation{
     - nbTours : int
     - estFini : boolean
+    - victoirePrisonnier : boolean
+    - victoireGardien : boolean
     - carteBayesiennes : HashMap<Personnage, double[][]>
     - bayesiens : HashMap<Personnage, Bayesien>
     + {static} final CARTE : int[][]
-    + {static} final MUR : int
-    + {static} final SORTIE : int
-    + {static} final SOL : int
     + {static} final VISION : HashMap<Position, ArrayList<Position>>
     + {static} final CHEMINS : HashMap<List<Position>, Stack>
-    + historiquePosition : List<List<Position>>
-    + historiqueBayesien : List<double[][]>
+    + historiquePosition : HashMap<Personnage, List<Position>>
+    + historiqueBayesien : HashMap<Personnage, List<double[][]>>
+    + historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
     + Simulation()
     + Simulation(boolean)
-    + Simulation(ReseauDeNeurones, boolean)
-    + apprentissage(int)
+    + Simulation(boolean, Comportements)
+    + Simulation(Comportement, Comportement)
+    + positionnerAgentsSpawnAleatoire(): void
+    + positionnerAleatoirement(): void
     + deplacerAgents(): void
     + deplacerPersonnage(Personnage, Deplacement): boolean
     + deplacementJoueur(Deplacement): void
+    + verifierDeplacement(Personnage, Personnage): boolean
     + miseAJourFinJeu(): void
     + actualisationBayesienne(Personnage, Personnage): void
     + estVisible(Personnage, boolean): boolean
@@ -122,6 +134,8 @@ package "simulation"{
     + getPosSortie(): Position
     + getCarteBayesienne(Personnage): double[][]
     + getBayesiens(): HashMap<Personnage, Bayesien>
+    + getVictoirePrisonnier(): boolean
+    + getVictoireGardien(): boolean
   }
 
   class Case{
@@ -130,22 +144,10 @@ package "simulation"{
     - contenu: int
   }
 
-
-  class CalculVision{
-    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
-    + {static} ecrireVision(): void
-    + {static} calculerCarteVision(): HashMap
-    + {static} calculerVision(int, int): ArrayList
-  }
-  class CalculChemins{
-    + {static} recupererChemin(): HashMap<List<Position>, Stack>
-    + {static} ecrireChemins(): void
-    + {static} calculerChemins
-  }
-
   package "personnage"{
     class Bayesien{
       - carteBayesienne: double[][]
+      - casesValides : List<Case>
       + Bayesien()
       + calculerProbaPresence(double[][], List<Integer[]>): double[][]
       + getCasesVoisineValide(int, int): List<Case>
@@ -162,16 +164,19 @@ package "simulation"{
      + getY(): int
      + deplacer(int, int): void
      + deplacer(Deplacement): void
+     + casesAdjacentes(): ArrayList<Position>
     }
 
     class Personnage{
-      + {abstract} deplacer(int, int): void
+      + Personnage(int, int)
       + {abstract} deplacer(Position): void
       + getPosition(): Position
+      + setPosition(Position): void
+      + getVision(): ArrayList<Position>
     }
-
     class Agent{
       + Agent(int, int)
+
     }
     class Joueur{
       + Joueur(int, int)
@@ -185,6 +190,8 @@ package "calculs"{
     + {static} ecrireVision(): void
     + {static} calculerCarteVision(): HashMap
     + {static} calculerVision(int, int): ArrayList
+    + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
+    + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
   }
   class CalculChemins{
     + {static} recupererChemin(): HashMap<List<Position>, Stack>
@@ -223,13 +230,6 @@ package "affichage" {
     + {static} updateBayes(Rectangle[][], double[][])
   }
 
-  class VueAnalyse{
-    - imageMur: Image
-    - imageSol: Image
-    - imageSortie: Image
-    - imagePerso: Image
-}
-
   class VuePrincipale{
     - iterationLabel: Label
     - filtreVision: Rectangle[][]
@@ -253,8 +253,6 @@ package "affichage" {
       - tour: int
       + VueBayesienne(Simulation, Personnage)
       - init(): void
-      + initImages(): void
-      + initLabyrinthe(): void
       # updatePositions(): void
       - updateBayes(): void
       + update(int): void
@@ -263,13 +261,34 @@ package "affichage" {
     - iterationLabel : Label
     - tour : int
     - caseBayesienneHisto : Rectangle[][]
-    - {static} final TAILLE_CELLULE : int
     + VuePrincipaleNonInteractive()
     - init(): void
     # updatePositions(): void
     + update(Jeu): void
     + updateIteration(): void
     + setPositions(Position, ImageView): void
+  }
+  class VueMenus{
+    - {static} WIDTH : double
+    - {static} HEIGHT : double
+    # primaryStage: Stage
+    - choixPersonnage : String
+    + VueMenus(MoteurJeu)
+    + VueMenus()
+    - initPrimayStage(): void
+    - setScene(Scene, String): void
+    + afficherMenuPrincipal(): void
+    + afficherMenuPersonnage(): void
+    + afficherJeu(Jeu, Pane, Scene): void
+    + afficherMenuIA(): void
+    + getChoixPersonnage(): String
+    + setChoixPersonnage(String): void
+  }
+  class VueMenusNonInteractive{
+    - {static} WIDTH : double
+    - {static} HEIGHT : double
+    + VuePrincipaleNonInteractive(MoteurJeu)
+    + afficherMenuIA(Stage): void
   }
 }
 
@@ -279,32 +298,18 @@ package "main"{
   }
 }
 
-Bayesien "1" --> "*" Case: casesValides
-Agent --|> Personnage
-Joueur --|> Personnage
-Personnage "1" --> "1" Position : position
+Clavier "1" --> "1" Simulation : simulation
+ClavierNonInteractif "1" --> "1" Simulation : simulation
+Jeu <|.. Simulation
 MoteurJeu --|> Application
 MoteurJeu "1" --> "1" Jeu: jeu
-Simulation "1" --> "*" DessinJeu : observateurs
-DessinJeu <|.. VuePrincipale
-VuePrincipale --|> VueSimulation
-VueBayesienne --|> VueSimulation
-VuePrincipaleNonInteractive --|> VueSimulation
-VuePrincipaleNonInteractive ..|> DessinJeu
-VueBayesienne "1"-->"1" Simulation : simulation
-VuePrincipale "1"-->"1" Simulation : simulation
-VueBayesienne "1"-->"1" Personnage : perso
-Simulation "1" --> "1" Personnage: gardien
-Simulation "1" --> "1" Personnage: prisonnier
-Simulation "1" --> "1" Comportement: comportementGardien
-Simulation "1" --> "1" Comportement: comportementPrisonnier
-Clavier "1" --> "1" Simulation : simulation
-Jeu <|.. Simulation
-Couche "1" --> "*" Neurone : neurones
-Sigmoide ..|> FonctionActivation
+
+ReseauDeNeurones "1" --> "1" Simulation : simulation
+ReseauDeNeurones "1" --> "1" Personnage : personnage
 ReseauDeNeurones ..|> Comportement
-ReseauDeNeurones "1" --> "*" Couche: couches
-ReseauDeNeurones "1" --> "1" FonctionActivation: fonctionActivation
+Aleatoire "1" --> "1" Simulation : simulation
+Aleatoire "1" --> "1" Personnage : perso
+Aleatoire ..|> Comportement
 ArbreDecisionPrisonnier --|> ArbreDecision
 ArbreDecisionGardien --|> ArbreDecision
 ArbreDecisionPrisonnier ..|> Comportement
@@ -313,5 +318,41 @@ ArbreDecisionPrisonnier "1" --> "1" Simulation: simulation
 ArbreDecisionPrisonnier "1" --> "1" Personnage: personnage
 ArbreDecisionGardien "1" --> "1" Simulation: simulation
 ArbreDecisionGardien "1" --> "1" Personnage: personnage
+ArbreDecisionGardienAleatoire "1" --> "1" Simulation: simulation
+ArbreDecisionGardienAleatoire "1" --> "1" Personnage: personnage
+ArbreDecisionGardienAleatoire ..|> Comportement
+ArbreDecisionGardienAleatoire --|> ArbreDecision
+ArbreDecisionPrisonnier2 "1" --> "1" Simulation: simulation
+ArbreDecisionPrisonnier2 "1" --> "1" Personnage: personnage
+ArbreDecisionPrisonnier2 --|> ArbreDecision
+ArbreDecisionPrisonnier2 ..|> Comportement
+
+
+
+Bayesien "1" --> "*" Case: casesValides
+Agent --|> Personnage
+Joueur --|> Personnage
+Personnage "1" --> "1" Position : position
+
+
+Simulation "1" --> "*" DessinJeu : observateurs
+Simulation "1" --> "1" Personnage: gardien
+Simulation "1" --> "1" Personnage: prisonnier
+Simulation "1" --> "1" Comportement: comportementGardien
+Simulation "1" --> "1" Comportement: comportementPrisonnier
+
+DessinJeu <|.. VuePrincipale
+VuePrincipale --|> VueSimulation
+VueBayesienne --|> VueSimulation
+VuePrincipaleNonInteractive --|> VueSimulation
+VuePrincipaleNonInteractive ..|> DessinJeu
+VueBayesienne "1"-->"1" Simulation : simulation
+VuePrincipale "1"-->"1" Simulation : simulation
+VuePrincipaleNonInteractive "1"-->"1" Simulation : simulation
+VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB1
+VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB2
+VueBayesienne "1"-->"1" Personnage : perso
+
+
 
 @enduml

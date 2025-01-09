@@ -298,9 +298,6 @@ public class Simulation implements Jeu {
             historiqueDeplacement.get(prisonnier).add(d1);
             historiqueDeplacement.get(gardien).add(d2);
 
-            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
-            historiquePosition.get(gardien).add(gardien.getPosition());
-
             var cartebay = bayesiens.get(gardien).getCarteBayesienne().clone();
             historiqueBayesien.get(gardien).add(cartebay);
             var cartebay2 = bayesiens.get(prisonnier).getCarteBayesienne().clone();
@@ -310,11 +307,14 @@ public class Simulation implements Jeu {
             miseAJourFinJeu();
             deplacerPersonnage(this.gardien, d2);
 
+            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+            historiquePosition.get(gardien).add(gardien.getPosition());
+
+
             this.nbTours++;
             //gestion des interactions et de la fin du jeu
             miseAJourFinJeu();
 
-            this.notifierObservateurs();
         }
         this.notifierObservateurs();
     }
@@ -364,9 +364,11 @@ public class Simulation implements Jeu {
 
         //gestion des interactions et de la fin du jeu
         miseAJourFinJeu();
-        this.notifierObservateurs();
         historiquePosition.get(joueur).add(joueur.getPosition());
         historiquePosition.get(agent).add(agent.getPosition());
+
+        this.notifierObservateurs();
+
 
     }
 
@@ -462,6 +464,9 @@ public class Simulation implements Jeu {
         nvPos.deplacement(d);
 
         if(p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+            return false;
+        }
+        if(p.equals(this.gardien) && nvPos.equals(getPosSortie())){
             return false;
         }
 

@@ -45,26 +45,4 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
 
     }
 
-    public Deplacement oppose(Deplacement d){
-        switch (d){
-            case HAUT:
-                return Deplacement.BAS;
-            case BAS:
-                return Deplacement.HAUT;
-            case GAUCHE:
-                return Deplacement.DROITE;
-            case DROITE:
-                return Deplacement.GAUCHE;
-            case DIAG_BAS_DROITE:
-                return Deplacement.DIAG_HAUT_GAUCHE;
-            case DIAG_BAS_GAUCHE:
-                return Deplacement.DIAG_HAUT_DROITE;
-            case DIAG_HAUT_DROITE:
-                return Deplacement.DIAG_BAS_GAUCHE;
-            case DIAG_HAUT_GAUCHE:
-                return Deplacement.DIAG_BAS_DROITE;
-
-        }
-        return Deplacement.AUCUN;
-    }
 }

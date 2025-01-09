@@ -1,43 +1,5 @@
 @startuml
-class Application
 
-
-package "moteur"{
-  Interface Jeu{
-    + init(): void
-    + etreFini(): boolean
-    + ajouterObservateur(DessinJeu): void
-    - notifierObservateurs(): void
-  }
-  class Clavier{
-    + handle(KeyEvent): void
-  }
-  class ClavierNonInteractif{
-    + handle(KeyEvent): void
-  }
-  class MoteurJeu{
-    + start(Stage): void
-  }
-}
-package "lancercalculs"{
-  class LancerCalculsChemins{
-    + main(): void
-  }
-  class LancerCalculsVision{
-      + main(): void
-  }
-  class LancerCalculsDataset{
-        + main(): void
-  }
-}
-package "outil"{
-    class ChargementCarte{
-        + {static} charger(String): int[][]
-    }
-    class Outil{
-      + {static} applatissement(double[][]): double[]
-    }
-}
 package "simulation"{
   enum Deplacement{
     HAUT
@@ -106,6 +68,7 @@ package "simulation"{
     - estFini : boolean
     - victoirePrisonnier : boolean
     - victoireGardien : boolean
+    - observateurs : ArrayList<DessinJeu>
     - carteBayesiennes : HashMap<Personnage, double[][]>
     - bayesiens : HashMap<Personnage, Bayesien>
     + {static} final CARTE : int[][]
@@ -184,125 +147,6 @@ package "simulation"{
   }
 }
 
-package "calculs"{
-  class CalculVision{
-    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
-    + {static} ecrireVision(): void
-    + {static} calculerCarteVision(): HashMap
-    + {static} calculerVision(int, int): ArrayList
-    + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
-    + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
-  }
-  class CalculChemins{
-    + {static} recupererChemin(): HashMap<List<Position>, Stack>
-    + {static} ecrireChemins(): void
-    + {static} calculerChemins(): HashMap<List<Position>,Stack>
-    + {static} isValid(int, int, Position): boolean
-    + {static} isUnblocked(int[][], int, int, Position): boolean
-    + {static} isDestination(Position, Position): boolean
-    + {static} calculateHValue(Position, Position): double
-    + {static} tracePath(Cell[][], Position): Stack
-    + {static} aStarSearch(int[][], int, int, Position, Position): Stack
-  }
-}
-
-package "affichage" {
-  Interface DessinJeu{
-    + update(Jeu): void
-  }
-  class VueSimulation{
-    # imageMur: Image
-    # imageSol : Image
-    # imageSortie : Image
-    # imagePrisonnier : Image
-    # imageGardien : Image
-    # prisonnierView : ImageView
-    # gardienView : ImageView
-    # TAILLE_CELLULE : int
-    + VueSimulation()
-    # initLabyrinthe(): void
-    # {abstract} setOpacityPersonnage(): void
-    # {abstract} updatePositions(): void
-    # setPositions(Position, ImageView): void
-  }
-  class FiltreBayesien{
-    + {static} initFiltre(double[][], int): Rectangle[][]
-    + {static} updateBayes(Rectangle[][], double[][])
-  }
-
-  class VuePrincipale{
-    - iterationLabel: Label
-    - filtreVision: Rectangle[][]
-    - tour: int
-    - caseBayesienneHisto : Rectangle[][]
-    + VuePrincipale()
-    - init(): void
-    + update(Jeu): void=
-    + updateIteration(): void
-    + initFiltreVision(): void
-    + setFiltreVision(): void
-    + historique(): void
-    + updateHistorique(): void
-
-  }
-
-  class VueBayesienne{
-      - persoView: ImageView
-      - imagePerso: Image
-      - caseBayesienne: Rectangle[][]
-      - tour: int
-      + VueBayesienne(Simulation, Personnage)
-      - init(): void
-      # updatePositions(): void
-      - updateBayes(): void
-      + update(int): void
-  }
-  class VuePrincipaleNonInteractive{
-    - iterationLabel : Label
-    - tour : int
-    - caseBayesienneHisto : Rectangle[][]
-    + VuePrincipaleNonInteractive()
-    - init(): void
-    # updatePositions(): void
-    + update(Jeu): void
-    + updateIteration(): void
-    + setPositions(Position, ImageView): void
-  }
-  class VueMenus{
-    - {static} WIDTH : double
-    - {static} HEIGHT : double
-    # primaryStage: Stage
-    - choixPersonnage : String
-    + VueMenus(MoteurJeu)
-    + VueMenus()
-    - initPrimayStage(): void
-    - setScene(Scene, String): void
-    + afficherMenuPrincipal(): void
-    + afficherMenuPersonnage(): void
-    + afficherJeu(Jeu, Pane, Scene): void
-    + afficherMenuIA(): void
-    + getChoixPersonnage(): String
-    + setChoixPersonnage(String): void
-  }
-  class VueMenusNonInteractive{
-    - {static} WIDTH : double
-    - {static} HEIGHT : double
-    + VuePrincipaleNonInteractive(MoteurJeu)
-    + afficherMenuIA(Stage): void
-  }
-}
-
-package "main"{
-  class Main{
-    + main(): void
-  }
-}
-
-Clavier "1" --> "1" Simulation : simulation
-ClavierNonInteractif "1" --> "1" Simulation : simulation
-Jeu <|.. Simulation
-MoteurJeu --|> Application
-MoteurJeu "1" --> "1" Jeu: jeu
 
 ReseauDeNeurones "1" --> "1" Simulation : simulation
 ReseauDeNeurones "1" --> "1" Personnage : personnage
@@ -334,25 +178,10 @@ Agent --|> Personnage
 Joueur --|> Personnage
 Personnage "1" --> "1" Position : position
 
-
-Simulation "1" --> "*" DessinJeu : observateurs
 Simulation "1" --> "1" Personnage: gardien
 Simulation "1" --> "1" Personnage: prisonnier
 Simulation "1" --> "1" Comportement: comportementGardien
 Simulation "1" --> "1" Comportement: comportementPrisonnier
-
-DessinJeu <|.. VuePrincipale
-VuePrincipale --|> VueSimulation
-VueBayesienne --|> VueSimulation
-VuePrincipaleNonInteractive --|> VueSimulation
-VuePrincipaleNonInteractive ..|> DessinJeu
-VueBayesienne "1"-->"1" Simulation : simulation
-VuePrincipale "1"-->"1" Simulation : simulation
-VuePrincipaleNonInteractive "1"-->"1" Simulation : simulation
-VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB1
-VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB2
-VueBayesienne "1"-->"1" Personnage : perso
-
 
 
 @enduml

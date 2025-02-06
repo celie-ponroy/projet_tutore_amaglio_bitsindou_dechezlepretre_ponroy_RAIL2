@@ -3,11 +3,14 @@ package affichage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -23,7 +26,7 @@ public class VueMenus {
 
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
-    private static  MoteurJeu jeu;
+    private static MoteurJeu jeu;
 
     protected Stage primaryStage; //scene
     private String choixPersonnage;
@@ -38,6 +41,7 @@ public class VueMenus {
 
     /**
      * constructeur avec paramètre jeu
+     *
      * @param j le moteur de jeu
      */
     public VueMenus(MoteurJeu j) {
@@ -57,6 +61,7 @@ public class VueMenus {
 
     /**
      * permet de changer la scene et son nom
+     *
      * @param scene la scene
      * @param title le titre de la scene
      */
@@ -101,8 +106,17 @@ public class VueMenus {
             vni.afficherMenuIA(this.primaryStage);
         });
 
+        //Bouton pour le mode analyse
+        Button modeAnalyse = new Button("Mode analyse");
+        modeAnalyse.setPrefSize(200, 100);
+        modeAnalyse.setOnAction(e -> {
+            //Affichage de la vue d'analyse
+            afficherAnalyse();
+
+        });
+
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse);
 
         //Bouton pour quitter l'application
         Button quitter = new Button("Quitter");
@@ -175,6 +189,7 @@ public class VueMenus {
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
+
     /**
      * Affiche le menu de choix de la difficulté de l'IA
      */
@@ -199,13 +214,13 @@ public class VueMenus {
         //Création de la combobox pour le choix de la difficulté en fonction du personnage séléctionné
         ComboBox<String> comboBox = new ComboBox<>();
         //si le choix du personnage de l'utilisateur est le prisonnier, on adapte la combobox
-        if (choixPersonnage == "Prisonnier"){ //si l'utilisateur joue le prisonnier
+        if (choixPersonnage == "Prisonnier") { //si l'utilisateur joue le prisonnier
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision aléatoire");
             comboBox.getItems().add("Comportement aléatoire");
             comboBox.getItems().add("Réseau de neurones 1.0");
-        }else{ //si l'utilisateur joue le gardien
+        } else { //si l'utilisateur joue le gardien
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision déterministe 2.0");
@@ -246,20 +261,20 @@ public class VueMenus {
                     }
                     break;
                 case "Arbre de décision déterministe 2.0":
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ArbreDeterministev2);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
+                    //on change le nom de la scene
+                    setScene(scene, "Simulation interactive");
+                    simulation = new Simulation(false, Comportements.ArbreDeterministev2);
+                    MoteurJeu.jeu = simulation;
+                    //Affichage du jeu
+                    afficherJeu(MoteurJeu.jeu, root, scene);
                     break;
                 case "Arbre de décision aléatoire":
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ArbreAleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
+                    //on change le nom de la scene
+                    setScene(scene, "Simulation interactive");
+                    simulation = new Simulation(true, Comportements.ArbreAleatoire);
+                    MoteurJeu.jeu = simulation;
+                    //Affichage du jeu
+                    afficherJeu(MoteurJeu.jeu, root, scene);
                     break;
                 case "Comportement aléatoire":
                     if (choixPersonnage == "Prisonnier") {
@@ -317,17 +332,53 @@ public class VueMenus {
 
     /**
      * Permet de récupérer le choix de personnage de l'utilisateur
+     *
      * @return le choix du personnage
      */
-    public String getChoixPersonnage(){
+    public String getChoixPersonnage() {
         return this.choixPersonnage;
     }
 
     /**
      * Permet de changer le choix de personnage de l'utilisateur
+     *
      * @param choixPersonnage le choix du personnage
      */
-     public void setChoixPersonnage(String choixPersonnage) {
-         this.choixPersonnage = choixPersonnage;
-     }
+    public void setChoixPersonnage(String choixPersonnage) {
+        this.choixPersonnage = choixPersonnage;
+    }
+
+    /**
+     * Méthode permettant de lancer la vue analyse
+     */
+    public void afficherAnalyse() {
+        VueAnalyse va = new VueAnalyse();
+
+        // Création d'un GridPane
+        GridPane grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
+        grid.setHgap(800); //espacement horizontal entre les éléments
+        grid.setVgap(100); //espacement vertical entre les éléments
+
+        // Affichage et positionnement des graphiques
+        PieChart pieChart = va.graphiqueCamembert();
+        LineChart<String, Number> lineChart = va.graphiqueCourbes();
+
+        // Ajout des graphiques au GridPane
+        grid.add(pieChart, 1, 0);
+        grid.add(lineChart, 0, 0);
+
+        // Définition de la scène SANS taille initiale (évite le redimensionnement)
+        primaryStage.setScene(new Scene(grid));
+
+        // Activation du plein écran AVANT d'afficher la scène
+        primaryStage.setFullScreen(true);
+
+        // Maintenant, on affiche la scène directement en plein écran
+        primaryStage.show();
+
+        // On change le titre de la fenêtre
+        primaryStage.setTitle("Analyse des données");
+    }
+
 }

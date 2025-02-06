@@ -299,20 +299,20 @@ public class Simulation implements Jeu {
             historiqueDeplacement.get(gardien).add(d2);
 
             var cartebay = bayesiens.get(gardien).getCarteBayesienne().clone();
-            historiqueBayesien.get(gardien).add(cartebay);
             var cartebay2 = bayesiens.get(prisonnier).getCarteBayesienne().clone();
+
+            historiqueBayesien.get(gardien).add(cartebay);
             historiqueBayesien.get(prisonnier).add(cartebay2);
+
+            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+            historiquePosition.get(gardien).add(gardien.getPosition());
 
             deplacerPersonnage(this.prisonnier, d1);
             miseAJourFinJeu();
             deplacerPersonnage(this.gardien, d2);
 
-            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
-            historiquePosition.get(gardien).add(gardien.getPosition());
-
-
             this.nbTours++;
-            //gestion des interactions et de la fin du jeu
+
             miseAJourFinJeu();
 
         }
@@ -358,7 +358,6 @@ public class Simulation implements Jeu {
 
         actualisationBayesienne(agent, joueur);
 
-
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
         historiqueBayesien.get(agent).add(cartebay);
 
@@ -375,7 +374,6 @@ public class Simulation implements Jeu {
     /**
      * Mise à jour fin du jeu
      */
-
     public void miseAJourFinJeu() {
         if (nbTours >= 100)
             this.estFini = true;

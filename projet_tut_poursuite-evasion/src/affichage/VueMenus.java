@@ -106,6 +106,8 @@ public class VueMenus {
 
         //Bouton pour quitter l'application
         Button quitter = new Button("Quitter");
+        quitter.getStyleClass().add("important");
+
         quitter.setPrefSize(150, 50);
         quitter.setOnAction(e -> this.primaryStage.close());
 

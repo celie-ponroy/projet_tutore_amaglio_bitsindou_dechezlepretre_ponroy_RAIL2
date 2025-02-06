@@ -1,5 +1,6 @@
 package affichage;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,7 +18,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
-    private Rectangle[][] caseBayesienneHisto;
     private VueBayesienne vB1,vB2;
 
 
@@ -36,11 +36,11 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         // Ajout d'une VBox pour afficher le nombre d'itérations sous le labyrinthe
         VBox vbox = new VBox();
         vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + 100);
+        vbox.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setStyle("-fx-font-size: 11px;");
-
         vbox.getChildren().add(this.iterationLabel);
+
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
         if (!this.getChildren().contains(vbox)) {
@@ -49,8 +49,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
         //Ajout de la vbox de l'iteration au Pane
         labyPane.getChildren().add(vbox);
+        labyPane.setStyle("-fx-border-color: black; -fx-padding: 10;");
 
-        //
         // Création des deux vues bayésiennes dans des VBox distinctes
 
         //Création des vues bayesiennes
@@ -82,29 +82,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
     }
 
-    /**
-     * Crée la vue du labyrinthe et l'entoure avec des informations supplémentaires.
-     */
-    private VBox createLabyrintheView() {
-        VBox labyrintheVBox = new VBox();
-        labyrintheVBox.setSpacing(10); // Espacement entre les éléments de la VBox
-        labyrintheVBox.setAlignment(Pos.TOP_CENTER);
-
-        // Initialisation du labyrinthe
-        Pane labyPane = initLabyrinthe();
-
-        // Ajout du labyrinthe à la VBox
-        labyrintheVBox.getChildren().add(labyPane);
-
-        // Ajout d'un label pour le nombre d'itérations
-        this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        labyrintheVBox.getChildren().addAll(this, iterationLabel); // Ajouter le labyrinthe et le label
-
-        // Style
-        labyrintheVBox.setStyle("-fx-border-color: darkgrey; -fx-padding: 10;");
-
-        return labyrintheVBox;
-    }
 
     /**
      * Crée une vue Bayesienne associée à un personnage.
@@ -175,7 +152,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             });
 
             javafx.scene.control.Button retourMenuBtn = new Button("Revenir au menu principal");
-            retourMenuBtn.setPrefSize(200, 75);
+            retourMenuBtn.setPrefSize(410, 75);
+            retourMenuBtn.getStyleClass().add("important");
             retourMenuBtn.setOnAction(e -> {
                 //Ferme la fenetre actuelle
                 Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
@@ -184,15 +162,19 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 VueMenus vm = new VueMenus();
                 vm.afficherMenuPrincipal();
             });
+            retourMenuBtn.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
+            retourMenuBtn.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*7);
 
             //ajout des boutons
             HBox hboxBouttons = new HBox();
-            hboxBouttons.setLayoutX(10);
-            hboxBouttons.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length);
+            hboxBouttons.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
+            hboxBouttons.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*3);
+            hboxBouttons.setSpacing(10);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
-            hboxBouttons.getChildren().add(retourMenuBtn);
             this.getChildren().add(hboxBouttons);
+            this.getChildren().add(retourMenuBtn);
+
         }
     }
 

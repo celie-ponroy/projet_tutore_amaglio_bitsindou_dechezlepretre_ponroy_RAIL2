@@ -1,5 +1,6 @@
 package affichage;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
@@ -17,6 +20,7 @@ import simulation.personnages.Position;
 import java.util.Arrays;
 
 public class VuePrincipale extends VueSimulation implements DessinJeu {
+    private static final Logger log = LoggerFactory.getLogger(VuePrincipale.class);
     private Simulation simulation;
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
@@ -28,7 +32,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     //constructeur
     public VuePrincipale(){
         super();
-        TAILLE_CELLULE = 50;
+        TAILLE_CELLULE = 40;
 
     }
 
@@ -36,11 +40,13 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
-        this.getChildren().add(initLabyrinthe());
+        var laby = initLabyrinthe();
+        this.getChildren().add(laby);
+
         //affichage itération
         VBox vbox = new VBox();
         vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
+        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setStyle("-fx-font-size: 11px;");
         vbox.getChildren().add(this.iterationLabel);
@@ -50,7 +56,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStroke(Color.DARKGREY);
         rectangle.setLayoutX(10);
-        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
+        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
         this.getChildren().add(rectangle);
     }
 
@@ -90,7 +96,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        System.out.println(this.simulation);
 
         if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé
@@ -240,7 +245,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         });
 
         Button retourMenuBtn = new Button("Revenir au menu principal");
-        retourMenuBtn.setPrefSize(200, 75);
+        retourMenuBtn.getStyleClass().add("important");
+        retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
@@ -249,12 +255,14 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             VueMenus vm = new VueMenus();
             vm.afficherMenuPrincipal();
         });
+
         HBox hboxBouttons = new HBox();
-        hboxBouttons.setLayoutX(10);
-        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length);
+        hboxBouttons.setLayoutX(TAILLE_CELLULE*3);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*2);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
         hboxBouttons.getChildren().add(retourMenuBtn);
+        hboxBouttons.setSpacing(30);
         this.getChildren().add(hboxBouttons);
     }
     /**

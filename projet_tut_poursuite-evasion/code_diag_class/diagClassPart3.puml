@@ -29,8 +29,11 @@ package "calculs"{
     + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
     + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
   }
-  class CalculChemins{
-    + {static} recupererChemin(): HashMap<List<Position>, Stack>
+  class CalculChemins {
+    - {static} carte : int[][]
+    + {static} lirefichier(String): HashMap<List<Position>,Stack>
+    + {static} recupererCheminPrisonnier(): HashMap<List<Position>,Stack>
+    + {static} recupererCheminGardien(): HashMap<List<Position>,Stack>
     + {static} ecrireChemins(): void
     + {static} calculerChemins(): HashMap<List<Position>,Stack>
     + {static} isValid(int, int, Position): boolean

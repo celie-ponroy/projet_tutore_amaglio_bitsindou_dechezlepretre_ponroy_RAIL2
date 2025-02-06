@@ -1,7 +1,5 @@
 package outils;
 
-import simulation.comportement.ReseauDeNeurones;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;

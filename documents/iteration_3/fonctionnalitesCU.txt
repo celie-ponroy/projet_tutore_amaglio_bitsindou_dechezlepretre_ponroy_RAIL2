@@ -1,4 +1,4 @@
-Itération n°3:
+Itération n°3 (attention installer Neuroph !):
 
 - Arbre de décision du Prisonnier amélioré (Arbre de décision 2) (Célie)
 	Le premier arbre de décision était trop simple, nous avons donc améliorer sa façon 

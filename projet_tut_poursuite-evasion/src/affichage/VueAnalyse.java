@@ -35,7 +35,7 @@ public class VueAnalyse {
         lineChart.setTitle("Évolution du nombre de personnes");
 
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Nombre de personnes");
+        lineChart.setLegendVisible(false); //cache la légende
         series.getData().add(new XYChart.Data<>("Janvier", 100));
         series.getData().add(new XYChart.Data<>("Février", 200));
         series.getData().add(new XYChart.Data<>("Mars", 50));

@@ -23,7 +23,7 @@ public abstract class VueSimulation extends Pane {
     private Pane labyrinthePane;// Taille des cases du labyrinthe
 
 
-    VueSimulation(){
+    VueSimulation() {
         this.imageMur = new Image("file:images/murs.png");
         this.imageSol = new Image("file:images/sol.png");
         this.imageSortie = new Image("file:images/sortie.png");
@@ -36,7 +36,7 @@ public abstract class VueSimulation extends Pane {
      * Initialise le labyrinthe et les personnages
      */
 
-    protected Pane initLabyrinthe() {
+    protected Pane initLabyrinthe(boolean withPerso) {
         // Création d'un conteneur pour le labyrinthe
         labyrinthePane = new Pane();
         labyrinthePane.setPrefSize(TAILLE_CELLULE * Simulation.CARTE[0].length,
@@ -79,22 +79,24 @@ public abstract class VueSimulation extends Pane {
             }
         }
 
-        // Initialisation des personnages
-        prisonnierView = new ImageView(imagePrisonnier);
-        prisonnierView.setFitWidth(TAILLE_CELLULE);
-        prisonnierView.setFitHeight(TAILLE_CELLULE);
+        if (withPerso) {
+            // Initialisation des personnages
+            prisonnierView = new ImageView(imagePrisonnier);
+            prisonnierView.setFitWidth(TAILLE_CELLULE);
+            prisonnierView.setFitHeight(TAILLE_CELLULE);
 
-        gardienView = new ImageView(imageGardien);
-        gardienView.setFitWidth(TAILLE_CELLULE);
-        gardienView.setFitHeight(TAILLE_CELLULE);
+            gardienView = new ImageView(imageGardien);
+            gardienView.setFitWidth(TAILLE_CELLULE);
+            gardienView.setFitHeight(TAILLE_CELLULE);
 
-        setOpacityPersonnage();
+            setOpacityPersonnage();
 
-        // Ajouter les personnages au conteneur labyrinthe
-        labyrinthePane.getChildren().addAll(prisonnierView, gardienView);
+            // Ajouter les personnages au conteneur labyrinthe
+            labyrinthePane.getChildren().addAll(prisonnierView, gardienView);
 
-        // Placement initial des personnages
-        updatePositions();
+            // Placement initial des personnages
+            updatePositions();
+        }
 
         return labyrinthePane;
     }
@@ -104,6 +106,7 @@ public abstract class VueSimulation extends Pane {
      * Methode qui change l'opacité des personnages selon certains criteres
      */
     protected abstract void setOpacityPersonnage();
+
     /**
      * Met à jour uniquement les positions des personnages
      */
@@ -111,6 +114,7 @@ public abstract class VueSimulation extends Pane {
 
     /**
      * Met à jour l'image en fonction de la position
+     *
      * @param p
      * @param im
      */

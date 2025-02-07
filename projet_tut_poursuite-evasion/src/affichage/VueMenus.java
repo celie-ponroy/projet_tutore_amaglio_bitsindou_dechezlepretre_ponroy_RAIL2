@@ -1,19 +1,21 @@
 package affichage;
 
+import ch.qos.logback.core.subst.Node;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Line;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
@@ -21,8 +23,11 @@ import moteur.Jeu;
 import moteur.MoteurJeu;
 import simulation.Comportements;
 import simulation.Simulation;
+import javafx.scene.image.Image;
 
-public class VueMenus {
+import java.awt.*;
+
+public class VueMenus extends VueSimulation {
 
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
@@ -57,6 +62,17 @@ public class VueMenus {
     public VueMenus() {
         initPrimaryStage();
         this.choixPersonnage = "";
+    }
+
+    @Override
+    protected void setOpacityPersonnage() {
+        this.gardienView.setOpacity(0);
+        this.prisonnierView.setOpacity(0);
+    }
+
+    @Override
+    protected void updatePositions() {
+
     }
 
     /**
@@ -354,31 +370,96 @@ public class VueMenus {
     public void afficherAnalyse() {
         VueAnalyse va = new VueAnalyse();
 
-        // Création d'un GridPane
+        // GridPane légende
+        GridPane gridLegende = new GridPane();
+        gridLegende.setMaxWidth(Region.USE_PREF_SIZE);
+        gridLegende.setMaxHeight(Region.USE_PREF_SIZE);
+        gridLegende.setHgap(10);
+        gridLegende.setPadding(new Insets(25, 25, 25, 25));
+
+        // Ajout des éléments à la légende
+        ImageView prisonnierView = new ImageView(new Image("file:images/prisonnier.png"));
+        ImageView gardienView = new ImageView(new Image("file:images/gardien.png"));
+
+        // Dimensions des images
+        prisonnierView.setFitWidth(80);
+        prisonnierView.setFitHeight(80);
+        gardienView.setFitWidth(80);
+        gardienView.setFitHeight(80);
+
+        Label legendeLabel = new Label("Légende");
+        legendeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        gridLegende.add(legendeLabel, 1, 0);
+        gridLegende.add(prisonnierView, 0, 1);
+        gridLegende.add(gardienView, 0, 2);
+
+        // Création des lignes
+        Line lignePrisonnier = new Line(0, 0, 30, 0);
+        lignePrisonnier.setStyle("-fx-stroke: #0000FF;"); // bleu
+        lignePrisonnier.setStrokeWidth(3);
+        Line ligneGardien = new Line(0, 0, 30, 0);
+        ligneGardien.setStyle("-fx-stroke: #FF0000;"); // rouge
+        ligneGardien.setStrokeWidth(3);
+
+        gridLegende.add(lignePrisonnier, 1, 1);
+        gridLegende.add(ligneGardien, 1, 2);
+
+        // Encadré d'un petit rectangle noir la légende
+        gridLegende.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 10px;");
+
+        // Création du GridPane pour les graphiques
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(800); //espacement horizontal entre les éléments
-        grid.setVgap(100); //espacement vertical entre les éléments
+        grid.setHgap(50);
 
-        // Affichage et positionnement des graphiques
         PieChart pieChart = va.graphiqueCamembert();
         LineChart<String, Number> lineChart = va.graphiqueCourbes();
 
-        // Ajout des graphiques au GridPane
-        grid.add(pieChart, 1, 0);
-        grid.add(lineChart, 0, 0);
+        // Ajout des graphiques
+        grid.add(pieChart, 0, 0);
+        grid.add(initLabyrinthe(false), 1, 0);
+        grid.add(lineChart, 2, 0);
 
-        // Définition de la scène SANS taille initiale (évite le redimensionnement)
-        primaryStage.setScene(new Scene(grid));
+        // Utilisation d'un BorderPane pour organiser la scène
+        BorderPane root = new BorderPane();
 
-        // Activation du plein écran AVANT d'afficher la scène
+        // HBox pour la légende, le texte centré et l'espace à droite
+        HBox topContainer = new HBox();
+        topContainer.setPadding(new Insets(20, 50, 10, 50));
+        topContainer.setSpacing(20);
+
+        // Créer un espace flexible pour forcer le centrage du texte
+        Region espaceGauche = new Region();
+        Region espaceDroite = new Region();
+        HBox.setHgrow(espaceGauche, Priority.ALWAYS);
+        HBox.setHgrow(espaceDroite, Priority.ALWAYS);
+
+        // Nombre d'itération centré
+        Label nbIteration = new Label("Nombre d'itérations : " + "57/100");
+        nbIteration.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        // Ajouter les éléments dans le HBox
+        topContainer.getChildren().addAll(gridLegende, espaceGauche, nbIteration, espaceDroite);
+
+        // Définir la barre supérieure de l'interface
+        root.setTop(topContainer);
+
+        // Légende en haut à gauche sans être collée au bord
+        BorderPane.setAlignment(gridLegende, Pos.TOP_LEFT);
+        BorderPane.setMargin(gridLegende, new Insets(50, 10, 10, 50));
+
+        // Mise en place du Grid pour les graphiques et le labyrinthe
+        root.setCenter(grid);
+
+        // Définition de la scène
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
-
-        // Maintenant, on affiche la scène directement en plein écran
+        primaryStage.setTitle("Analyse des données"); 
         primaryStage.show();
-
-        // On change le titre de la fenêtre
-        primaryStage.setTitle("Analyse des données");
     }
+
+
 
 }

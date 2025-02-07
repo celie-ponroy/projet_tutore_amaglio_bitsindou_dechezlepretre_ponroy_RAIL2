@@ -177,7 +177,7 @@ public class Simulation implements Jeu {
                 default:
                     break;
             }
-            bayesiens.put(this.gardien,new Bayesien());
+            bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(gardien).clone());
@@ -208,7 +208,7 @@ public class Simulation implements Jeu {
                     break;
             }
 
-            bayesiens.put(this.prisonnier,new Bayesien());
+            bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(prisonnier).clone());
@@ -463,10 +463,10 @@ public class Simulation implements Jeu {
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
 
-        if(p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+        if (p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
             return false;
         }
-        if(p.equals(this.gardien) && nvPos.equals(getPosSortie())){
+        if (p.equals(this.gardien) && nvPos.equals(getPosSortie())) {
             return false;
         }
 
@@ -561,7 +561,7 @@ public class Simulation implements Jeu {
     /**
      * Methode permettant de recuperer le nombre de tours actuels
      *
-     * @return
+     * @return le nolbre de tours
      */
     public int getNbTours() {
         return this.nbTours;

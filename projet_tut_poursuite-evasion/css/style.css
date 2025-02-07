@@ -32,3 +32,10 @@
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, #edebeb;
 
 }
+.important{
+    -fx-background-color:  #C95050
+}
+.important:hover{
+    -fx-background-color: #B34040;
+
+}

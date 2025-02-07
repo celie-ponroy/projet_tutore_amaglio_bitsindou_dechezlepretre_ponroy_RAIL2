@@ -17,7 +17,6 @@ import simulation.personnages.Position;
 import java.util.Arrays;
 
 public class VuePrincipale extends VueSimulation implements DessinJeu {
-    private Simulation simulation;
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
     private int tour;
@@ -28,19 +27,21 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     //constructeur
     public VuePrincipale(){
         super();
-        TAILLE_CELLULE = 50;
-
+        TAILLE_CELLULE = 40;
     }
 
     /**
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
-        this.getChildren().add(initLabyrinthe());
+        var laby = initLabyrinthe();
+        this.getChildren().add(laby);
+
+
         //affichage itération
         VBox vbox = new VBox();
         vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
+        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setStyle("-fx-font-size: 11px;");
         vbox.getChildren().add(this.iterationLabel);
@@ -50,7 +51,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         rectangle.setFill(Color.TRANSPARENT);
         rectangle.setStroke(Color.DARKGREY);
         rectangle.setLayoutX(10);
-        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+100);
+        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
         this.getChildren().add(rectangle);
     }
 
@@ -90,38 +91,22 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        System.out.println(this.simulation);
 
         if (this.getChildren().isEmpty()) {
             // Si le labyrinthe n'est pas encore initialisé
             init();
             initFiltreVision();
+            setOpacityPersonnage();
+
 
         } else {
             // Sinon, il met juste a jour les positions des personnages
+            updateDirections(this.simulation.getNbTours()-1);
             updatePositions();
             updateIteration();
-
+            setOpacityPersonnage();
 
             setFiltreVision();
-            //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
-            Personnage p1 = simulation.getGardien();
-            Personnage p2 = simulation.getPrisonnier();
-            ImageView imageP2 = prisonnierView;
-
-
-            if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
-                p1 = simulation.getPrisonnier();
-                p2 = simulation.getGardien();
-                imageP2 = gardienView;
-            }
-
-            //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
-            if (p1.getVision().contains(p2.getPosition())) {
-                imageP2.setOpacity(1);
-            } else {
-                imageP2.setOpacity(0);
-            }
 
         }
 
@@ -240,7 +225,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         });
 
         Button retourMenuBtn = new Button("Revenir au menu principal");
-        retourMenuBtn.setPrefSize(200, 75);
+        retourMenuBtn.getStyleClass().add("important");
+        retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
@@ -249,12 +235,14 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             VueMenus vm = new VueMenus();
             vm.afficherMenuPrincipal();
         });
+
         HBox hboxBouttons = new HBox();
-        hboxBouttons.setLayoutX(10);
-        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length);
+        hboxBouttons.setLayoutX(TAILLE_CELLULE*3);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*2);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
         hboxBouttons.getChildren().add(retourMenuBtn);
+        hboxBouttons.setSpacing(30);
         this.getChildren().add(hboxBouttons);
     }
     /**
@@ -271,6 +259,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             tour=taille-1;
             this.iterationLabel.setText("Fin");
         }
+        updateDirections(tour);
         //on mets a jour la carte bayesienne
         Personnage agent = simulation.getPrisonnier();
         if(simulation.getJoueur()==simulation.getPrisonnier())

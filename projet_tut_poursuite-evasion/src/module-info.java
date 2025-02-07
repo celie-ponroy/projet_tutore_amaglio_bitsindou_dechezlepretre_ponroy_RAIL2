@@ -5,6 +5,7 @@ module com.example.projet_tut_poursuiteevasion {
     requires ai.djl.api;
     requires ai.djl.basicdataset;
     requires org.apache.commons.csv;
+    requires ai.djl.model_zoo;
 
     opens moteur to javafx.fxml;
     exports moteur;

@@ -2,18 +2,32 @@ package simulation.comportement;
 
 import ai.djl.MalformedModelException;
 import ai.djl.Model;
+import ai.djl.modality.Classifications;
+import ai.djl.modality.cv.Image;
+import ai.djl.modality.cv.util.NDImageUtils;
+import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDList;
+import ai.djl.ndarray.NDManager;
+import ai.djl.translate.Batchifier;
+import outils.Outil;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
+import ai.djl.training.dataset.Record;
+import ai.djl.translate.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ReseauDeNeurones implements Comportement {
     Simulation sim;
     Personnage personnage;
     Model model;
+    private Translator<NDArray, Integer> translator;
 
     public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) throws MalformedModelException, IOException {
         this.sim = simulation;
@@ -22,10 +36,34 @@ public class ReseauDeNeurones implements Comportement {
         Path modelDir = Paths.get("donnes/mlp/" + nomReseau);
         model = Model.newInstance("mlp");
         model.load(modelDir);
+
+        this.translator =  new Translator<NDArray, Integer>() {
+            @Override
+            public NDList processInput(TranslatorContext ctx, NDArray input) {
+                // L'entrée est déjà un NDArray, on le met simplement dans un NDList
+                return new NDList(input);
+            }
+
+            @Override
+            public Integer processOutput(TranslatorContext ctx, NDList list) {
+                // Trouver l'index de la probabilité la plus haute
+                NDArray probabilities = list.singletonOrThrow().softmax(0);
+                return probabilities.argMax().getInt();
+            }
+
+            @Override
+            public Batchifier getBatchifier() {
+                return Batchifier.STACK;
+            }
+        };
     }
 
     @Override
-    public Deplacement prendreDecision() {
-        return null;
+    public Deplacement prendreDecision() throws TranslateException {
+        var predictor = model.newPredictor(translator);
+        NDManager manager = NDManager.newBaseManager();
+        NDArray array = manager.create(Outil.applatissement(sim.getCarteBayesienne(sim.getGardien())));
+        Integer resultat = predictor.predict(array);
+        return Deplacement.values()[resultat];
     }
 }

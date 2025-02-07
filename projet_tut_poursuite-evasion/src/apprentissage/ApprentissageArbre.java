@@ -3,6 +3,7 @@ package apprentissage;
 
 import ai.djl.Application;
 import ai.djl.Model;
+import ai.djl.basicdataset.tabular.CsvDataset;
 import ai.djl.nn.Activation;
 import ai.djl.nn.Blocks;
 import ai.djl.nn.SequentialBlock;

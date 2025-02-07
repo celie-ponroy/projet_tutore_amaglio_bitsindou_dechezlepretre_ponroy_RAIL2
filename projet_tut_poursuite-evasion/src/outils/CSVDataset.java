@@ -1,4 +1,5 @@
 package outils;
+
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
@@ -8,13 +9,12 @@ import ai.djl.util.Progress;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import simulation.Simulation;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class CSVDataset extends RandomAccessDataset {
 
@@ -28,8 +28,14 @@ public class CSVDataset extends RandomAccessDataset {
     @Override
     public Record get(NDManager manager, long index) {
         CSVRecord record = csvRecords.get(Math.toIntExact(index));
-        NDArray bayesien = manager.create(encode(record.get("map")));
+
+        // Conversion de la colonne "map" en un tableau de float
+        float[] mapValues = parseMap(record.get("map"));
+        NDArray bayesien = manager.create(mapValues);
+
+        // Conversion de "dep" en float
         NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
+
         return new Record(new NDList(bayesien), new NDList(dep));
     }
 
@@ -38,17 +44,13 @@ public class CSVDataset extends RandomAccessDataset {
         return csvRecords.size();
     }
 
-    // we encode the url String based on the count of the character from a to z.
-    private int[] encode(String url) {
-        url = url.toLowerCase();
-        int[] encoding = new int[26];
-        for (char ch : url.toCharArray()) {
-            int index = ch - 'a';
-            if (index < 26 && index >= 0) {
-                encoding[ch - 'a']++;
-            }
-        }
-        return encoding;
+    private float[] parseMap(String mapString) {
+        // Diviser la chaîne sur les virgules et convertir chaque élément en float
+        return Stream.of(mapString.split(","))
+                .mapToDouble(Double::parseDouble)
+                .collect(() -> new float[mapString.split(",").length],
+                        (arr, val) -> arr[arr.length - 1] = (float) val,
+                        (arr1, arr2) -> {});
     }
 
     @Override
@@ -59,10 +61,9 @@ public class CSVDataset extends RandomAccessDataset {
     }
 
     public static final class Builder extends BaseBuilder<Builder> {
-
         List<CSVRecord> csvRecords;
 
-        public Builder(){}
+        public Builder() {}
 
         @Override
         protected Builder self() {
@@ -73,13 +74,11 @@ public class CSVDataset extends RandomAccessDataset {
             String csvFilePath = "donnees/game_data.csv";
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
                  CSVParser csvParser =
-                         new CSVParser(
-                                 reader,
-                                 CSVFormat.DEFAULT
-                                         .withHeader("bayesien", "dep")
-                                         .withFirstRecordAsHeader()
-                                         .withIgnoreHeaderCase()
-                                         .withTrim())) {
+                         new CSVParser(reader, CSVFormat.DEFAULT
+                                 .withHeader("map", "dep")
+                                 .withFirstRecordAsHeader()
+                                 .withIgnoreHeaderCase()
+                                 .withTrim())) {
                 csvRecords = csvParser.getRecords();
             }
             return new CSVDataset(this);

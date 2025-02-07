@@ -389,10 +389,9 @@ public class VueMenus extends VueSimulation {
 
         Label legendeLabel = new Label("Légende");
         legendeLabel.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
-        gridLegende.add(legendeLabel, 1, 0);
-        gridLegende.add(prisonnierView, 0, 1);
-        gridLegende.add(gardienView, 0, 2);
+        
+        gridLegende.add(prisonnierView, 0, 0);
+        gridLegende.add(gardienView, 2, 0);
 
         // Création des lignes
         Line lignePrisonnier = new Line(0, 0, 30, 0);
@@ -402,8 +401,8 @@ public class VueMenus extends VueSimulation {
         ligneGardien.setStyle("-fx-stroke: #FF0000;"); // rouge
         ligneGardien.setStrokeWidth(3);
 
-        gridLegende.add(lignePrisonnier, 1, 1);
-        gridLegende.add(ligneGardien, 1, 2);
+        gridLegende.add(lignePrisonnier, 1, 0);
+        gridLegende.add(ligneGardien, 3, 0);
 
         // Encadré d'un petit rectangle noir la légende
         gridLegende.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 10px;");
@@ -411,49 +410,26 @@ public class VueMenus extends VueSimulation {
         // Création du GridPane pour les graphiques
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
-        grid.setHgap(50);
+        grid.setHgap(40);
+        grid.setVgap(200);
+
 
         PieChart pieChart = va.graphiqueCamembert();
         LineChart<String, Number> lineChart = va.graphiqueCourbes();
-
-        // Ajout des graphiques
-        grid.add(pieChart, 0, 0);
-        grid.add(initLabyrinthe(false), 1, 0);
-        grid.add(lineChart, 2, 0);
-
-        // Utilisation d'un BorderPane pour organiser la scène
-        BorderPane root = new BorderPane();
-
-        // HBox pour la légende, le texte centré et l'espace à droite
-        HBox topContainer = new HBox();
-        topContainer.setPadding(new Insets(20, 50, 10, 50));
-        topContainer.setSpacing(20);
-
-        // Créer un espace flexible pour forcer le centrage du texte
-        Region espaceGauche = new Region();
-        Region espaceDroite = new Region();
-        HBox.setHgrow(espaceGauche, Priority.ALWAYS);
-        HBox.setHgrow(espaceDroite, Priority.ALWAYS);
 
         // Nombre d'itération centré
         Label nbIteration = new Label("Nombre d'itérations : " + "57/100");
         nbIteration.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        // Ajouter les éléments dans le HBox
-        topContainer.getChildren().addAll(gridLegende, espaceGauche, nbIteration, espaceDroite);
-
-        // Définir la barre supérieure de l'interface
-        root.setTop(topContainer);
-
-        // Légende en haut à gauche sans être collée au bord
-        BorderPane.setAlignment(gridLegende, Pos.TOP_LEFT);
-        BorderPane.setMargin(gridLegende, new Insets(50, 10, 10, 50));
-
-        // Mise en place du Grid pour les graphiques et le labyrinthe
-        root.setCenter(grid);
+        // Ajout des graphiques
+        grid.add(gridLegende, 0, 0);
+        grid.add(nbIteration, 1, 0);
+        grid.add(pieChart, 0, 1);
+        grid.add(initLabyrinthe(false), 1, 1);
+        grid.add(lineChart, 2, 1);
 
         // Définition de la scène
-        Scene scene = new Scene(root);
+        Scene scene = new Scene(grid, WIDTH, HEIGHT);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.setTitle("Analyse des données");

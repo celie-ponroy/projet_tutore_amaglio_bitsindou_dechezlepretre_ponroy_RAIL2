@@ -9,7 +9,7 @@ public class DataCollector {
             for (double value : bayesianValues) {
                 sb.append(value).append(",");
             }
-            sb.append(x).append(y).append(",");
+            sb.append(x).append(",").append(y).append(",");
             sb.append(decisionMove).append("\n");
             writer.write(sb.toString());
         } catch (IOException e) {

@@ -456,7 +456,7 @@ public class VueMenus extends VueSimulation {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
-        primaryStage.setTitle("Analyse des données"); 
+        primaryStage.setTitle("Analyse des données");
         primaryStage.show();
     }
 

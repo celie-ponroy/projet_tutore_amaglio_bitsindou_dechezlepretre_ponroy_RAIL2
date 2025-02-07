@@ -4,12 +4,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
@@ -21,13 +23,19 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
     private int tour;
     private Rectangle[][] caseBayesienneHisto;
+    protected int DECALAGE;
 
 
 
     //constructeur
-    public VuePrincipale(){
+    public VuePrincipale(double width, double height) {
         super();
-        TAILLE_CELLULE = 40;
+        if(width<height){
+            TAILLE_CELLULE = (int) (width/ (Simulation.CARTE[0].length)*0.75);
+        }else{
+            TAILLE_CELLULE = (int) (height/ (Simulation.CARTE.length)*0.75);
+        }
+        DECALAGE = (int)width/2 ;
     }
 
     /**
@@ -35,24 +43,18 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      */
     private void init() {
         var laby = initLabyrinthe();
+        //au centre
+        laby.setLayoutX(DECALAGE);
         this.getChildren().add(laby);
 
 
         //affichage itération
-        VBox vbox = new VBox();
-        vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        iterationLabel.setStyle("-fx-font-size: 11px;");
-        vbox.getChildren().add(this.iterationLabel);
-        this.getChildren().add(vbox);
+        iterationLabel.setLayoutX(DECALAGE);
+        iterationLabel.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
+        iterationLabel.setStyle("-fx-font-size: 12px; -fx-border-color: black; -fx-padding: 10;");
+        this.getChildren().add(iterationLabel);
 
-        Rectangle rectangle = new Rectangle(150, 20);
-        rectangle.setFill(Color.TRANSPARENT);
-        rectangle.setStroke(Color.DARKGREY);
-        rectangle.setLayoutX(10);
-        rectangle.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*1);
-        this.getChildren().add(rectangle);
     }
 
     @Override
@@ -91,8 +93,10 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
+        //mise à jour du décalage en fonction de la carte
 
         if (this.getChildren().isEmpty()) {
+            DECALAGE -= simulation.CARTE[0].length*TAILLE_CELLULE/2;
             // Si le labyrinthe n'est pas encore initialisé
             init();
             initFiltreVision();
@@ -156,7 +160,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             for (int j = 0; j < simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
                 rectangle.setFill(Color.rgb(44, 88, 245));
-                rectangle.setLayoutX(j * TAILLE_CELLULE);
+                rectangle.setLayoutX(j * TAILLE_CELLULE+DECALAGE);
                 rectangle.setLayoutY(i * TAILLE_CELLULE);
                 this.filtreVision[j][i] = rectangle;
 
@@ -199,7 +203,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         if(simulation.getJoueur()==simulation.getPrisonnier())
             agent = simulation.getGardien();
 
-        caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.historiqueBayesien.get(agent).get(0),TAILLE_CELLULE);
+        caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.historiqueBayesien.get(agent).get(0),TAILLE_CELLULE,DECALAGE,0);
         for (Rectangle[] rect : caseBayesienneHisto) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
@@ -240,8 +244,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         });
 
         HBox hboxBouttons = new HBox();
-        hboxBouttons.setLayoutX(TAILLE_CELLULE*3);
-        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+TAILLE_CELLULE*2);
+        hboxBouttons.setLayoutX(DECALAGE);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+iterationLabel.getHeight()+15);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
         hboxBouttons.getChildren().add(retourMenuBtn);

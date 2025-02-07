@@ -1,5 +1,6 @@
 package lancercalculs;
 
+import ai.djl.translate.TranslateException;
 import outils.DataCollector;
 import outils.Outil;
 import simulation.Comportements;
@@ -11,7 +12,7 @@ import simulation.personnages.Position;
 import java.util.List;
 
 public class LancerCalculsDataSet {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws TranslateException {
         DataCollector.etiquettage("\"map\",\"dep\"");
         Simulation sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
         List<double[][]> bayesien;

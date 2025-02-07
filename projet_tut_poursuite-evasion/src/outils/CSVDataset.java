@@ -60,14 +60,14 @@ public class CSVDataset extends RandomAccessDataset {
 
         List<CSVRecord> csvRecords;
 
-        Builder(){}
+        public Builder(){}
 
         @Override
         protected Builder self() {
             return this;
         }
 
-        CSVDataset build() throws IOException {
+        public CSVDataset build() throws IOException {
             String csvFilePath = "donnees/game_data.csv";
             try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
                  CSVParser csvParser =

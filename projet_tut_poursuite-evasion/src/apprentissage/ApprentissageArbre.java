@@ -13,6 +13,8 @@ import ai.djl.training.Trainer;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
+import ai.djl.translate.TranslateException;
+import outils.CSVDataset;
 import simulation.Simulation;
 
 import java.io.IOException;
@@ -21,7 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ApprentissageArbre {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TranslateException {
 
         Application application = Application.Tabular.SOFTMAX_REGRESSION;
         long inputSize = Simulation.getTailleCarte()+2;
@@ -47,7 +49,8 @@ public class ApprentissageArbre {
 
         Trainer trainer = model.newTrainer(config);
         int epoch = 100;
-        EasyTrain.fit(trainer, epoch, mnist, null);
+        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32,false).build();
+        EasyTrain.fit(trainer, epoch, csvDataset, null);
 
         //enregistrement du model
         Path modelDir = Paths.get("donnes/mlp");

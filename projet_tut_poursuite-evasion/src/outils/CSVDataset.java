@@ -26,7 +26,7 @@ public class CSVDataset extends RandomAccessDataset {
     @Override
     public Record get(NDManager manager, long index) {
         CSVRecord record = csvRecords.get(Math.toIntExact(index));
-        NDArray bayesien = manager.create(Float.parseFloat(record.get("map")));
+        NDArray bayesien = manager.create(encode(record.get("map")));
         NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
         return new Record(new NDList(bayesien), new NDList(dep));
     }

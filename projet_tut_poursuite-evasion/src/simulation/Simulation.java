@@ -76,7 +76,11 @@ public class Simulation implements Jeu {
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                try {
+                    this.comportementGardien = new ReseauDeNeurones("", this, this.gardien);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
                 break;
             case Comportements.ReseauArbreAleatoire:
                 //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
@@ -177,7 +181,7 @@ public class Simulation implements Jeu {
                 default:
                     break;
             }
-            bayesiens.put(this.gardien,new Bayesien());
+            bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(gardien).clone());
@@ -208,7 +212,7 @@ public class Simulation implements Jeu {
                     break;
             }
 
-            bayesiens.put(this.prisonnier,new Bayesien());
+            bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(prisonnier).clone());
@@ -463,10 +467,10 @@ public class Simulation implements Jeu {
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
 
-        if(p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+        if (p.equals(this.prisonnier) && Simulation.CARTE[nvPos.getY()][nvPos.getX()] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
             return false;
         }
-        if(p.equals(this.gardien) && nvPos.equals(getPosSortie())){
+        if (p.equals(this.gardien) && nvPos.equals(getPosSortie())) {
             return false;
         }
 
@@ -590,6 +594,15 @@ public class Simulation implements Jeu {
             }
         }
         return new Position(0, 0);
+    }
+
+    /**
+     * Méthode qui calcule la taille de la carte
+     *
+     * @return taille de la carte
+     */
+    public static int getTailleCarte() {
+        return Simulation.CARTE.length * Simulation.CARTE[0].length;
     }
 
     /**

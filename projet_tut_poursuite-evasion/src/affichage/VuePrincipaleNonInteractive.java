@@ -18,14 +18,12 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private VueBayesienne vB1,vB2;
-    private int milieu_largeur;
 
 
     //constructeur
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
         TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
-        milieu_largeur = (int) width/2;
         this.tour = 0;
     }
 

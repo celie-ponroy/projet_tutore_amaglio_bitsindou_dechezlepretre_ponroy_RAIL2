@@ -24,7 +24,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     //constructeur
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
-        TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.40);
+        TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
         milieu_largeur = (int) width/2;
         this.tour = 0;
     }
@@ -35,24 +35,19 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private void init() {
         Pane labyPane = initLabyrinthe();
 
-        // Ajout d'une VBox pour afficher le nombre d'itérations sous le labyrinthe
-        VBox vbox = new VBox();
-        vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        iterationLabel.setStyle("-fx-font-size: 11px;");
-        vbox.getChildren().add(this.iterationLabel);
-        vbox.setStyle("-fx-border-color: black; -fx-padding: 10;");
-
+        iterationLabel.setLayoutX(10);
+        iterationLabel.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
+        iterationLabel.setStyle("-fx-font-size: 11px;-fx-border-color: black; -fx-padding: 10;");
 
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
-        if (!this.getChildren().contains(vbox)) {
-            this.getChildren().add(vbox);
+        if (!this.getChildren().contains(iterationLabel)) {
+            this.getChildren().add(iterationLabel);
         }
 
         //Ajout de la vbox de l'iteration au Pane
-        labyPane.getChildren().add(vbox);
+        labyPane.getChildren().add(iterationLabel);
 
         // Création des deux vues bayésiennes dans des VBox distinctes
 

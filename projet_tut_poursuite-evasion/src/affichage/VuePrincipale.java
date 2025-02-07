@@ -113,8 +113,11 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         //Pop up pour afficher la fin de la partie
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()){
-
-            if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
+            if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
+                alert.setHeaderText("Egalité !");
+                alert.setContentText("Le nombre de coup est dépassé !\n" +
+                        "Cliquez sur OK pour voir l'historique");
+            }else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
                 alert.setHeaderText("Félicitations !");
                 alert.setContentText("Vous avez gagné la partie !\n" +
                         "Cliquez sur OK pour voir l'historique");

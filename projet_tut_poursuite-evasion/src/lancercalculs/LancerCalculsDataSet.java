@@ -25,8 +25,7 @@ public class LancerCalculsDataSet {
             //on récupère les positions
             positions = sim.historiquePosition.get(sim.getGardien());
             System.out.println(bayesien.size()+" "+deplacements.size()+" "+positions.size());
-            deplacements.add(0, Deplacement.AUCUN);
-            for(int j = 0; j < bayesien.size(); j++){
+            for(int j = 0; j < deplacements.size(); j++){
                 //
                 double x = (double) (positions.get(j).getX()) /sim.CARTE[0].length;
                 double y = (double) (positions.get(j).getY()) /sim.CARTE.length;

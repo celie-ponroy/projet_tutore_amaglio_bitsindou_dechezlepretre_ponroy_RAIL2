@@ -21,6 +21,7 @@ public abstract class VueSimulation extends Pane {
     protected ImageView gardienView; // Vue pour le gardien
     protected int TAILLE_CELLULE = 25;
     private Pane labyrinthePane;// Taille des cases du labyrinthe
+    protected Simulation simulation;
 
 
     VueSimulation(){
@@ -35,7 +36,6 @@ public abstract class VueSimulation extends Pane {
     /**
      * Initialise le labyrinthe et les personnages
      */
-
     protected Pane initLabyrinthe() {
         // Création d'un conteneur pour le labyrinthe
         labyrinthePane = new Pane();
@@ -81,11 +81,11 @@ public abstract class VueSimulation extends Pane {
 
         // Initialisation des personnages
         prisonnierView = new ImageView(imagePrisonnier);
-        prisonnierView.setFitWidth(TAILLE_CELLULE);
+        prisonnierView.setPreserveRatio(true);
         prisonnierView.setFitHeight(TAILLE_CELLULE);
 
         gardienView = new ImageView(imageGardien);
-        gardienView.setFitWidth(TAILLE_CELLULE);
+        gardienView.setPreserveRatio(true);
         gardienView.setFitHeight(TAILLE_CELLULE);
 
         setOpacityPersonnage();
@@ -108,6 +108,65 @@ public abstract class VueSimulation extends Pane {
      * Met à jour uniquement les positions des personnages
      */
     protected abstract void updatePositions();
+
+    /**
+     * Mets à jour les directions des sprites personnages
+     */
+    protected void updateDirections(int tour){
+        var historiqueDeplacement = this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier());
+        if(historiqueDeplacement.isEmpty()) {
+            System.out.println("Historique de déplacement vide");
+            return;
+        }
+        if(this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
+            prisonnierView.setImage(new Image("file:images/prisonnier.png"));
+            gardienView.setImage(new Image("file:images/gardien.png"));
+            return;
+        }
+
+        switch (this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).get(tour)){
+            case HAUT:
+                prisonnierView.setImage(new Image("file:images/prisonnier_haut.png"));
+                break;
+            case BAS:
+                prisonnierView.setImage(new Image("file:images/prisonnier_bas.png"));
+                break;
+            case GAUCHE:
+            case DIAG_BAS_GAUCHE:
+            case DIAG_HAUT_GAUCHE:
+                prisonnierView.setImage(new Image("file:images/prisonnier_gauche.png"));
+                break;
+            case DROITE:
+            case DIAG_BAS_DROITE:
+            case DIAG_HAUT_DROITE:
+                prisonnierView.setImage(new Image("file:images/prisonnier_droite.png"));
+                break;
+            case AUCUN:
+                prisonnierView.setImage(new Image("file:images/prisonnier.png"));
+                break;
+        }
+        switch (this.simulation.historiqueDeplacement.get(this.simulation.getGardien()).get(tour)){
+            case HAUT:
+                gardienView.setImage(new Image("file:images/gardien_haut.png"));
+                break;
+            case BAS:
+                gardienView.setImage(new Image("file:images/gardien_bas.png"));
+                break;
+            case GAUCHE:
+            case DIAG_BAS_GAUCHE:
+            case DIAG_HAUT_GAUCHE:
+                gardienView.setImage(new Image("file:images/gardien_gauche.png"));
+                break;
+            case DROITE:
+            case DIAG_BAS_DROITE:
+            case DIAG_HAUT_DROITE:
+                gardienView.setImage(new Image("file:images/gardien_droite.png"));
+                break;
+            case AUCUN:
+                gardienView.setImage(new Image("file:images/gardien.png"));
+                break;
+        }
+    }
 
     /**
      * Met à jour l'image en fonction de la position

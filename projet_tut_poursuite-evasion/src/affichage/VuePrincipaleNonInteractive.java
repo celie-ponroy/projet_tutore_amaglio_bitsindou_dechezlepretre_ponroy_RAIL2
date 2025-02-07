@@ -14,7 +14,6 @@ import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
 public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu {
-    private Simulation simulation;
 
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
@@ -22,7 +21,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
 
     //constructeur
-    public VuePrincipaleNonInteractive(){
+    public VuePrincipaleNonInteractive() {
         super();
         this.tour = 0;
     }
@@ -40,6 +39,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setStyle("-fx-font-size: 11px;");
         vbox.getChildren().add(this.iterationLabel);
+        vbox.setStyle("-fx-border-color: black; -fx-padding: 10;");
+
 
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
@@ -49,7 +50,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
         //Ajout de la vbox de l'iteration au Pane
         labyPane.getChildren().add(vbox);
-        labyPane.setStyle("-fx-border-color: black; -fx-padding: 10;");
 
         // Création des deux vues bayésiennes dans des VBox distinctes
 
@@ -112,10 +112,12 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     protected void updatePositions() {
         // Met à jour la position du prisonnier
+
         Position p = simulation.historiquePosition.get(simulation.getPrisonnier()).get(tour);
         Position g = simulation.historiquePosition.get(simulation.getGardien()).get(tour);
         setPositions(p, prisonnierView);
         setPositions(g, gardienView);
+        updateDirections(tour);
     }
 
     /**
@@ -125,11 +127,14 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
+
         if(simulation.etreFini()){
             init();
+
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
             precedent.setOnAction(e -> {
+
                 if (tour > 0) {
                     tour -= 1;
                     updatePositions();

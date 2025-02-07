@@ -160,6 +160,7 @@ public class VueMenus {
         root2.getChildren().addAll(title2, buttonBox2);
 
         //Affichage de la scene et changement du titre de la fenêtre
+
         setScene(scene2, "Choix du personnage");
     }
 

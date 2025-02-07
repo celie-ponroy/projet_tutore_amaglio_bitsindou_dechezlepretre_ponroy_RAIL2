@@ -1,6 +1,5 @@
 package affichage;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -11,8 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
@@ -20,8 +17,6 @@ import simulation.personnages.Position;
 import java.util.Arrays;
 
 public class VuePrincipale extends VueSimulation implements DessinJeu {
-    private static final Logger log = LoggerFactory.getLogger(VuePrincipale.class);
-    private Simulation simulation;
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
     private int tour;
@@ -33,7 +28,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public VuePrincipale(){
         super();
         TAILLE_CELLULE = 40;
-
     }
 
     /**
@@ -42,6 +36,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     private void init() {
         var laby = initLabyrinthe();
         this.getChildren().add(laby);
+
 
         //affichage itération
         VBox vbox = new VBox();
@@ -101,32 +96,17 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             // Si le labyrinthe n'est pas encore initialisé
             init();
             initFiltreVision();
+            setOpacityPersonnage();
+
 
         } else {
             // Sinon, il met juste a jour les positions des personnages
+            updateDirections(this.simulation.getNbTours()-1);
             updatePositions();
             updateIteration();
-
+            setOpacityPersonnage();
 
             setFiltreVision();
-            //variable pour savoir si le joueur a choisi le personnage prisonnier ou gardien
-            Personnage p1 = simulation.getGardien();
-            Personnage p2 = simulation.getPrisonnier();
-            ImageView imageP2 = prisonnierView;
-
-
-            if(simulation.getJoueur().equals(simulation.getPrisonnier())) {//si le joueur choisit le personnage prisonnier
-                p1 = simulation.getPrisonnier();
-                p2 = simulation.getGardien();
-                imageP2 = gardienView;
-            }
-
-            //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
-            if (p1.getVision().contains(p2.getPosition())) {
-                imageP2.setOpacity(1);
-            } else {
-                imageP2.setOpacity(0);
-            }
 
         }
 
@@ -279,6 +259,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             tour=taille-1;
             this.iterationLabel.setText("Fin");
         }
+        updateDirections(tour);
         //on mets a jour la carte bayesienne
         Personnage agent = simulation.getPrisonnier();
         if(simulation.getJoueur()==simulation.getPrisonnier())

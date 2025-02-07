@@ -10,12 +10,11 @@ import simulation.personnages.Position;
 
 public class VueBayesienne extends VueSimulation {
 
-    private Simulation simulation;
     private ImageView persoView; // Vue pour le gardien
     private Personnage perso; // Personnage à afficher
     private Image imagePerso;
     private Rectangle[][] caseBayesienne;
-    private int tour = 0;
+    private int tour;
 
     /**
      * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
@@ -98,7 +97,10 @@ public class VueBayesienne extends VueSimulation {
      * Met à jour les probabilités bayesiennes uniquement du joueur
      */
     private void updateBayes() {
-        var carte = simulation.historiqueBayesien.get(this.perso).get(tour);
+        if(tour>=simulation.getNbTours()){
+            return;
+        }
+        var carte = simulation.historiqueBayesien.get(this.perso).get(tour+1);
         FiltreBayesien.updateBayes(caseBayesienne,carte);
     }
 
@@ -108,8 +110,47 @@ public class VueBayesienne extends VueSimulation {
      */
     public void update(int tour) {
         this.tour = tour;
+        updateDirections(tour);
         updatePositions();
         updateBayes();
     }
 
+    @Override
+    protected void updateDirections(int tour) {
+        var historiqueDeplacement = this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier());
+        if(historiqueDeplacement.isEmpty()) {
+            System.out.println("Historique de déplacement vide");
+            return;
+        }
+        String nomPerso = "prisonnier";
+        if(perso==this.simulation.getGardien()){
+            nomPerso = "gardien";
+        }
+        if(this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
+           persoView.setImage(new Image("file:images/"+nomPerso+".png"));
+            return;
+        }
+
+        switch (this.simulation.historiqueDeplacement.get(perso).get(tour)){
+            case HAUT:
+                persoView.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
+                break;
+            case BAS:
+                persoView.setImage(new Image("file:images/"+nomPerso+"_bas.png"));
+                break;
+            case GAUCHE:
+            case DIAG_BAS_GAUCHE:
+            case DIAG_HAUT_GAUCHE:
+                persoView.setImage(new Image("file:images/"+nomPerso+"_gauche.png"));
+                break;
+            case DROITE:
+            case DIAG_BAS_DROITE:
+            case DIAG_HAUT_DROITE:
+                persoView.setImage(new Image("file:images/"+nomPerso+"_droite.png"));
+                break;
+            case AUCUN:
+                prisonnierView.setImage(new Image("file:images/"+nomPerso+".png"));
+                break;
+        }
+    }
 }

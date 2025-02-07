@@ -224,6 +224,13 @@ public class Simulation implements Jeu {
         List<Position> list1 = new ArrayList<>();
         list1.add(this.gardien.getPosition());
         historiquePosition.put(this.gardien, list1);
+
+        historiqueDeplacement = new HashMap<>();
+        List<Deplacement> depP = new ArrayList<>();
+        List<Deplacement> depG = new ArrayList<>();
+        historiqueDeplacement.put(gardien, depG);
+        historiqueDeplacement.put(prisonnier, depP);
+
     }
 
     /**
@@ -304,18 +311,21 @@ public class Simulation implements Jeu {
             historiqueBayesien.get(gardien).add(cartebay);
             historiqueBayesien.get(prisonnier).add(cartebay2);
 
-            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
-            historiquePosition.get(gardien).add(gardien.getPosition());
-
             deplacerPersonnage(this.prisonnier, d1);
             miseAJourFinJeu();
             deplacerPersonnage(this.gardien, d2);
+            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+            historiquePosition.get(gardien).add(gardien.getPosition());
 
             this.nbTours++;
 
             miseAJourFinJeu();
 
         }
+
+        historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+        historiquePosition.get(gardien).add(gardien.getPosition());
+
         this.notifierObservateurs();
     }
 
@@ -325,6 +335,8 @@ public class Simulation implements Jeu {
      * @param d déplacement souhaité
      */
     public void deplacementJoueur(Deplacement d) {
+        this.historiqueDeplacement.get(this.prisonnier).add(Deplacement.AUCUN);
+        this.historiqueDeplacement.get(this.gardien).add(Deplacement.AUCUN);
 
         Deplacement deplacementAgent;
 
@@ -339,19 +351,33 @@ public class Simulation implements Jeu {
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
         //initialisation du déplacement du joueur
-        if (!verifierDeplacemnt(joueur, d))
+        if (!verifierDeplacemnt(joueur, d)) {
+            historiqueDeplacement.get(joueur).removeLast();
+            historiqueDeplacement.get(agent).removeLast();
             return;
+        }
         //on déplace d'abbord le joueur
         if (this.prisonnier.equals(getJoueur())) {
             deplacerPersonnage(joueur, d);
+            this.historiqueDeplacement.get(joueur).removeLast();
+            this.historiqueDeplacement.get(joueur).add(d);
             miseAJourFinJeu();
-            if (!this.estFini)
+            if (!this.estFini){
                 deplacerPersonnage(agent, deplacementAgent);
+                this.historiqueDeplacement.get(agent).removeLast();
+                this.historiqueDeplacement.get(agent).add(deplacementAgent);
+            }
         } else {
             deplacerPersonnage(agent, deplacementAgent);
+            this.historiqueDeplacement.get(agent).removeLast();
+            this.historiqueDeplacement.get(agent).add(deplacementAgent);
             miseAJourFinJeu();
-            if (!this.estFini)
+            if (!this.estFini) {
                 deplacerPersonnage(joueur, d);
+                this.historiqueDeplacement.get(joueur).removeLast();
+                this.historiqueDeplacement.get(joueur).add(d);
+            }
+
         }
 
         this.nbTours++;
@@ -360,6 +386,7 @@ public class Simulation implements Jeu {
 
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
         historiqueBayesien.get(agent).add(cartebay);
+
 
         //gestion des interactions et de la fin du jeu
         miseAJourFinJeu();

@@ -8,6 +8,8 @@ import ai.djl.util.Progress;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import simulation.Simulation;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -26,7 +28,7 @@ public class CSVDataset extends RandomAccessDataset {
     @Override
     public Record get(NDManager manager, long index) {
         CSVRecord record = csvRecords.get(Math.toIntExact(index));
-        NDArray bayesien = manager.create(Float.parseFloat(record.get("map")));
+        NDArray bayesien = manager.create(encode(record.get("map")));
         NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
         return new Record(new NDList(bayesien), new NDList(dep));
     }

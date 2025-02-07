@@ -49,7 +49,8 @@ public class ApprentissageArbre {
 
         Trainer trainer = model.newTrainer(config);
         int epoch = 100;
-        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32,false).build();
+        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(1,false).build();
+        System.out.println(csvDataset.size());
         EasyTrain.fit(trainer, epoch, csvDataset, null);
 
         //enregistrement du model

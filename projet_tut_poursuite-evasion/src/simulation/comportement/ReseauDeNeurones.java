@@ -59,11 +59,18 @@ public class ReseauDeNeurones implements Comportement {
     }
 
     @Override
-    public Deplacement prendreDecision() throws TranslateException {
+    public Deplacement prendreDecision() {
         var predictor = model.newPredictor(translator);
         NDManager manager = NDManager.newBaseManager();
         NDArray array = manager.create(Outil.applatissement(sim.getCarteBayesienne(sim.getGardien())));
-        Integer resultat = predictor.predict(array);
+        Integer resultat = 0;
+        try {
+            resultat = predictor.predict(array);
+        } catch (TranslateException te){
+            System.out.println(te.getMessage());
+            return Deplacement.AUCUN;
+        }
+
         return Deplacement.values()[resultat];
     }
 }

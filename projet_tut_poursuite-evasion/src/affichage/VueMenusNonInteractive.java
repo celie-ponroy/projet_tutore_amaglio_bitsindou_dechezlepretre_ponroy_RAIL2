@@ -159,7 +159,7 @@ public class VueMenusNonInteractive {
                         Simulation simulation = new Simulation(comportementG, comportementP);
                         MoteurJeu.jeu = simulation;
                         //Affichage du jeu
-                        VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive();
+                        VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive(WIDTH, HEIGHT);
                         vp.update(MoteurJeu.jeu);
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();

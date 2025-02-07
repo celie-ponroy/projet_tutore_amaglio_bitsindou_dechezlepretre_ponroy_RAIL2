@@ -15,12 +15,15 @@ public class VueBayesienne extends VueSimulation {
     private Image imagePerso;
     private Rectangle[][] caseBayesienne;
     private int tour;
+    private int decalageX = 0;
+    private int decalageY = 0;
 
     /**
      * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
      */
-    public VueBayesienne(Simulation s, Personnage p) {
+    public VueBayesienne(Simulation s, Personnage p, int decalageX, int decalageY,int tailleCellule) {
         super();
+        TAILLE_CELLULE = tailleCellule;
         this.simulation = s;
         if (s.getGardien() == p) {
             this.perso = s.getGardien();
@@ -58,7 +61,7 @@ public class VueBayesienne extends VueSimulation {
         this.getChildren().add(initLabyrinthe());
         // Initialisation de la carte bayesienne
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
-        caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE);
+        caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE,decalageX,decalageY);
         for (Rectangle[] rect : caseBayesienne) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);

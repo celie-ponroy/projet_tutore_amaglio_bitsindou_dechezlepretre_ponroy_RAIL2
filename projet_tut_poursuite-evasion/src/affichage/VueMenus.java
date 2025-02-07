@@ -170,7 +170,7 @@ public class VueMenus {
      */
     public void afficherJeu(Jeu j, Pane root, Scene scene) {
         //Affichage du jeu
-        VuePrincipale vp = new VuePrincipale();
+        VuePrincipale vp = new VuePrincipale(WIDTH, HEIGHT);
         vp.update(j);
         j.ajouterObservateur(vp);
         root.getChildren().clear();

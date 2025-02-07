@@ -2,8 +2,7 @@ package affichage;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.CaseEnum;
@@ -22,6 +21,7 @@ public abstract class VueSimulation extends Pane {
     protected int TAILLE_CELLULE = 25;
     private Pane labyrinthePane;// Taille des cases du labyrinthe
     protected Simulation simulation;
+
 
 
     VueSimulation(){

@@ -18,11 +18,14 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private VueBayesienne vB1,vB2;
+    private int milieu_largeur;
 
 
     //constructeur
-    public VuePrincipaleNonInteractive() {
+    public VuePrincipaleNonInteractive(double width, double height) {
         super();
+        TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.40);
+        milieu_largeur = (int) width/2;
         this.tour = 0;
     }
 
@@ -54,8 +57,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         // Création des deux vues bayésiennes dans des VBox distinctes
 
         //Création des vues bayesiennes
-        vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier());
-        vB2 = new VueBayesienne(this.simulation,simulation.getGardien());
+        vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier(),0,0,TAILLE_CELLULE);
+        vB2 = new VueBayesienne(this.simulation,simulation.getGardien(),0,0,TAILLE_CELLULE);
 
         VBox vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
         VBox vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier",vB2);

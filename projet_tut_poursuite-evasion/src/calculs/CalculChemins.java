@@ -9,7 +9,7 @@ import java.util.*;
 //basé sur https://codegym.cc/groups/posts/a-search-algorithm-in-java
 
 public class CalculChemins {
-    static int [][] carte = ChargementCarte.charger("donnees/laby.txt");
+    static int [][] carte = ChargementCarte.charger("donnees/littleLaby.txt");
     /**
      * Recuperer la vision depuis le fichier cheminP.txt du prisonnier
      * @return la liste des chemins pour toutes les paires de positions de la carte

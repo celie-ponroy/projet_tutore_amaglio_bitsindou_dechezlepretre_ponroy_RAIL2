@@ -11,7 +11,7 @@ import java.util.*;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
-    static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+    static int[][] CARTE = ChargementCarte.charger("donnees/littleLaby.txt");
     /**
      * Recuperer la vision depuis le fichier vision.txt
      * @return la liste des cases pour toutes les positions de la carte

@@ -14,6 +14,7 @@ import moteur.Jeu;
 import sauvegarde.Sauvegarde;
 import simulation.Deplacement;
 import simulation.Simulation;
+import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
@@ -158,21 +159,12 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour initialiser un filtre sur les cases non visibles
      */
     public void initFiltreVision() {
-        this.filtreVision = new Rectangle[simulation.CARTE[0].length][simulation.CARTE.length];
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
-                rectangle.setFill(Color.rgb(44, 88, 245));
-                rectangle.setLayoutX(j * TAILLE_CELLULE+DECALAGE);
-                rectangle.setLayoutY(i * TAILLE_CELLULE);
-                this.filtreVision[j][i] = rectangle;
+        //this.getChildren().add(FiltreVision.createLightSpot(9,(Joueur) simulation.getJoueur(),TAILLE_CELLULE,DECALAGE,0));
 
-                if (!simulation.getJoueur().getVision().contains(new Position(j, i))) {
-                    rectangle.setOpacity(0.5);
-                }else{
-                    rectangle.setOpacity(0);
-                }
-                this.getChildren().add(rectangle);
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur());
+        for (Rectangle[] rect : filtreVision) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
             }
         }
     }
@@ -180,19 +172,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour lettre un filtre sur les cases non visibles
      */
     public void setFiltreVision() {
-        // Parcours de toutes les cases du labyrinthe
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = this.filtreVision[j][i];
-                // Si la case n'est pas visible
-                if (!simulation.getJoueur().getVision().contains(new Position(j, i))) {
-                    // Création d'un filtre pour cacher la case
-                    rectangle.setOpacity(0.5);
-                }else{
-                    rectangle.setOpacity(0);
-                }
-            }
-        }
+        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur());
     }
     /**
      * Methode pour historique à la fin du jeu en mode interactif

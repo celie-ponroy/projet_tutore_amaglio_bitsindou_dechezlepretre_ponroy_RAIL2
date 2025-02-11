@@ -355,40 +355,18 @@ public class VueSauvegarde extends VueSimulation{
         im.setY(p.getY() * TAILLE_CELLULE);
     }
     public void initFiltreVision(Pane laby){
-        this.filtreVision = new Rectangle[simulation.CARTE[0].length][simulation.CARTE.length];
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
-                rectangle.setFill(Color.rgb(44, 88, 245));
-                rectangle.setLayoutX(j * TAILLE_CELLULE);
-                rectangle.setLayoutY(i * TAILLE_CELLULE);
-                this.filtreVision[j][i] = rectangle;
-                Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(0);
-                Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
-                if (!tmp.getVision().contains(new Position(j, i))) {
-                    rectangle.setOpacity(0.5);
-                }else{
-                    rectangle.setOpacity(0);
-                }
-                laby.getChildren().add(rectangle);
+        Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
+        Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE,0,0,tmp);
+        for (Rectangle[] rect : filtreVision) {
+            for (Rectangle sousrect : rect) {
+                laby.getChildren().add(sousrect);
             }
         }
     }
     public void updateFiltreVision() {
-        // Parcours de toutes les cases du labyrinthe
-        for (int i = 0; i < simulation.CARTE.length; i++) {
-            for (int j = 0; j < simulation.CARTE[i].length; j++) {
-                Rectangle rectangle = this.filtreVision[j][i];
-                Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
-                Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
-                // Si la case n'est pas visible
-                if (!tmp.getVision().contains(new Position(j, i))) {
-                    // Création d'un filtre pour cacher la case
-                    rectangle.setOpacity(0.5);
-                }else{
-                    rectangle.setOpacity(0);
-                }
-            }
-        }
+        Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
+        Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
+        FiltreVision.updateFiltre(filtreVision, tmp);
     }
 }

@@ -76,10 +76,10 @@ public class Simulation implements Jeu {
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
                 break;
             default:
                 break;
@@ -96,10 +96,10 @@ public class Simulation implements Jeu {
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                 break;
             default:
                 break;
@@ -169,10 +169,10 @@ public class Simulation implements Jeu {
                     this.comportementGardien = new Aleatoire(this, this.gardien);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
                     break;
                 case Comportements.ReseauArbreAleatoire:
-                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
                     break;
                 default:
                     break;
@@ -199,10 +199,10 @@ public class Simulation implements Jeu {
                     this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
                     break;
                 case Comportements.ReseauArbreAleatoire:
-                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                     break;
                 default:
                     break;

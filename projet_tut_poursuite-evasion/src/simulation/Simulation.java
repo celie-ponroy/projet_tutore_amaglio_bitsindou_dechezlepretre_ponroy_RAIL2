@@ -16,6 +16,7 @@ import java.util.Stack;
 public class Simulation implements Jeu {
     private List<DessinJeu> observateurs;
     private int nbTours;
+    private int nbDeplacementsPerso;
     private Personnage gardien;
     private Personnage prisonnier;
     private boolean victoirePrisonnier;
@@ -45,6 +46,7 @@ public class Simulation implements Jeu {
         this.observateurs = new ArrayList<>();
         this.nbTours = 0;
         this.estFini = false;
+        this.nbDeplacementsPerso = 0;
 
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(9, 18);
@@ -288,6 +290,7 @@ public class Simulation implements Jeu {
      * Methode de deplacement non interactif
      */
     public void deplacerAgents() {
+        //tant que le jeu n'est pas fini
         while (!estFini) {
             actualisationBayesienne(this.gardien, this.prisonnier);
             actualisationBayesienne(this.prisonnier, this.gardien);
@@ -306,6 +309,8 @@ public class Simulation implements Jeu {
             deplacerPersonnage(this.prisonnier, d1);
             miseAJourFinJeu();
             deplacerPersonnage(this.gardien, d2);
+            //on incremente le nombre de deplacements des personnages
+            this.nbDeplacementsPerso++;
 
             historiquePosition.get(prisonnier).add(prisonnier.getPosition());
             historiquePosition.get(gardien).add(gardien.getPosition());
@@ -408,13 +413,6 @@ public class Simulation implements Jeu {
             casesVue.add(new Integer[]{position.getY(), position.getX(), present});
         }
         carteBayesiennes.replace(p1, bayesiens.get(p1).calculerProbaPresence(carteBayesiennes.get(p1).clone(), casesVue));
-    }
-
-    /**
-     * Methode permettant d'initialiser le jeu
-     */
-    @Override
-    public void init() {
     }
 
     /**
@@ -611,7 +609,14 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui récupère la victoire du gardien
      */
-    public boolean getVictoireGardien() {
+    public  boolean getVictoireGardien() {
         return this.victoireGardien;
+    }
+
+    /**
+     * Méthode qui récupère le nombre de déplacements des persos
+     */
+    public int getNbDeplacementsPerso() {
+        return nbDeplacementsPerso;
     }
 }

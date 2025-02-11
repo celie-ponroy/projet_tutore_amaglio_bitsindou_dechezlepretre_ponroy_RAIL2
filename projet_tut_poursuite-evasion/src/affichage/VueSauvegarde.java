@@ -266,75 +266,74 @@ public class VueSauvegarde extends VueSimulation{
      * Méthode principale de l'interface DessinJeu
      */
     public void update() {
-        if(simulation.etreFini()){
-            init();
+        init();
 
-            javafx.scene.control.Button precedent = new Button("Précédent");
-            precedent.setPrefSize(200, 75);
-            precedent.setOnAction(e -> {
+        javafx.scene.control.Button precedent = new Button("Précédent");
+        precedent.setPrefSize(200, 75);
+        precedent.setOnAction(e -> {
 
-                if (tour > 0) {
-                    tour -= 1;
-                    updatePositions();
-                    updateIteration();
-                    if(vB2==null){
-                        vB1.update(tour);
-                        updateFiltreVision();
-                    }else if(vB1==null){
-                        vB2.update(tour);
-                        updateFiltreVision();
-                    }else {
-                        vB1.update(tour);
-                        vB2.update(tour);
-                    }
+            if (tour > 0) {
+                tour -= 1;
+                updatePositions();
+                updateIteration();
+                if(vB2==null){
+                    vB1.update(tour);
+                    updateFiltreVision();
+                }else if(vB1==null){
+                    vB2.update(tour);
+                    updateFiltreVision();
+                }else {
+                    vB1.update(tour);
+                    vB2.update(tour);
                 }
-            });
+            }
+        });
 
-            javafx.scene.control.Button suivant = new Button("Suivant");
-            suivant.setPrefSize(200, 75);
-            suivant.setOnAction(e -> {
-                if (tour < simulation.getNbTours()) {
-                    tour += 1;
-                    updatePositions();
-                    updateIteration();
-                    if(vB2==null){
-                        vB1.update(tour);
-                        updateFiltreVision();
-                    }else if(vB1==null){
-                        vB2.update(tour);
-                        updateFiltreVision();
-                    }else {
-                        vB1.update(tour);
-                        vB2.update(tour);
-                    }
+        javafx.scene.control.Button suivant = new Button("Suivant");
+        suivant.setPrefSize(200, 75);
+        suivant.setOnAction(e -> {
+            if (tour < simulation.getNbTours()) {
+                tour += 1;
+                updatePositions();
+                updateIteration();
+                if(vB2==null){
+                    vB1.update(tour);
+                    updateFiltreVision();
+                }else if(vB1==null){
+                    vB2.update(tour);
+                    updateFiltreVision();
+                }else {
+                    vB1.update(tour);
+                    vB2.update(tour);
                 }
-            });
+            }
+        });
 
-            javafx.scene.control.Button retourMenuBtn = new Button("Revenir au menu principal");
-            retourMenuBtn.setPrefSize(410, 75);
-            retourMenuBtn.getStyleClass().add("important");
-            retourMenuBtn.setOnAction(e -> {
-                //Ferme la fenetre actuelle
-                Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-                stage.close();
-                //retour au menu principal
-                VueMenus vm = new VueMenus();
-                vm.afficherMenuPrincipal();
-            });
-            retourMenuBtn.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
-            retourMenuBtn.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*7);
+        javafx.scene.control.Button retourMenuBtn = new Button("Revenir au menu principal");
+        retourMenuBtn.setPrefSize(410, 75);
+        retourMenuBtn.getStyleClass().add("important");
+        retourMenuBtn.setOnAction(e -> {
+            //Ferme la fenetre actuelle
+            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
+            stage.close();
+            //retour au menu principal
+            VueMenus vm = new VueMenus();
+            vm.afficherMenuPrincipal();
+        });
+        retourMenuBtn.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
+        retourMenuBtn.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*7);
 
-            //ajout des boutons
-            HBox hboxBouttons = new HBox();
-            hboxBouttons.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
-            hboxBouttons.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*3);
-            hboxBouttons.setSpacing(10);
-            hboxBouttons.getChildren().add(precedent);
-            hboxBouttons.getChildren().add(suivant);
-            this.getChildren().add(hboxBouttons);
-            this.getChildren().add(retourMenuBtn);
+        //ajout des boutons
+        HBox hboxBouttons = new HBox();
+        hboxBouttons.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*3);
+        hboxBouttons.setSpacing(10);
+        hboxBouttons.getChildren().add(precedent);
+        hboxBouttons.getChildren().add(suivant);
+        this.getChildren().add(hboxBouttons);
+        this.getChildren().add(retourMenuBtn);
 
-        }
+
     }
 
     /**

@@ -1,9 +1,10 @@
 package affichage;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
@@ -15,6 +16,7 @@ import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
 import java.io.Serializable;
+import java.util.Optional;
 
 public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu{
 
@@ -131,16 +133,10 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             init();
             Button sauvegarder = new Button("Sauvegarder");
             sauvegarder.setPrefSize(200, 75);
+
             sauvegarder.setOnAction(e -> {
-                try {
-                    Sauvegarde.sauvegarder(this.simulation,"simu");
-                    sauvegarder.getStyleClass().add("valider");
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                    sauvegarder.getStyleClass().add("nonValider");
-                }
+                lancerSauvegarde(sauvegarder);
             });
-            sauvegarder.setPrefSize(200, 75);
 
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);

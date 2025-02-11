@@ -3,10 +3,7 @@ package affichage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,6 +16,10 @@ import moteur.MoteurJeu;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class VueMenus {
 
@@ -330,20 +331,30 @@ public class VueMenus {
      * Affiche le menu de sauvegarde
      */
     public void afficherMenuSauvegarde(Stage primaryStage, VBox root, Scene scene) {
-        Simulation simulation = null;
-        try{
-            System.out.println("Chargement de la sauvegarde");
-            simulation = Sauvegarde.charger("simu");
+        AtomicReference<Simulation> simulation = new AtomicReference<>();
+        //récuperration du nom de la sauvegarde
+        List<String> choices =  Sauvegarde.nomsSauvegardes();
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("simu.ser", choices);
+        dialog.setTitle("Choix sauvegarde");
+        dialog.setContentText("Sauvegarde à choisir :");
 
-        }catch (Exception e){
-            System.out.println("Erreur lors du chargement de la sauvegarde");
-        }
-        VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation);
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent((letter) -> {
+            try{
+                System.out.println("Chargement de la sauvegarde");
+                simulation.set(Sauvegarde.charger(letter));
+                System.out.println("Partie chargée");
+
+            }catch (Exception e){
+                System.out.println("Erreur lors du chargement de la sauvegarde de :"+letter+".ser");
+            }
+
+        });
+        VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation.get());
         vs.update();
         root.getChildren().clear();
         root.getChildren().add(vs);
         primaryStage.setScene(scene);
-
     }
 
     /**

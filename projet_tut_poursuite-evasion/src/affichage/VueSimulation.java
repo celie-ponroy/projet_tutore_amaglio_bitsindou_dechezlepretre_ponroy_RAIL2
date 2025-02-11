@@ -1,10 +1,14 @@
 package affichage;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import sauvegarde.Sauvegarde;
 import simulation.CaseEnum;
 import simulation.Deplacement;
 import simulation.Simulation;
@@ -12,6 +16,7 @@ import simulation.personnages.Position;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class VueSimulation extends Pane {
     protected Image imageMur;
@@ -167,5 +172,36 @@ public abstract class VueSimulation extends Pane {
     protected void setPositions(Position p, ImageView im) {
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);
+    }
+
+    /**
+     * Permets de sauvegarder la parie courrante peut se lancer a la fin de la partie)
+     * @param sauvegarder
+     */
+    protected void lancerSauvegarde(Button sauvegarder){
+        TextInputDialog dialog = new TextInputDialog("sauvegarde");
+        dialog.setTitle("Veillez nommez votre sauvegarde");
+        dialog.setContentText("Veillez nommez votre sauvegarde:");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            if(Sauvegarde.nomsSauvegardes().contains(result.get().toString()+".ser")){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Le nom selectionné est déja attribué voullez vous l'écraser?");
+
+                Optional<ButtonType> result2 = alert.showAndWait();
+                if (result2.get() == ButtonType.OK){
+                } else {
+                    sauvegarder.getStyleClass().add("nonValider");
+                }
+
+            }
+            try {
+                Sauvegarde.sauvegarder(this.simulation,result.get()+".ser");
+                sauvegarder.getStyleClass().add("valider");
+            }catch (Exception ex){
+                ex.printStackTrace();
+                sauvegarder.getStyleClass().add("nonValider");
+            }
+        });
     }
 }

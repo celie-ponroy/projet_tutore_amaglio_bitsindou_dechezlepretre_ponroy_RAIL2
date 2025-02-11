@@ -1,8 +1,8 @@
 package affichage;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -19,6 +19,7 @@ import simulation.personnages.Position;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class VuePrincipale extends VueSimulation implements DessinJeu {
     private Label iterationLabel; // Label pour afficher le nombre d'itération
@@ -200,13 +201,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         Button sauvegarder = new Button("Sauvegarder");
         sauvegarder.setPrefSize(200, 75);
         sauvegarder.setOnAction(e -> {
-            try {
-                Sauvegarde.sauvegarder(this.simulation,"simu");
-                sauvegarder.getStyleClass().add("valider");
-            }catch (Exception ex){
-                ex.printStackTrace();
-                sauvegarder.getStyleClass().add("nonValider");
-            }
+            lancerSauvegarde(sauvegarder);
         });
 
         tour=0;
@@ -292,4 +287,5 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         setPositions(simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour),prisonnierView);
         setPositions(simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour),gardienView);
     }
+
 }

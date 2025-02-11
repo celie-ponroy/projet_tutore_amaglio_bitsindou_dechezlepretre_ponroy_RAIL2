@@ -2,10 +2,10 @@ package simulation.personnages;
 
 import simulation.Simulation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
-public abstract class Personnage {
+public abstract class Personnage implements Serializable {
     protected Position position;
 
     public Personnage(int x, int y) {

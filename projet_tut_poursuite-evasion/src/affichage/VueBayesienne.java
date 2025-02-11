@@ -87,11 +87,11 @@ public class VueBayesienne extends VueSimulation {
     protected void updatePositions() {
         if (this.perso == simulation.getPrisonnier()) {
             // Met à jour la position du prisonnier
-            Position p = simulation.historiquePosition.get(simulation.getPrisonnier()).get(tour);
+            Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
             setPositions(p, persoView);
         } else {
             // Met à jour la position du gardien
-            Position g = simulation.historiquePosition.get(simulation.getGardien()).get(tour);
+            Position g = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
             setPositions(g, persoView);
         }
     }
@@ -103,7 +103,7 @@ public class VueBayesienne extends VueSimulation {
         if(tour>=simulation.getNbTours()){
             return;
         }
-        var carte = simulation.historiqueBayesien.get(this.perso).get(tour+1);
+        var carte = simulation.getHistoriqueBayesien().get(this.perso).get(tour+1);
         FiltreBayesien.updateBayes(caseBayesienne,carte);
     }
 
@@ -120,7 +120,7 @@ public class VueBayesienne extends VueSimulation {
 
     @Override
     protected void updateDirections(int tour) {
-        var historiqueDeplacement = this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier());
+        var historiqueDeplacement = this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier());
         if(historiqueDeplacement.isEmpty()) {
             System.out.println("Historique de déplacement vide");
             return;
@@ -129,12 +129,12 @@ public class VueBayesienne extends VueSimulation {
         if(perso==this.simulation.getGardien()){
             nomPerso = "gardien";
         }
-        if(this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
+        if(this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
            persoView.setImage(new Image("file:images/"+nomPerso+".png"));
             return;
         }
 
-        switch (this.simulation.historiqueDeplacement.get(perso).get(tour)){
+        switch (this.simulation.getHistoriqueDeplacement().get(perso).get(tour)){
             case HAUT:
                 persoView.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
                 break;

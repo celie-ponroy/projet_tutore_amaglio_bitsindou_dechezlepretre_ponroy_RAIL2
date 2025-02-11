@@ -9,23 +9,24 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import sauvegarde.Sauvegarde;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
-public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu {
+import java.io.Serializable;
+
+public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu{
 
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private VueBayesienne vB1,vB2;
-    private int milieu_largeur;
 
 
     //constructeur
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
         TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
-        milieu_largeur = (int) width/2;
         this.tour = 0;
     }
 
@@ -111,8 +112,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     protected void updatePositions() {
         // Met à jour la position du prisonnier
 
-        Position p = simulation.historiquePosition.get(simulation.getPrisonnier()).get(tour);
-        Position g = simulation.historiquePosition.get(simulation.getGardien()).get(tour);
+        Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
+        Position g = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
         setPositions(p, prisonnierView);
         setPositions(g, gardienView);
         updateDirections(tour);
@@ -128,6 +129,18 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
         if(simulation.etreFini()){
             init();
+            Button sauvegarder = new Button("Sauvegarder");
+            sauvegarder.setPrefSize(200, 75);
+            sauvegarder.setOnAction(e -> {
+                try {
+                    Sauvegarde.sauvegarder(this.simulation,"simu");
+                    sauvegarder.getStyleClass().add("valider");
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                    sauvegarder.getStyleClass().add("nonValider");
+                }
+            });
+            sauvegarder.setPrefSize(200, 75);
 
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
@@ -175,8 +188,10 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             hboxBouttons.setSpacing(10);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
+            hboxBouttons.getChildren().add(sauvegarder);
             this.getChildren().add(hboxBouttons);
             this.getChildren().add(retourMenuBtn);
+
 
         }
     }

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
 
-public class FiltreBayesien {
+public class FiltreBayesien  {
     /**
      * Initialiste le filtre
      * @param carteBayes

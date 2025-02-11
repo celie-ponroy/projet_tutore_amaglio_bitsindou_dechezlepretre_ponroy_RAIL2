@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import moteur.Clavier;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
 
@@ -101,8 +102,15 @@ public class VueMenus {
             vni.afficherMenuIA(this.primaryStage);
         });
 
+        //Boutton parties sauvegardées
+        Button modePartiesSauvegardes = new Button("Parties sauvegardées");
+        modePartiesSauvegardes.setPrefSize(200,100);
+        modePartiesSauvegardes.setOnAction(e -> {
+            afficherMenuSauvegarde(this.primaryStage, root, scene);
+        });
+
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modePartiesSauvegardes);
 
         //Bouton pour quitter l'application
         Button quitter = new Button("Quitter");
@@ -316,6 +324,26 @@ public class VueMenus {
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");
+    }
+
+    /**
+     * Affiche le menu de sauvegarde
+     */
+    public void afficherMenuSauvegarde(Stage primaryStage, VBox root, Scene scene) {
+        Simulation simulation = null;
+        try{
+            System.out.println("Chargement de la sauvegarde");
+            simulation = Sauvegarde.charger("simu");
+
+        }catch (Exception e){
+            System.out.println("Erreur lors du chargement de la sauvegarde");
+        }
+        VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation);
+        vs.update();
+        root.getChildren().clear();
+        root.getChildren().add(vs);
+        primaryStage.setScene(scene);
+
     }
 
     /**

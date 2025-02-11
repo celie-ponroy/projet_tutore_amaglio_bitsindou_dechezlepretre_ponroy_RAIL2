@@ -1,7 +1,11 @@
 package simulation.comportement;
 
+import simulation.Comportements;
 import simulation.Deplacement;
 
-public interface Comportement {
+import java.io.Serializable;
+
+public interface Comportement extends Serializable {
     public Deplacement prendreDecision();
+    public Comportements getType();
 }

@@ -6,8 +6,12 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.CaseEnum;
+import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Position;
+
+import java.util.HashMap;
+import java.util.List;
 
 public abstract class VueSimulation extends Pane {
     protected Image imageMur;
@@ -113,59 +117,46 @@ public abstract class VueSimulation extends Pane {
      * Mets à jour les directions des sprites personnages
      */
     protected void updateDirections(int tour){
-        var historiqueDeplacement = this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier());
+        var historiqueDeplacementP = this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier());
+        updateDirectionPersonnage(tour, historiqueDeplacementP, "prisonnier", prisonnierView);
+        var historiqueDeplacementG = this.simulation.getHistoriqueDeplacement().get(this.simulation.getGardien());
+        updateDirectionPersonnage(tour, historiqueDeplacementG, "gardien", gardienView);
+    }
+    /**
+     * Mets à jour les directions des sprites personnages
+     */
+    static public void updateDirectionPersonnage(int tour, List<Deplacement> historiqueDeplacement,String nomPerso, ImageView view){
         if(historiqueDeplacement.isEmpty()) {
             System.out.println("Historique de déplacement vide");
             return;
         }
-        if(this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
-            prisonnierView.setImage(new Image("file:images/prisonnier.png"));
-            gardienView.setImage(new Image("file:images/gardien.png"));
+        if(historiqueDeplacement.size() <= tour||tour==0) {
+            view.setImage(new Image("file:images/"+nomPerso+".png"));
             return;
         }
 
-        switch (this.simulation.historiqueDeplacement.get(this.simulation.getPrisonnier()).get(tour)){
+        switch (historiqueDeplacement.get(tour)){
             case HAUT:
-                prisonnierView.setImage(new Image("file:images/prisonnier_haut.png"));
+                view.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
                 break;
             case BAS:
-                prisonnierView.setImage(new Image("file:images/prisonnier_bas.png"));
+                view.setImage(new Image("file:images/"+nomPerso+"_bas.png"));
                 break;
             case GAUCHE:
             case DIAG_BAS_GAUCHE:
             case DIAG_HAUT_GAUCHE:
-                prisonnierView.setImage(new Image("file:images/prisonnier_gauche.png"));
+                view.setImage(new Image("file:images/"+nomPerso+"_gauche.png"));
                 break;
             case DROITE:
             case DIAG_BAS_DROITE:
             case DIAG_HAUT_DROITE:
-                prisonnierView.setImage(new Image("file:images/prisonnier_droite.png"));
+                view.setImage(new Image("file:images/"+nomPerso+"_droite.png"));
                 break;
             case AUCUN:
-                prisonnierView.setImage(new Image("file:images/prisonnier.png"));
+                view.setImage(new Image("file:images/"+nomPerso+".png"));
                 break;
         }
-        switch (this.simulation.historiqueDeplacement.get(this.simulation.getGardien()).get(tour)){
-            case HAUT:
-                gardienView.setImage(new Image("file:images/gardien_haut.png"));
-                break;
-            case BAS:
-                gardienView.setImage(new Image("file:images/gardien_bas.png"));
-                break;
-            case GAUCHE:
-            case DIAG_BAS_GAUCHE:
-            case DIAG_HAUT_GAUCHE:
-                gardienView.setImage(new Image("file:images/gardien_gauche.png"));
-                break;
-            case DROITE:
-            case DIAG_BAS_DROITE:
-            case DIAG_HAUT_DROITE:
-                gardienView.setImage(new Image("file:images/gardien_droite.png"));
-                break;
-            case AUCUN:
-                gardienView.setImage(new Image("file:images/gardien.png"));
-                break;
-        }
+
     }
 
     /**

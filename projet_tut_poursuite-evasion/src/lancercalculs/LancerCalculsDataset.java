@@ -34,9 +34,9 @@ public class LancerCalculsDataset {
             }
 
             //ajouter un historique des déplacement choisit
-            List<double[][]> histoBayes = simulation.historiqueBayesien.get(perso);
-            List<Position> histoPos = simulation.historiquePosition.get(perso);
-            List<Deplacement> histoDep = simulation.historiqueDeplacement.get(perso);
+            List<double[][]> histoBayes = simulation.getHistoriqueBayesien().get(perso);
+            List<Position> histoPos = simulation.getHistoriquePosition().get(perso);
+            List<Deplacement> histoDep = simulation.getHistoriqueDeplacement().get(perso);
 
             for (int j = 0; j < histoDep.size() - 1; j++) {
                 Position p = histoPos.get(j);

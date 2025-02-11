@@ -3,12 +3,15 @@ package simulation.comportement;
 import org.apache.commons.lang3.ArrayUtils;
 import org.neuroph.core.NeuralNetwork;
 import outils.Outil;
+import simulation.Comportements;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 
+import java.io.Serializable;
 
-public class ReseauDeNeurones implements Comportement {
+
+public class ReseauDeNeurones implements Comportement, Serializable {
 
     private NeuralNetwork neuralNetwork;
     private Simulation simulation;
@@ -44,5 +47,9 @@ public class ReseauDeNeurones implements Comportement {
             }
         }
         return Deplacement.values()[index];
+    }
+    @Override
+    public Comportements getType() {
+        return Comportements.ReseauArbreAleatoire;
     }
 }

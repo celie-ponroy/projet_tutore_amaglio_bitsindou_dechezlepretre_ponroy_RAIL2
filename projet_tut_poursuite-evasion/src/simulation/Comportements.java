@@ -1,6 +1,8 @@
 package simulation;
 
-public enum Comportements {
+import java.io.Serializable;
+
+public enum Comportements implements Serializable {
     ArbreDeterministe,
     ArbreDeterministev2,
     Aleatoire,

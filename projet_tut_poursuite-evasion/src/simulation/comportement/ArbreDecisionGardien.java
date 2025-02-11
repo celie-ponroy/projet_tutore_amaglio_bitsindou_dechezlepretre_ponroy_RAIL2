@@ -1,15 +1,17 @@
     package simulation.comportement;
 
     import simulation.Case;
+    import simulation.Comportements;
     import simulation.Deplacement;
     import simulation.Simulation;
     import simulation.personnages.Personnage;
     import simulation.personnages.Position;
 
+    import java.io.Serializable;
     import java.util.List;
     import java.util.Stack;
 
-    public class ArbreDecisionGardien extends ArbreDecision implements Comportement  {
+    public class ArbreDecisionGardien extends ArbreDecision implements Comportement , Serializable {
         private Simulation simulation;
         private Personnage personnage;
 
@@ -49,6 +51,10 @@
                 Stack<Position> s2 = Simulation.CHEMINS_G.get(List.of(personnage.getPosition(), new Position(c.getX(), c.getY())));
                 return direction(personnage.getPosition(),s2.getLast());
             }
-
         }
+        @Override
+        public Comportements getType() {
+            return Comportements.ArbreDeterministe;
+        }
+
     }

@@ -1,15 +1,17 @@
     package simulation.comportement;
 
     import simulation.Case;
+    import simulation.Comportements;
     import simulation.Deplacement;
     import simulation.Simulation;
     import simulation.personnages.Personnage;
     import simulation.personnages.Position;
 
+    import java.io.Serializable;
     import java.util.List;
     import java.util.Stack;
 
-    public class ArbreDecisionGardienAleatoire extends ArbreDecision implements Comportement  {
+    public class ArbreDecisionGardienAleatoire extends ArbreDecision implements Comportement , Serializable {
         private Simulation simulation;
         private Personnage personnage;
 
@@ -68,4 +70,9 @@
             }
             return new int[]{probas.length - 1, probas[0].length - 1};
         }
+        @Override
+        public Comportements getType() {
+            return Comportements.ArbreAleatoire;
+        }
+
     }

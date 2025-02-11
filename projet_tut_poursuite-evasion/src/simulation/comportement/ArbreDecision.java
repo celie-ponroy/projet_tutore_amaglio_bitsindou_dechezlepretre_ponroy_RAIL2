@@ -2,7 +2,7 @@ package simulation.comportement;
 import simulation.Deplacement;
 import simulation.personnages.Position;
 
-public class ArbreDecision {
+public class ArbreDecision{
     /**
      * Renvoie la direction à prendre pour aller de p1 à p2
      * @param p1
@@ -62,4 +62,5 @@ public class ArbreDecision {
         }
         return Deplacement.AUCUN;
     }
+
 }

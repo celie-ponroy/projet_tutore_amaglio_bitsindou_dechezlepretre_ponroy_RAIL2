@@ -106,6 +106,7 @@ public class VueMenus extends VueSimulation {
         root.setAlignment(Pos.CENTER);
 
         Label title = new Label("Veuillez choisir un mode:");
+        title.getStyleClass().add("titre");
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(20);
@@ -163,6 +164,7 @@ public class VueMenus extends VueSimulation {
         root2.setAlignment(Pos.CENTER);
 
         Label title2 = new Label("Veuillez choisir un personnage:");
+        title2.getStyleClass().add("titre");
 
         HBox buttonBox2 = new HBox();
         buttonBox2.setSpacing(20);
@@ -226,7 +228,7 @@ public class VueMenus extends VueSimulation {
         setScene(scene, "Choix de la difficulté de l'IA adverse");
 
         Label title = new Label("Veuillez choisir un niveau de difficulté:");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        title.getStyleClass().add("titre");
 
         //on recupere le choix du personnage que l'utilisateur va joué
         choixPersonnage = getChoixPersonnage();

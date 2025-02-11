@@ -12,11 +12,6 @@ public interface Jeu {
     void notifierObservateurs();
 
     /**
-     * initialisation du jeu
-     */
-    void init();
-
-    /**
      * verifie si le jeu est fini
      *
      * @return booleen true si le jeu est fini

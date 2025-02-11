@@ -50,6 +50,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     public VBox createAnalyseView(Stage primaryStage){
         // VBox principale
         VBox root = new VBox(30);
+        root.getStylesheets().add("style.css");
 
         // GridPane légende
         GridPane gridLegende;

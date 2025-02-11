@@ -58,6 +58,7 @@ public class LancerAnalyse implements Jeu {
             }
             System.out.println("Victoire Gardien: " + nbVictoireGardien + " Victoire Prisonnier: " + nbVictoirePrisonnier + " Match Null: " + matchNull);
             notifierObservateurs();
+            System.gc();
         }
         etreFini = true;
     }
@@ -75,6 +76,7 @@ public class LancerAnalyse implements Jeu {
             dj.update(this);
         }
     }
+
 
     @Override
     public boolean etreFini() {

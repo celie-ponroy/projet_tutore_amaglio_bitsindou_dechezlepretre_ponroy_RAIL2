@@ -31,7 +31,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      * Initialise la vue avec les deux vues bayésiennes et le labyrinthe positionné entre elles.
      */
     private void init() {
-        Pane labyPane = initLabyrinthe();
+        Pane labyPane = initLabyrinthe(true);
 
         // Ajout d'une VBox pour afficher le nombre d'itérations sous le labyrinthe
         VBox vbox = new VBox();
@@ -91,7 +91,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         labyrintheVBox.setAlignment(Pos.TOP_CENTER);
 
         // Initialisation du labyrinthe
-        Pane labyPane = initLabyrinthe();
+        Pane labyPane = initLabyrinthe(true);
 
         // Ajout du labyrinthe à la VBox
         labyrintheVBox.getChildren().add(labyPane);

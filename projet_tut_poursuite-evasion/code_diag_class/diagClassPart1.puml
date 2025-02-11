@@ -33,6 +33,8 @@ package "affichage" {
     # prisonnierView : ImageView
     # gardienView : ImageView
     # TAILLE_CELLULE : int
+    - labyrinthePane : Pane
+    # simulation : Simulation
     + VueSimulation()
     # initLabyrinthe(): void
     # {abstract} setOpacityPersonnage(): void
@@ -45,44 +47,48 @@ package "affichage" {
   }
 
   class VuePrincipale{
-    - simulation : Simulation
     - iterationLabel: Label
     - filtreVision: Rectangle[][]
     - tour: int
     - caseBayesienneHisto : Rectangle[][]
-    + VuePrincipale()
+    # DECALAGE : int
+    + VuePrincipale(double, double)
     - init(): void
-    + update(Jeu): void=
+    # setOpacityPersonnage(): void
+    # updatePositions: void
+    + update(Jeu): void
     + updateIteration(): void
     + initFiltreVision(): void
     + setFiltreVision(): void
     + historique(): void
     + updateHistorique(): void
-
   }
 
   class VueBayesienne{
-      - simulation : Simulation
       - perso : Personnage
       - persoView: ImageView
       - imagePerso: Image
       - caseBayesienne: Rectangle[][]
       - tour: int
-      + VueBayesienne(Simulation, Personnage)
+      - decalageX : int
+      - decalageY : int
+      + VueBayesienne(Simulation, Personnage, int, int, int)
       - init(): void
+      + setOpacityPersonnage(): void
       # updatePositions(): void
       - updateBayes(): void
       + update(int): void
+      # updateDirections(int): void
   }
   class VuePrincipaleNonInteractive{
-    - simulation : Simulation
     - iterationLabel : Label
     - tour : int
-    - caseBayesienneHisto : Rectangle[][]
-    + VuePrincipaleNonInteractive()
+    + VuePrincipaleNonInteractive(double, double)
     - init(): void
+    # setOpacityPersonnage(): void
     # updatePositions(): void
     + update(Jeu): void
+    + createBayesienneView(Personnage, String, VueBayesienne): VBox
     + updateIteration(): void
     + setPositions(Position, ImageView): void
   }
@@ -100,20 +106,38 @@ package "affichage" {
     + afficherMenuPersonnage(): void
     + afficherJeu(Jeu, Pane, Scene): void
     + afficherMenuIA(): void
+    + afficherMenuSauvegarde(Stage, VBox, Scene): void
     + getChoixPersonnage(): String
     + setChoixPersonnage(String): void
   }
   class VueMenusNonInteractive{
     - {static} WIDTH : double
     - {static} HEIGHT : double
-    - {static} jeu: MoteurJeu
     + VuePrincipaleNonInteractive(MoteurJeu)
     + afficherMenuIA(Stage): void
   }
+  class VueSauvegarde{
+    - iterationLabel : Label
+    - tour : int
+    - filtreVision : Rectangle[][]
+    - viewInteractifPerso : ImageView
+    - viewInteractifAdversaire :ImageView
+    - interactive :boolean
+    + VueSauvegarde(double, double, Simulation)
+    + init() : void
+    - createBayesienneView(Personnage, String, VueBayesienne): VBox
+    - creerVision(String) : VBox
+    - creerLabyvision(): Pane
+    # setOpacityPersonnage(): void
+    # updatePositions(): void
+    + update(): void
+    + updateIteration(): void
+    + setPositions(Position, ImageView): void
+    + initFiltreVision(Pane): void
+    + updateFiltreVision(): void
+  }
 }
 
-
-Jeu <|.. Simulation
 MoteurJeu --|> Application
 MoteurJeu "1" --> "1" Jeu: jeu
 
@@ -123,7 +147,12 @@ VuePrincipale --|> VueSimulation
 VueBayesienne --|> VueSimulation
 VuePrincipaleNonInteractive --|> VueSimulation
 VuePrincipaleNonInteractive ..|> DessinJeu
+VueMenus "1" --> "1" MoteurJeu : jeu
+VueMenusNonInteractive "1" --> "1" MoteurJeu : jeu
 VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB1
 VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB2
+VueSauvegarde --|> VueSimulation
+VueSauvegarde "1" --> "1" VueBayesienne: vB1
+VueSauvegarde "1" --> "1" VueBayesienne: vB2
 
 @enduml

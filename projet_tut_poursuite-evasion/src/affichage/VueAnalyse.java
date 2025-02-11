@@ -60,6 +60,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     public VBox createAnalyseView(Stage primaryStage){
         // VBox principale
         VBox root = new VBox(30);
+        root.getStylesheets().add("style.css");
 
         // GridPane légende
 //        GridPane gridLegende;
@@ -370,10 +371,10 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
                 switch(data.getName()) {
                     case "Victoire Gardien":
-                        color = "red";
+                        color = "#3B4466"; //3B4466
                         break;
                     case "Victoire Prisonnier":
-                        color = "blue";
+                        color = "#E26F1D"; //E26F1D
                         break;
                     case "Match Null":
                         color = "grey";

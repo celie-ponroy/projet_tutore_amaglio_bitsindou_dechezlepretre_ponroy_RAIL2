@@ -12,6 +12,7 @@ public interface Jeu {
 
     void notifierObservateurs();
 
+
     /**
      * verifie si le jeu est fini
      *

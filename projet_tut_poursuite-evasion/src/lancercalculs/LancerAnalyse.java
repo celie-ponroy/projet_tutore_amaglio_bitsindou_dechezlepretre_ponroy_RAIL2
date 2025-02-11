@@ -118,6 +118,7 @@ public class LancerAnalyse implements Jeu {
         });
     }
 
+
     @Override
     public boolean etreFini() {
         return etreFini;

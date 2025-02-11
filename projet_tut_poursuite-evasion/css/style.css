@@ -17,10 +17,15 @@
 }
 
 .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #1B263B;
+}
+
+.titre {
     -fx-font-size: 20pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
-    -fx-font-weight: bold;
 }
 
 .combo-box-base {

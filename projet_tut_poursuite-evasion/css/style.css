@@ -3,7 +3,7 @@
     -fx-font-family: "Segoe UI Semibold";
     -fx-padding: 10;
     -fx-background-color: #778DA9;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
 }
 
 .button:hover {
@@ -28,7 +28,21 @@
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius: 3px, 3px, 2px, 1px;
 }
-.combo-box{
+
+.combo-box {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, #edebeb;
 
+}
+
+.chart-pie {
+    -fx-stroke: black; /* Couleur du contour */
+    -fx-stroke-width: 2px; /* Épaisseur du contour */
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: black;
 }

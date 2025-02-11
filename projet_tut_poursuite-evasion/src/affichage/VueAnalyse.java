@@ -1,9 +1,11 @@
 package affichage;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
@@ -13,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lancercalculs.LancerAnalyse;
@@ -22,7 +25,10 @@ import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
+import simulation.Simulation;
+import simulation.personnages.Position;
 
+import java.security.Key;
 import java.util.List;
 
 public class VueAnalyse extends VueSimulation implements DessinJeu {
@@ -33,6 +39,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     private LancerAnalyse lancerAnalyse;
     private int nbIterationsInt;
     private ObservableList<PieChart.Data> pieChartData;
+    private final Rectangle[][] caseFiltreChaleur = new Rectangle[Simulation.CARTE.length][Simulation.CARTE[0].length];
 
     //constructeur
     public VueAnalyse() {
@@ -41,22 +48,25 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         this.courbes = new LineChart<>(new CategoryAxis(), new NumberAxis());
         this.pieChartData = FXCollections.observableArrayList();
         this.camembert = new PieChart(pieChartData);
+        camembert.setTitle("Résultats des parties");
+        camembert.setLabelsVisible(true);
         this.courbes = new LineChart<>(new CategoryAxis(), new NumberAxis());
+        courbes.setTitle("Nombre de déplacements par parties");
     }
 
     /**
-     * Méthode qui crée la vue analyse
+     * Méthode qui crée la vue analysevoici
      */
     public VBox createAnalyseView(Stage primaryStage){
         // VBox principale
         VBox root = new VBox(30);
 
         // GridPane légende
-        GridPane gridLegende;
-        gridLegende = initLegende();
+//        GridPane gridLegende;
+//        gridLegende = initLegende();
 
         // Nombre d'itérations
-        Label nbIteration = new Label("Nombre de partie(s) : 57/100");
+        Label nbIteration = new Label();
         nbIteration.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
 
         // ComboBox prisonnier
@@ -117,7 +127,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // HBox pour les graphiques et le labyrinthe
         HBox graphiques = new HBox(20);
         graphiques.setAlignment(Pos.CENTER);
-        graphiques.getChildren().addAll(camembert, initLabyrinthe(false), courbes);
+        var laby = initLabyrinthe(false);
+        Rectangle[][] filtre = initFiltreChaleur();
+        for (Rectangle[] rectangles: filtre) {
+            for (Rectangle rectangle: rectangles) {
+                laby.getChildren().add(rectangle);
+            }
+        }
+        graphiques.getChildren().addAll(camembert,laby, courbes);
 
         // Conteneur pour centrer les graphiques verticalement et horizontalement
         VBox graphiquesWrapper = new VBox(graphiques);
@@ -129,6 +146,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Bouton lancer simulation
 
         lancerBtn.setPrefSize(150, 50);
+        // Dans le bouton lancerBtn
         lancerBtn.setOnAction(e -> {
             if (comboBoxGardien.getValue() == null || comboBoxPrisonnier.getValue() == null ||
                     (comboBoxPrisonnier.getValue() == null && comboBoxGardien.getValue() == null ||
@@ -139,26 +157,54 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 alert.setContentText("Veuillez remplir tous les champs");
                 alert.showAndWait();
             } else {
-                // Réinitialisation des données avant de lancer une nouvelle série
-                lancerAnalyse.reinitialiser();
+                lancerBtn.setDisable(true);
 
-                // Réinitialisation des graphiques
-                courbes.getData().clear();
-                camembert.getData().clear();
+                // Réinitialisation des données
+                Platform.runLater(() -> {
+                    lancerAnalyse.reinitialiser();
+                    courbes.getData().clear();
+                    camembert.getData().clear();
+                    caseFiltreChaleur[0][0].setOpacity(0);
+                });
 
                 nbIterationsInt = Integer.parseInt(nbIterations.getText());
                 Comportements[] tabChoix = choixComboBox(comboBoxPrisonnier, comboBoxGardien);
 
                 MoteurJeu.jeu = lancerAnalyse;
                 lancerAnalyse.ajouterObservateur(this);
-                lancerAnalyse.lancerAnalyse(nbIterationsInt, tabChoix[0], tabChoix[1]);
+                lancerAnalyse.setNbIterationsTotal(nbIterationsInt);
 
-                this.update(lancerAnalyse);
+                Thread analyseThread = new Thread(() -> {
+                    for (int i = 1; i <= nbIterationsInt; i++) {
+                        final int currentIteration = i;
+                        // Exécution de l'analyse
+                        lancerAnalyse.lancerAnalyse(1, tabChoix[0], tabChoix[1]);
+
+                        // Mise à jour de l'interface
+                        Platform.runLater(() -> {
+                            nbIteration.setText("Nombre de partie(s) : " + currentIteration + "/" + nbIterationsInt);
+                            update(lancerAnalyse);
+
+                            if (currentIteration == nbIterationsInt) {
+                                lancerBtn.setDisable(false);
+                            }
+                        });
+
+                        try {
+                            //Pause de 3 s
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                });
+
+                analyseThread.start();
             }
         });
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(20, 20, 20, 20));
-        root.getChildren().addAll(headerContainer, graphiquesWrapper, gridLegende);
+        root.getChildren().addAll(headerContainer, graphiquesWrapper);
         root.setAlignment(Pos.BOTTOM_RIGHT);
 
         // Définition de la scène
@@ -283,45 +329,86 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
      */
 
     public void afficherCamembert() {
-        int nbIte = lancerAnalyse.getNbIterationCourrante();
-        if (nbIte == 0) {
-            nbIte = 1;
-        } else {
-            System.out.println("Nombre d'itérations courante  : " + nbIte);
-        }
-        System.out.println("Nombre de parties : " + nbIte);
-        System.out.println("Nombre de victoire gardien : " + lancerAnalyse.getNbVictoireGardien());
-        System.out.println("Nombre de victoire prisonnier : " + lancerAnalyse.getNbVictoirePrisonnier());
-        System.out.println("Nombre de match null : " + lancerAnalyse.getMatchNull());
+        Platform.runLater(() -> {
+            int nbIte = lancerAnalyse.getNbIterationCourrante();
+            if (nbIte == 0) {
+                nbIte = 1;
+            } else {
+                System.out.println("Nombre d'itérations courante  : " + nbIte);
+            }
 
-        // Effacer les anciennes données
-        pieChartData.clear();
+            // Effacer les anciennes données
+            pieChartData.clear();
 
-        // Ajouter de nouvelles données
-        if (lancerAnalyse.getNbVictoireGardien() > 0) {
-            pieChartData.add(new PieChart.Data("Victoire Gardien", lancerAnalyse.getNbVictoireGardien()));
-        }
-        if (lancerAnalyse.getNbVictoirePrisonnier() > 0) {
-            pieChartData.add(new PieChart.Data("Victoire Prisonnier", lancerAnalyse.getNbVictoirePrisonnier()));
-        }
-        if (lancerAnalyse.getMatchNull() > 0) {
-            pieChartData.add(new PieChart.Data("Match Null", lancerAnalyse.getMatchNull()));
-        }
+            //Enleve l'animation
+            camembert.setAnimated(false);
 
-        camembert.setTitle("Résultats des parties");
+            // Ajouter de nouvelles données
+            if (lancerAnalyse.getNbVictoireGardien() > 0) {
+                PieChart.Data gardienData = new PieChart.Data("Victoire Gardien", lancerAnalyse.getNbVictoireGardien());
+                pieChartData.add(gardienData);
+            }
 
-        // Ajout des tooltips pour afficher le pourcentage
-        for (PieChart.Data data : camembert.getData()) {
-            Tooltip tooltip = new Tooltip();
-            tooltip.setShowDelay(Duration.seconds(0.2)); // Petit délai pour éviter les clignotements
+            if (lancerAnalyse.getNbVictoirePrisonnier() > 0) {
+                PieChart.Data prisonnierData = new PieChart.Data("Victoire Prisonnier", lancerAnalyse.getNbVictoirePrisonnier());
+                pieChartData.add(prisonnierData);
+            }
 
-            data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
-                double total = pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum();
-                double percentage = (data.getPieValue() / total) * 100;
-                tooltip.setText(String.format("%.1f%%", percentage)); // Formate à 1 décimale
-                Tooltip.install(data.getNode(), tooltip); // Associe le tooltip au nœud
-            });
-        }
+            if (lancerAnalyse.getMatchNull() > 0) {
+                PieChart.Data nullData = new PieChart.Data("Match Null", lancerAnalyse.getMatchNull());
+                pieChartData.add(nullData);
+            }
+
+            // Appliquer les styles après que le graphique soit rendu
+            camembert.applyCss();
+            camembert.layout();
+
+            // Mettre à jour les couleurs des sections et des légendes
+            for (int i = 0; i < pieChartData.size(); i++) {
+                PieChart.Data data = pieChartData.get(i);
+                String color;
+
+                switch(data.getName()) {
+                    case "Victoire Gardien":
+                        color = "red";
+                        break;
+                    case "Victoire Prisonnier":
+                        color = "blue";
+                        break;
+                    case "Match Null":
+                        color = "grey";
+                        break;
+                    default:
+                        color = "black";
+                        break;
+                }
+
+                // Colorer la section du camembert
+                if (data.getNode() != null) {
+                    data.getNode().setStyle("-fx-pie-color: " + color + ";");
+                }
+
+                // Colorer la légende
+                Node legendItem = camembert.lookup(".chart-legend-item-symbol." + i);
+                if (legendItem != null) {
+                    legendItem.setStyle("-fx-background-color: " + color + ";");
+                }
+            }
+
+            // Ajout des tooltips
+            for (PieChart.Data data : camembert.getData()) {
+                Tooltip tooltip = new Tooltip();
+                tooltip.setShowDelay(Duration.seconds(0.2));
+
+                final PieChart.Data finalData = data;
+                data.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+                    double total = pieChartData.stream().mapToDouble(PieChart.Data::getPieValue).sum();
+                    double percentage = (finalData.getPieValue() / total) * 100;
+                    tooltip.setText(String.format("%.1f%%", percentage));
+                    Tooltip.install(finalData.getNode(), tooltip);
+                });
+            }
+        });
     }
 
 
@@ -339,9 +426,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         // Rotation des labels de l'axe X pour éviter le chevauchement
         xAxis.setTickLabelRotation(45);
-
-        // Configuration du titre
-        courbes.setTitle("Nombres de déplacements pour chaque personnage par parties");
 
         // Création des séries de données
         XYChart.Series<String, Number> series = new XYChart.Series<>();
@@ -372,7 +456,20 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         courbes.setVerticalGridLinesVisible(true);
 
         // Amélioration de la lisibilité
-        courbes.setAnimated(false);  // Désactive les animations pour une meilleure performance
+        courbes.setAnimated(false);
+
+        //Ajout des tool tips sur les points
+        for (XYChart.Series<String, Number> s : courbes.getData()) {
+            for (XYChart.Data<String, Number> d : s.getData()) {
+                Tooltip tooltip = new Tooltip();
+                tooltip.setShowDelay(Duration.seconds(0.2)); // Petit délai pour éviter les clignotements
+
+                d.getNode().addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+                    tooltip.setText("Nombre de déplacements : " + d.getYValue());
+                    Tooltip.install(d.getNode(), tooltip); // Associe le tooltip au nœud
+                });
+            }
+        }
 
         return courbes;
     }
@@ -386,12 +483,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Récuperation de la simulation
         this.lancerAnalyse = (LancerAnalyse) jeu;
 
-//        System.out.println("TEEEEEEEST");
         // Mise à jour des graphiques
         afficherCamembert();
 
         // Mise à jour des courbes
         graphiqueCourbes();
+
+        // Mise à jour du filtre de chaleur
+        updateFiltreChaleur();
 
     }
 
@@ -405,4 +504,67 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     protected void updatePositions() {
 
     }
+
+    /**
+     * Méthode qui initialise le filtre de chaleur
+     */
+    public Rectangle[][] initFiltreChaleur() {
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE.length; j++) {
+                Rectangle rect = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
+                rect.setX(i * TAILLE_CELLULE);
+                rect.setY(j * TAILLE_CELLULE);
+                rect.setOpacity(0);
+                caseFiltreChaleur[i][j] = rect;
+            }
+        }
+        return caseFiltreChaleur;
+    }
+
+    /**
+     * Méthode qui normalise le nombre de visites
+     */
+    public double normaliser(int nbVisites) {
+        int sum = 0;
+        // pour chaque valeur de getcasesVisitees on ajoute la valeur à sum
+        for (Position i :lancerAnalyse.getCasesVisitees().keySet())
+            sum += lancerAnalyse.getCasesVisitees().get(i);
+        return (double) nbVisites / sum;
+    }
+    /**
+     * Méthode qui met à jour le filtre de chaleur
+     */
+    public void updateFiltreChaleur() {
+        //on clear les anciennes données
+
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE.length; j++) {
+                Rectangle rect = caseFiltreChaleur[i][j];
+                rect.setFill(Color.rgb(0,255,0, 0));
+            }
+        }
+
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE.length; j++) {
+                Rectangle rect = caseFiltreChaleur[i][j];
+                if (lancerAnalyse.getCasesVisitees().containsKey(new Position(i, j))) {
+                    rect.setOpacity(1);
+                    int nbVisites = lancerAnalyse.getCasesVisitees().get(new Position(i, j));
+                    //on normalise le nombre de visites
+                    double opacite = Math.pow(normaliser(nbVisites), 0.5);
+
+                    //on change la couleur en fonction du nombre de visites
+                    rect.setFill(Color.rgb(0, 0, 255, opacite)); // Rouge transparent
+
+                    //on ajoute un toltip pour affiche le nombre de vosotes de chaque case
+                    Tooltip tooltip = new Tooltip();
+                    tooltip.setText("Visites : " + nbVisites);
+                    Tooltip.install(rect, tooltip);
+                }
+            }
+        }
+    }
+
+
+
 }

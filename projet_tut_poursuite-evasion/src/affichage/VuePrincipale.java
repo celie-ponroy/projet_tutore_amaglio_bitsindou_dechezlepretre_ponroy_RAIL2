@@ -121,7 +121,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             } else {
                 imageP2.setOpacity(0);
             }
-
         }
 
         //Pop up pour afficher la fin de la partie
@@ -134,7 +133,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
                 alert.setHeaderText("Dommage...");
-                alert.setContentText("L'IA a été plus maligne, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
+                alert.setContentText("L'IA a été plus rusée, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
             }
             //affiche l'alerte avec les messages pendant 2 secondes
             alert.showAndWait();

@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import simulation.Comportements;
 import simulation.Simulation;
+
 /**
  * Classe qui affiche les menus non interactifs
  */
@@ -23,6 +24,7 @@ public class VueMenusNonInteractive {
     private static MoteurJeu jeu;
     private static double WIDTH = 1540;
     private static double HEIGHT = 1200;
+
     /**
      * constructeur
      */

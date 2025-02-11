@@ -6,10 +6,11 @@ import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
-public class Aleatoire implements Comportement{
+public class Aleatoire implements Comportement {
     Simulation simulation;
     Personnage perso;
-    public Aleatoire(Simulation simulation, Personnage perso){
+
+    public Aleatoire(Simulation simulation, Personnage perso) {
         this.simulation = simulation;
         this.perso = perso;
 
@@ -22,42 +23,43 @@ public class Aleatoire implements Comportement{
         position.deplacement(deplacement);
         boolean gardien = perso.equals(simulation.getGardien());
         boolean invalide = simulation.murPresent(position.getX(), position.getY());
-        if(!gardien){
-            if(Simulation.CARTE[position.getX()][position.getY()]== CaseEnum.SPAWN_PRISONNIER.ordinal()){
+        if (!gardien) {
+            if (Simulation.CARTE[position.getX()][position.getY()] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
                 invalide = true;
             }
         }
-        while(invalide){
+        while (invalide) {
             deplacement = deplacementAleatoire();
             position = new Position(perso.getPosition().getX(), perso.getPosition().getY());
             position.deplacement(deplacement);
             invalide = simulation.murPresent(position.getX(), position.getY());
-            if(!gardien){
-                if(Simulation.CARTE[position.getX()][position.getY()]== CaseEnum.SPAWN_PRISONNIER.ordinal()){
+            if (!gardien) {
+                if (Simulation.CARTE[position.getX()][position.getY()] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
                     invalide = true;
                 }
             }
         }
         return deplacement;
     }
-    private Deplacement deplacementAleatoire(){
+
+    private Deplacement deplacementAleatoire() {
         int random = (int) (Math.random() * 9);
         Deplacement deplacement = Deplacement.AUCUN;
-        if(random == 0){
+        if (random == 0) {
             deplacement = Deplacement.HAUT;
-        } else if(random == 1){
+        } else if (random == 1) {
             deplacement = Deplacement.BAS;
-        } else if(random == 2){
+        } else if (random == 2) {
             deplacement = Deplacement.GAUCHE;
-        } else if(random == 3){
+        } else if (random == 3) {
             deplacement = Deplacement.DROITE;
-        } else if(random == 4){
+        } else if (random == 4) {
             deplacement = Deplacement.DIAG_HAUT_GAUCHE;
-        } else if(random == 5){
+        } else if (random == 5) {
             deplacement = Deplacement.DIAG_HAUT_DROITE;
-        } else if(random == 6){
+        } else if (random == 6) {
             deplacement = Deplacement.DIAG_BAS_GAUCHE;
-        } else if(random == 7){
+        } else if (random == 7) {
             deplacement = Deplacement.DIAG_BAS_DROITE;
         }
         return deplacement;

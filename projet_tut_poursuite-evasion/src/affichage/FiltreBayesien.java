@@ -7,11 +7,12 @@ import simulation.Simulation;
 public class FiltreBayesien {
     /**
      * Initialiste le filtre
+     *
      * @param carteBayes
      * @param TAILLE_CELLULE
      * @return
      */
-    static Rectangle[][] initFiltre(double[][] carteBayes,int TAILLE_CELLULE) {
+    static Rectangle[][] initFiltre(double[][] carteBayes, int TAILLE_CELLULE) {
         Rectangle[][] caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
         for (int i = 0; i < Simulation.CARTE.length; i++) {
@@ -33,6 +34,7 @@ public class FiltreBayesien {
 
     /**
      * mets à jour le filtre
+     *
      * @param caseBayesienne
      * @param carteBayes
      */
@@ -43,7 +45,7 @@ public class FiltreBayesien {
                 if (carteBayes[i][j] == -1) {
                     rectangle.setFill(new Color(0.0, 0, 0, 0.5));
                 } else {
-                    rectangle.setFill(Color.rgb(190, 35, 0, 1 *Math.pow( carteBayes[i][j], 0.5)));
+                    rectangle.setFill(Color.rgb(190, 35, 0, 1 * Math.pow(carteBayes[i][j], 0.5)));
                 }
             }
         }

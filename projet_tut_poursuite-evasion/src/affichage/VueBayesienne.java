@@ -29,10 +29,10 @@ public class VueBayesienne extends VueSimulation {
             this.perso = s.getPrisonnier();
         }
         if (this.perso == simulation.getPrisonnier()) {
-            this.imagePerso= new Image("file:images/prisonnier.png");
+            this.imagePerso = new Image("file:images/prisonnier.png");
 
         } else {
-            this.imagePerso= new Image("file:images/gardien.png");
+            this.imagePerso = new Image("file:images/gardien.png");
         }
         this.persoView = new ImageView(imagePerso);
         persoView.setFitWidth(TAILLE_CELLULE);
@@ -49,14 +49,14 @@ public class VueBayesienne extends VueSimulation {
     private void init() {
         Personnage personnage;
 
-        if (this.perso == simulation.getPrisonnier()){
+        if (this.perso == simulation.getPrisonnier()) {
             personnage = simulation.getPrisonnier();
-        }else{
+        } else {
             personnage = simulation.getGardien();
         }
 
 
-        this.getChildren().add(initLabyrinthe());
+        this.getChildren().add(initLabyrinthe(true));
         // Initialisation de la carte bayesienne
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
         caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE);
@@ -99,11 +99,12 @@ public class VueBayesienne extends VueSimulation {
      */
     private void updateBayes() {
         var carte = simulation.historiqueBayesien.get(this.perso).get(tour);
-        FiltreBayesien.updateBayes(caseBayesienne,carte);
+        FiltreBayesien.updateBayes(caseBayesienne, carte);
     }
 
     /**
      * Permets de mettre à jour selon le tour
+     *
      * @param tour
      */
     public void update(int tour) {

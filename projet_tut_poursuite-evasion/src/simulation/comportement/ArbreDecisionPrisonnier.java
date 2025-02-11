@@ -12,32 +12,33 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
     private Simulation simulation;
     private Personnage personnage;
 
-    public ArbreDecisionPrisonnier(Simulation simulation, Personnage personnage){
+    public ArbreDecisionPrisonnier(Simulation simulation, Personnage personnage) {
         this.simulation = simulation;
         this.personnage = personnage;
     }
 
     /**
      * Renvoie le deplacement à prendre
+     *
      * @return
      */
     @Override
     public Deplacement prendreDecision() {
 
         Deplacement deplacementRes = Deplacement.AUCUN;
-        Stack<Position> s = Simulation.CHEMINS_P.get(List.of(personnage.getPosition(),Simulation.getPosSortie()));
-        if(s.empty()) {
+        Stack<Position> s = Simulation.CHEMINS_P.get(List.of(personnage.getPosition(), Simulation.getPosSortie()));
+        if (s.empty()) {
             deplacementRes = direction(personnage.getPosition(), Simulation.getPosSortie());
             //si on voit pas le gardien
-        }else if(!simulation.estVisible(personnage, true)){
+        } else if (!simulation.estVisible(personnage, true)) {
             //on va vers la sortie
             deplacementRes = direction(personnage.getPosition(), s.getLast());
 
-        //sinon est ce qu'il est sur le chemin de la sortie ?
-        }else if(s.contains(simulation.getGardien().getPosition())){
+            //sinon est ce qu'il est sur le chemin de la sortie ?
+        } else if (s.contains(simulation.getGardien().getPosition())) {
             //on fui le gardien
             deplacementRes = oppose(direction(personnage.getPosition(), s.getLast()));// a changer
-        }else{
+        } else {
             //on va vers la sortie
             deplacementRes = direction(personnage.getPosition(), s.getLast());
         }

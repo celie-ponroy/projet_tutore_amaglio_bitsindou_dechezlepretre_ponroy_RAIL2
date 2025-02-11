@@ -9,12 +9,8 @@ import affichage.DessinJeu;
 public interface Jeu {
 
     void ajouterObservateur(DessinJeu dj);
-    void notifierObservateurs();
 
-    /**
-     * initialisation du jeu
-     */
-    void init();
+    void notifierObservateurs();
 
     /**
      * verifie si le jeu est fini

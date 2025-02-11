@@ -12,11 +12,13 @@ import java.util.*;
 
 public class CalculVision {
     static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+
     /**
      * Recuperer la vision depuis le fichier vision.txt
+     *
      * @return la liste des cases pour toutes les positions de la carte
      */
-    public static HashMap<Position,ArrayList<Position>> recupererVision() {
+    public static HashMap<Position, ArrayList<Position>> recupererVision() {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
         //on recupere la vision depuis le fichier vision.txt
         try {
@@ -31,12 +33,12 @@ public class CalculVision {
                 ArrayList<Position> positions = new ArrayList<>();
                 //on cherche les positions
                 //il faut enlever les crochets et les parenthèses
-                parts[1] = parts[1].replace("[","").replace("]","").replace("(","").replace(")","").replace(" ","");
+                parts[1] = parts[1].replace("[", "").replace("]", "").replace("(", "").replace(")", "").replace(" ", "");
                 positions = new ArrayList<>();
                 String[] positionsStr = parts[1].split(",");
                 for (String positionStr : positionsStr) {
                     String[] coordonneesPosition = positionStr.split(";");
-                    if(coordonneesPosition.length != 2){
+                    if (coordonneesPosition.length != 2) {
                         continue;
                     }
                     int xPosition = Integer.parseInt(coordonneesPosition[0]);
@@ -53,17 +55,18 @@ public class CalculVision {
 
     /**
      * Ecrire la vision dans un fichier (et dans le terminal)
+     *
      * @throws IOException
      */
     public static void ecrireVision() throws IOException {
         HashMap vision = calculerCarteVision();
         //ecrire dans un fichier
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision.txt"));
-        for (int y = 0; y < CARTE.length ; y++) {
+        for (int y = 0; y < CARTE.length; y++) {
             for (int x = 0; x < CARTE[0].length; x++) {
                 //afficher la position
-                bos.write((x+","+y+":").getBytes());
-                bos.write((vision.get(new Position(x,y))+";"+"\n").getBytes());
+                bos.write((x + "," + y + ":").getBytes());
+                bos.write((vision.get(new Position(x, y)) + ";" + "\n").getBytes());
             }
         }
         bos.close();
@@ -72,19 +75,20 @@ public class CalculVision {
 
     /**
      * Calculer la vision de chaque case de la carte
+     *
      * @return la liste des cases pour toutes les positions de la carte
      */
-    public static HashMap calculerCarteVision(){
+    public static HashMap calculerCarteVision() {
 
         HashMap res = new HashMap();
-        for (int y = 0; y < CARTE.length ; y++) {
+        for (int y = 0; y < CARTE.length; y++) {
             for (int x = 0; x < CARTE[0].length; x++) {
-               //si la case est un mur
+                //si la case est un mur
                 if (CARTE[y][x] == CaseEnum.MUR.ordinal()) {
-                    res.put(new Position(x,y),new ArrayList());
+                    res.put(new Position(x, y), new ArrayList());
                     continue;
                 }
-                res.put(new Position(x,y),calculerVision(x, y));
+                res.put(new Position(x, y), calculerVision(x, y));
             }
         }
         cleanVision(res);
@@ -93,6 +97,7 @@ public class CalculVision {
 
     /**
      * Calculer la vision d'un personnage sur une case
+     *
      * @param xPerso position x du personnage
      * @param yPerso position y du personnage
      * @return la liste des positions des cases visibles
@@ -115,7 +120,7 @@ public class CalculVision {
                 int coordoneeVisionY = y + tailledecalage;
 
 
-                if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length ||coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
+                if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length || coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
 
 
@@ -130,7 +135,7 @@ public class CalculVision {
         List<Position> murs = new ArrayList<>();
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
-                if (vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal()) {
+                if (vision[y + tailledecalage][x + tailledecalage] == CaseEnum.MUR.ordinal()) {
 
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
@@ -142,7 +147,7 @@ public class CalculVision {
                 //si la case est un mur
 
 
-                if (!(vision[y+tailledecalage][x+tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
+                if (!(vision[y + tailledecalage][x + tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
 
 
                     //on trace une droite entre le personnage et la case
@@ -154,8 +159,8 @@ public class CalculVision {
                     for (Position mur : murs) {
                         //on regarde si la droite un des cotés du mur
                         //nonVisible =
-                        if(line.intersects(mur.getX() - 0.5, mur.getY() - 0.5, 1, 1)){
-                            visible=false;
+                        if (line.intersects(mur.getX() - 0.5, mur.getY() - 0.5, 1, 1)) {
+                            visible = false;
                         }
                     }
                     if (visible) {
@@ -169,12 +174,13 @@ public class CalculVision {
 
     /**
      * Nettoyer la vision pour ne garder que les cases voulues
+     *
      * @param vision
      */
-    private static void cleanVision(HashMap<Position,ArrayList<Position>> vision){
+    private static void cleanVision(HashMap<Position, ArrayList<Position>> vision) {
         //on retire les cases non voulues
 
-        for (Position pPerso: vision.keySet()) {
+        for (Position pPerso : vision.keySet()) {
             ArrayList<Position> visionCur = vision.get(pPerso);
 
             Iterator<Position> iterator = visionCur.iterator();
@@ -191,6 +197,7 @@ public class CalculVision {
 
     /**
      * Parcours de la carte pour voir si il y a un chemin entre la case et le personnage
+     *
      * @param pPerso
      * @param positionCur
      * @param visionCur
@@ -198,8 +205,8 @@ public class CalculVision {
      * @return true si il y a un chemin entre la case et le personnage
      */
 
-    private static boolean parcours(Position pPerso, Position positionCur, ArrayList<Position> visionCur, ArrayList<Position> casesVisites){
-        if(positionCur.equals(pPerso)){
+    private static boolean parcours(Position pPerso, Position positionCur, ArrayList<Position> visionCur, ArrayList<Position> casesVisites) {
+        if (positionCur.equals(pPerso)) {
             return true;
         }
         ArrayList<Position> casesAdjacentes = positionCur.casesAdjacentes();
@@ -207,19 +214,19 @@ public class CalculVision {
         boolean res = false;
 
         //on parcours les cases visibles adjacentes si elles ne sont pas déjà visités
-        for (Position caseAdjacente :casesAdjacentes) {
-            if(casesVisites.contains(caseAdjacente)){//si la case est déjà visitée on passe
+        for (Position caseAdjacente : casesAdjacentes) {
+            if (casesVisites.contains(caseAdjacente)) {//si la case est déjà visitée on passe
                 continue;
             }
-            if(!visionCur.contains(caseAdjacente)){//si la case n'est pas dans la vision on passe
+            if (!visionCur.contains(caseAdjacente)) {//si la case n'est pas dans la vision on passe
                 continue;
             }
             //si la case est celle du perso on garde la case sinon on la retire
-            if(pPerso.equals(caseAdjacente)){
+            if (pPerso.equals(caseAdjacente)) {
                 return true;
             }
             //si la case a un chemin de la case adjacente au perso qui passe par que des cases visibles
-            if(parcours(pPerso,caseAdjacente,visionCur,casesVisites))
+            if (parcours(pPerso, caseAdjacente, visionCur, casesVisites))
                 res = true;
         }
         return res;

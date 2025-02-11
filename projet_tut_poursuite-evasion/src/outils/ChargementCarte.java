@@ -9,21 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChargementCarte {
-    public static int[][] charger(String nom){
+    public static int[][] charger(String nom) {
         int[][] carte;
         List<int[]> lignes = new ArrayList<>();
-        try{
+        try {
             BufferedReader bf = new BufferedReader(new FileReader(nom));
             String ligne = bf.readLine();
-            while (ligne != null){
+            while (ligne != null) {
                 int[] nbLigne = new int[ligne.length()];
                 int car;
-                for(int i = 0; i < ligne.length(); i++) {
+                for (int i = 0; i < ligne.length(); i++) {
                     car = ligne.charAt(i) - '0';
-                    if (car >= CaseEnum.MUR.ordinal() && car <= CaseEnum.RACCOURCI_GARDIEN.ordinal()){
+                    if (car >= CaseEnum.MUR.ordinal() && car <= CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
                         nbLigne[i] = car;
-                    }
-                    else{
+                    } else {
                         nbLigne[i] = CaseEnum.SOL.ordinal();
                     }
                 }

@@ -8,13 +8,13 @@ import simulation.Simulation;
 public class Clavier implements EventHandler<KeyEvent> {
     private Simulation simulation;
 
-    public Clavier(Simulation s){
+    public Clavier(Simulation s) {
         this.simulation = s;
     }
 
     @Override
     public void handle(KeyEvent keyEvent) {
-        if(!simulation.etreFini()) {
+        if (!simulation.etreFini()) {
             switch (keyEvent.getCode()) {
                 case Z:
                 case NUMPAD8:

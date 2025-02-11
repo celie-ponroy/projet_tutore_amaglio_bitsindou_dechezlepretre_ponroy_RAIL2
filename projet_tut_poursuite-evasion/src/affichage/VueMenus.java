@@ -376,8 +376,6 @@ public class VueMenus extends VueSimulation {
     public void afficherAnalyse() {
         VueAnalyse va = new VueAnalyse();
         va.createAnalyseView(primaryStage);
-
-
     }
 
 

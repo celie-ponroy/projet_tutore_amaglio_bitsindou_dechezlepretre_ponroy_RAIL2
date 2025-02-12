@@ -27,6 +27,12 @@
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
 }
+.infos{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #749bed;
+    -fx-font-weight: bold;
+}
 
 .combo-box-base {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, #edebeb;

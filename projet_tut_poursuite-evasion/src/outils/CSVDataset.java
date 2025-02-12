@@ -5,6 +5,7 @@ import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
+import ai.djl.translate.TranslateException;
 import ai.djl.util.Progress;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -70,9 +71,8 @@ public class CSVDataset extends RandomAccessDataset {
             return this;
         }
 
-        public CSVDataset build() throws IOException {
-            String csvFilePath = "donnees/game_data.csv";
-            try (Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));
+        public CSVDataset build(String nomFichier) throws IOException {
+            try (Reader reader = Files.newBufferedReader(Paths.get(nomFichier));
                  CSVParser csvParser =
                          new CSVParser(reader, CSVFormat.DEFAULT
                                  .withHeader("map", "dep")

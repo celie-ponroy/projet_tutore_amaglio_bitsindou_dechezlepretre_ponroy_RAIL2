@@ -6,7 +6,6 @@ import ai.djl.basicmodelzoo.basic.Mlp;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
-import ai.djl.nn.Parameter;
 import ai.djl.translate.Batchifier;
 import ai.djl.util.Pair;
 import outils.Outil;
@@ -30,12 +29,13 @@ public class ReseauDeNeurones implements Comportement {
         this.personnage = personnage;
 
         Path modelDir = Paths.get("donnees/mlp");
-        model = Model.newInstance("mlp_"+200+"_"+100);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {200, 100}));
+        model = Model.newInstance(nomReseau);
+        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {200, 150,100}));
         try {
             model.load(modelDir);
-        }catch (MalformedModelException | IOException ex) {}
-
+        }catch (MalformedModelException | IOException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         this.translator =  new Translator<NDArray, Integer>() {
             @Override

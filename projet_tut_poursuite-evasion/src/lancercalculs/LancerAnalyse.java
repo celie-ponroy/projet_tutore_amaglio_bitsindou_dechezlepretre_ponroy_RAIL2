@@ -57,8 +57,8 @@ public class LancerAnalyse implements Jeu {
         historiqueDeplacementsPerso.add(nbDeplacementPerso);
 
         // Récupération des positions
-        List<Position> posPrisonnier = simulation.historiquePosition.get(simulation.getPrisonnier());
-        List<Position> posGardien = simulation.historiquePosition.get(simulation.getGardien());
+        List<Position> posPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier());
+        List<Position> posGardien = simulation.getHistoriquePosition().get(simulation.getGardien());
 
         // Mise à jour des cases visitées pour le prisonnier
         updateCasesVisitees(posPrisonnier);

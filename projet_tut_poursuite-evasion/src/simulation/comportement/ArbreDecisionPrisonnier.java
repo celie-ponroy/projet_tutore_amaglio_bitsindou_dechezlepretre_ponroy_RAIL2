@@ -1,14 +1,16 @@
 package simulation.comportement;
 
+import simulation.Comportements;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-public class ArbreDecisionPrisonnier extends ArbreDecision implements Comportement {
+public class ArbreDecisionPrisonnier extends ArbreDecision implements Comportement , Serializable {
     private Simulation simulation;
     private Personnage personnage;
 
@@ -44,6 +46,10 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         }
         return deplacementRes;
 
+    }
+    @Override
+    public Comportements getType() {
+        return Comportements.ArbreDeterministe;
     }
 
 }

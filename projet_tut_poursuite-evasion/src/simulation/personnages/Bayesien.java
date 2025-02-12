@@ -4,12 +4,13 @@ import simulation.Case;
 import simulation.CaseEnum;
 import simulation.Simulation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Bayesien {
+public class Bayesien implements Serializable {
     double[][] carteBayesienne;
     List<Case> casesValides;
 

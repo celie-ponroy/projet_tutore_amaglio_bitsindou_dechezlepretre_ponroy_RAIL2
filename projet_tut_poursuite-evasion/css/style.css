@@ -51,3 +51,22 @@
 .chart-legend-item {
     -fx-text-fill: black;
 }
+.important{
+    -fx-background-color:  #C95050
+}
+.important:hover{
+    -fx-background-color: #B34040;
+
+}
+.valider{
+    -fx-background-color:  #50C950
+}
+.valider:hover{
+    -fx-background-color: #40B340;
+}
+.nonValider{
+    -fx-background-color:  #C95050
+}
+.nonValider:hover {
+    -fx-background-color: #B34040;
+}

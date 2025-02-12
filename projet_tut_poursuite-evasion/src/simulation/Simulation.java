@@ -28,9 +28,9 @@ public class Simulation implements Jeu {
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
-    public HashMap<Personnage, List<Position>> historiquePosition;
-    public HashMap<Personnage, List<double[][]>> historiqueBayesien;
-    public HashMap<Personnage, List<Deplacement>> historiqueDeplacement;
+    private HashMap<Personnage, List<Position>> historiquePosition;
+    private HashMap<Personnage, List<double[][]>> historiqueBayesien;
+    private HashMap<Personnage, List<Deplacement>> historiqueDeplacement;
 
     private boolean estFini;
     private HashMap<Personnage, double[][]> carteBayesiennes;
@@ -78,10 +78,10 @@ public class Simulation implements Jeu {
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
                 break;
             default:
                 break;
@@ -98,10 +98,10 @@ public class Simulation implements Jeu {
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreAleatoire:
-                this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                 break;
             default:
                 break;
@@ -171,10 +171,10 @@ public class Simulation implements Jeu {
                     this.comportementGardien = new Aleatoire(this, this.gardien);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
                     break;
                 case Comportements.ReseauArbreAleatoire:
-                    this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
                     break;
                 default:
                     break;
@@ -201,10 +201,10 @@ public class Simulation implements Jeu {
                     this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
                     break;
                 case Comportements.ReseauArbreAleatoire:
-                    this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                     break;
                 default:
                     break;
@@ -226,7 +226,35 @@ public class Simulation implements Jeu {
         List<Position> list1 = new ArrayList<>();
         list1.add(this.gardien.getPosition());
         historiquePosition.put(this.gardien, list1);
+
+        historiqueDeplacement = new HashMap<>();
+        List<Deplacement> depP = new ArrayList<>();
+        List<Deplacement> depG = new ArrayList<>();
+        historiqueDeplacement.put(gardien, depG);
+        historiqueDeplacement.put(prisonnier, depP);
+
     }
+
+    /**
+     * Constructeur par copie
+     */
+    public Simulation(Simulation simulation){
+        this.gardien = simulation.gardien;
+        this.prisonnier = simulation.prisonnier;
+        this.comportementGardien = simulation.comportementGardien;
+        this.comportementPrisonnier = simulation.comportementPrisonnier;
+        this.historiqueDeplacement = simulation.historiqueDeplacement;
+        this.historiquePosition = simulation.historiquePosition;
+        this.historiqueBayesien = simulation.historiqueBayesien;
+        this.estFini = simulation.estFini;
+        this.carteBayesiennes = simulation.carteBayesiennes;
+        this.bayesiens = simulation.bayesiens;
+        this.nbTours = simulation.nbTours;
+        this.victoireGardien = simulation.victoireGardien;
+        this.victoirePrisonnier = simulation.victoirePrisonnier;
+        this.observateurs = new ArrayList<>();
+    }
+
 
     /**
      * Methode permettant d'ajouter un observateur
@@ -302,8 +330,9 @@ public class Simulation implements Jeu {
             historiqueDeplacement.get(gardien).add(d2);
 
             var cartebay = bayesiens.get(gardien).getCarteBayesienne().clone();
-            historiqueBayesien.get(gardien).add(cartebay);
             var cartebay2 = bayesiens.get(prisonnier).getCarteBayesienne().clone();
+
+            historiqueBayesien.get(gardien).add(cartebay);
             historiqueBayesien.get(prisonnier).add(cartebay2);
 
             deplacerPersonnage(this.prisonnier, d1);
@@ -315,12 +344,15 @@ public class Simulation implements Jeu {
             historiquePosition.get(prisonnier).add(prisonnier.getPosition());
             historiquePosition.get(gardien).add(gardien.getPosition());
 
-
             this.nbTours++;
-            //gestion des interactions et de la fin du jeu
+
             miseAJourFinJeu();
 
         }
+
+        historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+        historiquePosition.get(gardien).add(gardien.getPosition());
+
         this.notifierObservateurs();
     }
 
@@ -330,6 +362,8 @@ public class Simulation implements Jeu {
      * @param d déplacement souhaité
      */
     public void deplacementJoueur(Deplacement d) {
+        this.historiqueDeplacement.get(this.prisonnier).add(Deplacement.AUCUN);
+        this.historiqueDeplacement.get(this.gardien).add(Deplacement.AUCUN);
 
         Deplacement deplacementAgent;
 
@@ -344,28 +378,42 @@ public class Simulation implements Jeu {
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
         //initialisation du déplacement du joueur
-        if (!verifierDeplacemnt(joueur, d))
+        if (!verifierDeplacemnt(joueur, d)) {
+            historiqueDeplacement.get(joueur).removeLast();
+            historiqueDeplacement.get(agent).removeLast();
             return;
+        }
         //on déplace d'abbord le joueur
         if (this.prisonnier.equals(getJoueur())) {
             deplacerPersonnage(joueur, d);
+            this.historiqueDeplacement.get(joueur).removeLast();
+            this.historiqueDeplacement.get(joueur).add(d);
             miseAJourFinJeu();
-            if (!this.estFini)
+            if (!this.estFini){
                 deplacerPersonnage(agent, deplacementAgent);
+                this.historiqueDeplacement.get(agent).removeLast();
+                this.historiqueDeplacement.get(agent).add(deplacementAgent);
+            }
         } else {
             deplacerPersonnage(agent, deplacementAgent);
+            this.historiqueDeplacement.get(agent).removeLast();
+            this.historiqueDeplacement.get(agent).add(deplacementAgent);
             miseAJourFinJeu();
-            if (!this.estFini)
+            if (!this.estFini) {
                 deplacerPersonnage(joueur, d);
+                this.historiqueDeplacement.get(joueur).removeLast();
+                this.historiqueDeplacement.get(joueur).add(d);
+            }
+
         }
 
         this.nbTours++;
 
         actualisationBayesienne(agent, joueur);
 
-
         var cartebay = bayesiens.get(agent).getCarteBayesienne().clone();
         historiqueBayesien.get(agent).add(cartebay);
+
 
         //gestion des interactions et de la fin du jeu
         miseAJourFinJeu();
@@ -380,7 +428,6 @@ public class Simulation implements Jeu {
     /**
      * Mise à jour fin du jeu
      */
-
     public void miseAJourFinJeu() {
         if (nbTours >= 100)
             this.estFini = true;
@@ -618,5 +665,106 @@ public class Simulation implements Jeu {
      */
     public int getNbDeplacementsPerso() {
         return nbDeplacementsPerso;
+    }
+    public HashMap<Personnage, List<Deplacement>> getHistoriqueDeplacement() {
+        return historiqueDeplacement;
+    }
+
+    public HashMap<Personnage, List<Position>> getHistoriquePosition() {
+        return historiquePosition;
+    }
+
+    public HashMap<Personnage, List<double[][]>> getHistoriqueBayesien() {
+        return historiqueBayesien;
+    }
+    public void supprimerObservateurs() {
+        this.observateurs.clear();
+    }
+
+    public Comportement getComportementPrisonnier() {
+        return comportementPrisonnier;
+    }
+
+    public Comportement getComportementGardien() {
+        return comportementGardien;
+    }
+
+    public HashMap<Personnage, double[][]> getCarteBayesiennes() {
+        return carteBayesiennes;
+    }
+
+    public void setComportementPrisonnier(Comportement comportementPrisonnier) {
+        this.comportementPrisonnier = comportementPrisonnier;
+    }
+
+    public void setComportementGardien(Comportement comportementGardien) {
+        this.comportementGardien = comportementGardien;
+    }
+
+    public void setCarteBayesiennes(HashMap<Personnage, double[][]> carteBayesiennes) {
+        this.carteBayesiennes = carteBayesiennes;
+    }
+
+    public void setBayesiens(HashMap<Personnage, Bayesien> bayesiens) {
+        this.bayesiens = bayesiens;
+    }
+
+    public void setGardien(Personnage gardien) {
+        this.gardien = gardien;
+    }
+
+    public void setEstFini(boolean estFini) {
+        this.estFini = estFini;
+    }
+
+    public void setHistoriqueBayesien(HashMap<Personnage, List<double[][]>> historiqueBayesien) {
+        this.historiqueBayesien = historiqueBayesien;
+    }
+
+    public void setHistoriqueDeplacement(HashMap<Personnage, List<Deplacement>> historiqueDeplacement) {
+        this.historiqueDeplacement = historiqueDeplacement;
+    }
+
+    public void setHistoriquePosition(HashMap<Personnage, List<Position>> historiquePosition) {
+        this.historiquePosition = historiquePosition;
+    }
+
+    public void setNbTours(int nbTours) {
+        this.nbTours = nbTours;
+    }
+
+    public void setObservateurs(List<DessinJeu> observateurs) {
+        this.observateurs = observateurs;
+    }
+
+    public void setPrisonnier(Personnage prisonnier) {
+        this.prisonnier = prisonnier;
+    }
+
+    public void setVictoireGardien(boolean victoireGardien) {
+        this.victoireGardien = victoireGardien;
+    }
+
+    public void setVictoirePrisonnier(boolean victoirePrisonnier) {
+        this.victoirePrisonnier = victoirePrisonnier;
+    }
+
+    @Override
+    public String toString() {
+        return "Simulation{" +
+                ", nbTours=" + nbTours +
+                ", gardien=" + gardien +
+                ", prisonnier=" + prisonnier +
+                ", victoirePrisonnier=" + victoirePrisonnier +
+                ", victoireGardien=" + victoireGardien +
+                ", comportementGardien=" + comportementGardien +
+                ", comportementPrisonnier=" + comportementPrisonnier +
+                ", historiquePosition=" + historiquePosition +
+                ", historiqueBayesien=" + historiqueBayesien +
+                ", historiqueDeplacement=" + historiqueDeplacement +
+                ", estFini=" + estFini +
+                ", carteBayesiennes=" + carteBayesiennes +
+                ", bayesiens=" + bayesiens +
+                '}';
     }
 }

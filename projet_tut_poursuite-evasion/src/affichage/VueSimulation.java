@@ -1,14 +1,22 @@
 package affichage;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import sauvegarde.Sauvegarde;
 import simulation.CaseEnum;
+import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Position;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
 
 public abstract class VueSimulation extends Pane {
     protected Image imageMur;
@@ -21,6 +29,8 @@ public abstract class VueSimulation extends Pane {
     protected ImageView gardienView; // Vue pour le gardien
     protected int TAILLE_CELLULE = 25;
     private Pane labyrinthePane;// Taille des cases du labyrinthe
+    protected Simulation simulation;
+
 
 
     VueSimulation() {
@@ -82,12 +92,13 @@ public abstract class VueSimulation extends Pane {
         if (withPerso) {
             // Initialisation des personnages
             prisonnierView = new ImageView(imagePrisonnier);
-            prisonnierView.setFitWidth(TAILLE_CELLULE);
+            prisonnierView.setPreserveRatio(true);
             prisonnierView.setFitHeight(TAILLE_CELLULE);
 
             gardienView = new ImageView(imageGardien);
-            gardienView.setFitWidth(TAILLE_CELLULE);
+            gardienView.setPreserveRatio(true);
             gardienView.setFitHeight(TAILLE_CELLULE);
+
 
             setOpacityPersonnage();
 
@@ -113,6 +124,52 @@ public abstract class VueSimulation extends Pane {
     protected abstract void updatePositions();
 
     /**
+     * Mets à jour les directions des sprites personnages
+     */
+    protected void updateDirections(int tour){
+        var historiqueDeplacementP = this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier());
+        updateDirectionPersonnage(tour, historiqueDeplacementP, "prisonnier", prisonnierView);
+        var historiqueDeplacementG = this.simulation.getHistoriqueDeplacement().get(this.simulation.getGardien());
+        updateDirectionPersonnage(tour, historiqueDeplacementG, "gardien", gardienView);
+    }
+    /**
+     * Mets à jour les directions des sprites personnages
+     */
+    static public void updateDirectionPersonnage(int tour, List<Deplacement> historiqueDeplacement,String nomPerso, ImageView view){
+        if(historiqueDeplacement.isEmpty()) {
+            System.out.println("Historique de déplacement vide");
+            return;
+        }
+        if(historiqueDeplacement.size() <= tour||tour==0) {
+            view.setImage(new Image("file:images/"+nomPerso+".png"));
+            return;
+        }
+
+        switch (historiqueDeplacement.get(tour)){
+            case HAUT:
+                view.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
+                break;
+            case BAS:
+                view.setImage(new Image("file:images/"+nomPerso+"_bas.png"));
+                break;
+            case GAUCHE:
+            case DIAG_BAS_GAUCHE:
+            case DIAG_HAUT_GAUCHE:
+                view.setImage(new Image("file:images/"+nomPerso+"_gauche.png"));
+                break;
+            case DROITE:
+            case DIAG_BAS_DROITE:
+            case DIAG_HAUT_DROITE:
+                view.setImage(new Image("file:images/"+nomPerso+"_droite.png"));
+                break;
+            case AUCUN:
+                view.setImage(new Image("file:images/"+nomPerso+".png"));
+                break;
+        }
+
+    }
+
+    /**
      * Met à jour l'image en fonction de la position
      *
      * @param p
@@ -121,5 +178,36 @@ public abstract class VueSimulation extends Pane {
     protected void setPositions(Position p, ImageView im) {
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);
+    }
+
+    /**
+     * Permets de sauvegarder la parie courrante peut se lancer a la fin de la partie)
+     * @param sauvegarder
+     */
+    protected void lancerSauvegarde(Button sauvegarder){
+        TextInputDialog dialog = new TextInputDialog("sauvegarde");
+        dialog.setTitle("Veillez nommez votre sauvegarde");
+        dialog.setContentText("Veillez nommez votre sauvegarde:");
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(name -> {
+            if(Sauvegarde.nomsSauvegardes().contains(result.get().toString()+".ser")){
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setContentText("Le nom selectionné est déja attribué voullez vous l'écraser?");
+
+                Optional<ButtonType> result2 = alert.showAndWait();
+                if (result2.get() == ButtonType.OK){
+                } else {
+                    sauvegarder.getStyleClass().add("nonValider");
+                }
+
+            }
+            try {
+                Sauvegarde.sauvegarder(this.simulation,result.get()+".ser");
+                sauvegarder.getStyleClass().add("valider");
+            }catch (Exception ex){
+                ex.printStackTrace();
+                sauvegarder.getStyleClass().add("nonValider");
+            }
+        });
     }
 }

@@ -9,6 +9,7 @@ pom.xml
 resources/
 hello-view.fxml
 *.class
+donnes/sauvegardes_simulation
 
 
 

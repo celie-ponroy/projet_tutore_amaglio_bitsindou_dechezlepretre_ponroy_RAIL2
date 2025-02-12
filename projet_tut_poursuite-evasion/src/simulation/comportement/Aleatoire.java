@@ -1,12 +1,13 @@
 package simulation.comportement;
 
 import simulation.CaseEnum;
+import simulation.Comportements;
 import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
-public class Aleatoire implements Comportement {
+public class Aleatoire implements Comportement, java.io.Serializable {
     Simulation simulation;
     Personnage perso;
 
@@ -42,7 +43,12 @@ public class Aleatoire implements Comportement {
         return deplacement;
     }
 
-    private Deplacement deplacementAleatoire() {
+    @Override
+    public Comportements getType() {
+        return Comportements.Aleatoire;
+    }
+
+    private Deplacement deplacementAleatoire(){
         int random = (int) (Math.random() * 9);
         Deplacement deplacement = Deplacement.AUCUN;
         if (random == 0) {
@@ -64,4 +70,5 @@ public class Aleatoire implements Comportement {
         }
         return deplacement;
     }
+
 }

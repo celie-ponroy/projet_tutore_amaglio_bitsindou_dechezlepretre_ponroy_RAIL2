@@ -2,11 +2,12 @@ package simulation.personnages;
 
 import simulation.Simulation;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Joueur extends Personnage {
-    public Joueur(int x, int y) {
-        super(x, y);
+public class Joueur extends Personnage implements Serializable {
+    public Joueur(int x, int y){
+        super(x,y);
     }
 
 

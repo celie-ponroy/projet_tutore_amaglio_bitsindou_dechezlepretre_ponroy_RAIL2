@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
 
-public class FiltreBayesien {
+public class FiltreBayesien  {
     /**
      * Initialiste le filtre
      *
@@ -12,14 +12,14 @@ public class FiltreBayesien {
      * @param TAILLE_CELLULE
      * @return
      */
-    static Rectangle[][] initFiltre(double[][] carteBayes, int TAILLE_CELLULE) {
+    static Rectangle[][] initFiltre(double[][] carteBayes,int TAILLE_CELLULE,int DecalageX,int DecalageY) {
         Rectangle[][] caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
-                rectangle.setX(j * TAILLE_CELLULE);
-                rectangle.setY(i * TAILLE_CELLULE);
+                rectangle.setX(j * TAILLE_CELLULE+DecalageX);
+                rectangle.setY(i * TAILLE_CELLULE+DecalageY);
                 if (carteBayes[i][j] == -1) {
                     rectangle.setFill(new Color(0.0, 0, 0, 0.5));
                 } else {

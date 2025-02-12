@@ -1,17 +1,18 @@
 package simulation.comportement;
+    import simulation.Case;
+    import simulation.Comportements;
+    import simulation.Deplacement;
+    import simulation.Simulation;
+    import simulation.personnages.Personnage;
+    import simulation.personnages.Position;
 
-import simulation.Case;
-import simulation.Deplacement;
-import simulation.Simulation;
-import simulation.personnages.Personnage;
-import simulation.personnages.Position;
+    import java.io.Serializable;
+    import java.util.List;
+    import java.util.Stack;
 
-import java.util.List;
-import java.util.Stack;
-
-public class ArbreDecisionGardienAleatoire extends ArbreDecision implements Comportement {
-    private Simulation simulation;
-    private Personnage personnage;
+    public class ArbreDecisionGardienAleatoire extends ArbreDecision implements Comportement , Serializable {
+        private Simulation simulation;
+        private Personnage personnage;
 
     public ArbreDecisionGardienAleatoire(Simulation simulation, Personnage personnage) {
         this.simulation = simulation;
@@ -45,6 +46,12 @@ public class ArbreDecisionGardienAleatoire extends ArbreDecision implements Comp
             return direction(personnage.getPosition(), s.getLast());
 
         }
+
+    }
+
+    @Override
+    public Comportements getType() {
+        return Comportements.ArbreAleatoire;
     }
 
     /**

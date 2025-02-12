@@ -14,7 +14,7 @@ package "simulation"{
   }
   enum Comportements{
     ARBREDETERMINISTE
-    ARBREDETERMINISTEV
+    ARBREDETERMINISTEV2
     ALEATOIRE
     ARBREALEATOIRE
     RESEAUARBREDETERMINISTE
@@ -26,6 +26,7 @@ package "simulation"{
     SORTIE
     SPAWN_PRISONNIER
     SPAWN_GARDIEN
+    RACCOURCI_GARDIEN
   }
 
   package "apprentissage"{
@@ -36,16 +37,17 @@ package "simulation"{
   package "comportement"{
     class ReseauDeNeurones{
         + ReseauDeNeurones(String, Simulation, Personnage)
-        - neuralNetwork : NeuralNetwork
     }
     Interface Comportement{
         + prendreDecision(): Deplacement
+        + getType(): Comportements
     }
     class Aleatoire{
         - deplacementAleatoire(): Deplacement
     }
     class ArbreDecision{
         + direction(Position, Position): Deplacement
+        + oppose(Deplacement): Deplacement
     }
     class ArbreDecisionGardien{
       + ArbreDecisionGardien(Simulation, Personnage)

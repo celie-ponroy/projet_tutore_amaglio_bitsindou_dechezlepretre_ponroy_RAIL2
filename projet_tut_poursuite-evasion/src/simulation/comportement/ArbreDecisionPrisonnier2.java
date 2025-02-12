@@ -1,17 +1,15 @@
 package simulation.comportement;
 
-import simulation.Case;
-import simulation.CaseEnum;
-import simulation.Deplacement;
-import simulation.Simulation;
+import simulation.*;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportement {
+public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportement , Serializable {
     private Simulation simulation;
     private Personnage personnage;
 
@@ -128,5 +126,9 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         //System.out.println("Aucun chemin trouvé");
 
         return oppose(direction(positionPerso, simulation.getGardien().getPosition()));
+    }
+    @Override
+    public Comportements getType() {
+        return Comportements.ArbreDeterministev2;
     }
 }

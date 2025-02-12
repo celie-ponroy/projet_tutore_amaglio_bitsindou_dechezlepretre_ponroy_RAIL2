@@ -3,9 +3,8 @@ package affichage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -14,9 +13,12 @@ import javafx.stage.Stage;
 import moteur.Clavier;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
-
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 import java.awt.*;
 
@@ -125,6 +127,7 @@ public class VueMenus extends VueSimulation {
             vni.afficherMenuIA(this.primaryStage);
         });
 
+
         //Bouton pour le mode analyse
         Button modeAnalyse = new Button("Mode analyse");
         modeAnalyse.setPrefSize(200, 100);
@@ -134,11 +137,21 @@ public class VueMenus extends VueSimulation {
 
         });
 
+        //Boutton parties sauvegardées
+        Button modePartiesSauvegardes = new Button("Parties sauvegardées");
+        modePartiesSauvegardes.setPrefSize(200,100);
+        modePartiesSauvegardes.setOnAction(e -> {
+            afficherMenuSauvegarde(this.primaryStage, root, scene);
+        });
+
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
+
 
         //Bouton pour quitter l'application
         Button quitter = new Button("Quitter");
+        quitter.getStyleClass().add("important");
+
         quitter.setPrefSize(150, 50);
         quitter.setOnAction(e -> this.primaryStage.close());
 
@@ -192,6 +205,7 @@ public class VueMenus extends VueSimulation {
         root2.getChildren().addAll(title2, buttonBox2);
 
         //Affichage de la scene et changement du titre de la fenêtre
+
         setScene(scene2, "Choix du personnage");
     }
 
@@ -201,7 +215,7 @@ public class VueMenus extends VueSimulation {
      */
     public void afficherJeu(Jeu j, Pane root, Scene scene) {
         //Affichage du jeu
-        VuePrincipale vp = new VuePrincipale();
+        VuePrincipale vp = new VuePrincipale(WIDTH, HEIGHT);
         vp.update(j);
         j.ajouterObservateur(vp);
         root.getChildren().clear();
@@ -348,6 +362,36 @@ public class VueMenus extends VueSimulation {
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");
+    }
+
+    /**
+     * Affiche le menu de sauvegarde
+     */
+    public void afficherMenuSauvegarde(Stage primaryStage, VBox root, Scene scene) {
+        AtomicReference<Simulation> simulation = new AtomicReference<>();
+        //récuperration du nom de la sauvegarde
+        List<String> choices =  Sauvegarde.nomsSauvegardes();
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("simu.ser", choices);
+        dialog.setTitle("Choix sauvegarde");
+        dialog.setContentText("Sauvegarde à choisir :");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent((letter) -> {
+            try{
+                System.out.println("Chargement de la sauvegarde");
+                simulation.set(Sauvegarde.charger(letter));
+                System.out.println("Partie chargée");
+
+            }catch (Exception e){
+                System.out.println("Erreur lors du chargement de la sauvegarde de :"+letter+".ser");
+            }
+
+        });
+        VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation.get());
+        vs.update();
+        root.getChildren().clear();
+        root.getChildren().add(vs);
+        primaryStage.setScene(scene);
     }
 
     /**

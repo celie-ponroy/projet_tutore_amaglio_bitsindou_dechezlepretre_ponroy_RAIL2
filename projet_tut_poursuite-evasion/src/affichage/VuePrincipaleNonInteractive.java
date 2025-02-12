@@ -1,29 +1,34 @@
 package affichage;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import sauvegarde.Sauvegarde;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
-public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu {
-    private Simulation simulation;
+import java.io.Serializable;
+import java.util.Optional;
+
+public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu{
 
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
-    private Rectangle[][] caseBayesienneHisto;
-    private VueBayesienne vB1, vB2;
+    private VueBayesienne vB1,vB2;
 
 
     //constructeur
-    public VuePrincipaleNonInteractive() {
+    public VuePrincipaleNonInteractive(double width, double height) {
         super();
+        TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
         this.tour = 0;
     }
 
@@ -33,29 +38,25 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private void init() {
         Pane labyPane = initLabyrinthe(true);
 
-        // Ajout d'une VBox pour afficher le nombre d'itérations sous le labyrinthe
-        VBox vbox = new VBox();
-        vbox.setLayoutX(10);
-        vbox.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + 100);
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        iterationLabel.setStyle("-fx-font-size: 11px;");
+        iterationLabel.setLayoutX(10);
+        iterationLabel.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
+        iterationLabel.setStyle("-fx-font-size: 11px;-fx-border-color: black; -fx-padding: 10;");
 
-        vbox.getChildren().add(this.iterationLabel);
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
-        if (!this.getChildren().contains(vbox)) {
-            this.getChildren().add(vbox);
+        if (!this.getChildren().contains(iterationLabel)) {
+            this.getChildren().add(iterationLabel);
         }
 
         //Ajout de la vbox de l'iteration au Pane
-        labyPane.getChildren().add(vbox);
+        labyPane.getChildren().add(iterationLabel);
 
-        //
         // Création des deux vues bayésiennes dans des VBox distinctes
 
         //Création des vues bayesiennes
-        vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier());
-        vB2 = new VueBayesienne(this.simulation, simulation.getGardien());
+        vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier(),0,0,TAILLE_CELLULE);
+        vB2 = new VueBayesienne(this.simulation,simulation.getGardien(),0,0,TAILLE_CELLULE);
 
         VBox vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
         VBox vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB2);
@@ -80,30 +81,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         this.getChildren().clear();
         this.getChildren().addAll(hbox);
 
-    }
-
-    /**
-     * Crée la vue du labyrinthe et l'entoure avec des informations supplémentaires.
-     */
-    private VBox createLabyrintheView() {
-        VBox labyrintheVBox = new VBox();
-        labyrintheVBox.setSpacing(10); // Espacement entre les éléments de la VBox
-        labyrintheVBox.setAlignment(Pos.TOP_CENTER);
-
-        // Initialisation du labyrinthe
-        Pane labyPane = initLabyrinthe(true);
-
-        // Ajout du labyrinthe à la VBox
-        labyrintheVBox.getChildren().add(labyPane);
-
-        // Ajout d'un label pour le nombre d'itérations
-        this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        labyrintheVBox.getChildren().addAll(this, iterationLabel); // Ajouter le labyrinthe et le label
-
-        // Style
-        labyrintheVBox.setStyle("-fx-border-color: darkgrey; -fx-padding: 10;");
-
-        return labyrintheVBox;
     }
 
     /**
@@ -135,10 +112,12 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     protected void updatePositions() {
         // Met à jour la position du prisonnier
-        Position p = simulation.historiquePosition.get(simulation.getPrisonnier()).get(tour);
-        Position g = simulation.historiquePosition.get(simulation.getGardien()).get(tour);
+
+        Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
+        Position g = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
         setPositions(p, prisonnierView);
         setPositions(g, gardienView);
+        updateDirections(tour);
     }
 
     /**
@@ -147,12 +126,21 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     @Override
     public void update(Jeu jeu) {
         // Récuperation de la simulation
-        this.simulation = (Simulation) jeu;
-        if (simulation.etreFini()) {
+        this.simulation = (Simulation)jeu;
+        if(simulation.etreFini()){
+
             init();
+            Button sauvegarder = new Button("Sauvegarder");
+            sauvegarder.setPrefSize(200, 75);
+
+            sauvegarder.setOnAction(e -> {
+                lancerSauvegarde(sauvegarder);
+            });
+
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
             precedent.setOnAction(e -> {
+
                 if (tour > 0) {
                     tour -= 1;
                     updatePositions();
@@ -175,7 +163,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             });
 
             javafx.scene.control.Button retourMenuBtn = new Button("Revenir au menu principal");
-            retourMenuBtn.setPrefSize(200, 75);
+            retourMenuBtn.setPrefSize(410, 75);
+            retourMenuBtn.getStyleClass().add("important");
             retourMenuBtn.setOnAction(e -> {
                 //Ferme la fenetre actuelle
                 Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
@@ -184,15 +173,21 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 VueMenus vm = new VueMenus();
                 vm.afficherMenuPrincipal();
             });
+            retourMenuBtn.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
+            retourMenuBtn.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*7);
 
             //ajout des boutons
             HBox hboxBouttons = new HBox();
-            hboxBouttons.setLayoutX(10);
-            hboxBouttons.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length);
+            hboxBouttons.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
+            hboxBouttons.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*3);
+            hboxBouttons.setSpacing(10);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
-            hboxBouttons.getChildren().add(retourMenuBtn);
+            hboxBouttons.getChildren().add(sauvegarder);
             this.getChildren().add(hboxBouttons);
+            this.getChildren().add(retourMenuBtn);
+
+
         }
     }
 

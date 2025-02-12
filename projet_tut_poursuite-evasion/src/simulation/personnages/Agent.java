@@ -1,6 +1,8 @@
 package simulation.personnages;
 
-public class Agent extends Personnage {
+import java.io.Serializable;
+
+public class Agent extends Personnage implements Serializable {
 
     public Agent(int x, int y) {
         super(x, y);

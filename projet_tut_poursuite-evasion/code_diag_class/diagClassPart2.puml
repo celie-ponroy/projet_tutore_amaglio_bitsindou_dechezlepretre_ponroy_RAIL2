@@ -29,32 +29,7 @@ package "simulation"{
     RACCOURCI_GARDIEN
   }
 
-  package "apprentissage"{
-    class ApprentissageDeArbre{
-        + main(): void
-    }
-    class OptimisationBayesienne{
-        - {static} final MIN_NEURONS: int
-        - {static} final MAX_NEURONS: int
-        - {static} final MIN_LAYERS: int
-        - {static} final MAX_LAYERS: int
-        - {static} final INITIAL_SAMPLES: int
-        - {static} final ITERATIONS: int
-        - {static} lossMini: float
-        - {static} BETA: float
-        - {static} testedConfigs: List<int>
-        - {static} lossResults: List<Double>
-        - {static} random: Random
-        + main(): void
-        - {static} getRandomConfig(): int[]
-        - {static} suggestNextConfiguration(): int[]
-        - {static} getRandomNearConfig(): int[]
-        - {static} predictMean(int[]): double
-        - {static} predictVariance(int[]): double
-        - {static} euclideanDistance(int[], int[]): double
-        - {static} evaluate(int[]): double
-    }
-  }
+
   package "comportement"{
     class ReseauDeNeurones{
         - translator: Translator<NDArray, Integer>

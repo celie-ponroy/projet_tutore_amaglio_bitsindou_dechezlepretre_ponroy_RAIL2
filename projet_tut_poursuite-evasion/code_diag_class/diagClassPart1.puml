@@ -24,6 +24,10 @@ package "affichage" {
   Interface DessinJeu{
     + update(Jeu): void
   }
+  class FiltreVision{
+    + {static} initFiltre(int, int, int, Joueur): Rectangle[][]
+    + {static} updateFiltre(Rectangle[][], Joueur): void
+  }
   class VueSimulation{
     # imageMur: Image
     # imageSol : Image

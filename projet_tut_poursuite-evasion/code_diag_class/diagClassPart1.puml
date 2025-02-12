@@ -24,6 +24,10 @@ package "affichage" {
   Interface DessinJeu{
     + update(Jeu): void
   }
+  class FiltreVision{
+    + {static} initFiltre(int, int, int, Joueur): Rectangle[][]
+    + {static} updateFiltre(Rectangle[][], Joueur): void
+  }
   class VueSimulation{
     # imageMur: Image
     # imageSol : Image
@@ -36,9 +40,10 @@ package "affichage" {
     - labyrinthePane : Pane
     # simulation : Simulation
     + VueSimulation()
-    # initLabyrinthe(): void
+    # initLabyrinthe(boolean): void
     # {abstract} setOpacityPersonnage(): void
     # {abstract} updatePositions(): void
+    + {static} updateDirectionPersonnage(int, List<Deplacement>, String, ImageView): void
     # setPositions(Position, ImageView): void
   }
   class FiltreBayesien{

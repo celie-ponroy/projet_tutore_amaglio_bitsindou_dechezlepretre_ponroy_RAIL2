@@ -1,6 +1,35 @@
 @startuml
 
 package "lancercalculs"{
+  class LancerCalculs{
+    + {static} init(): void
+    + {static} initSansDS(): void
+  }
+  class LancerAnalyse{
+    - etreFini: boolean
+    - nbVictoireGardien: int
+    - nbVictoirePrisonnier: int
+    - matchNull: int
+    - nbIterationCourante: int
+    - nbDeplacementPerso: int
+    - historiqueDeplacementPerso: List<Integer>
+    - casesVisitees: HashMap
+    - pause: boolean
+    + LancerAnalyse()
+    + lancerAnalyse(int, Comportements, Comportements): void
+    - updateCasesVisitees(List<Position>): void
+    + etreFini(): boolean
+    + getNbVictoireGardien(): int
+    + getNbVictoirePrisonnier(): int
+    + getMatchNull(): int
+    + getNbIterationCourante(): int
+    + getNbDeplacementPerso(int): int
+    + getHistoriqueDeplacementPrisonnier(): List<Integer>
+    + getCasesVisitees(): HashMap<Position, Integer>
+    + setNbIterationsTotal(int): void
+    + reinitialiser(): void
+    + isPause()
+  }
   class LancerCalculsChemins{
     + main(): void
   }
@@ -8,7 +37,7 @@ package "lancercalculs"{
       + main(): void
   }
   class LancerCalculsDataset{
-        + main(): void
+        + launch(): void
   }
 }
 package "outil"{
@@ -17,40 +46,21 @@ package "outil"{
     }
     class Outil{
       + {static} applatissement(double[][]): double[]
+      + {static} afficherTab(double[] tab): void
+    }
+    class DataCollector{
+        + {static} saveData(double[], double, double, int): void
+        + {static} etiquettage(String): void
+    }
+    class CSVDataset{
+        - {final} csvRecords: List<CSVRecord>
+        + CSVDataset(Builder)
+        + get(NDManager, long): Record
+        + availableSize(): long
+        + parseMap(String): float[]
+        + prepare(Progress): void
+        + {static} builder(): Builder
     }
 }
-
-package "calculs"{
-  class CalculVision{
-    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
-    + {static} ecrireVision(): void
-    + {static} calculerCarteVision(): HashMap
-    + {static} calculerVision(int, int): ArrayList
-    + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
-    + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
-  }
-  class CalculChemins {
-    - {static} carte : int[][]
-    + {static} lirefichier(String): HashMap<List<Position>,Stack>
-    + {static} recupererCheminPrisonnier(): HashMap<List<Position>,Stack>
-    + {static} recupererCheminGardien(): HashMap<List<Position>,Stack>
-    + {static} ecrireChemins(): void
-    + {static} calculerChemins(): HashMap<List<Position>,Stack>
-    + {static} isValid(int, int, Position): boolean
-    + {static} isUnblocked(int[][], int, int, Position): boolean
-    + {static} isDestination(Position, Position): boolean
-    + {static} calculateHValue(Position, Position): double
-    + {static} tracePath(Cell[][], Position): Stack
-    + {static} aStarSearch(int[][], int, int, Position, Position): Stack
-  }
-}
-
-
-package "main"{
-  class Main{
-    + main(): void
-  }
-}
-
 
 @enduml

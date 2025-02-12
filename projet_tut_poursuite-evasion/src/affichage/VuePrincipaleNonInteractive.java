@@ -131,11 +131,13 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
             init();
             Button sauvegarder = new Button("Sauvegarder");
-            sauvegarder.setPrefSize(200, 75);
+            sauvegarder.setPrefSize(410, 75);
 
             sauvegarder.setOnAction(e -> {
                 lancerSauvegarde(sauvegarder);
             });
+            sauvegarder.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
+            sauvegarder.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*7);
 
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
@@ -174,7 +176,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 vm.afficherMenuPrincipal();
             });
             retourMenuBtn.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
-            retourMenuBtn.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*7);
+            retourMenuBtn.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*11);
 
             //ajout des boutons
             HBox hboxBouttons = new HBox();
@@ -183,8 +185,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             hboxBouttons.setSpacing(10);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
-            hboxBouttons.getChildren().add(sauvegarder);
             this.getChildren().add(hboxBouttons);
+            this.getChildren().add(sauvegarder);
             this.getChildren().add(retourMenuBtn);
 
 

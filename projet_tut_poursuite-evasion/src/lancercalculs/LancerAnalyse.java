@@ -66,9 +66,6 @@ public class LancerAnalyse implements Jeu {
         // Mise à jour des cases visitées pour le gardien
         updateCasesVisitees(posGardien);
 
-        // Affichage du résultat de la partie
-        System.out.println("Partie " + numeroPartie + " " + comportementG + " VS " + comportementP);
-
         // Mise à jour des statistiques
         if (simulation.getVictoireGardien() == simulation.getVictoirePrisonnier()) {
             matchNull++;
@@ -77,10 +74,6 @@ public class LancerAnalyse implements Jeu {
         } else if (simulation.getVictoirePrisonnier()) {
             nbVictoirePrisonnier++;
         }
-
-        System.out.println("Victoire Gardien: " + nbVictoireGardien +
-                " Victoire Prisonnier: " + nbVictoirePrisonnier +
-                " Match Null: " + matchNull);
 
         // Notification des observateurs pour mise à jour de l'interface
         notifierObservateurs();

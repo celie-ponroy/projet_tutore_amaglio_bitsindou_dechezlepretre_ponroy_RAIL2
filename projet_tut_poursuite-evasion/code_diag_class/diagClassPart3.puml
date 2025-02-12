@@ -1,6 +1,10 @@
 @startuml
 
 package "lancercalculs"{
+  class LancerCalculs{
+    + {static} init(): void
+    + {static} initSansDS(): void
+  }
   class LancerCalculsChemins{
     + main(): void
   }
@@ -8,7 +12,7 @@ package "lancercalculs"{
       + main(): void
   }
   class LancerCalculsDataset{
-        + main(): void
+        + launch(): void
   }
 }
 package "outil"{
@@ -17,6 +21,20 @@ package "outil"{
     }
     class Outil{
       + {static} applatissement(double[][]): double[]
+      + {static} afficherTab(double[] tab): void
+    }
+    class DataCollector{
+        + {static} saveData(double[], double, double, int): void
+        + {static} etiquettage(String): void
+    }
+    class CSVDataset{
+        - {final} csvRecords: List<CSVRecord>
+        + CSVDataset(Builder)
+        + get(NDManager, long): Record
+        + availableSize(): long
+        + parseMap(String): float[]
+        + prepare(Progress): void
+        + {static} builder(): Builder
     }
 }
 
@@ -34,8 +52,9 @@ package "calculs"{
     + {static} lirefichier(String): HashMap<List<Position>,Stack>
     + {static} recupererCheminPrisonnier(): HashMap<List<Position>,Stack>
     + {static} recupererCheminGardien(): HashMap<List<Position>,Stack>
-    + {static} ecrireChemins(): void
-    + {static} calculerChemins(): HashMap<List<Position>,Stack>
+    + {static} ecrireChemins(String): void
+    + {static} ecrireFichier(String, Boolean, String): void
+    + {static} calculerChemins(Boolean, String): HashMap<List<Position>,Stack>
     + {static} isValid(int, int, Position): boolean
     + {static} isUnblocked(int[][], int, int, Position): boolean
     + {static} isDestination(Position, Position): boolean
@@ -43,6 +62,32 @@ package "calculs"{
     + {static} tracePath(Cell[][], Position): Stack
     + {static} aStarSearch(int[][], int, int, Position, Position): Stack
   }
+}
+
+package sauvegarde{
+    class Sauvegarde{
+    + {static} main(String[]): void
+    + {static} sauvegarder(Simulation, String): void
+    + {static} charger(String): Simulation
+    + {static} nomsSauvegardes(): ArrayList<String>
+    }
+    class SimulationSerializable{
+        - nbTours: int
+        - gardien: Personnage
+        - prisonnier: Personnage
+        - victoirePrisonnier: boolean
+        - victoireGardien: boolean
+        - comportementGardien: Comportements
+        - comportementPrisonnier: Comportements
+        - historiquePosition : HashMap<Personnage, List<Position>>
+        - historiqueBayesien : HashMap<Personnage, List<double[][]>>
+        - historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
+        - estFini : boolean
+        - carteBayesiennes : HashMap<Personnage, double[][]>
+        - bayesiens : HashMap<Personnage, Bayesien>
+        + SimulationSerializable(Simulation)
+        + creerSimulation(): Simulation
+    }
 }
 
 

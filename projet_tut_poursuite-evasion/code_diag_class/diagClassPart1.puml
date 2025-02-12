@@ -36,9 +36,10 @@ package "affichage" {
     - labyrinthePane : Pane
     # simulation : Simulation
     + VueSimulation()
-    # initLabyrinthe(): void
+    # initLabyrinthe(boolean): void
     # {abstract} setOpacityPersonnage(): void
     # {abstract} updatePositions(): void
+    + {static} updateDirectionPersonnage(int, List<Deplacement>, String, ImageView): void
     # setPositions(Position, ImageView): void
   }
   class FiltreBayesien{

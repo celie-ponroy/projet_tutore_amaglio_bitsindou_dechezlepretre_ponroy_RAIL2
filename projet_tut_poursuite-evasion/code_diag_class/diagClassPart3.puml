@@ -5,6 +5,31 @@ package "lancercalculs"{
     + {static} init(): void
     + {static} initSansDS(): void
   }
+  class LancerAnalyse{
+    - etreFini: boolean
+    - nbVictoireGardien: int
+    - nbVictoirePrisonnier: int
+    - matchNull: int
+    - nbIterationCourante: int
+    - nbDeplacementPerso: int
+    - historiqueDeplacementPerso: List<Integer>
+    - casesVisitees: HashMap
+    - pause: boolean
+    + LancerAnalyse()
+    + lancerAnalyse(int, Comportements, Comportements): void
+    - updateCasesVisitees(List<Position>): void
+    + etreFini(): boolean
+    + getNbVictoireGardien(): int
+    + getNbVictoirePrisonnier(): int
+    + getMatchNull(): int
+    + getNbIterationCourante(): int
+    + getNbDeplacementPerso(int): int
+    + getHistoriqueDeplacementPrisonnier(): List<Integer>
+    + getCasesVisitees(): HashMap<Position, Integer>
+    + setNbIterationsTotal(int): void
+    + reinitialiser(): void
+    + isPause()
+  }
   class LancerCalculsChemins{
     + main(): void
   }

@@ -23,13 +23,11 @@ import moteur.Jeu;
 import moteur.MoteurJeu;
 import simulation.Comportements;
 import javafx.scene.control.Tooltip;
-import javafx.scene.input.MouseEvent;
-import javafx.util.Duration;
 import simulation.Simulation;
 import simulation.personnages.Position;
-
-import java.security.Key;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class VueAnalyse extends VueSimulation implements DessinJeu {
 
@@ -62,13 +60,10 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         VBox root = new VBox(30);
         root.getStylesheets().add("style.css");
 
-        // GridPane légende
-//        GridPane gridLegende;
-//        gridLegende = initLegende();
-
         // Nombre d'itérations
         Label nbIteration = new Label();
         nbIteration.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        nbIteration.setText("Nombre de partie(s) : .../...");
 
         // ComboBox prisonnier
         ComboBox<String> comboBoxPrisonnier = new ComboBox<>();
@@ -78,7 +73,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Comportement aléatoire",
                 "Réseau de neurones 1.0"
         );
-
 
         // ComboBox gardien
         ComboBox<String> comboBoxGardien = new ComboBox<>();
@@ -101,8 +95,12 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         //Bouton pour revenir au menu principal
         Button retourMenu = new Button("Retour au menu principal");
         retourMenu.setPrefSize(250, 50);
-        VueMenus vm = new VueMenus();
+        VueMenus vm = new VueMenus(primaryStage);
         retourMenu.setOnAction(e -> vm.afficherMenuPrincipal());
+
+        //Bouton pour pause la simulation
+        Button pauseBtn = new Button("Pause");
+        pauseBtn.setPrefSize(150, 50);
 
         // Bouton lancer simulation
         Button lancerBtn = new Button("Lancer");
@@ -110,7 +108,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Conteneur pour les ComboBox et le bouton
         HBox choixContainer = new HBox(20);
         choixContainer.setAlignment(Pos.CENTER);
-        choixContainer.getChildren().addAll(comboBoxGardien, comboBoxPrisonnier, nbIterations,lancerBtn);
+        choixContainer.getChildren().addAll(comboBoxGardien, comboBoxPrisonnier, nbIterations,lancerBtn, pauseBtn);
 
         //Création du container top
         VBox topContainer = initTopContainer(nbIteration, choixContainer, retourMenu);
@@ -142,10 +140,15 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         graphiquesWrapper.setAlignment(Pos.CENTER);
         VBox.setVgrow(graphiquesWrapper, Priority.ALWAYS);
 
-//        root.getStylesheets().add("style.css");
+        //Bouton pour mettre en pause la simulation
+        pauseBtn.setPrefSize(150, 50);
+        pauseBtn.setOnAction(e -> {
+            if (lancerAnalyse != null) {
+                lancerAnalyse.setPause(!lancerAnalyse.isPause());
+            }
+        });
 
         // Bouton lancer simulation
-
         lancerBtn.setPrefSize(150, 50);
         // Dans le bouton lancerBtn
         lancerBtn.setOnAction(e -> {
@@ -192,11 +195,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         });
 
                         try {
-                            //Pause de 3 s
-                            Thread.sleep(1000);
+                            while (lancerAnalyse.isPause()) {
+                                Thread.sleep(500); // Attente active en pause
+                            }
+                            Thread.sleep(1000); // Pause normale entre les itérations
                         } catch (InterruptedException ex) {
-                            ex.printStackTrace();
+                            Thread.currentThread().interrupt(); // Bonne pratique pour gérer les interruptions
                         }
+
                     }
                 });
 
@@ -335,68 +341,67 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             if (nbIte == 0) {
                 nbIte = 1;
             } else {
-                System.out.println("Nombre d'itérations courante  : " + nbIte);
+                System.out.println("Nombre d'itérations courante : " + nbIte);
             }
 
             // Effacer les anciennes données
             pieChartData.clear();
 
-            //Enleve l'animation
+            // Enlever l'animation pour éviter les effets indésirables
             camembert.setAnimated(false);
 
-            // Ajouter de nouvelles données
+            // Ajouter de nouvelles données avec leurs couleurs associées
+            Map<String, String> couleurs = new HashMap<>();
+
             if (lancerAnalyse.getNbVictoireGardien() > 0) {
                 PieChart.Data gardienData = new PieChart.Data("Victoire Gardien", lancerAnalyse.getNbVictoireGardien());
                 pieChartData.add(gardienData);
+                couleurs.put("Victoire Gardien", "#3B4466");
             }
 
             if (lancerAnalyse.getNbVictoirePrisonnier() > 0) {
                 PieChart.Data prisonnierData = new PieChart.Data("Victoire Prisonnier", lancerAnalyse.getNbVictoirePrisonnier());
                 pieChartData.add(prisonnierData);
+                couleurs.put("Victoire Prisonnier", "#E26F1D");
             }
 
             if (lancerAnalyse.getMatchNull() > 0) {
                 PieChart.Data nullData = new PieChart.Data("Match Null", lancerAnalyse.getMatchNull());
                 pieChartData.add(nullData);
+                couleurs.put("Match Null", "grey");
             }
 
             // Appliquer les styles après que le graphique soit rendu
             camembert.applyCss();
             camembert.layout();
 
-            // Mettre à jour les couleurs des sections et des légendes
-            for (int i = 0; i < pieChartData.size(); i++) {
-                PieChart.Data data = pieChartData.get(i);
-                String color;
+            // Appliquer les couleurs aux sections du camembert
+            for (PieChart.Data data : pieChartData) {
+                String color = couleurs.getOrDefault(data.getName(), "black");
 
-                switch(data.getName()) {
-                    case "Victoire Gardien":
-                        color = "#3B4466"; //3B4466
-                        break;
-                    case "Victoire Prisonnier":
-                        color = "#E26F1D"; //E26F1D
-                        break;
-                    case "Match Null":
-                        color = "grey";
-                        break;
-                    default:
-                        color = "black";
-                        break;
-                }
-
-                // Colorer la section du camembert
                 if (data.getNode() != null) {
                     data.getNode().setStyle("-fx-pie-color: " + color + ";");
                 }
-
-                // Colorer la légende
-                Node legendItem = camembert.lookup(".chart-legend-item-symbol." + i);
-                if (legendItem != null) {
-                    legendItem.setStyle("-fx-background-color: " + color + ";");
-                }
             }
 
-            // Ajout des tooltips
+            // Mettre à jour les couleurs de la légende
+            Platform.runLater(() -> {
+                Set<Node> legendItems = camembert.lookupAll(".chart-legend-item");
+                for (Node legend : legendItems) {
+                    if (legend instanceof Label) {
+                        Label label = (Label) legend;
+                        String text = label.getText();
+                        if (couleurs.containsKey(text)) {
+                            Node symbol = label.getGraphic();
+                            if (symbol != null) {
+                                symbol.setStyle("-fx-background-color: " + couleurs.get(text) + ";");
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Ajouter des tooltips pour afficher les pourcentages
             for (PieChart.Data data : camembert.getData()) {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.seconds(0.2));
@@ -411,6 +416,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         });
     }
+
 
 
     /**

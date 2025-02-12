@@ -1,24 +1,14 @@
 package affichage;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
@@ -26,8 +16,7 @@ import moteur.Jeu;
 import moteur.MoteurJeu;
 import simulation.Comportements;
 import simulation.Simulation;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
+
 
 import java.awt.*;
 
@@ -41,22 +30,14 @@ public class VueMenus extends VueSimulation {
     private String choixPersonnage;
 
     /**
-     * Permet d'initialiser la taille de la fenêtre à la taille de l'écran
-     */
-    private void initPrimaryStage() {
-        this.primaryStage = new Stage();
-        this.primaryStage.setFullScreen(true);
-    }
-
-    /**
      * constructeur avec paramètre jeu
      *
      * @param j le moteur de jeu
      */
     public VueMenus(MoteurJeu j) {
         this.jeu = j;
-        //Initialisation de la fenêtre
-        initPrimaryStage();
+        this.primaryStage = new Stage();
+        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
     }
 
@@ -64,9 +45,26 @@ public class VueMenus extends VueSimulation {
      * constructeur sans paramètre
      */
     public VueMenus() {
-        initPrimaryStage();
+        this.primaryStage = new Stage();
+        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
     }
+
+    /**
+     * constructeur pour accepter un stage
+     */
+    public VueMenus(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        this.choixPersonnage = "";
+    }
+
+    /**
+     * Permet d'initialiser la taille de la fenêtre à la taille de l'écran
+     */
+//    private void initPrimaryStage() {
+//        this.primaryStage = new Stage();
+//        this.primaryStage.setFullScreen(true);
+//    }
 
     @Override
     protected void setOpacityPersonnage() {

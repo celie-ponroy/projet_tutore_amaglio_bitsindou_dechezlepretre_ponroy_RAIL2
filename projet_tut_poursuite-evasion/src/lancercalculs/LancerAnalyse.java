@@ -27,6 +27,7 @@ public class LancerAnalyse implements Jeu {
     //HashMap pour stocker les cases et leur nombre de fois ou elles ont été visitées
     private HashMap casesVisitees = new HashMap();
     private int nbIterationsTotal; // Nombre total d'itérations à effectuer
+    private boolean pause;
 
 
     //constructeur
@@ -37,6 +38,7 @@ public class LancerAnalyse implements Jeu {
         observateurs = new ArrayList<>();
         nbIterationCourrante=0;
         nbDeplacementPerso=0;
+        pause = false;
     }
 
     /**
@@ -185,4 +187,11 @@ public class LancerAnalyse implements Jeu {
         this.nbIterationsTotal = nbIterations;
     }
 
+    public synchronized boolean isPause() {
+        return pause;
+    }
+
+    public void setPause(boolean b){
+        this.pause = b;
+    }
 }

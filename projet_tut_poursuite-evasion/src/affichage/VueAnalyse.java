@@ -226,43 +226,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     }
 
     /**
-     * Méthode qui permet de créer la legende du labyrinthe
-     */
-
-    public GridPane initLegende() {
-        // GridPane légende (toujours en haut à gauche)
-        GridPane gridLegende = new GridPane();
-        gridLegende.setMaxWidth(Region.USE_PREF_SIZE);
-        gridLegende.setMaxHeight(Region.USE_PREF_SIZE);
-        gridLegende.setHgap(10);
-        gridLegende.setPadding(new Insets(25, 25, 25, 25));
-
-        ImageView prisonnierView = new ImageView(new Image("file:images/prisonnier.png"));
-        ImageView gardienView = new ImageView(new Image("file:images/gardien.png"));
-        prisonnierView.setFitWidth(80);
-        prisonnierView.setFitHeight(80);
-        gardienView.setFitWidth(80);
-        gardienView.setFitHeight(80);
-
-        gridLegende.add(prisonnierView, 0, 0);
-        gridLegende.add(gardienView, 2, 0);
-
-        Line lignePrisonnier = new Line(0, 0, 30, 0);
-        lignePrisonnier.setStroke(Color.BLUE);
-        lignePrisonnier.setStrokeWidth(3);
-
-        Line ligneGardien = new Line(0, 0, 30, 0);
-        ligneGardien.setStroke(Color.RED);
-        ligneGardien.setStrokeWidth(3);
-
-        gridLegende.add(lignePrisonnier, 1, 0);
-        gridLegende.add(ligneGardien, 3, 0);
-
-        gridLegende.setStyle("-fx-border-color: black; -fx-border-width: 2px; -fx-padding: 10px;");
-
-        return gridLegende;
-    }
-    /**
      * Méthode qui crée le container top
      */
     public VBox initTopContainer(Label nbIteration, HBox choixContainer, Button retourMenu) {
@@ -326,10 +289,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         //Ajoute les comportements choisis dans un tableau
         Comportements[] comportements = {comportementG, comportementP};
         return comportements; //retourne le tableau des comporteemnts choisis
-
-        //Création du nombre de simulation en fonction du nombre d'itérations entré par l'utilisateur
-        //Simulation simulation = new Simulation(comportementG, comportementP);
-        //MoteurJeu.jeu = simulation;
     }
 
     /**
@@ -373,6 +332,9 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             // Appliquer les styles après que le graphique soit rendu
             camembert.applyCss();
             camembert.layout();
+
+            //Supprime les label
+            camembert.setLabelsVisible(false);
 
             // Appliquer les couleurs aux sections du camembert
             for (PieChart.Data data : pieChartData) {

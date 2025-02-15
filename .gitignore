@@ -12,7 +12,6 @@ hello-view.fxml
 projet_tut_poursuite-evasion/donnees/sauvegardes_simulation/*
 
 
-
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/

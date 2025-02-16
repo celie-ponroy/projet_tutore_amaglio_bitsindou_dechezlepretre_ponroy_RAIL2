@@ -1,0 +1,27 @@
+Implémentation de la librairie DJL dans le projet (Luc & Matias)
+	La librairie DJL pour le réseau de neuronne à été implémenté
+	
+Apprentissage de l’arbre de décision du gardien par le réseau de neurone (Matias & Luc)
+	(fonctionnalité en retard) L'apprentissage du réseau de neuronne n'as pas donné les 
+	résultats escontés pour le moment
+	
+Apparition aléatoire de la sortie sur les cases désignées (Luc)
+	Pour pouvoir avancer dans l'appentissage nous avons ajouter la possibilité de changer 
+	aléatoirement la position de la sortie
+
+Création d’un outil pour tenter d’optimiser les hyper-paramètres (Matias)
+
+Mise en place d’un système de sauvegarde des parties (Célie)
+	-Sérialisation d'une partie (SimulationSerializable et Sauvegarde)
+	-Affichage d'une partie et chargement (Sauvergarde et VueSauvegarde)
+	-Ajout des controleurs pour sauvegarder une partie effectuée (Interactif et NonInteractif)
+
+Mise en place d’un mode analyse (Maëlle)
+	Création d'un outil permettant d'alyser un nombre choisi de parties en temps réel. 
+		-Création d'un lancement de plusieurs parties
+		- Création de la Vue de l'analyse
+
+Amélioration de l’affichage (Célie)
+	-Mise à l'échelle de l'écran pour toutes les vues (carte et placement des bouttons)
+	- VuePrincipale mise au centre de l'écran
+	- modifications mineures du css

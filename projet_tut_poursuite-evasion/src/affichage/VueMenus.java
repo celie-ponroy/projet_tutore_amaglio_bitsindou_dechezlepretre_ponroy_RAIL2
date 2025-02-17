@@ -1,5 +1,7 @@
 package affichage;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -8,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
@@ -271,90 +274,112 @@ public class VueMenus extends VueSimulation {
         okButton.setPrefSize(150, 50);
 
         //Évenements lier au choix de difficulté
+        //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
-            //Déclaration de la simulation
-            Simulation simulation;
+            // Désactiver le bouton pendant le chargement
+            okButton.setDisable(true);
 
-            //Switch pour le choix de la difficulté de l'agent en focntion du choix de l'utilisateur
-            switch (comboBox.getValue()) {
-                case "Arbre de décision déterministe 1.0":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
+            // Créer un ProgressIndicator
+            ProgressIndicator progressIndicator = new ProgressIndicator();
+            progressIndicator.setMaxSize(20, 20);
+
+            // Sauvegarder le texte original du bouton
+            String originalText = okButton.getText();
+
+            // Créer un HBox pour contenir l'indicateur et le texte
+            HBox loadingContent = new HBox(5); // 5 pixels d'espacement
+            loadingContent.setAlignment(Pos.CENTER);
+            loadingContent.getChildren().addAll(progressIndicator, new Text("Chargement..."));
+
+            // Remplacer le contenu du bouton
+            okButton.setGraphic(loadingContent);
+            okButton.setText("");
+
+            // Utiliser Task pour exécuter le code de manière asynchrone
+            Task<Simulation> task = new Task<>() {
+                @Override
+                protected Simulation call() throws Exception {
+                    Simulation simulation;
+
+                    //Switch pour le choix de la difficulté de l'agent en fonction du choix de l'utilisateur
+                    switch (comboBox.getValue()) {
+                        case "Arbre de décision déterministe 1.0":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.ArbreDeterministe);
+                            } else {
+                                simulation = new Simulation(false, Comportements.ArbreDeterministe);
+                            }
+                            break;
+                        case "Arbre de décision déterministe 2.0":
+                            simulation = new Simulation(false, Comportements.ArbreDeterministev2);
+                            break;
+                        case "Arbre de décision aléatoire":
+                            simulation = new Simulation(true, Comportements.ArbreAleatoire);
+                            break;
+                        case "Comportement aléatoire":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.Aleatoire);
+                            } else {
+                                simulation = new Simulation(false, Comportements.Aleatoire);
+                            }
+                            break;
+                        case "Réseau de neurones 1.0":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
+                            } else {
+                                simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
+                            }
+                            break;
+                        case null:
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText("Attention !");
+                                alert.setContentText("Veuillez choisir un niveau de difficulté");
+                                alert.showAndWait();
+                            });
+                            return null;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
                     }
-                    break;
-                case "Arbre de décision déterministe 2.0":
+                    return simulation;
+                }
+            };
+
+            // Gérer la fin du task
+            task.setOnSucceeded(event -> {
+                Simulation simulation = task.getValue();
+                if (simulation != null) {
                     //on change le nom de la scene
                     setScene(scene, "Simulation interactive");
-                    simulation = new Simulation(false, Comportements.ArbreDeterministev2);
                     MoteurJeu.jeu = simulation;
                     //Affichage du jeu
                     afficherJeu(MoteurJeu.jeu, root, scene);
-                    break;
-                case "Arbre de décision aléatoire":
-                    //on change le nom de la scene
-                    setScene(scene, "Simulation interactive");
-                    simulation = new Simulation(true, Comportements.ArbreAleatoire);
-                    MoteurJeu.jeu = simulation;
-                    //Affichage du jeu
-                    afficherJeu(MoteurJeu.jeu, root, scene);
-                    break;
-                case "Comportement aléatoire":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.Aleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.Aleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    }
-                    break;
-                case "Réseau de neurones 1.0":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    }
-                    break;
-                case null:
-                    //Pop up pour afficher un message d'alerte si aucun choix n'est fait
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information");
-                    alert.setHeaderText("Attention !");
-                    alert.setContentText("Veuillez choisir un niveau de difficulté");
-                    alert.showAndWait();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
-            }
+                }
+
+                // Réinitialiser le bouton
+                okButton.setGraphic(null);
+                okButton.setText(originalText);
+                okButton.setDisable(false);
+            });
+
+            // Gérer les erreurs
+            task.setOnFailed(event -> {
+                // Réinitialiser le bouton
+                okButton.setGraphic(null);
+                okButton.setText(originalText);
+                okButton.setDisable(false);
+
+                // Afficher l'erreur
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Une erreur est survenue");
+                alert.setContentText(task.getException().getMessage());
+                alert.showAndWait();
+            });
+
+            // Démarrer le task dans un nouveau thread
+            new Thread(task).start();
         });
 
         //Ajout des éléments à la scene principale

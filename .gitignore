@@ -9,8 +9,7 @@ pom.xml
 resources/
 hello-view.fxml
 *.class
-donnes/sauvegardes_simulation
-
+projet_tut_poursuite-evasion/donnees/sauvegardes_simulation/*
 
 
 target/

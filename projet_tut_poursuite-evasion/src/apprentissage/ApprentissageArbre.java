@@ -57,6 +57,7 @@ public class ApprentissageArbre {
 
         //enregistrement du model
         Path modelDir = Paths.get("donnees/mlp");
+        System.out.println(modelDir.toAbsolutePath());
         Files.createDirectories(modelDir);
 
         model.setProperty("Epoch", String.valueOf(epoch));

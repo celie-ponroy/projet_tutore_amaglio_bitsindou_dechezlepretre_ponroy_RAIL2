@@ -23,7 +23,7 @@ public class Simulation implements Jeu {
     private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
-    public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+    public static final int[][] CARTE = ChargementCarte.charger("donnees/littleLaby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
@@ -49,8 +49,8 @@ public class Simulation implements Jeu {
         this.nbDeplacementsPerso = 0;
 
         //les 2 personnages sont des agents
-        this.prisonnier = new Agent(9, 18);
-        this.gardien = new Agent(5, 4);
+        this.prisonnier = new Agent(3, 5);
+        this.gardien = new Agent(3, 1);
         this.positionnerAgentsSpawnAleatoire();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
@@ -79,7 +79,7 @@ public class Simulation implements Jeu {
                 break;
             case Comportements.ReseauArbreDeterministe:
                 try {
-                    this.comportementGardien = new ReseauDeNeurones("", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("mlp_200_100-0050.params", this, this.gardien);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

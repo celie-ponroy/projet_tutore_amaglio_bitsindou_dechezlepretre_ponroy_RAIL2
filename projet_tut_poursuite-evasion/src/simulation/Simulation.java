@@ -8,10 +8,7 @@ import outils.ChargementCarte;
 import simulation.comportement.*;
 import simulation.personnages.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Simulation implements Jeu {
     private List<DessinJeu> observateurs;
@@ -23,7 +20,7 @@ public class Simulation implements Jeu {
     private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
-    public static final int[][] CARTE = ChargementCarte.charger("donnees/littleLaby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/labySmall.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
@@ -51,7 +48,8 @@ public class Simulation implements Jeu {
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(3, 5);
         this.gardien = new Agent(3, 1);
-        this.positionnerAgentsSpawnAleatoire();
+        //this.positionnerAgentsSpawnAleatoire();
+        this.positionnerAleatoirement();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
         List<Deplacement> depG = new ArrayList<>();
@@ -79,7 +77,7 @@ public class Simulation implements Jeu {
                 break;
             case Comportements.ReseauArbreDeterministe:
                 try {
-                    this.comportementGardien = new ReseauDeNeurones("mlp_200_100-0050.params", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("mlp_"+50+"_"+30+"_"+20, this, this.gardien);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -175,7 +173,7 @@ public class Simulation implements Jeu {
                     this.comportementGardien = new Aleatoire(this, this.gardien);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementGardien = new ReseauDeNeurones("donnees/mlp/mpl_200_100-0050.params", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("donnees/mlp/mpl_200_100-100.params", this, this.gardien);
                     break;
                 case Comportements.ReseauArbreAleatoire:
                     //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
@@ -312,10 +310,25 @@ public class Simulation implements Jeu {
                 }
             }
         }
-        Case spawnGardien = casesValides.get((int) (Math.random() * casesValides.size()));
-        Case spawnPrisonnier = casesValides.get((int) (Math.random() * casesValides.size()));
-        this.prisonnier.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
-        this.gardien.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
+
+        Case spawnGardien = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+        //On retire la case pour eviter le spawn de deux agent sur la meme case
+        casesValides.remove(spawnGardien);
+        Case spawnPrisonnier = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+
+        this.prisonnier.setPosition(new Position(spawnGardien.getX(),spawnGardien.getY()));
+        this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
+
+        int casesHaut = 0;
+        int casesBas = 0;
+
+        for (Case c : casesValides) {
+            if (c.getY() > 3) {
+                casesBas++;
+            } else if (c.getY() < 3) {
+                casesHaut++;
+            }
+        }
     }
 
     /**

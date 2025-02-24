@@ -31,12 +31,13 @@ public class ReseauDeNeurones implements Comportement {
         this.personnage = personnage;
 
         Path modelDir = Paths.get("donnees/mlp");
-        model = Model.newInstance("mlp_"+200+"_"+100);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {200, 100}));
+        model = Model.newInstance(nomReseau);
+        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {200, 150,100}));
         try {
             model.load(modelDir);
-        }catch (MalformedModelException | IOException ex) {}
-
+        }catch (MalformedModelException | IOException ex) {
+            System.out.println(ex.getMessage());
+        }
 
         this.translator = new Translator<NDArray, Integer>() {
             @Override

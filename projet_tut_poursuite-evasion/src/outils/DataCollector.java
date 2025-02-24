@@ -3,8 +3,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class DataCollector {
-    public static void saveData(double[] bayesianValues, double x, double y, int decisionMove) {
-        try (FileWriter writer = new FileWriter("donnees/game_data.csv", true)) {
+    public static void saveData(double[] bayesianValues, double x, double y, int decisionMove,String fichierDeSauevgarde) {
+        try (FileWriter writer = new FileWriter(fichierDeSauevgarde, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append("\"");
             for (double value : bayesianValues) {
@@ -18,8 +18,8 @@ public class DataCollector {
             e.printStackTrace();
         }
     }
-    public static void etiquettage(String etiq) {
-        try (FileWriter writer = new FileWriter("donnees/game_data.csv", true)) {
+    public static void etiquettage(String etiq,String fichierDeSauevgarde) {
+        try (FileWriter writer = new FileWriter(fichierDeSauevgarde, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append(etiq).append("\n");
             writer.write(sb.toString());

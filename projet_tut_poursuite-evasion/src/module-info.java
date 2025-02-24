@@ -4,6 +4,7 @@ module com.example.projet_tut_poursuiteevasion {
     requires java.desktop;
     requires java.sql;
 
+    requires ai.djl.api;
 
     opens moteur to javafx.fxml;
     exports moteur;

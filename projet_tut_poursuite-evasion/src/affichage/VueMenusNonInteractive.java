@@ -102,6 +102,20 @@ public class VueMenusNonInteractive {
         Button okButton = new Button("Valider");
         okButton.setPrefSize(150, 50);
 
+        //Bouton de retour au menu principal
+        Button retour = new Button("Retour");
+        retour.getStyleClass().add("important"); //rend le bouton rouge
+
+        //Événement lié au bouton de retour
+        retour.setOnAction(e -> {
+            //Ferme la fenetre actuelle
+            Stage stage = (Stage) retour.getScene().getWindow();
+            stage.close();
+            //retour au menu principal
+            VueMenus vm = new VueMenus();
+            vm.afficherMenuPrincipal();
+        });
+
         // Événement lié au bouton de validation
         okButton.setOnAction(e -> {
             //si aucun choix de difficulté n'est fait pour le gardien
@@ -181,7 +195,7 @@ public class VueMenusNonInteractive {
         });
 
         // Ajout des éléments à la racine
-        root.getChildren().addAll(title, container, okButton,info);
+        root.getChildren().addAll(title, container, okButton,info,retour);
 
         // Création et affichage de la scène
         primaryStage.setScene(scene);

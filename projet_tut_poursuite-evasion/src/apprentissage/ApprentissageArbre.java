@@ -86,8 +86,8 @@ public class ApprentissageArbre {
 
         int epoch = 150;
 
-        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, false).build("donnees/game_data.csv");
-        CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, false).build("donnees/game_data_validation.csv");
+        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data.csv");
+        CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");
 
         System.out.println(csvDataset.size());
         System.out.println(csvDatasetValidate.size());

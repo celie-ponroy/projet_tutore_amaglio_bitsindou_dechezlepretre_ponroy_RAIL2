@@ -32,7 +32,7 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {200, 150,100}));
+        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {269, 269,269,269}));
         try {
             model.load(modelDir);
         }catch (MalformedModelException | IOException ex) {
@@ -50,7 +50,10 @@ public class ReseauDeNeurones implements Comportement {
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray probabilities = list.singletonOrThrow().softmax(0);
-                System.out.println(probabilities);
+                for(int i = 0; i < probabilities.size(); i++) {
+                    //System.out.println(i);
+                    System.out.println(probabilities.get(i));
+                }
                 return (int) probabilities.argMax().getLong();
             }
 

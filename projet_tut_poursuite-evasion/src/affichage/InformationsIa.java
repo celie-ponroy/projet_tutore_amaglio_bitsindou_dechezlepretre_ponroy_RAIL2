@@ -56,7 +56,11 @@ public class InformationsIa {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informations sur les comportements du prisonnier");
         alert.setHeaderText("Informations sur les comportements du prisonnier");
-        alert.getDialogPane().setContent(getInfosPrisonnier());
+        VBox vboxMain = getInfosPrisonnier();
+        vboxMain.getStyleClass().add("popup");
+        alert.getDialogPane().setContent(vboxMain);
+        alert.getDialogPane().getStyleClass().add("popup");
+
         return alert;
     }
 
@@ -68,7 +72,11 @@ public class InformationsIa {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informations sur les comportements du gardien");
         alert.setHeaderText("Informations sur les comportements du gardien");
-        alert.getDialogPane().setContent(getInfosGardien());
+        VBox vboxMain = getInfosGardien();
+        vboxMain.getStyleClass().add("popup");
+        alert.getDialogPane().setContent(vboxMain);
+        alert.getDialogPane().getStyleClass().add("popup");
+
         return alert;
     }
     public static Alert getAlertNonInteractif(){
@@ -76,8 +84,15 @@ public class InformationsIa {
         alert.setTitle("Informations sur les comportements du gardien et du prisonnier");
         alert.setHeaderText("Informations sur les comportements du gardien et du prisonnier");
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(getInfosGardien(),getInfosPrisonnier());
+        var gardien =  getInfosGardien();
+        gardien.getStyleClass().add("popup");
+        var prisonnier = getInfosPrisonnier();
+        prisonnier.getStyleClass().add("popup");
+        hBox.getChildren().addAll(gardien,prisonnier);
+        hBox.getStyleClass().add("popup");
         alert.getDialogPane().setContent(hBox);
+        alert.getDialogPane().getStyleClass().add("popup");
+
         return alert;
     }
 

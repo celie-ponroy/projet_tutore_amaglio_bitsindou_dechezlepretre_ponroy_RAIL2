@@ -364,12 +364,23 @@ public class VueMenus extends VueSimulation {
             // Démarre le task dans un nouveau thread
             new Thread(task).start();
         });
+        //ajout bouton informatif
+        Button info = new Button("Informations");
+        info.setPrefSize(150, 50);
+        info.setOnAction(e -> {
+            //on lance un popup
+            Alert alert;
+            if(choixPersonnage == "Prisonnier") {
+                alert = InformationsIa.getAlertGardien();
 
-        //on ajoute les infos sur les ia:
-        var ia = InformationsIa.getInfosPrisonnier();
-
+            }else {
+                alert = InformationsIa.getAlertPrisonnier();
+            }
+            alert.setResizable(true);
+            alert.showAndWait();
+        });
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, okButton, ia);
+        root.getChildren().addAll(title, buttonBox, okButton, info);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");

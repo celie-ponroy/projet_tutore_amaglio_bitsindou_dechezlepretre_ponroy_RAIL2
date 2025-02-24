@@ -6,6 +6,7 @@ import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.translate.Batchifier;
+import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
 import outils.Outil;
@@ -61,7 +62,9 @@ public class ReseauDeNeurones implements Comportement {
         Integer resultat = 0;
         try {
             resultat = predictor.predict(array);
-        } catch (Exception e) {
+        } catch (TranslateException te){
+            System.out.println(te.getMessage());
+            return Deplacement.AUCUN;
         }
         return Deplacement.values()[resultat];
     }

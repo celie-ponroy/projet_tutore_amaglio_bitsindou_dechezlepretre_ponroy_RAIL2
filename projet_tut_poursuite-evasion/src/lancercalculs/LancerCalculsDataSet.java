@@ -12,6 +12,7 @@ import java.util.List;
 
 public class LancerCalculsDataSet {
     public static void main(String[] args) {
+        DataCollector.etiquettage("\"map\",\"dep\"");
         Simulation sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
         List<double[][]> bayesien;
         List<Deplacement> deplacements;

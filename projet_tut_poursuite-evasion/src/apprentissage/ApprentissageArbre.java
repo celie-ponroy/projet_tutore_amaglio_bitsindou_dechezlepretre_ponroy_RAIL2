@@ -49,12 +49,14 @@ public class ApprentissageArbre {
                 .addTrainingListeners(TrainingListener.Defaults.logging()); //affiche les info d'entrainement
 
         Trainer trainer = model.newTrainer(config);
-        int epoch = 100;
+
+        int epoch = 50;
         CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32,false).build();
+        System.out.println(csvDataset.size());
         EasyTrain.fit(trainer, epoch, csvDataset, null);
 
         //enregistrement du model
-        Path modelDir = Paths.get("donnes/mlp");
+        Path modelDir = Paths.get("donnees/mlp");
         Files.createDirectories(modelDir);
 
         model.setProperty("Epoch", String.valueOf(epoch));

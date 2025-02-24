@@ -25,13 +25,16 @@ public class ReseauDeNeurones implements Comportement {
     Model model;
     private Translator<NDArray, Integer> translator;
 
-    public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) throws MalformedModelException, IOException {
+    public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage)  {
         this.sim = simulation;
         this.personnage = personnage;
 
         Path modelDir = Paths.get("donnes/mlp/" + nomReseau);
         model = Model.newInstance("mlp");
-        model.load(modelDir);
+        try {
+            model.load(modelDir);
+        }catch (MalformedModelException | IOException ex) {}
+
 
         this.translator = new Translator<NDArray, Integer>() {
             @Override
@@ -62,7 +65,7 @@ public class ReseauDeNeurones implements Comportement {
         Integer resultat = 0;
         try {
             resultat = predictor.predict(array);
-        } catch (TranslateException te){
+        } catch (ai.djl.translate.TranslateException te){
             System.out.println(te.getMessage());
             return Deplacement.AUCUN;
         }

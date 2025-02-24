@@ -274,28 +274,11 @@ public class VueMenus extends VueSimulation {
         okButton.setPrefSize(150, 50);
 
         //Évenements lier au choix de difficulté
-        //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
-            // Désactiver le bouton pendant le chargement
-            okButton.setDisable(true);
+            //Chargement du bouton
+            String originalText = chargementBouton(okButton);
 
-            // Créer un ProgressIndicator
-            ProgressIndicator progressIndicator = new ProgressIndicator();
-            progressIndicator.setMaxSize(20, 20);
-
-            // Sauvegarder le texte original du bouton
-            String originalText = okButton.getText();
-
-            // Créer un HBox pour contenir l'indicateur et le texte
-            HBox loadingContent = new HBox(5); // 5 pixels d'espacement
-            loadingContent.setAlignment(Pos.CENTER);
-            loadingContent.getChildren().addAll(progressIndicator, new Text("Chargement..."));
-
-            // Remplacer le contenu du bouton
-            okButton.setGraphic(loadingContent);
-            okButton.setText("");
-
-            // Utiliser Task pour exécuter le code de manière asynchrone
+            // On utilise Task pour exécuter le code de manière asynchrone
             Task<Simulation> task = new Task<>() {
                 @Override
                 protected Simulation call() throws Exception {
@@ -346,7 +329,7 @@ public class VueMenus extends VueSimulation {
                 }
             };
 
-            // Gérer la fin du task
+            // Gére la fin du task
             task.setOnSucceeded(event -> {
                 Simulation simulation = task.getValue();
                 if (simulation != null) {
@@ -357,13 +340,13 @@ public class VueMenus extends VueSimulation {
                     afficherJeu(MoteurJeu.jeu, root, scene);
                 }
 
-                // Réinitialiser le bouton
+                // Réinitialise le bouton avec le texte original
                 okButton.setGraphic(null);
                 okButton.setText(originalText);
                 okButton.setDisable(false);
             });
 
-            // Gérer les erreurs
+            // Gére l'erreur
             task.setOnFailed(event -> {
                 // Réinitialiser le bouton
                 okButton.setGraphic(null);
@@ -378,7 +361,7 @@ public class VueMenus extends VueSimulation {
                 alert.showAndWait();
             });
 
-            // Démarrer le task dans un nouveau thread
+            // Démarre le task dans un nouveau thread
             new Thread(task).start();
         });
 
@@ -387,6 +370,32 @@ public class VueMenus extends VueSimulation {
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");
+    }
+
+    /**
+     * Affiche le bouton de chargement
+     */
+    public String chargementBouton(Button okButton) {
+        // Désactive le bouton pendant le chargement
+        okButton.setDisable(true);
+
+        // Crée un ProgressIndicator
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(20, 20);
+
+        // Sauvegarde le texte original du bouton
+        String originalText = okButton.getText();
+
+        // Créer un HBox pour contenir l'indicateur et le texte
+        HBox loadingContent = new HBox(5); // 5 pixels d'espacement
+        loadingContent.setAlignment(Pos.CENTER);
+        loadingContent.getChildren().addAll(progressIndicator, new Text("Chargement..."));
+
+        // Remplace le contenu du bouton original avec l'indicateur de chargement
+        okButton.setGraphic(loadingContent);
+        okButton.setText("");
+
+        return originalText;
     }
 
     /**

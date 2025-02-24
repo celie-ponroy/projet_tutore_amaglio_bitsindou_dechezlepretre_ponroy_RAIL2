@@ -1,14 +1,13 @@
 package affichage;
 
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import moteur.MoteurJeu;
 import javafx.scene.image.Image;
@@ -106,22 +105,30 @@ public class VueMenusNonInteractive {
 
         // Événement lié au bouton de validation
         okButton.setOnAction(e -> {
-            //si aucun choix de difficulté n'est fait pour le gardien
-            if (gardienComboBox.getValue() == null || prisonnierComboBox.getValue() == null || (prisonnierComboBox.getValue() == null && gardienComboBox.getValue() == null)) {
+            // Chargement du bouton
+            String originalText = chargementBouton(okButton);
+
+            // Vérification des choix de difficulté
+            if (gardienComboBox.getValue() == null || prisonnierComboBox.getValue() == null) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Information");
                 alert.setHeaderText("Attention !");
                 alert.setContentText("Veuillez choisir un niveau de difficulté ");
                 alert.showAndWait();
-            } else {
-                //Création d'une simulation en fonction du choix de difficulté des 2 agents
-                if (gardienComboBox.getValue() != null && prisonnierComboBox.getValue() != null) {
-                    //Évenements lier au choix de difficulté
-                    okButton.setOnAction(f -> {
-                        Comportements comportementP; //stocke le comportement du prisonnier choisi
-                        Comportements comportementG; //stocke le comportement du gardien choisi
 
-                        //Switch pour le choix de difficulté du gardien
+                // Réinitialisation du bouton
+                okButton.setGraphic(null);
+                okButton.setText(originalText);
+                okButton.setDisable(false);
+            } else {
+                // Création d'une tâche asynchrone
+                Task<Simulation> task = new Task<>() {
+                    @Override
+                    protected Simulation call() throws Exception {
+                        Comportements comportementP;
+                        Comportements comportementG;
+
+                        // Switch pour le choix de difficulté du gardien
                         switch (gardienComboBox.getValue()) {
                             case "Arbre de décision déterministe":
                                 comportementG = Comportements.ArbreDeterministe;
@@ -139,7 +146,7 @@ public class VueMenusNonInteractive {
                                 throw new IllegalStateException("Unexpected value: " + gardienComboBox.getValue());
                         }
 
-                        //Switch pour le choix de difficulté du prisonnier
+                        // Switch pour le choix de difficulté du prisonnier
                         switch (prisonnierComboBox.getValue()) {
                             case "Arbre de décision déterministe 1.0":
                                 comportementP = Comportements.ArbreDeterministe;
@@ -157,20 +164,54 @@ public class VueMenusNonInteractive {
                                 throw new IllegalStateException("Unexpected value: " + prisonnierComboBox.getValue());
                         }
 
-                        //Création de la simulation
-                        Simulation simulation = new Simulation(comportementG, comportementP);
+                        // Création de la simulation
+                        return new Simulation(comportementG, comportementP);
+                    }
+                };
+
+                // Gére la fin de la tâche
+                task.setOnSucceeded(event -> {
+                    Simulation simulation = task.getValue();
+
+                    //Si la simulation n'est pas null on lance la simulation
+                    if (simulation != null) {
                         MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
+
+                        // Affichage du jeu
                         VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive(WIDTH, HEIGHT);
                         vp.update(MoteurJeu.jeu);
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();
                         root.getChildren().add(vp);
                         primaryStage.setScene(scene);
-                    });
-                }
+                    }
+
+                    // Réinitialisation du bouton
+                    okButton.setGraphic(null);
+                    okButton.setText(originalText);
+                    okButton.setDisable(false);
+                });
+
+                // Gére l'erreur
+                task.setOnFailed(event -> {
+                    // Réinitialisation du bouton
+                    okButton.setGraphic(null);
+                    okButton.setText(originalText);
+                    okButton.setDisable(false);
+
+                    // Affichage de l'erreur
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Erreur");
+                    alert.setHeaderText("Une erreur est survenue");
+                    alert.setContentText(task.getException().getMessage());
+                    alert.showAndWait();
+                });
+
+                // Démarre la tâche dans un nouveau thread
+                new Thread(task).start();
             }
         });
+
 
         // Ajout des éléments à la racine
         root.getChildren().addAll(title, container, okButton);
@@ -179,6 +220,32 @@ public class VueMenusNonInteractive {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Choix de la difficulté de l'IA");
         primaryStage.show();
+    }
+
+    /**
+     * Affiche le bouton de chargement
+     */
+    public String chargementBouton(Button okButton) {
+        // Désactive le bouton pendant le chargement
+        okButton.setDisable(true);
+
+        // Créer un indicateur de progression
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(20, 20);
+
+        // Sauvegarde le texte original du bouton
+        String originalText = okButton.getText();
+
+        // Créer un HBox pour contenir l'indicateur et le texte
+        HBox loadingContent = new HBox(5); // 5 pixels d'espacement
+        loadingContent.setAlignment(Pos.CENTER);
+        loadingContent.getChildren().addAll(progressIndicator, new Text("Chargement..."));
+
+        // Remplace le contenu du bouton original avec l'indicateur de chargement
+        okButton.setGraphic(loadingContent);
+        okButton.setText("");
+
+        return originalText;
     }
 
 }

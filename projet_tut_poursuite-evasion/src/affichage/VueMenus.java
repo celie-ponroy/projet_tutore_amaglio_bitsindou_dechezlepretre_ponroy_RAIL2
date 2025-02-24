@@ -118,7 +118,9 @@ public class VueMenus extends VueSimulation {
         //Bouton du mode interactif
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
-        modeInteractif.setOnAction(e -> afficherMenuPersonnage()); // Appel le menu des choix des personnages
+        modeInteractif.setOnAction(e ->{//Affichage du menu de choix du personnage
+            afficherMenuPersonnage();// Appel le menu des choix des personnages
+        });
 
 
         //Bouton du mode non interactif
@@ -165,6 +167,7 @@ public class VueMenus extends VueSimulation {
         setScene(scene, "Menu principal");
     }
 
+
     /**
      * Affiche le menu de choix du personnage
      */
@@ -201,17 +204,38 @@ public class VueMenus extends VueSimulation {
             afficherMenuIA(); // Menu de difficulté
         });
 
+        //Bouton "Retour"
+        Button retour = retourBtn();
+
         //Ajout des boutons dans la HBox des boutons
         buttonBox2.getChildren().addAll(persoPrisonnier, persoGardien);
 
         //Ajout des éléments au VBox principal
-        root2.getChildren().addAll(title2, buttonBox2);
+        root2.getChildren().addAll(title2, buttonBox2,retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
 
         setScene(scene2, "Choix du personnage");
     }
 
+    /**
+     * Affiche le
+     */
+    public Button retourBtn(){
+        //Bouton "Retour"
+        Button retour = new Button ("Retour");
+        retour.getStyleClass().add("important"); //rend le bouton rouge
+        retour.setOnAction(e -> {
+            //Ferme la fenetre actuelle
+            Stage stage = (Stage) retour.getScene().getWindow();
+            stage.close();
+            //retour au menu principal
+            VueMenus vm = new VueMenus();
+            vm.afficherMenuPrincipal();
+        });
+
+        return retour;
+    }
 
     /**
      * Permet d'afficher le jeu (mode interactif)
@@ -379,8 +403,12 @@ public class VueMenus extends VueSimulation {
             alert.setResizable(true);
             alert.showAndWait();
         });
+
+        //Ajout bouton retour
+        Button retour = retourBtn();
+
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, okButton, info);
+        root.getChildren().addAll(title, buttonBox, okButton, info, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");

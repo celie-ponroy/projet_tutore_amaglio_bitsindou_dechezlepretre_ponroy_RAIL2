@@ -34,4 +34,8 @@ public class LancerCalculs {
         CalculVision.ecrireVision();
         Simulation.CARTE = carte;
     }
+
+    public static void main(String[] args) throws IOException, TranslateException {
+        initSansDS();
+    }
 }

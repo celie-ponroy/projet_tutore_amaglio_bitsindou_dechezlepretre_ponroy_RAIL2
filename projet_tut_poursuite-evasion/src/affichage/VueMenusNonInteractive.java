@@ -169,9 +169,19 @@ public class VueMenusNonInteractive {
                 }
             }
         });
+        //ajout bouton informatif
+        Button info = new Button("Informations");
+        info.setPrefSize(150, 50);
+        info.setOnAction(e -> {
+            //on lance un popup
+            Alert alert;
+            alert = InformationsIa.getAlertNonInteractif();
+            alert.setResizable(true);
+            alert.showAndWait();
+        });
 
         // Ajout des éléments à la racine
-        root.getChildren().addAll(title, container, okButton);
+        root.getChildren().addAll(title, container, okButton,info);
 
         // Création et affichage de la scène
         primaryStage.setScene(scene);

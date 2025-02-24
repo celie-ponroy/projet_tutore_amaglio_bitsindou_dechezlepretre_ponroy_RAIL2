@@ -62,30 +62,4 @@ public class FiltreVision {
             }
         }
     }
-    /**
-     * Crée un spot lumineux autour du joueur.
-     */
-    public static Circle createLightSpot(int radius, Joueur joueur,int TAILLECELLULE, int decalageX, int decalageY) {
-        Circle lightSpot = new Circle(radius);
-
-        // Appliquer un effet de lumière avec un dégradé radial
-        lightSpot.setFill(new RadialGradient(
-                0, 0, 0.5, 0.5, 0.5, true, CycleMethod.NO_CYCLE,
-                new Stop(0, Color.rgb(255, 255, 150, 0.9)), // Centre lumineux
-                new Stop(0.7, Color.rgb(255, 255, 150, 0.5)), // Lumière diffusée
-                new Stop(1, Color.rgb(0, 0, 0, 0)) // Bord fondu vers transparent
-        ));
-
-        // Positionner le cercle sur le joueur
-        updateLightPosition(lightSpot, joueur,TAILLECELLULE, decalageX, decalageY);
-        return lightSpot;
-    }
-
-    /**
-     * Met à jour la position du spot lumineux en fonction du joueur.
-     */
-    public static void updateLightPosition(Circle lightSpot, Joueur joueur,int TAILLECELLULE, int decalageX, int decalageY) {
-        lightSpot.setCenterX(joueur.getPosition().getX() * TAILLECELLULE + decalageX +TAILLECELLULE / 2.0);
-        lightSpot.setCenterY(joueur.getPosition().getY() * TAILLECELLULE + decalageY + TAILLECELLULE / 2.0);
-    }
 }

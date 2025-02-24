@@ -10,7 +10,8 @@ resources/
 hello-view.fxml
 *.class
 projet_tut_poursuite-evasion/donnees/sauvegardes_simulation/*
-
+projet_tut_poursuite-evasion/donnees/vision.txt
+projet_tut_poursuite-evasion/donnees/chemins*
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

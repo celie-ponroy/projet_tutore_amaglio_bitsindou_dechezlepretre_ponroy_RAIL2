@@ -84,7 +84,7 @@ public class ApprentissageArbre {
         Trainer trainer = model.newTrainer(config);
 
 
-        int epoch = 150;
+        int epoch = 5;
 
         CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data.csv");
         CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");

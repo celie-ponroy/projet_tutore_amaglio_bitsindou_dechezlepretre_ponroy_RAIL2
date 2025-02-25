@@ -9,7 +9,7 @@ import simulation.Simulation;
 import java.io.IOException;
 
 public class LancerCalculs {
-    static String laby = "donnees/laby.txt";
+    static String laby = "donnees/petitLaby.txt";
 
     public static void init() throws IOException, TranslateException {
         int[][] carte = ChargementCarte.charger(laby);
@@ -36,6 +36,7 @@ public class LancerCalculs {
     }
 
     public static void main(String[] args) throws IOException, TranslateException {
-        initSansDS();
+        //initSansDS();
+        init();
     }
 }

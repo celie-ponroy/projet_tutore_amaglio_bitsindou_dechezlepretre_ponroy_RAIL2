@@ -31,7 +31,7 @@ public class LancerCalculsDataSet {
         List<Position> positions;
 
         int[] deplacementInt = new int[Deplacement.values().length];
-        int nbIteration = 7000;
+        int nbIteration = 100;
         String nomFichier = "";
         for (int i = 0; i < nbIteration; i++) {
             //on récupére les déplacements

@@ -3,7 +3,7 @@
     -fx-font-family: "Segoe UI Semibold";
     -fx-padding: 10;
     -fx-background-color: #778DA9;
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 3, 0.0 , 0 , 1 );
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
 }
 
 .button:hover {
@@ -17,24 +17,43 @@
 }
 
 .label {
+    -fx-font-size: 14pt;
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #1B263B;
+}
+
+.titre {
     -fx-font-size: 20pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
-    -fx-font-weight: bold;
 }
 .infos{
     -fx-font-size: 16pt;
     -fx-font-family: "Roboto";
-    -fx-text-fill: #749bed;
+    -fx-text-fill: #778DA9;
 }
 .cache{
     visibility: hidden;
+    -fx-font-size: 0px;
 }
 .petit{
     -fx-font-size: 12pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
-    -fx-font-weight: bold;
+}
+.infos{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #778DA9;
+}
+.cache{
+    visibility: hidden;
+    -fx-font-size: 0px;
+}
+.petit{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #1B263B;
 }
 
 .combo-box-base {
@@ -42,9 +61,23 @@
     -fx-background-insets: 0 0 -1 0, 0, 1, 2;
     -fx-background-radius: 3px, 3px, 2px, 1px;
 }
-.combo-box{
+
+.combo-box {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, #edebeb;
 
+}
+
+.chart-pie {
+    -fx-stroke: black; /* Couleur du contour */
+    -fx-stroke-width: 2px; /* Épaisseur du contour */
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: black;
 }
 .important{
     -fx-background-color:  #C95050
@@ -62,6 +95,20 @@
 .nonValider{
     -fx-background-color:  #C95050
 }
-.nonValider:hover{
+.nonValider:hover {
     -fx-background-color: #B34040;
+}
+/*pop up */
+.popup{
+    -fx-background-color: #E0E1DD;
+    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-border-color: #1B263B;
+    -fx-display-caret: false;
+    -fx-content-display: top;
+    -fx-alignment: center;
+
+
 }

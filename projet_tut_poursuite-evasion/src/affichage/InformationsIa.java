@@ -1,11 +1,18 @@
 package affichage;
 
-import javafx.scene.control.Alert;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 public class InformationsIa {
+    static final int WIDTH = 700;
+    static final int HEIGHT = 600;
     /**
      * Retourne une VBox contenant les informations sur les comportements des prisonniers
      * @return
@@ -19,10 +26,18 @@ public class InformationsIa {
         vboxMain.getChildren().add(image);
 
         //on fait une liste de label pour les informations
-        initLabel("Comportement aléatoire","L'IA se déplace aléatoirement sur la carte",vboxMain);
-        initLabel("Arbre de décision déterministe 1.0","L'IA se déplace en suivant un arbre de décision déterministe",vboxMain);
-        initLabel("Arbre de décision déterministe 2.0","L'IA se déplace en suivant un arbre de décision déterministe",vboxMain);
-        initLabel("Réseau de neurones 1.0","L'IA se déplace en suivant un réseau de neurones",vboxMain);
+        initLabel("Comportement aléatoire",
+                "L'IA se déplace aléatoirement sur la carte.",vboxMain);
+        initLabel("Arbre de décision déterministe 1.0",
+                "L'IA se déplace en suivant des probabilités de présence du gardien"+"\n"+
+                        " dites bayésiennes dans le but d'aller vers la sortie en l'évitant."
+                ,vboxMain);
+        initLabel("Arbre de décision déterministe 2.0",
+                "Cette IA fonctionne comme la version 1.0 mais une fois face au gardien, " +"\n"+
+                "le prisonnier cherche à fuir vers la sortie et non à l'opposé de l'adversaire.",vboxMain);
+
+        initLabel("Réseau de neurones 1.0",
+                "L'IA se déplace en suivant un réseau de neurones.",vboxMain);
 
         return vboxMain;
     }
@@ -40,45 +55,108 @@ public class InformationsIa {
         vboxMain.getChildren().add(image);
 
         //on fait une liste de label pour les informations
-        initLabel("Comportement aléatoire","L'IA se déplace aléatoirement sur la carte",vboxMain);
-        initLabel("Arbre de décision déterministe 1.0","L'IA se déplace en suivant un arbre de décision déterministe",vboxMain);
-        initLabel("Arbre de décision aléatoire","L'IA se déplace en suivant un arbre de décision déterministe",vboxMain);
-        initLabel("Réseau de neurones 1.0","L'IA se déplace en suivant un réseau de neurones",vboxMain);
+        initLabel("Comportement aléatoire","L'IA se déplace aléatoirement sur la carte.",vboxMain);
+        initLabel("Arbre de décision déterministe 1.0",
+                "L'IA se déplace en suivant des probabilités de présence du prisonnier "+"\n"+
+                        " dites bayésiennes dans le but d'attraper le prisonnier et l'empêcher " +"\n"+
+                        "de sortir.",vboxMain);
+        initLabel("Arbre de décision aléatoire",
+                "Cette IA fonctionne comme la version 1.0 mais il y ajoute de "+"\n"+
+                        "l'aléatoire en ayant une change daller vers une direction égale à "+"\n"+
+                        "la probabilité de présence de l'adversaire.",vboxMain);
+        initLabel("Réseau de neurones 1.0",
+                "L'IA se déplace en suivant un réseau de neurones.",vboxMain);
 
         return vboxMain;
     }
 
     /**
-     * Retourne une alerte contenant les informations sur les comportements des prisonniers
+     * Lance une fenetre contenant les informations sur les comportements des prisonniers
      * @return
      */
-    public static Alert getAlertPrisonnier(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Informations sur les comportements du prisonnier");
-        alert.setHeaderText("Informations sur les comportements du prisonnier");
-        alert.getDialogPane().setContent(getInfosPrisonnier());
-        return alert;
+    public static void popUpPrisonnier(){
+        HBox hBox = new HBox();
+        var gardien =  getInfosPrisonnier();
+        gardien.getStyleClass().add("popup");
+        gardien.setPrefSize(WIDTH,HEIGHT);
+
+        hBox.getChildren().add(gardien);
+        hBox.getStyleClass().add("popup");
+        Scene secondScene = new Scene(hBox,WIDTH,HEIGHT);
+
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Informations sur les comportements du prisonnier");
+        newWindow.setScene(secondScene);
+
+        newWindow.setX(100);
+        newWindow.setY(100);
+        newWindow.setResizable(false);
+        newWindow.setMaxWidth(WIDTH);
+        newWindow.setMaxHeight(HEIGHT);
+
+        newWindow.alwaysOnTopProperty();
+
+        newWindow.show();
     }
 
     /**
-     * Retourne une alerte contenant les informations sur les comportements des gardiens
+     * Lance une fenetre contenant les informations sur les comportements des gardiens
      * @return
      */
-    public static Alert getAlertGardien(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Informations sur les comportements du gardien");
-        alert.setHeaderText("Informations sur les comportements du gardien");
-        alert.getDialogPane().setContent(getInfosGardien());
-        return alert;
-    }
-    public static Alert getAlertNonInteractif(){
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Informations sur les comportements du gardien et du prisonnier");
-        alert.setHeaderText("Informations sur les comportements du gardien et du prisonnier");
+    public static void popUpGardien(){
         HBox hBox = new HBox();
-        hBox.getChildren().addAll(getInfosGardien(),getInfosPrisonnier());
-        alert.getDialogPane().setContent(hBox);
-        return alert;
+        var gardien =  getInfosGardien();
+        gardien.getStyleClass().add("popup");
+        gardien.setPrefSize(WIDTH,HEIGHT);
+
+        hBox.getChildren().add(gardien);
+        hBox.getStyleClass().add("popup");
+        Scene secondScene = new Scene(hBox,WIDTH,HEIGHT);
+
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Informations sur les comportements du gardien");
+        newWindow.setScene(secondScene);
+
+        newWindow.setX(100);
+        newWindow.setY(100);
+        newWindow.setResizable(false);
+        newWindow.setMaxWidth(WIDTH);
+        newWindow.setMaxHeight(HEIGHT);
+
+        newWindow.alwaysOnTopProperty();
+
+        newWindow.show();
+    }
+
+    /**
+     * Lance une fenetre contenant les informations sur les comportements des gardiens et des prisonniers
+     */
+    public static void popUpNonInteractif(){
+        HBox hBox = new HBox();
+        var gardien =  getInfosGardien();
+        gardien.getStyleClass().add("popup");
+        gardien.setPrefSize(WIDTH,HEIGHT);
+        var prisonnier = getInfosPrisonnier();
+        prisonnier.setPrefSize(WIDTH,HEIGHT);
+        prisonnier.getStyleClass().add("popup");
+        hBox.getChildren().addAll(gardien,prisonnier);
+        hBox.getStyleClass().add("popup");
+
+        Scene secondScene = new Scene(hBox,WIDTH*2,HEIGHT);
+
+        Stage newWindow = new Stage();
+        newWindow.setTitle("Informations sur les comportements du gardien et du prisonnier");
+        newWindow.setScene(secondScene);
+
+        newWindow.setX(100);
+        newWindow.setY(100);
+        newWindow.setResizable(false);
+        newWindow.setMaxWidth(WIDTH*2);
+        newWindow.setMaxHeight(HEIGHT);
+        newWindow.alwaysOnTopProperty();
+
+        newWindow.show();
+
     }
 
     /**
@@ -90,27 +168,44 @@ public class InformationsIa {
     private  static void initLabel(String titre, String description,VBox vboxMain){
         Label label = new Label(titre);
         label.getStyleClass().add("infos");
-        Label labelDescription = new Label(description);
-        labelDescription.getStyleClass().add("cache");
+        Text textDescription = new Text();
+        textDescription.setTextAlignment(TextAlignment.CENTER);
+        textDescription.setText(description);
+        textDescription.getStyleClass().add("cache");
         label.setOnMouseClicked(e -> {
-            toggleLabel(labelDescription);
-            System.out.println(titre);
+            toggleLabel(textDescription);
         });
-        vboxMain.getChildren().addAll(label,labelDescription);
+        vboxMain.getChildren().addAll(label,textDescription);
     }
 
     /**
-     * Cache ou affiche un label
-     * @param label
+     * Cache ou affiche un text
+     * @param description
      */
-    private static void toggleLabel(Label label){
-        if(label.getStyleClass().contains("petit")) {
-            label.getStyleClass().remove("petit");
-            label.getStyleClass().add("cache");
+    private static void toggleLabel(Text description){
+        if(description.getStyleClass().contains("petit")) {
+            description.getStyleClass().remove("petit");
+            description.getStyleClass().add("cache");
         }else {
-            label.getStyleClass().remove("cache");
-            label.getStyleClass().add("petit");
+            description.getStyleClass().remove("cache");
+            description.getStyleClass().add("petit");
         }
     }
 
+    /**
+     * Retourne un bouton d'information
+     * @return
+     */
+    public static Button getButtonInfo(){
+        Button info = new Button();
+        Image img = new Image("file:images/info.png");
+        ImageView view = new ImageView(img);
+        info.setPrefSize(40, 40);
+        view.setFitHeight(40);
+        view.setPreserveRatio(true);
+
+        info.setStyle("-fx-background-color: transparent;");
+        info.setGraphic(view);
+        return info;
+    }
 }

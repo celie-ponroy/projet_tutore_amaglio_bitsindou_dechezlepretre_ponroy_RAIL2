@@ -24,14 +24,14 @@ import java.util.Optional;
 
 public class VuePrincipale extends VueSimulation implements DessinJeu {
     private Label iterationLabel; // Label pour afficher le nombre d'itération
-    private Rectangle [][] filtreVision; // Filtre pour cacher les cases non visibles
+    private Rectangle[][] filtreVision; // Filtre pour cacher les cases non visibles
     private int tour;
     private Rectangle[][] caseBayesienneHisto;
     protected int DECALAGE;
 
 
-
     //constructeur
+
     public VuePrincipale(double width, double height) {
         super();
         if(width<height){
@@ -46,7 +46,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
-        var laby = initLabyrinthe();
+        var laby = initLabyrinthe(true);
         //au centre
         laby.setLayoutX(DECALAGE);
         this.getChildren().add(laby);
@@ -58,7 +58,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         iterationLabel.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
         iterationLabel.setStyle("-fx-font-size: 12px; -fx-border-color: black; -fx-padding: 10;");
         this.getChildren().add(iterationLabel);
-
     }
 
     @Override
@@ -115,7 +114,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             setOpacityPersonnage();
 
             setFiltreVision();
-
         }
 
         //Pop up pour afficher la fin de la partie
@@ -131,13 +129,13 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
                 alert.setHeaderText("Dommage...");
-                alert.setContentText("L'IA a été plus maligne, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
+                alert.setContentText("L'IA a été plus rusée, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
             }
             //affiche l'alerte avec les messages pendant 2 secondes
             alert.showAndWait();
             //Affichage de l'historique
             historique();
-        }else if(simulation.etreFini()){ //si on est en mode non interactif
+        } else if (simulation.etreFini()) { //si on est en mode non interactif
             alert.setContentText("Fin de la partie !\n" +
                     "Cliquez sur OK pour quitter");
             alert.showAndWait();
@@ -168,12 +166,14 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             }
         }
     }
+
     /**
      * Méthode pour lettre un filtre sur les cases non visibles
      */
     public void setFiltreVision() {
         FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur());
     }
+
     /**
      * Methode pour historique à la fin du jeu en mode interactif
      */
@@ -189,7 +189,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         Arrays.stream(filtreVision).forEach(rectangles -> Arrays.stream(rectangles).forEach(rectangle -> rectangle.setOpacity(0)));
         //on mets la première carte bayesienne
         Personnage agent = simulation.getPrisonnier();
-        if(simulation.getJoueur()==simulation.getPrisonnier())
+        if (simulation.getJoueur() == simulation.getPrisonnier())
             agent = simulation.getGardien();
 
         caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.getHistoriqueBayesien().get(agent).get(0),TAILLE_CELLULE,DECALAGE,0);
@@ -199,24 +199,25 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             }
         }
         //on mets les perso à l'emplacement ini
+
         Position pPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(0);
         Position pGardien= simulation.getHistoriquePosition().get(simulation.getGardien()).get(1);
         setPositions(pPrisonnier,prisonnierView);
         prisonnierView.setOpacity(1);
-        setPositions(pGardien,gardienView);
+        setPositions(pGardien, gardienView);
         gardienView.setOpacity(1);
 
         //ajout boutons pour precedent, suivant et revenir au menu principal
         Button precedent = new Button("Précédent");
         precedent.setPrefSize(200, 75);
         precedent.setOnAction(e -> {
-            tour-=1;
+            tour -= 1;
             updateHistorique();
-            });
+        });
         Button suivant = new Button("Suivant");
         suivant.setPrefSize(200, 75);
         suivant.setOnAction(e -> {
-            tour+=1;
+            tour += 1;
             updateHistorique();
         });
 
@@ -233,6 +234,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         });
 
         HBox hboxBouttons = new HBox();
+
         hboxBouttons.setLayoutX(DECALAGE);
         hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+iterationLabel.getHeight()+15);
         hboxBouttons.getChildren().add(precedent);
@@ -242,24 +244,25 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         hboxBouttons.setSpacing(30);
         this.getChildren().add(hboxBouttons);
     }
+
     /**
      * Update de l'historique (par rapport à un tour)
      */
-    public void updateHistorique(){
+    public void updateHistorique() {
         //on mets a jour position et bayes
-        if(tour<0){
-            tour=0;
+        if (tour < 0) {
+            tour = 0;
         }
         int taille = simulation.getHistoriquePosition().get(simulation.getJoueur()).size();
         this.iterationLabel.setText("Nombre d'itération: " + tour);
-        if(tour>=taille-1){
-            tour=taille-1;
+        if (tour >= taille - 1) {
+            tour = taille - 1;
             this.iterationLabel.setText("Fin");
         }
         updateDirections(tour);
         //on mets a jour la carte bayesienne
         Personnage agent = simulation.getPrisonnier();
-        if(simulation.getJoueur()==simulation.getPrisonnier())
+        if (simulation.getJoueur() == simulation.getPrisonnier())
             agent = simulation.getGardien();
 
         FiltreBayesien.updateBayes(caseBayesienneHisto,simulation.getHistoriqueBayesien().get(agent).get(tour));

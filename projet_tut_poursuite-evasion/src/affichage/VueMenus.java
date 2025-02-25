@@ -1,13 +1,19 @@
 package affichage;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+
+
+
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
@@ -16,36 +22,30 @@ import moteur.MoteurJeu;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class VueMenus {
+import java.awt.*;
+
+public class VueMenus extends VueSimulation {
 
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
-    private static  MoteurJeu jeu;
+    private static MoteurJeu jeu;
 
     protected Stage primaryStage; //scene
     private String choixPersonnage;
 
     /**
-     * Permet d'initialiser la taille de la fenêtre à la taille de l'écran
-     */
-    private void initPrimaryStage() {
-        this.primaryStage = new Stage();
-        this.primaryStage.setFullScreen(true);
-    }
-
-    /**
      * constructeur avec paramètre jeu
+     *
      * @param j le moteur de jeu
      */
     public VueMenus(MoteurJeu j) {
         this.jeu = j;
-        //Initialisation de la fenêtre
-        initPrimaryStage();
+        this.primaryStage = new Stage();
+        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
     }
 
@@ -53,12 +53,41 @@ public class VueMenus {
      * constructeur sans paramètre
      */
     public VueMenus() {
-        initPrimaryStage();
+        this.primaryStage = new Stage();
+        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
     }
 
     /**
+     * constructeur pour accepter un stage
+     */
+    public VueMenus(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+        this.choixPersonnage = "";
+    }
+
+    /**
+     * Permet d'initialiser la taille de la fenêtre à la taille de l'écran
+     */
+//    private void initPrimaryStage() {
+//        this.primaryStage = new Stage();
+//        this.primaryStage.setFullScreen(true);
+//    }
+
+    @Override
+    protected void setOpacityPersonnage() {
+        this.gardienView.setOpacity(0);
+        this.prisonnierView.setOpacity(0);
+    }
+
+    @Override
+    protected void updatePositions() {
+
+    }
+
+    /**
      * permet de changer la scene et son nom
+     *
      * @param scene la scene
      * @param title le titre de la scene
      */
@@ -83,6 +112,7 @@ public class VueMenus {
         root.setAlignment(Pos.CENTER);
 
         Label title = new Label("Veuillez choisir un mode:");
+        title.getStyleClass().add("titre");
 
         HBox buttonBox = new HBox();
         buttonBox.setSpacing(20);
@@ -105,6 +135,16 @@ public class VueMenus {
             vni.afficherMenuIA(this.primaryStage);
         });
 
+
+        //Bouton pour le mode analyse
+        Button modeAnalyse = new Button("Mode analyse");
+        modeAnalyse.setPrefSize(200, 100);
+        modeAnalyse.setOnAction(e -> {
+            //Affichage de la vue d'analyse
+            afficherAnalyse();
+
+        });
+
         //Boutton parties sauvegardées
         Button modePartiesSauvegardes = new Button("Parties sauvegardées");
         modePartiesSauvegardes.setPrefSize(200,100);
@@ -113,7 +153,8 @@ public class VueMenus {
         });
 
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modePartiesSauvegardes);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
+
 
         //Bouton pour quitter l'application
         Button quitter = new Button("Quitter");
@@ -143,6 +184,7 @@ public class VueMenus {
         root2.setAlignment(Pos.CENTER);
 
         Label title2 = new Label("Veuillez choisir un personnage:");
+        title2.getStyleClass().add("titre");
 
         HBox buttonBox2 = new HBox();
         buttonBox2.setSpacing(20);
@@ -212,6 +254,7 @@ public class VueMenus {
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
+
     /**
      * Affiche le menu de choix de la difficulté de l'IA
      */
@@ -228,7 +271,7 @@ public class VueMenus {
         setScene(scene, "Choix de la difficulté de l'IA adverse");
 
         Label title = new Label("Veuillez choisir un niveau de difficulté:");
-        title.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        title.getStyleClass().add("titre");
 
         //on recupere le choix du personnage que l'utilisateur va joué
         choixPersonnage = getChoixPersonnage();
@@ -236,13 +279,13 @@ public class VueMenus {
         //Création de la combobox pour le choix de la difficulté en fonction du personnage séléctionné
         ComboBox<String> comboBox = new ComboBox<>();
         //si le choix du personnage de l'utilisateur est le prisonnier, on adapte la combobox
-        if (choixPersonnage == "Prisonnier"){ //si l'utilisateur joue le prisonnier
+        if (choixPersonnage == "Prisonnier") { //si l'utilisateur joue le prisonnier
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision aléatoire");
             comboBox.getItems().add("Comportement aléatoire");
             comboBox.getItems().add("Réseau de neurones 1.0");
-        }else{ //si l'utilisateur joue le gardien
+        } else { //si l'utilisateur joue le gardien
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision déterministe 2.0");
@@ -260,114 +303,146 @@ public class VueMenus {
 
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
-            //Déclaration de la simulation
-            Simulation simulation;
+            //Chargement du bouton
+            String originalText = chargementBouton(okButton);
 
-            //Switch pour le choix de la difficulté de l'agent en focntion du choix de l'utilisateur
-            switch (comboBox.getValue()) {
-                case "Arbre de décision déterministe 1.0":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
+            // On utilise Task pour exécuter le code de manière asynchrone
+            Task<Simulation> task = new Task<>() {
+                @Override
+                protected Simulation call() throws Exception {
+                    Simulation simulation;
+
+                    //Switch pour le choix de la difficulté de l'agent en fonction du choix de l'utilisateur
+                    switch (comboBox.getValue()) {
+                        case "Arbre de décision déterministe 1.0":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.ArbreDeterministe);
+                            } else {
+                                simulation = new Simulation(false, Comportements.ArbreDeterministe);
+                            }
+                            break;
+                        case "Arbre de décision déterministe 2.0":
+                            simulation = new Simulation(false, Comportements.ArbreDeterministev2);
+                            break;
+                        case "Arbre de décision aléatoire":
+                            simulation = new Simulation(true, Comportements.ArbreAleatoire);
+                            break;
+                        case "Comportement aléatoire":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.Aleatoire);
+                            } else {
+                                simulation = new Simulation(false, Comportements.Aleatoire);
+                            }
+                            break;
+                        case "Réseau de neurones 1.0":
+                            if (choixPersonnage == "Prisonnier") {
+                                simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
+                            } else {
+                                simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
+                            }
+                            break;
+                        case null:
+                            Platform.runLater(() -> {
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Information");
+                                alert.setHeaderText("Attention !");
+                                alert.setContentText("Veuillez choisir un niveau de difficulté");
+                                alert.showAndWait();
+                            });
+                            return null;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
                     }
-                    break;
-                case "Arbre de décision déterministe 2.0":
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ArbreDeterministev2);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    break;
-                case "Arbre de décision aléatoire":
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ArbreAleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    break;
-                case "Comportement aléatoire":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.Aleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.Aleatoire);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    }
-                    break;
-                case "Réseau de neurones 1.0":
-                    if (choixPersonnage == "Prisonnier") {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    } else {
-                        //on change le nom de la scene
-                        setScene(scene, "Simulation interactive");
-                        simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
-                        MoteurJeu.jeu = simulation;
-                        //Affichage du jeu
-                        afficherJeu(MoteurJeu.jeu, root, scene);
-                    }
-                    break;
-                case null:
-                    //Pop up pour afficher un message d'alerte si aucun choix n'est fait
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Information");
-                    alert.setHeaderText("Attention !");
-                    alert.setContentText("Veuillez choisir un niveau de difficulté");
-                    alert.showAndWait();
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
-            }
+                    return simulation;
+                }
+            };
+
+            // Gére la fin du task
+            task.setOnSucceeded(event -> {
+                Simulation simulation = task.getValue();
+                if (simulation != null) {
+                    //on change le nom de la scene
+                    setScene(scene, "Simulation interactive");
+                    MoteurJeu.jeu = simulation;
+                    //Affichage du jeu
+                    afficherJeu(MoteurJeu.jeu, root, scene);
+                }
+
+                // Réinitialise le bouton avec le texte original
+                okButton.setGraphic(null);
+                okButton.setText(originalText);
+                okButton.setDisable(false);
+            });
+
+            // Gére l'erreur
+            task.setOnFailed(event -> {
+                // Réinitialiser le bouton
+                okButton.setGraphic(null);
+                okButton.setText(originalText);
+                okButton.setDisable(false);
+
+                // Afficher l'erreur
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Erreur");
+                alert.setHeaderText("Une erreur est survenue");
+                alert.setContentText(task.getException().getMessage());
+                alert.showAndWait();
+            });
+
+            // Démarre le task dans un nouveau thread
+            new Thread(task).start();
         });
+        
         //ajout bouton informatif
-        Button info = new Button("Informations");
-        info.setPrefSize(150, 50);
+        Button info = InformationsIa.getButtonInfo();
+
         info.setOnAction(e -> {
             //on lance un popup
-            Alert alert;
             if(choixPersonnage == "Prisonnier") {
-                alert = InformationsIa.getAlertGardien();
+                InformationsIa.popUpGardien();
 
             }else {
-                alert = InformationsIa.getAlertPrisonnier();
+                InformationsIa.popUpPrisonnier();
             }
-            alert.setResizable(true);
-            alert.showAndWait();
         });
-
+        HBox buttonBox2 = new HBox();
+        buttonBox2.setSpacing(20);
+        buttonBox2.setAlignment(Pos.CENTER);
+        buttonBox2.getChildren().addAll(okButton, info);
         //Ajout bouton retour
         Button retour = retourBtn();
 
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, okButton, info, retour);
+        root.getChildren().addAll(title, buttonBox, buttonBox2, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");
+    }
+
+    /**
+     * Affiche le bouton de chargement
+     */
+    public String chargementBouton(Button okButton) {
+        // Désactive le bouton pendant le chargement
+        okButton.setDisable(true);
+
+        // Crée un ProgressIndicator
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setMaxSize(20, 20);
+
+        // Sauvegarde le texte original du bouton
+        String originalText = okButton.getText();
+
+        // Créer un HBox pour contenir l'indicateur et le texte
+        HBox loadingContent = new HBox(5); // 5 pixels d'espacement
+        loadingContent.setAlignment(Pos.CENTER);
+        loadingContent.getChildren().addAll(progressIndicator, new Text("Chargement..."));
+
+        // Remplace le contenu du bouton original avec l'indicateur de chargement
+        okButton.setGraphic(loadingContent);
+        okButton.setText("");
+
+        return originalText;
     }
 
     /**
@@ -402,17 +477,30 @@ public class VueMenus {
 
     /**
      * Permet de récupérer le choix de personnage de l'utilisateur
+     *
      * @return le choix du personnage
      */
-    public String getChoixPersonnage(){
+    public String getChoixPersonnage() {
         return this.choixPersonnage;
     }
 
     /**
      * Permet de changer le choix de personnage de l'utilisateur
+     *
      * @param choixPersonnage le choix du personnage
      */
-     public void setChoixPersonnage(String choixPersonnage) {
-         this.choixPersonnage = choixPersonnage;
-     }
+    public void setChoixPersonnage(String choixPersonnage) {
+        this.choixPersonnage = choixPersonnage;
+    }
+
+    /**
+     * Méthode permettant de lancer la vue analyse
+     */
+    public void afficherAnalyse() {
+        VueAnalyse va = new VueAnalyse();
+        va.createAnalyseView(primaryStage);
+    }
+
+
+
 }

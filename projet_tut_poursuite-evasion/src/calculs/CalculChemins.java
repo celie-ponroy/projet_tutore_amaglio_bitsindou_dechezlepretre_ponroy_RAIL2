@@ -9,24 +9,28 @@ import java.util.*;
 //basé sur https://codegym.cc/groups/posts/a-search-algorithm-in-java
 
 public class CalculChemins {
-    static int [][] carte = ChargementCarte.charger("donnees/laby.txt");
+    static int[][] carte = ChargementCarte.charger("donnees/laby.txt");
+
     /**
      * Recuperer la vision depuis le fichier cheminP.txt du prisonnier
+     *
      * @return la liste des chemins pour toutes les paires de positions de la carte
      */
-    public static HashMap<List<Position>,Stack> recupererCheminPrisonnier(){
+    public static HashMap<List<Position>, Stack> recupererCheminPrisonnier() {
         return lirefichier("./donnees/cheminsP.txt");
     }
+
     /**
      * Recuperer la vision depuis le fichier cheminG.txt du gardien
+     *
      * @return la liste des chemins pour toutes les paires de positions de la carte
      */
-    public static HashMap<List<Position>,Stack> recupererCheminGardien(){
+    public static HashMap<List<Position>, Stack> recupererCheminGardien() {
         return lirefichier("./donnees/cheminsG.txt");
     }
 
-    private static HashMap<List<Position>,Stack> lirefichier(String nomFichier){
-        HashMap<List<Position>,Stack> chemins = new HashMap<List<Position>,Stack>();
+    private static HashMap<List<Position>, Stack> lirefichier(String nomFichier) {
+        HashMap<List<Position>, Stack> chemins = new HashMap<List<Position>, Stack>();
         //on recupere la chemins depuis le fichier chemins.txt
         try {
             BufferedReader br = new BufferedReader(new FileReader(nomFichier));
@@ -43,19 +47,19 @@ public class CalculChemins {
 
                 //on cherche les positions
                 //il faut enlever les crochets et les parenthèses
-                parts[1] = parts[1].replace("[","").replace("]","").replace("(","").replace(")","").replace(" ","");
+                parts[1] = parts[1].replace("[", "").replace("]", "").replace("(", "").replace(")", "").replace(" ", "");
                 String[] positionsStr = parts[1].split(",");
                 Stack listPositions = new Stack();
                 for (String positionStr : positionsStr) {
                     String[] coordonneesPosition = positionStr.split(";");
-                    if(coordonneesPosition.length != 2){
+                    if (coordonneesPosition.length != 2) {
                         continue;
                     }
                     int xPosition = Integer.parseInt(coordonneesPosition[0]);
                     int yPosition = Integer.parseInt(coordonneesPosition[1]);
                     listPositions.add(new Position(xPosition, yPosition));
                 }
-                chemins.put(List.of(position1,position2), listPositions);
+                chemins.put(List.of(position1, position2), listPositions);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,25 +69,27 @@ public class CalculChemins {
 
     /**
      * Ecrire les chemins dans un fichier
+     *
      * @throws IOException
      */
     public static void ecrireChemins() throws IOException {
         //ecrire dans les fichiers
-        ecrireFichier("./donnees/cheminsP.txt",false);
-        ecrireFichier("./donnees/cheminsG.txt",true);
+        ecrireFichier("./donnees/cheminsP.txt", false);
+        ecrireFichier("./donnees/cheminsG.txt", true);
     }
-    private static void ecrireFichier(String nomFichier,Boolean gardien) throws IOException {
+
+    private static void ecrireFichier(String nomFichier, Boolean gardien) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(nomFichier));
         HashMap vision = calculerChemins(gardien);
         for (int y1 = 0; y1 < carte.length; y1++) {
             for (int x1 = 0; x1 < carte[0].length; x1++) {
                 for (int y2 = 0; y2 < carte.length; y2++) {
                     for (int x2 = 0; x2 < carte[0].length; x2++) {
-                        Position src = new Position(x1,y1);
+                        Position src = new Position(x1, y1);
                         Position dest = new Position(x2, y2);
                         //System.out.println("Chemin de "+src+" à "+dest+" : "+vision.get(List.of(src,dest)));
-                        bos.write((x1+","+y1+"|"+x2+","+y2+":").getBytes());
-                        bos.write((vision.get(List.of(src,dest))+";"+"\n").getBytes());
+                        bos.write((x1 + "," + y1 + "|" + x2 + "," + y2 + ":").getBytes());
+                        bos.write((vision.get(List.of(src, dest)) + ";" + "\n").getBytes());
                     }
                 }
             }
@@ -91,34 +97,34 @@ public class CalculChemins {
         bos.close();
     }
 
-    public static HashMap<List<Position>,Stack> calculerChemins(Boolean gardien){
-         carte = ChargementCarte.charger("donnees/laby.txt");
+    public static HashMap<List<Position>, Stack> calculerChemins(Boolean gardien) {
+        carte = ChargementCarte.charger("donnees/laby.txt");
 
         //changer la carte pour prendre en compte les raccourcis
 
-        for(int i = 0; i < carte.length; i++){
-            for(int j = 0; j < carte[0].length; j++){
-                if(carte[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()){
-                    if(!gardien)
-                        carte[i][j]=CaseEnum.MUR.ordinal();
+        for (int i = 0; i < carte.length; i++) {
+            for (int j = 0; j < carte[0].length; j++) {
+                if (carte[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
+                    if (!gardien)
+                        carte[i][j] = CaseEnum.MUR.ordinal();
                     else
-                        carte[i][j]=CaseEnum.SOL.ordinal();
+                        carte[i][j] = CaseEnum.SOL.ordinal();
                 }
             }
         }
 
 
-        var mapStack = new HashMap<List<Position>,Stack>();
+        var mapStack = new HashMap<List<Position>, Stack>();
 
         for (int y1 = 0; y1 < carte.length; y1++) {
             for (int x1 = 0; x1 < carte[0].length; x1++) {
                 for (int y2 = 0; y2 < carte.length; y2++) {
                     for (int x2 = 0; x2 < carte[0].length; x2++) {
-                        Position src = new Position(x1,y1);
+                        Position src = new Position(x1, y1);
                         Position dest = new Position(x2, y2);
-                        var res = aStarSearch(carte, carte.length , carte[0].length, src, dest);
+                        var res = aStarSearch(carte, carte.length, carte[0].length, src, dest);
                         //liste de positions avec src et dest
-                        mapStack.put( List.of(src,dest), res);
+                        mapStack.put(List.of(src, dest), res);
                         //System.out.println("Chemin de "+src+" à "+dest+" : "+res);
                     }
                 }
@@ -144,8 +150,8 @@ public class CalculChemins {
         public Position parent;
 
         public double f, g, h;
-        Cell()
-        {
+
+        Cell() {
             parent = new Position(-1, -1);
             f = -1;
             g = -1;
@@ -155,13 +161,13 @@ public class CalculChemins {
 
     /**
      * Verifier si la position de la case "point" est valide(si elle est dans la carte)
+     *
      * @param rows
      * @param cols
      * @param point
      * @return
      */
-    static boolean isValid( int rows, int cols, Position point)
-    {
+    static boolean isValid(int rows, int cols, Position point) {
         if (rows > 0 && cols > 0)
             return (point.getY() >= 0) && (point.getY() < rows)
                     && (point.getX() >= 0)
@@ -169,29 +175,23 @@ public class CalculChemins {
         return false;
     }
 
-    static boolean isUnBlocked(int[][] grid, int rows, int cols, Position point)
-    {
+    static boolean isUnBlocked(int[][] grid, int rows, int cols, Position point) {
         return isValid(rows, cols, point) //si la position est valide (dans le tableau
                 && grid[point.getY()][point.getX()] != CaseEnum.MUR.ordinal();//si la case n'est pas un mur
     }
 
 
-    static boolean isDestination(Position position, Position dest)
-    {
+    static boolean isDestination(Position position, Position dest) {
         return position == dest || position.equals(dest);
     }
 
 
-    static double calculateHValue(Position src, Position dest)
-    {
+    static double calculateHValue(Position src, Position dest) {
         return Math.sqrt(Math.pow((src.getY() - dest.getY()), 2.0) + Math.pow((src.getX() - dest.getX()), 2.0));
     }
 
 
-
-
-    static Stack tracePath(Cell[][] cellDetails, Position dest)
-    {
+    static Stack tracePath(Cell[][] cellDetails, Position dest) {
         Stack<Position> path = new Stack<>();
 
         int row = dest.getY();
@@ -205,18 +205,17 @@ public class CalculChemins {
             col = nextNode.getX();
         } while (cellDetails[row][col].parent != nextNode);
         //on retire la dernière position
-        path.remove(path.size()-1);
+        path.remove(path.size() - 1);
         return path;
     }
 
-    static Stack aStarSearch(int[][] grid, int rows, int cols, Position src, Position dest)
-    {
+    static Stack aStarSearch(int[][] grid, int rows, int cols, Position src, Position dest) {
 
         if (!isValid(rows, cols, src)) {
             return new Stack();
         }
 
-        if (!isValid( rows, cols, dest)) {
+        if (!isValid(rows, cols, dest)) {
             return new Stack();
         }
 
@@ -246,7 +245,7 @@ public class CalculChemins {
         cellDetails[i][j].f = 0.0;
         cellDetails[i][j].g = 0.0;
         cellDetails[i][j].h = 0.0;
-        cellDetails[i][j].parent = new Position( j,i);
+        cellDetails[i][j].parent = new Position(j, i);
 
         PriorityQueue<Details> openList = new PriorityQueue<>((o1, o2) -> (int) Math.round(o1.value - o2.value));
 
@@ -261,34 +260,35 @@ public class CalculChemins {
             //on regarde les voisins
             int[][] directions = {
                     {-1, -1}, {-1, 0}, {-1, 1},
-                    { 0, -1},          { 0, 1},
-                    { 1, -1}, { 1, 0}, { 1, 1}
+                    {0, -1}, {0, 1},
+                    {1, -1}, {1, 0}, {1, 1}
             };//(voisin
 
             for (int[] add : directions) {
                 if (add[0] == 0 && add[1] == 0) {
                     continue;
                 }
-                Position neighbour = new Position(j + add[1],i + add[0] );
+                Position neighbour = new Position(j + add[1], i + add[0]);
 
-                if (isValid( rows, cols, neighbour)) {//si la position est valide
-                    boolean diag = (add[0] != 0 && add[1] != 0 );
-                    boolean diagbloquee= (diag) && (grid[neighbour.getY()][j] == 0 || grid[i][neighbour.getX()] == 0);
+                if (isValid(rows, cols, neighbour)) {//si la position est valide
+                    boolean diag = (add[0] != 0 && add[1] != 0);
+                    boolean diagbloquee = (diag) && (grid[neighbour.getY()][j] == 0 || grid[i][neighbour.getX()] == 0);
 
-                    if(cellDetails[neighbour.getY()] == null){ cellDetails[neighbour.getY()] = new Cell[cols]; } //si la ligne n'existe pas, on la crée
+                    if (cellDetails[neighbour.getY()] == null) {
+                        cellDetails[neighbour.getY()] = new Cell[cols];
+                    } //si la ligne n'existe pas, on la crée
 
                     if (cellDetails[neighbour.getY()][neighbour.getX()] == null) { //si la case n'existe pas
                         cellDetails[neighbour.getY()][neighbour.getX()] = new Cell();//on la crée
                     }
 
                     if (isDestination(neighbour, dest)) {//si on est arrivé
-                        if(!diagbloquee){
-                            cellDetails[neighbour.getY()][neighbour.getX()].parent = new Position ( j, i );
+                        if (!diagbloquee) {
+                            cellDetails[neighbour.getY()][neighbour.getX()].parent = new Position(j, i);
                             return tracePath(cellDetails, dest);
                         }
 
-                    }
-                    else if (!closedList[neighbour.getY()][neighbour.getX()]
+                    } else if (!closedList[neighbour.getY()][neighbour.getX()]
                             && isUnBlocked(grid, rows, cols, neighbour) && (!diagbloquee)) {// si la case n'est pas bloquée et n'est pas fermée
 
                         double gNew, hNew, fNew;
@@ -303,7 +303,7 @@ public class CalculChemins {
                             cellDetails[neighbour.getY()][neighbour.getX()].g = gNew;
 
                             cellDetails[neighbour.getY()][neighbour.getX()].f = fNew;
-                            cellDetails[neighbour.getY()][neighbour.getX()].parent = new Position( j, i );
+                            cellDetails[neighbour.getY()][neighbour.getX()].parent = new Position(j, i);
                         }
 
                     }

@@ -11,7 +11,7 @@ public interface DessinJeu {
     /**
      * affiche l'etat du jeu dans le canvas passe en parametre
      *
-     * @param jeu    jeu a afficher
+     * @param jeu jeu a afficher
      */
     void update(Jeu jeu);
 

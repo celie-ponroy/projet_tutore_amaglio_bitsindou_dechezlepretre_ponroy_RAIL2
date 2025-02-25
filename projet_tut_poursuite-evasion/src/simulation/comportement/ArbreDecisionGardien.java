@@ -1,4 +1,5 @@
-    package simulation.comportement;
+package simulation.comportement;
+
 
     import simulation.Case;
     import simulation.Comportements;
@@ -56,5 +57,4 @@
         public Comportements getType() {
             return Comportements.ArbreDeterministe;
         }
-
-    }
+}

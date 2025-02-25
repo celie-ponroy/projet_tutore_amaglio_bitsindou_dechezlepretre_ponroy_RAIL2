@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Agent extends Personnage implements Serializable {
 
-    public Agent(int x, int y){
-        super(x,y);
+    public Agent(int x, int y) {
+        super(x, y);
     }
 
     @Override

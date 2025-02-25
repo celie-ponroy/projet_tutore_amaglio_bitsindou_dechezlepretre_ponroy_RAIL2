@@ -21,7 +21,8 @@ public abstract class Personnage implements Serializable {
     public Position getPosition() {
         return this.position;
     }
-    public ArrayList<Position> getVision(){
+
+    public ArrayList<Position> getVision() {
         return Simulation.VISION.get(this.position);
     }
 

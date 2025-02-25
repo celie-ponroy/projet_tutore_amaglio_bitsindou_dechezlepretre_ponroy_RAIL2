@@ -1,6 +1,5 @@
 package outils;
 
-import simulation.comportement.ReseauDeNeurones;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -24,15 +23,16 @@ public class Outil {
         return flatCarte;
     }
 
-    public static void afficher_tab(double[] tab){
-        for(int i = 0; i < tab.length; i++){
+    public static void afficher_tab(double[] tab) {
+        for (int i = 0; i < tab.length; i++) {
             System.out.printf("%5f\t", tab[i]);
         }
         System.out.println();
     }
-    public static void afficher_doubleTab(int[][] tab){
-        for(int i = 0; i < tab.length; i++){
-            for(int j = 0; j < tab[0].length; j++) {
+
+    public static void afficher_doubleTab(int[][] tab) {
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab[0].length; j++) {
                 System.out.printf("%d\t", tab[i][j]);
             }
             System.out.println();

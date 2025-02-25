@@ -14,7 +14,7 @@ package "simulation"{
   }
   enum Comportements{
     ARBREDETERMINISTE
-    ARBREDETERMINISTEV
+    ARBREDETERMINISTEV2
     ALEATOIRE
     ARBREALEATOIRE
     RESEAUARBREDETERMINISTE
@@ -26,26 +26,25 @@ package "simulation"{
     SORTIE
     SPAWN_PRISONNIER
     SPAWN_GARDIEN
+    RACCOURCI_GARDIEN
   }
 
-  package "apprentissage"{
-    class ApprentissageDeArbre{
-        + main(): void
-    }
-  }
+
   package "comportement"{
     class ReseauDeNeurones{
+        - translator: Translator<NDArray, Integer>
         + ReseauDeNeurones(String, Simulation, Personnage)
-        - neuralNetwork : NeuralNetwork
     }
     Interface Comportement{
         + prendreDecision(): Deplacement
+        + getType(): Comportements
     }
     class Aleatoire{
         - deplacementAleatoire(): Deplacement
     }
     class ArbreDecision{
         + direction(Position, Position): Deplacement
+        + oppose(Deplacement): Deplacement
     }
     class ArbreDecisionGardien{
       + ArbreDecisionGardien(Simulation, Personnage)
@@ -64,22 +63,23 @@ package "simulation"{
     }
   }
   class Simulation{
+    - observateurs : List<DessinJeu>
     - nbTours : int
-    - estFini : boolean
     - victoirePrisonnier : boolean
     - victoireGardien : boolean
-    - observateurs : ArrayList<DessinJeu>
-    - carteBayesiennes : HashMap<Personnage, double[][]>
-    - bayesiens : HashMap<Personnage, Bayesien>
     + {static} final CARTE : int[][]
     + {static} final VISION : HashMap<Position, ArrayList<Position>>
     + {static} final CHEMIN_G : HashMap<List<Position>, Stack>
-    + {static} final CHEMIN_Py : HashMap<List<Position>, Stack>
-    + historiquePosition : HashMap<Personnage, List<Position>>
-    + historiqueBayesien : HashMap<Personnage, List<double[][]>>
-    + historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
+    + {static} final CHEMIN_P : HashMap<List<Position>, Stack>
+    - historiquePosition : HashMap<Personnage, List<Position>>
+    - historiqueBayesien : HashMap<Personnage, List<double[][]>>
+    - historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
+    - estFini : boolean
+    - carteBayesiennes : HashMap<Personnage, double[][]>
+    - bayesiens : HashMap<Personnage, Bayesien>
     + Simulation(boolean, Comportements)
     + Simulation(Comportement, Comportement)
+    + Simulation(Simulation)
     + positionnerAgentsSpawnAleatoire(): void
     + positionnerAleatoirement(): void
     + deplacerAgents(): void
@@ -94,10 +94,30 @@ package "simulation"{
     + getGardien(): Personnage
     + getJoueur(): Personnage
     + getPosSortie(): Position
-    + getCarteBayesienne(Personnage): double[][]
+    + getNbTours(): int
+    + getCarteBayesienne(): HashMap<Personnage, double[][]>
     + getBayesiens(): HashMap<Personnage, Bayesien>
     + getVictoirePrisonnier(): boolean
     + getVictoireGardien(): boolean
+    + getHistoriqueDeplacement(): HashMap<Personnage, List<Deplacement>>
+    + getHistoriquePosition(): HashMap<Personnage, List<Position>>
+    + getHistoriqueBayesien(): HashMap<Personnage, List<double[][]>>
+    + getComportementPrisonnier(): Comportement
+    + getComportementGardien(): Comportement
+    + setComportementPrisonnier(Comportement): void
+    + setComportementGardien(Comportement): void
+    + setCarteBayesiennes(HashMap<Personnage, double[][]>): void
+    + setBayesiens(HashMap<Personnage, Bayesien>): void
+    + setGardien(Personnage): void
+    + setPrisonnier(Personnage): void
+    + setEstFini(boolean): void
+    + setHistoriqueBayesien(HashMap<Personnage, List<double[][]>>): void
+    + setHistoriqueDeplacement(HashMap<Personnage, List<Deplacement>>): void
+    + setHistoriquePosition(HashMap<Personnage, List<Position>>): void
+    + setNbTours(int): void
+    + setVictoireGardien(boolean): void
+    + setVictoirePersonnage(boolean): void
+    + toString(): String
   }
 
   class Case{

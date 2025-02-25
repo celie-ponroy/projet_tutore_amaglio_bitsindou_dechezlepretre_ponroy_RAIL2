@@ -1,4 +1,5 @@
 package simulation.personnages;
+
 import simulation.Simulation;
 
 import java.io.Serializable;

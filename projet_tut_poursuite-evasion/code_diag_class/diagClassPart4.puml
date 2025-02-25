@@ -1,0 +1,85 @@
+@startuml
+package "calculs"{
+  class CalculVision{
+    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
+    + {static} ecrireVision(): void
+    + {static} calculerCarteVision(): HashMap
+    + {static} calculerVision(int, int): ArrayList
+    + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
+    + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
+  }
+  class CalculChemins {
+    - {static} carte : int[][]
+    + {static} lirefichier(String): HashMap<List<Position>,Stack>
+    + {static} recupererCheminPrisonnier(): HashMap<List<Position>,Stack>
+    + {static} recupererCheminGardien(): HashMap<List<Position>,Stack>
+    + {static} ecrireChemins(String): void
+    + {static} ecrireFichier(String, Boolean, String): void
+    + {static} calculerChemins(Boolean, String): HashMap<List<Position>,Stack>
+    + {static} isValid(int, int, Position): boolean
+    + {static} isUnblocked(int[][], int, int, Position): boolean
+    + {static} isDestination(Position, Position): boolean
+    + {static} calculateHValue(Position, Position): double
+    + {static} tracePath(Cell[][], Position): Stack
+    + {static} aStarSearch(int[][], int, int, Position, Position): Stack
+  }
+}
+
+package sauvegarde{
+    class Sauvegarde{
+    + {static} main(String[]): void
+    + {static} sauvegarder(Simulation, String): void
+    + {static} charger(String): Simulation
+    + {static} nomsSauvegardes(): ArrayList<String>
+    }
+    class SimulationSerializable{
+        - nbTours: int
+        - gardien: Personnage
+        - prisonnier: Personnage
+        - victoirePrisonnier: boolean
+        - victoireGardien: boolean
+        - comportementGardien: Comportements
+        - comportementPrisonnier: Comportements
+        - historiquePosition : HashMap<Personnage, List<Position>>
+        - historiqueBayesien : HashMap<Personnage, List<double[][]>>
+        - historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
+        - estFini : boolean
+        - carteBayesiennes : HashMap<Personnage, double[][]>
+        - bayesiens : HashMap<Personnage, Bayesien>
+        + SimulationSerializable(Simulation)
+        + creerSimulation(): Simulation
+    }
+}
+package "apprentissage"{
+    class ApprentissageDeArbre{
+        + main(): void
+    }
+    class OptimisationBayesienne{
+        - {static} final MIN_NEURONS: int
+        - {static} final MAX_NEURONS: int
+        - {static} final MIN_LAYERS: int
+        - {static} final MAX_LAYERS: int
+        - {static} final INITIAL_SAMPLES: int
+        - {static} final ITERATIONS: int
+        - {static} lossMini: float
+        - {static} BETA: float
+        - {static} testedConfigs: List<int>
+        - {static} lossResults: List<Double>
+        - {static} random: Random
+        + main(): void
+        - {static} getRandomConfig(): int[]
+        - {static} suggestNextConfiguration(): int[]
+        - {static} getRandomNearConfig(): int[]
+        - {static} predictMean(int[]): double
+        - {static} predictVariance(int[]): double
+        - {static} euclideanDistance(int[], int[]): double
+        - {static} evaluate(int[]): double
+    }
+  }
+
+package "main"{
+  class Main{
+    + main(): void
+  }
+}
+@enduml

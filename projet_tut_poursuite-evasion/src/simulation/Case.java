@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
+ * Cette classe permet de représenter une case lors de manipulation
+ * pour les calculs d'inférence bayésienne
+ */
 
- Cette classe permet de représenter une case lors de manipulation
- pour les calculs d'inférence bayésienne*/
 public class Case implements Serializable {
     private int x;
     private int y;

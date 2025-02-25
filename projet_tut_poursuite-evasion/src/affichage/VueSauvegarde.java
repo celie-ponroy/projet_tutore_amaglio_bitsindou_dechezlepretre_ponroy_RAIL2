@@ -45,7 +45,7 @@ public class VueSauvegarde extends VueSimulation{
      * Initialise la vue avec les deux vues bayésiennes et le labyrinthe positionné entre elles.
      */
     private void init() {
-        Pane labyPane = initLabyrinthe();
+        Pane labyPane = initLabyrinthe(true);
 
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(10);

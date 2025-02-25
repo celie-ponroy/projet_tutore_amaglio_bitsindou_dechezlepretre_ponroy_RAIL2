@@ -391,7 +391,7 @@ public class VueMenus extends VueSimulation {
             // Démarre le task dans un nouveau thread
             new Thread(task).start();
         });
-        
+
         //ajout bouton informatif
         Button info = InformationsIa.getButtonInfo();
 

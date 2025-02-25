@@ -28,6 +28,8 @@ public class LancerAnalyse implements Jeu {
     private HashMap casesVisitees = new HashMap();
     private int nbIterationsTotal; // Nombre total d'itérations à effectuer
     private boolean pause;
+    private Position posDepartPrisonnier;
+    private Position posDepartGardien;
 
 
     //constructeur
@@ -59,6 +61,11 @@ public class LancerAnalyse implements Jeu {
         // Récupération des positions
         List<Position> posPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier());
         List<Position> posGardien = simulation.getHistoriquePosition().get(simulation.getGardien());
+
+        //Récupération de la position de départ du prisonnier
+        posDepartPrisonnier = posPrisonnier.get(0);
+        //Récupération de la position de départ du gardien
+        posDepartGardien = posGardien.get(0);
 
         // Mise à jour des cases visitées pour le prisonnier
         updateCasesVisitees(posPrisonnier);
@@ -96,6 +103,11 @@ public class LancerAnalyse implements Jeu {
             }
         }
     }
+
+    /**
+     * Méthode pour afficher
+     * @param dj
+     */
 
     //Méthode qui ajoute un observateur
     @Override
@@ -186,5 +198,13 @@ public class LancerAnalyse implements Jeu {
 
     public void setPause(boolean b){
         this.pause = b;
+    }
+
+    public Position getPosDepartGardien() {
+        return posDepartGardien;
+    }
+
+    public Position getPosDepartPrisonnier() {
+        return posDepartPrisonnier;
     }
 }

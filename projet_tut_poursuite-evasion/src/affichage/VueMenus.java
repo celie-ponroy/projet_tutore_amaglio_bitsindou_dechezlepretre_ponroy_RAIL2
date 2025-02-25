@@ -160,7 +160,7 @@ public class VueMenus extends VueSimulation {
         Button quitter = new Button("Quitter");
         quitter.getStyleClass().add("important");
 
-        quitter.setPrefSize(150, 50);
+        quitter.setPrefSize(230, 50);
         quitter.setOnAction(e -> this.primaryStage.close());
 
         //Ajout des éléments à la scene principale
@@ -227,7 +227,7 @@ public class VueMenus extends VueSimulation {
     public Button retourBtn(){
         //Bouton "Retour"
         Button retour = new Button ("Retour au menu principal");
-        retour.setPrefSize(220, 50);
+        retour.setPrefSize(230, 50);
         retour.getStyleClass().add("important"); //rend le bouton rouge
         retour.setOnAction(e -> {
             //Ferme la fenetre actuelle

@@ -94,7 +94,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         //Bouton pour revenir au menu principal
         Button retourMenu = new Button("Retour au menu principal");
-        retourMenu.setPrefSize(250, 50);
+        retourMenu.setPrefSize(230, 50);
         retourMenu.getStyleClass().add("important");
         VueMenus vm = new VueMenus(primaryStage);
         retourMenu.setOnAction(e -> vm.afficherMenuPrincipal());

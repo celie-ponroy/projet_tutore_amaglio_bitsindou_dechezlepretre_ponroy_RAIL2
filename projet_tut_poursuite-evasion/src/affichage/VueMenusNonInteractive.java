@@ -104,7 +104,8 @@ public class VueMenusNonInteractive {
         okButton.setPrefSize(150, 50);
 
         //Bouton de retour au menu principal
-        Button retour = new Button("Retour");
+        Button retour = new Button("Retour au menu principal");
+        retour.setPrefSize(230, 50);
         retour.getStyleClass().add("important"); //rend le bouton rouge
 
         //Événement lié au bouton de retour
@@ -233,6 +234,7 @@ public class VueMenusNonInteractive {
             InformationsIa.popUpNonInteractif();
         });
         HBox hBoxButtons = new HBox();
+        hBoxButtons.setSpacing(20);
         hBoxButtons.getChildren().addAll(okButton ,info);
         hBoxButtons.setAlignment(Pos.CENTER);
         // Ajout des éléments à la racine

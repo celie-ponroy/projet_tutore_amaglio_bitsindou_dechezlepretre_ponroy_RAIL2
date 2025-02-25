@@ -184,7 +184,8 @@ public class VueMenus {
      */
     public Button retourBtn(){
         //Bouton "Retour"
-        Button retour = new Button ("Retour");
+        Button retour = new Button ("Retour au menu principal");
+        retour.setPrefSize(220, 50);
         retour.getStyleClass().add("important"); //rend le bouton rouge
         retour.setOnAction(e -> {
             //Ferme la fenetre actuelle

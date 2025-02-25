@@ -29,12 +29,12 @@
 }
 .cache{
     visibility: hidden;
+    -fx-font-size: 0px;
 }
 .petit{
     -fx-font-size: 12pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
-    -fx-font-weight: bold;
 }
 
 .combo-box-base {
@@ -72,4 +72,10 @@
     -fx-border-radius: 10px;
     -fx-padding: 10px;
     -fx-spacing: 10px;
+    -fx-border-color: #1B263B;
+    -fx-display-caret: false;
+    -fx-content-display: top;
+    -fx-alignment: center;
+
+
 }

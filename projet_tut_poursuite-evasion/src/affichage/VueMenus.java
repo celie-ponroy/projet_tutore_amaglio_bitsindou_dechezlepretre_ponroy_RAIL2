@@ -4,6 +4,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -344,26 +346,26 @@ public class VueMenus {
             }
         });
         //ajout bouton informatif
-        Button info = new Button("Informations");
-        info.setPrefSize(150, 50);
+        Button info = InformationsIa.getButtonInfo();
+
         info.setOnAction(e -> {
             //on lance un popup
-            Alert alert;
             if(choixPersonnage == "Prisonnier") {
-                alert = InformationsIa.getAlertGardien();
+                InformationsIa.popUpGardien();
 
             }else {
-                alert = InformationsIa.getAlertPrisonnier();
+                InformationsIa.popUpPrisonnier();
             }
-            alert.setResizable(true);
-            alert.showAndWait();
         });
-
+        HBox buttonBox2 = new HBox();
+        buttonBox2.setSpacing(20);
+        buttonBox2.setAlignment(Pos.CENTER);
+        buttonBox2.getChildren().addAll(okButton, info);
         //Ajout bouton retour
         Button retour = retourBtn();
 
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, okButton, info, retour);
+        root.getChildren().addAll(title, buttonBox, buttonBox2, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Choix de la difficulté de l'IA adverse");

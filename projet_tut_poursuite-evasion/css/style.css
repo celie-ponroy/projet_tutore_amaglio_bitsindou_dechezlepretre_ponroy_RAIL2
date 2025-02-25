@@ -41,6 +41,20 @@
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
 }
+.infos{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Roboto";
+    -fx-text-fill: #778DA9;
+}
+.cache{
+    visibility: hidden;
+    -fx-font-size: 0px;
+}
+.petit{
+    -fx-font-size: 12pt;
+    -fx-font-family: "Times New Roman";
+    -fx-text-fill: #1B263B;
+}
 
 .combo-box-base {
     -fx-background-color: -fx-shadow-highlight-color, -fx-outer-border, -fx-inner-border, #edebeb;

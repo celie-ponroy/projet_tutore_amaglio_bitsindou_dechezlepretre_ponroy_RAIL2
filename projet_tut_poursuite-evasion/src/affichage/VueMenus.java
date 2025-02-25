@@ -6,9 +6,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -390,6 +391,7 @@ public class VueMenus extends VueSimulation {
             // Démarre le task dans un nouveau thread
             new Thread(task).start();
         });
+        
         //ajout bouton informatif
         Button info = InformationsIa.getButtonInfo();
 

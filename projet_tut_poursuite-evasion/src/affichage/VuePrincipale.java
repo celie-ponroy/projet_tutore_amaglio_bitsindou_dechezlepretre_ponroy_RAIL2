@@ -159,7 +159,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void initFiltreVision() {
         //this.getChildren().add(FiltreVision.createLightSpot(9,(Joueur) simulation.getJoueur(),TAILLE_CELLULE,DECALAGE,0));
 
-
         this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur());
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {

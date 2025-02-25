@@ -36,6 +36,6 @@ public class LancerCalculs {
     }
 
     public static void main(String[] args) throws IOException, TranslateException {
-        initSansDS();
+        init();
     }
 }

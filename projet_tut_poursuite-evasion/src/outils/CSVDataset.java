@@ -1,15 +1,17 @@
 package outils;
 
 import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDArrays;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
 import ai.djl.training.dataset.RandomAccessDataset;
 import ai.djl.training.dataset.Record;
-import ai.djl.translate.TranslateException;
 import ai.djl.util.Progress;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import simulation.Simulation;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -32,12 +34,24 @@ public class CSVDataset extends RandomAccessDataset {
 
         // Conversion de la colonne "map" en un tableau de float
         float[] mapValues = parseMap(record.get("map"));
-        NDArray bayesien = manager.create(mapValues);
+        NDArray bayesien = manager.create(mapValues).reshape(Simulation.CARTE.length, Simulation.CARTE[0].length); // Shape (10, 10)
+
+        // Conversion de la colonne "map" en un tableau de float
+        NDArray realMap = manager.create(Simulation.CARTE).reshape(Simulation.CARTE.length, Simulation.CARTE[0].length);
+
+        // Conversion de la colonne "pos" en un tableau de float
+        float[] posValues = parseMap(record.get("pos"));
+        NDArray pos = manager.create(posValues);
 
         // Conversion de "dep" en float
         NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
 
-        return new Record(new NDList(bayesien), new NDList(dep));
+        // Combiner les cartes en un seul tenseur
+        NDArray inputData = NDArrays.concat(new NDList(bayesien, realMap), 2);
+
+        // Créer le record
+        NDList inputs = new NDList(inputData, pos); // Entrées combinées
+        return new Record(inputs, new NDList(dep));
     }
 
     @Override
@@ -51,11 +65,13 @@ public class CSVDataset extends RandomAccessDataset {
                 .mapToDouble(Double::parseDouble)
                 .collect(() -> new float[mapString.split(",").length],
                         (arr, val) -> arr[arr.length - 1] = (float) val,
-                        (arr1, arr2) -> {});
+                        (arr1, arr2) -> {
+                        });
     }
 
     @Override
-    public void prepare(Progress progress) {}
+    public void prepare(Progress progress) {
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -64,7 +80,8 @@ public class CSVDataset extends RandomAccessDataset {
     public static final class Builder extends BaseBuilder<Builder> {
         List<CSVRecord> csvRecords;
 
-        public Builder() {}
+        public Builder() {
+        }
 
         @Override
         protected Builder self() {
@@ -75,7 +92,7 @@ public class CSVDataset extends RandomAccessDataset {
             try (Reader reader = Files.newBufferedReader(Paths.get(nomFichier));
                  CSVParser csvParser =
                          new CSVParser(reader, CSVFormat.DEFAULT
-                                 .withHeader("map", "dep")
+                                 .withHeader("map","pos", "dep")
                                  .withFirstRecordAsHeader()
                                  .withIgnoreHeaderCase()
                                  .withTrim())) {

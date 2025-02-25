@@ -22,8 +22,8 @@ public class LancerCalculsDataSet {
             file.delete();
         }
 
-        DataCollector.etiquettage("\"map\",\"dep\"","donnees/game_data_validation.csv");
-        DataCollector.etiquettage("\"map\",\"dep\"","donnees/game_data.csv");
+        DataCollector.etiquettage("\"map\",\"pos\",\"dep\"","donnees/game_data_validation.csv");
+        DataCollector.etiquettage("\"map\",\"pos\",\"dep\"","donnees/game_data.csv");
 
         Simulation sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
         List<double[][]> bayesien;

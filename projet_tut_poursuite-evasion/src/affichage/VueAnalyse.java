@@ -35,6 +35,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     private PieChart camembert = new PieChart();
     private LineChart<String, Number> courbes;
     private LancerAnalyse lancerAnalyse;
+//    private TextField nbIterations;
     private int nbIterationsInt;
     private ObservableList<PieChart.Data> pieChartData;
     private final Rectangle[][] caseFiltreChaleur = new Rectangle[Simulation.CARTE.length][Simulation.CARTE[0].length];
@@ -73,6 +74,23 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Comportement aléatoire",
                 "Réseau de neurones 1.0"
         );
+        //Ajout d'un titre dans la comboBox
+        comboBoxPrisonnier.setPromptText("Choix du prisonnier");
+
+        comboBoxPrisonnier.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Choix du prisonnier"); // Placeholder
+                    setStyle("-fx-text-fill: gray;"); // Texte gris clair
+                } else {
+                    setText(item);
+                    setStyle(""); // Réinitialise le style normal
+                }
+            }
+        });
+
 
         // ComboBox gardien
         ComboBox<String> comboBoxGardien = new ComboBox<>();
@@ -82,15 +100,46 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Comportement aléatoire",
                 "Réseau de neurones 1.0"
         );
+        //Ajout d'un titre dans la comboBox avec une couleur grise
+        comboBoxGardien.setPromptText("Choix du gardien");
 
-        //Intput pour le nombre d'itérations (uniquement des chiffres)
+        comboBoxGardien.setButtonCell(new ListCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText("Choix du gardien"); // Placeholder
+                    setStyle("-fx-text-fill: gray;"); // Texte gris clair
+                } else {
+                    setText(item);
+                    setStyle(""); // Réinitialise le style normal
+                }
+            }
+        });
+
+
+
+        //Intput pour le nombre d'itérations (uniquement des chiffres jusqu'à 400 itérations)
         TextField nbIterations = new TextField();
         nbIterations.setPromptText("Nombre de parties");
+
+        //Vérification que l'utilisateur rentre bien un nombre inférieur ou égal à 400 sinon affiche un message de warning
         nbIterations.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 nbIterations.setText(newValue.replaceAll("[^\\d]", ""));
             }
+            //Vérification que l'utilisateur rentre bien un nombre pas trop élevé sinon messge de warning
+            if (!newValue.isEmpty() && Integer.parseInt(newValue) > 400) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Attention !");
+                alert.setHeaderText("Nombre d'itérations trop élevé");
+                alert.setContentText("Veuillez entrer un nombre d'itérations inférieur ou égal à 400");
+                alert.showAndWait();
+                nbIterations.setText("");
+            }
         });
+        //Style pour le placeholder
+        nbIterations.setStyle("-fx-prompt-text-fill: gray;");
 
         //Bouton pour revenir au menu principal
         Button retourMenu = new Button("Retour au menu principal");
@@ -106,13 +155,41 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Bouton lancer simulation
         Button lancerBtn = new Button("Lancer");
 
-        // Conteneur pour les ComboBox et le bouton
+        //Titres de chaque comboBox
+        Label titrePrisonnier = new Label("Prisonnier");
+        titrePrisonnier.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        Label titreGardien = new Label("Gardien");
+        titreGardien.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+        Label titreNbIterations = new Label("Nombre de parties");
+        titreNbIterations.setStyle("-fx-font-size: 14px; -fx-font-weight: bold;");
+
+        // Conteneur pour le titre et la comboBox du prisonnier
+        VBox prisonnierContainer = new VBox(5);
+        prisonnierContainer.setAlignment(Pos.CENTER);
+        prisonnierContainer.getChildren().addAll(titrePrisonnier, comboBoxPrisonnier);
+
+        // Conteneur pour le titre et la comboBox du gardien
+        VBox gardienContainer = new VBox(5);
+        gardienContainer.setAlignment(Pos.CENTER);
+        gardienContainer.getChildren().addAll(titreGardien, comboBoxGardien);
+
+        // Conteneur pour le titre et le champ de nombre d'itérations
+        VBox iterationContainer = new VBox(5);
+        iterationContainer.setAlignment(Pos.CENTER);
+        iterationContainer.getChildren().addAll(titreNbIterations, nbIterations);
+
+        // Conteneur pour les ComboBox et les boutons
         HBox choixContainer = new HBox(20);
         choixContainer.setAlignment(Pos.CENTER);
-        choixContainer.getChildren().addAll(comboBoxGardien, comboBoxPrisonnier, nbIterations,lancerBtn, pauseBtn);
+        choixContainer.getChildren().addAll(gardienContainer, prisonnierContainer, iterationContainer, lancerBtn, pauseBtn);
+
+        // Conteneur pour le label du nombre d'itérations avec un espacement en bas
+        VBox nbIterationContainer = new VBox(nbIteration);
+        nbIterationContainer.setAlignment(Pos.CENTER);
+        VBox.setMargin(nbIterationContainer, new Insets(0, 0, 40, 0)); // Ajoute un espace sous le label
 
         //Création du container top
-        VBox topContainer = initTopContainer(nbIteration, choixContainer, retourMenu);
+        VBox topContainer = initTopContainer(nbIterationContainer,choixContainer, retourMenu);
 
         // HBox pour aligner la légende à gauche et le topContainer au centre
         HBox headerContainer = new HBox(20);
@@ -141,11 +218,15 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         graphiquesWrapper.setAlignment(Pos.CENTER);
         VBox.setVgrow(graphiquesWrapper, Priority.ALWAYS);
 
-        //Bouton pour mettre en pause la simulation
+        //Bouton pour mettre en pause la simulation et afficher le texte "Reprendre"
         pauseBtn.setPrefSize(150, 50);
         pauseBtn.setOnAction(e -> {
-            if (lancerAnalyse != null) {
-                lancerAnalyse.setPause(!lancerAnalyse.isPause());
+            if (lancerAnalyse.isPause()) {
+                lancerAnalyse.setPause(false);
+                pauseBtn.setText("Pause");
+            } else {
+                lancerAnalyse.setPause(true);
+                pauseBtn.setText("Reprendre");
             }
         });
 
@@ -183,7 +264,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                     for (int i = 1; i <= nbIterationsInt; i++) {
                         final int currentIteration = i;
                         // Exécution de l'analyse
-                        lancerAnalyse.lancerAnalyse(1, tabChoix[0], tabChoix[1]);
+                        lancerAnalyse.lancerAnalyse(i, tabChoix[0], tabChoix[1]);
 
                         // Mise à jour de l'interface
                         Platform.runLater(() -> {
@@ -228,14 +309,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     /**
      * Méthode qui crée le container top
      */
-    public VBox initTopContainer(Label nbIteration, HBox choixContainer, Button retourMenu) {
+    public VBox initTopContainer(VBox nbIteration, HBox choixContainer, Button retourMenu) {
         // VBox pour centrer nbIteration et choixContainer en haut
         VBox topContainer = new VBox(10);
         topContainer.setAlignment(Pos.TOP_CENTER); // Garde l'alignement en haut mais centré en largeur
 
         // Centrer nbIteration dans la VBox
-        nbIteration.setAlignment(Pos.CENTER);
-        VBox.setMargin(nbIteration, new Insets(0, 0, 0, 0)); // Évite les décalages
+//        nbIteration.setAlignment(Pos.CENTER);
+//        VBox.setMargin(nbIteration, new Insets(0, 0, 0, 0)); // Évite les décalages
 
         topContainer.getChildren().addAll(nbIteration, choixContainer, retourMenu);
         return topContainer;
@@ -395,6 +476,10 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Rotation des labels de l'axe X pour éviter le chevauchement
         xAxis.setTickLabelRotation(45);
 
+        //Augmenter la taille de l'axe des abscisses du graphique en fonction du nombre d'itérations
+        xAxis.setCategories(FXCollections.observableArrayList(String.valueOf(nbIterationsInt)));
+
+
         // Création des séries de données
         XYChart.Series<String, Number> series = new XYChart.Series<>();
 
@@ -460,6 +545,9 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Mise à jour du filtre de chaleur
         updateFiltreChaleur();
 
+//        //Mise à jour des points de départ
+//        updateStartPos();
+
     }
 
     @Override
@@ -492,47 +580,74 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     /**
      * Méthode qui normalise le nombre de visites
      */
-    public double normaliser(int nbVisites) {
+    public double normaliser(int nbVis, HashMap<Position, Integer> casesVisitees) {
         int sum = 0;
+        double res = 0;
         // pour chaque valeur de getcasesVisitees on ajoute la valeur à sum
-        for (Position i :lancerAnalyse.getCasesVisitees().keySet())
-            sum += lancerAnalyse.getCasesVisitees().get(i);
-        return (double) nbVisites / sum;
+        for (Position i :casesVisitees.keySet()) {
+            //on verifie que la somme ne soit pas nulle
+            if (casesVisitees.get(i) != 0) {
+                sum += casesVisitees.get(i);
+            }
+            res = (double) nbVis / sum;
+        }
+        return res;
     }
+
     /**
      * Méthode qui met à jour le filtre de chaleur
      */
     public void updateFiltreChaleur() {
-        //on clear les anciennes données
-
+        // Réinitialise les couleurs de toutes les cases
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
                 Rectangle rect = caseFiltreChaleur[i][j];
-                rect.setFill(Color.rgb(0,255,0, 0));
+                rect.setFill(Color.rgb(0, 255, 0, 0));
+                rect.setOpacity(0);
+                Tooltip.uninstall(rect, null); // Enlever les anciens tooltips
             }
         }
 
+        // Met à jour pour les cases visitées et les cases de départ
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
                 Rectangle rect = caseFiltreChaleur[i][j];
-                if (lancerAnalyse.getCasesVisitees().containsKey(new Position(i, j))) {
+                Position currentPos = new Position(i, j);
+
+                // Vérifie si c'est une position de départ
+                boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
+                boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
+
+                // Case visitée ordinaire
+                if (lancerAnalyse.getCasesVisitees().containsKey(currentPos)) {
                     rect.setOpacity(1);
-                    int nbVisites = lancerAnalyse.getCasesVisitees().get(new Position(i, j));
-                    //on normalise le nombre de visites
-                    double opacite = Math.pow(normaliser(nbVisites), 0.5);
+                    int nbVisites = (int) lancerAnalyse.getCasesVisitees().get(currentPos);
 
-                    //on change la couleur en fonction du nombre de visites
-                    rect.setFill(Color.rgb(0, 0, 255, opacite)); // Rouge transparent
+                    // Position de départ du prisonnier
+                    if (isPrisonnierStart) {
+                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                    }
+                    // Position de départ du gardien
+                    else if (isGardienStart) {
+                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                    }
+                    // Case visitée normale
+                    else {
+                        double opacite = Math.pow(normaliser(nbVisites, lancerAnalyse.getCasesVisitees()), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
 
-                    //on ajoute un toltip pour affiche le nombre de vosotes de chaque case
-                    Tooltip tooltip = new Tooltip();
-                    tooltip.setText("Visites : " + nbVisites);
-                    Tooltip.install(rect, tooltip);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Visites : " + nbVisites);
+                        Tooltip.install(rect, tooltip);
+                    }
                 }
             }
         }
     }
-
-
-
 }

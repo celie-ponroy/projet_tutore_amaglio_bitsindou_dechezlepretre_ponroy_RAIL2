@@ -264,7 +264,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                     for (int i = 1; i <= nbIterationsInt; i++) {
                         final int currentIteration = i;
                         // Exécution de l'analyse
-                        lancerAnalyse.lancerAnalyse(1, tabChoix[0], tabChoix[1]);
+                        lancerAnalyse.lancerAnalyse(i, tabChoix[0], tabChoix[1]);
 
                         // Mise à jour de l'interface
                         Platform.runLater(() -> {
@@ -545,8 +545,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Mise à jour du filtre de chaleur
         updateFiltreChaleur();
 
-        //Mise à jour des points de départ
-        updateStartPos();
+//        //Mise à jour des points de départ
+//        updateStartPos();
 
     }
 
@@ -580,68 +580,74 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     /**
      * Méthode qui normalise le nombre de visites
      */
-    public double normaliser(int nbVisites) {
+    public double normaliser(int nbVis, HashMap<Position, Integer> casesVisitees) {
         int sum = 0;
+        double res = 0;
         // pour chaque valeur de getcasesVisitees on ajoute la valeur à sum
-        for (Position i :lancerAnalyse.getCasesVisitees().keySet())
-            sum += lancerAnalyse.getCasesVisitees().get(i);
-        return (double) nbVisites / sum;
+        for (Position i :casesVisitees.keySet()) {
+            //on verifie que la somme ne soit pas nulle
+            if (casesVisitees.get(i) != 0) {
+                sum += casesVisitees.get(i);
+            }
+            res = (double) nbVis / sum;
+        }
+        return res;
     }
+
     /**
      * Méthode qui met à jour le filtre de chaleur
      */
     public void updateFiltreChaleur() {
-        //on clear les anciennes données
-
+        // Réinitialise les couleurs de toutes les cases
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
                 Rectangle rect = caseFiltreChaleur[i][j];
-                rect.setFill(Color.rgb(0,255,0, 0));
+                rect.setFill(Color.rgb(0, 255, 0, 0));
+                rect.setOpacity(0);
+                Tooltip.uninstall(rect, null); // Enlever les anciens tooltips
             }
         }
 
+        // Met à jour pour les cases visitées et les cases de départ
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
                 Rectangle rect = caseFiltreChaleur[i][j];
-                if (lancerAnalyse.getCasesVisitees().containsKey(new Position(i, j))) {
+                Position currentPos = new Position(i, j);
+
+                // Vérifie si c'est une position de départ
+                boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
+                boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
+
+                // Case visitée ordinaire
+                if (lancerAnalyse.getCasesVisitees().containsKey(currentPos)) {
                     rect.setOpacity(1);
-                    int nbVisites = lancerAnalyse.getCasesVisitees().get(new Position(i, j));
-                    //on normalise le nombre de visites
-                    double opacite = Math.pow(normaliser(nbVisites), 0.5);
+                    int nbVisites = (int) lancerAnalyse.getCasesVisitees().get(currentPos);
 
-                    //on change la couleur en fonction du nombre de visites
-                    rect.setFill(Color.rgb(0, 0, 255, opacite)); // Rouge transparent
+                    // Position de départ du prisonnier
+                    if (isPrisonnierStart) {
+                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                    }
+                    // Position de départ du gardien
+                    else if (isGardienStart) {
+                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                    }
+                    // Case visitée normale
+                    else {
+                        double opacite = Math.pow(normaliser(nbVisites, lancerAnalyse.getCasesVisitees()), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
 
-                    //on ajoute un toltip pour affiche le nombre de vosotes de chaque case
-                    Tooltip tooltip = new Tooltip();
-                    tooltip.setText("Visites : " + nbVisites);
-                    Tooltip.install(rect, tooltip);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Visites : " + nbVisites);
+                        Tooltip.install(rect, tooltip);
+                    }
                 }
             }
         }
     }
-
-    /**
-     * Méthode qui met un point orange pour le point de départ du prisonnier et un point bleu pour le point d'arrivée
-     */
-    public void updateStartPos() {
-        //on clear les anciennes données
-        for (int i = 0; i < Simulation.CARTE.length; i++) {
-            for (int j = 0; j < Simulation.CARTE.length; j++) {
-                Rectangle rect = caseFiltreChaleur[i][j];
-                rect.setFill(Color.rgb(0,255,0, 0));
-            }
-        }
-
-        //on ajoute un point orange pour le point de départ du prisonnier
-        Position startPosPrisonnier = lancerAnalyse.getPosDepartPrisonnier();
-        caseFiltreChaleur[startPosPrisonnier.getX()][startPosPrisonnier.getY()].setFill(Color.ORANGE);
-
-        //on ajoute un point bleu pour le point d'arrivée du prisonnier
-        Position startPosGardien = lancerAnalyse.getPosDepartGardien();
-        caseFiltreChaleur[startPosGardien.getX()][startPosGardien.getY()].setFill(Color.BLUE);
-    }
-
-
-
 }

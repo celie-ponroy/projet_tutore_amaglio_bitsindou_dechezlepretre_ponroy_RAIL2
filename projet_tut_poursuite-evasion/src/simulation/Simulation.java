@@ -14,27 +14,27 @@ import java.util.List;
 import java.util.Stack;
 
 public class Simulation implements Jeu {
-    private List<DessinJeu> observateurs;
-    private int nbTours;
-    private int nbDeplacementsPerso;
-    private Personnage gardien;
-    private Personnage prisonnier;
-    private boolean victoirePrisonnier;
-    private boolean victoireGardien;
-    private Comportement comportementGardien;
-    private Comportement comportementPrisonnier;
+    protected List<DessinJeu> observateurs;
+    protected int nbTours;
+    protected int nbDeplacementsPerso;
+    protected Personnage gardien;
+    protected Personnage prisonnier;
+    protected boolean victoirePrisonnier;
+    protected boolean victoireGardien;
+    protected Comportement comportementGardien;
+    protected Comportement comportementPrisonnier;
     public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
-    private HashMap<Personnage, List<Position>> historiquePosition;
-    private HashMap<Personnage, List<double[][]>> historiqueBayesien;
-    private HashMap<Personnage, List<Deplacement>> historiqueDeplacement;
+    protected HashMap<Personnage, List<Position>> historiquePosition;
+    protected HashMap<Personnage, List<double[][]>> historiqueBayesien;
+    protected HashMap<Personnage, List<Deplacement>> historiqueDeplacement;
 
-    private boolean estFini;
-    private HashMap<Personnage, double[][]> carteBayesiennes;
-    private HashMap<Personnage, Bayesien> bayesiens;
+    protected boolean estFini;
+    protected HashMap<Personnage, double[][]> carteBayesiennes;
+    protected HashMap<Personnage, Bayesien> bayesiens;
 
     /**
      * Constructeur mode non interactif
@@ -277,7 +277,7 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui positionne de manière aléatoire les deux perso sur un spawn
      */
-    private void positionnerAgentsSpawnAleatoire() {
+    protected void positionnerAgentsSpawnAleatoire() {
         List<Case> spawnsGardien = new ArrayList<>();
         List<Case> spawnsPrisonnier = new ArrayList<>();
         for (int i = 0; i < CARTE.length; i++) {
@@ -298,7 +298,7 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui positionne de manière aléatoire les deux agents pour l'apprentissage
      */
-    private void positionnerAleatoirement() {
+    protected void positionnerAleatoirement() {
         List<Case> casesValides = new ArrayList<>();
 
         for (int i = 0; i < CARTE.length; i++) {

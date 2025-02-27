@@ -178,10 +178,16 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         iterationContainer.setAlignment(Pos.CENTER);
         iterationContainer.getChildren().addAll(titreNbIterations, nbIterations);
 
+        //ajout bouton informatif
+        Button info = InformationsIa.getButtonInfo();
+        info.setOnAction(e -> {
+            InformationsIa.popUpNonInteractif();
+        });
+
         // Conteneur pour les ComboBox et les boutons
         HBox choixContainer = new HBox(20);
         choixContainer.setAlignment(Pos.CENTER);
-        choixContainer.getChildren().addAll(gardienContainer, prisonnierContainer, iterationContainer, lancerBtn, pauseBtn);
+        choixContainer.getChildren().addAll(info,gardienContainer, prisonnierContainer, iterationContainer, lancerBtn, pauseBtn);
 
         // Conteneur pour le label du nombre d'itérations avec un espacement en bas
         VBox nbIterationContainer = new VBox(nbIteration);

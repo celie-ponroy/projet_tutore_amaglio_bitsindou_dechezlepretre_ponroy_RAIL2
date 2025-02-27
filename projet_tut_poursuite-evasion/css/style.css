@@ -109,6 +109,9 @@
     -fx-display-caret: false;
     -fx-content-display: top;
     -fx-alignment: center;
+}
 
-
+.bordered-box {
+    -fx-border-color: black;
+    -fx-padding: 30;
 }

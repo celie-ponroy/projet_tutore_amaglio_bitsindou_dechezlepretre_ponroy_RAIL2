@@ -17,11 +17,14 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
+import moteur.ClavierTuto;
 import moteur.Jeu;
 import moteur.MoteurJeu;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
+import simulation.tuto.SimulationTutoriel;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -152,8 +155,17 @@ public class VueMenus extends VueSimulation {
             afficherMenuSauvegarde(this.primaryStage, root, scene);
         });
 
+        //Tuto
+        Button modeTuto = new Button("Tutoriel");
+        modeTuto.setPrefSize(200,100);
+        modeTuto.setOnAction(e -> {
+            SimulationTutoriel simulationTutoriel = new SimulationTutoriel();
+            MoteurJeu.jeu = simulationTutoriel;
+            afficherTuto(simulationTutoriel, scene, root);
+        });
+
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes, modeTuto);
 
 
         //Bouton pour quitter l'application
@@ -252,6 +264,21 @@ public class VueMenus extends VueSimulation {
         root.getChildren().clear();
         root.getChildren().add(vp);
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+    }
+
+    /**
+     * Permet d'afficher le tutoriel
+     * @param j
+     * @param scene
+     * @param root
+     */
+    public void afficherTuto(Jeu j ,Scene scene, Pane root){
+        VueTutoriel vueTutoriel = new VueTutoriel((SimulationTutoriel) j, WIDTH, HEIGHT);
+        j.ajouterObservateur(vueTutoriel);
+        root.getChildren().clear();
+        root.getChildren().add(vueTutoriel);
+        ClavierTuto clavier = new ClavierTuto((SimulationTutoriel) MoteurJeu.jeu);
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
 

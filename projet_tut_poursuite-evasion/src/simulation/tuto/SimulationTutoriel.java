@@ -10,6 +10,7 @@ import simulation.personnages.Position;
 
 public class SimulationTutoriel extends Simulation {
     public EtatTuto etatActuel;
+    public boolean gardienVus = false;
 
     public SimulationTutoriel(){
         super(true , Comportements.ArbreAleatoire);
@@ -24,15 +25,13 @@ public class SimulationTutoriel extends Simulation {
      * @param d déplacement souhaité
      */
     public void deplacementJoueur(Deplacement d) { //ajout du chemin dédié
-        if(etatActuel == EtatTuto.DEPLACEMENT && this.estVisible(gardien,false)){
-            this.etatActuel = EtatTuto.GARDIEN;
-        }
+
         Deplacement deplacementAgent;
 
         Joueur joueur = (Joueur) this.getJoueur();
         Personnage agent = this.gardien;
 
-        if(this.nbTours<=4){
+        if(!gardienVus){
             deplacementAgent = Deplacement.AUCUN;
         }else {
             deplacementAgent = this.comportementGardien.prendreDecision();
@@ -57,6 +56,12 @@ public class SimulationTutoriel extends Simulation {
         historiqueBayesien.get(agent).add(cartebay);
 
         //gestion des interactions et de la fin du jeu
+        if(etatActuel == EtatTuto.DEPLACEMENT && this.estVisible(gardien,false)){
+            this.etatActuel = EtatTuto.GARDIEN;
+            gardienVus = true;
+            this.notifierObservateurs();
+            return;
+        }
         miseAJourFinJeu();
         if(this.estFini){
             this.etatActuel = EtatTuto.FIN;

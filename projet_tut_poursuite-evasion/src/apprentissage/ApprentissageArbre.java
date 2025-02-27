@@ -15,6 +15,7 @@ import ai.djl.training.TrainingConfig;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
+import ai.djl.training.loss.SoftmaxCrossEntropyLoss;
 import ai.djl.translate.TranslateException;
 import lancercalculs.LancerCalculs;
 import outils.CSVDataset;
@@ -31,7 +32,7 @@ public class ApprentissageArbre {
         //LancerCalculs.init();
 
         Application application = Application.Tabular.SOFTMAX_REGRESSION;
-        long inputSize = Simulation.getTailleCarte() + 2;
+        long inputSize = Simulation.getTailleCarte()* 3L;
         long outputSize = 9;
 
 
@@ -53,6 +54,7 @@ public class ApprentissageArbre {
         Model model = Model.newInstance("reseau_Arbre");
         model.setBlock(block);
         //parametrage de l'entrainement
+        //Loss l = new SoftmaxCrossEntropyLoss("test",1,-1,false,true);
         TrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
                 .addEvaluator(new Accuracy()) // Fonction qui permet de comprendre comment performe le réseau a l'entrainement
                 .addTrainingListeners(TrainingListener.Defaults.logging())
@@ -84,7 +86,7 @@ public class ApprentissageArbre {
         Trainer trainer = model.newTrainer(config);
 
 
-        int epoch = 5;
+        int epoch = 50;
 
         CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data.csv");
         CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");

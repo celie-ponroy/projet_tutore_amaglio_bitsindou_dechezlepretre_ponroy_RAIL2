@@ -32,7 +32,7 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {269, 269,269,269}));
+        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {269, 269,269,269}));
         try {
             model.load(modelDir);
         }catch (MalformedModelException | IOException ex) {
@@ -50,10 +50,11 @@ public class ReseauDeNeurones implements Comportement {
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray probabilities = list.singletonOrThrow().softmax(0);
-                for(int i = 0; i < probabilities.size(); i++) {
-                    //System.out.println(i);
-                    System.out.println(probabilities.get(i));
-                }
+//                for(int i = 0; i < probabilities.size(); i++) {
+//                    System.out.print(i+" : ");
+//                    System.out.print(probabilities.get(i)+"\t");
+//                }
+//
                 return (int) probabilities.argMax().getLong();
             }
 
@@ -69,26 +70,56 @@ public class ReseauDeNeurones implements Comportement {
     public Deplacement prendreDecision() {
         var predictor = model.newPredictor(translator);
         NDManager manager = NDManager.newBaseManager();
-        double[] tableau = new double[Simulation.getTailleCarte()+2];
-        double[] tableau2 = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
-        for (int i = 0; i < tableau2.length; i++) {
-            tableau[i] = tableau2[i];
-        }
-        tableau[tableau.length-2] = (double) personnage.getPosition().getY() /Simulation.CARTE.length;
-        tableau[tableau.length-1] = (double) personnage.getPosition().getX() /Simulation.CARTE[0].length;
+        double[] cartePos = Outil.applatissement(sim.getGardien().getPositionCarte());
+        double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
+        double[] carte = Outil.applatissement(sim.getCarteMursSortie());
+//        for (int i = 0; i < tableau2.length; i++) {
+//            tableau[i] = tableau2[i];
+//        }
+//        tableau[tableau.length-2] = (double) personnage.getPosition().getY() /Simulation.CARTE.length;
+//        tableau[tableau.length-1] = (double) personnage.getPosition().getX() /Simulation.CARTE[0].length;
 
-        NDArray array = manager.create(tableau);
-        float[] popolola = new float[Simulation.getTailleCarte()+2];
-        for (int i = 0; i < popolola.length; i++) {
-            popolola[i] = Float.parseFloat(String.valueOf(tableau[i]));
+//        NDArray array = manager.create(tableau);
+//        float[] popolola = new float[Simulation.getTailleCarte()+2];
+//        for (int i = 0; i < popolola.length; i++) {
+//            popolola[i] = Float.parseFloat(String.valueOf(tableau[i]));
+//        }
+        float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
+        //Outil.afficher_tab(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
+        System.out.println("\nCarte Pos");
+        System.out.println(sim.getGardien().getPosition());
+        for(int i = 0; i < Simulation.CARTE.length; i++){
+            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+                System.out.print(sim.getGardien().getPositionCarte()[i][j]+" ");
+            }
+            System.out.println();
         }
-        NDArray arrayFlaot = manager.create(popolola);
+
+        System.out.println("\nCarte Baye");
+        for(int i = 0; i < Simulation.CARTE.length; i++){
+            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+                System.out.print(sim.getCarteBayesienne(sim.getGardien())[i][j]+" ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("\nCarte");
+        for(int i = 0; i < Simulation.CARTE.length; i++){
+            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+                System.out.print(sim.getCarteMursSortie()[i][j]+" ");
+            }
+            System.out.println();
+        }
+
+        NDArray arrayFlaot = manager.create(input);
         Integer resultat = 0;
         try {
             resultat = predictor.predict(arrayFlaot);
         } catch (ai.djl.translate.TranslateException te){
+            System.out.println(te.getMessage());
             return Deplacement.AUCUN;
         }
+        System.out.println(Deplacement.values()[resultat]);
         return Deplacement.values()[resultat];
     }
 

@@ -30,4 +30,19 @@ public abstract class Personnage implements Serializable {
     public String toString() {
         return position.toString();
     }
+
+    public double[][] getPositionCarte(){
+        double[][] res = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];
+
+        for(int i = 0; i < res.length; i++){
+            for(int j = 0; j < res[0].length; j++){
+                if(i == this.position.getX() && j == this.position.getY()){
+                    res[j][i] = 1;
+                } else{
+                    res[j][i] = 0;
+                }
+            }
+        }
+        return res;
+    }
 }

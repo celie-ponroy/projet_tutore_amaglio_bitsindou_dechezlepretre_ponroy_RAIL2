@@ -31,11 +31,12 @@ public class CSVDataset extends RandomAccessDataset {
         CSVRecord record = csvRecords.get(Math.toIntExact(index));
 
         // Conversion de la colonne "map" en un tableau de float
-        float[] mapValues = parseMap(record.get("map"));
+        float[] mapValues = parseMap(record.get("input"));
+        //System.out.println("taille input "+mapValues.length);
         NDArray bayesien = manager.create(mapValues);
 
         // Conversion de "dep" en float
-        NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
+        NDArray dep = manager.create(parseMap(record.get("dep")));
 
         return new Record(new NDList(bayesien), new NDList(dep));
     }
@@ -47,11 +48,13 @@ public class CSVDataset extends RandomAccessDataset {
 
     private float[] parseMap(String mapString) {
         // Diviser la chaîne sur les virgules et convertir chaque élément en float
-        return Stream.of(mapString.split(","))
-                .mapToDouble(Double::parseDouble)
-                .collect(() -> new float[mapString.split(",").length],
-                        (arr, val) -> arr[arr.length - 1] = (float) val,
-                        (arr1, arr2) -> {});
+        //System.out.println(mapString);
+        String[] strs = mapString.split(",");
+        float[] mapValues = new float[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            mapValues[i] = Float.parseFloat(strs[i]);
+        }
+        return mapValues;
     }
 
     @Override
@@ -75,7 +78,7 @@ public class CSVDataset extends RandomAccessDataset {
             try (Reader reader = Files.newBufferedReader(Paths.get(nomFichier));
                  CSVParser csvParser =
                          new CSVParser(reader, CSVFormat.DEFAULT
-                                 .withHeader("map", "dep")
+                                 .withHeader("input", "dep")
                                  .withFirstRecordAsHeader()
                                  .withIgnoreHeaderCase()
                                  .withTrim())) {

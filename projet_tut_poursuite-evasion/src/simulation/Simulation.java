@@ -20,7 +20,7 @@ public class Simulation implements Jeu {
     private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
-    public static int[][] CARTE = ChargementCarte.charger("donnees/petitLaby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
@@ -77,7 +77,7 @@ public class Simulation implements Jeu {
                 break;
             case Comportements.ReseauArbreDeterministe:
                 try {
-                    this.comportementGardien = new ReseauDeNeurones("mlp_"+50+"_"+30+"_"+20, this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("mlp_50_30_20", this, this.gardien);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -773,6 +773,32 @@ public class Simulation implements Jeu {
 
     public void setVictoirePrisonnier(boolean victoirePrisonnier) {
         this.victoirePrisonnier = victoirePrisonnier;
+    }
+
+    public double[][] getCarteDouble(){
+        double[][] carte = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];
+        for(int i = 0; i < carte.length; i++){
+            for(int j = 0; j < carte[0].length; j++){
+                carte[i][j] = (double) Simulation.CARTE[i][j];
+            }
+        }
+        return carte;
+    }
+
+    public double[][] getCarteMursSortie() {
+        double[][] carteMursSortie = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE[0].length; j++) {
+                if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
+                    carteMursSortie[i][j] = 2.0;
+                }else if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
+                    carteMursSortie[i][j] = 1.0;
+                }else{
+                    carteMursSortie[i][j] = 0.0;
+                }
+            }
+        }
+        return carteMursSortie;
     }
 
     @Override

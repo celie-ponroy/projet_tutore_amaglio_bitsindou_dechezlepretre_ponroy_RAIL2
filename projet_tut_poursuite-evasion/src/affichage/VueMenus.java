@@ -10,7 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 
-
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -25,8 +25,8 @@ import simulation.Simulation;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-
-import java.awt.*;
+import javafx.scene.image.Image;
+import javafx.scene.Cursor;
 
 public class VueMenus extends VueSimulation {
 
@@ -187,31 +187,105 @@ public class VueMenus extends VueSimulation {
         title2.getStyleClass().add("titre");
 
         HBox buttonBox2 = new HBox();
-        buttonBox2.setSpacing(20);
+        buttonBox2.setSpacing(50);
         buttonBox2.setAlignment(Pos.CENTER);
 
+        //Création d'une VBox cliquable
+        VBox vboxPris = new VBox();
+        vboxPris.setAlignment(Pos.CENTER);
+        vboxPris.setSpacing(10);
+        vboxPris.getStyleClass().add("bordered-box");
+        vboxPris.setCursor(Cursor.HAND); // Change le curseur en main au survol
+        //Taille de la VBox
+        vboxPris.setPrefSize(200, 200);
 
-        //Bouton "Prisonnier"
-        Button persoPrisonnier = new Button("Prisonnier");
-        persoPrisonnier.setPrefSize(200, 100);
-        persoPrisonnier.setOnAction(f -> {
+        //Fond pour la VBox
+        vboxPris.setStyle("-fx-background-color: #8F9CBF;");
+
+        //Label pour le prisonnier
+        Label labelPriso = new Label("Prisonnier");
+        labelPriso.setStyle("-fx-font-size: 20px;");
+
+        //Image du prisonnier (sans le bouton)
+        Image imgPrisonnier = new Image("file:images/prisonnier.png");
+        ImageView imgViewPrisonnier = new ImageView(imgPrisonnier);
+        imgViewPrisonnier.setFitHeight(80);
+        imgViewPrisonnier.setPreserveRatio(true);
+
+        //Ajout d'un tooltip sur la VBox entière
+        Tooltip tooltipPris = new Tooltip("Prisonnier");
+        Tooltip.install(vboxPris, tooltipPris);
+
+        //Ajout des éléments à la VBox
+        vboxPris.getChildren().addAll(imgViewPrisonnier, labelPriso);
+
+        //Gestion du clic sur la VBox entière
+        vboxPris.setOnMouseClicked(event -> {
             setChoixPersonnage("Prisonnier");
             afficherMenuIA(); // Menu de difficulté
         });
 
-        //Bouton "Gardien"
-        Button persoGardien = new Button("Gardien");
-        persoGardien.setPrefSize(200, 100);
-        persoGardien.setOnAction(f -> {
+        //Ajouter des effets visuels pour simuler un bouton
+        vboxPris.setOnMousePressed(event -> {
+            vboxPris.setTranslateY(2); // Effet d'enfoncement
+            vboxPris.getStyleClass().add("pressed-box");
+        });
+
+        vboxPris.setOnMouseReleased(event -> {
+            vboxPris.setTranslateY(0); // Retour à la position normale
+            vboxPris.getStyleClass().remove("pressed-box");
+        });
+
+        //Création d'une VBox cliquable
+        VBox vboxGard = new VBox();
+        vboxGard.setAlignment(Pos.CENTER);
+        vboxGard.setSpacing(10);
+        vboxGard.getStyleClass().add("bordered-box");
+        vboxGard.setCursor(Cursor.HAND); // Change le curseur en main au survol
+        //Taille de la VBox
+        vboxGard.setPrefSize(200, 200);
+        //Fond pour la VBox
+        vboxGard.setStyle("-fx-background-color: #8F9CBF;");
+
+        //Label pour le prisonnier
+        Label labelGard = new Label("Gardien");
+        labelGard.setStyle("-fx-font-size: 20px;");
+
+        //Image du prisonnier (sans le bouton)
+        Image imgGardien = new Image("file:images/gardien.png");
+        ImageView imgViewGardien = new ImageView(imgGardien);
+        imgViewGardien.setFitHeight(80);
+        imgViewGardien.setPreserveRatio(true);
+
+        //Ajout d'un tooltip sur la VBox entière
+        Tooltip tooltipGard = new Tooltip("Gardien");
+        Tooltip.install(vboxGard, tooltipGard);
+
+        //Ajout des éléments à la VBox
+        vboxGard.getChildren().addAll(imgViewGardien, labelGard);
+
+        //Gestion du clic sur la VBox entière
+        vboxGard.setOnMouseClicked(event -> {
             setChoixPersonnage("Gardien");
             afficherMenuIA(); // Menu de difficulté
+        });
+
+        //Ajouter des effets visuels pour simuler un bouton
+        vboxGard.setOnMousePressed(event -> {
+            vboxGard.setTranslateY(2); // Effet d'enfoncement
+            vboxGard.getStyleClass().add("pressed-box");
+        });
+
+        vboxGard.setOnMouseReleased(event -> {
+            vboxGard.setTranslateY(0); // Retour à la position normale
+            vboxGard.getStyleClass().remove("pressed-box");
         });
 
         //Bouton "Retour"
         Button retour = retourBtn();
 
         //Ajout des boutons dans la HBox des boutons
-        buttonBox2.getChildren().addAll(persoPrisonnier, persoGardien);
+        buttonBox2.getChildren().addAll(vboxPris, vboxGard);
 
         //Ajout des éléments au VBox principal
         root2.getChildren().addAll(title2, buttonBox2,retour);

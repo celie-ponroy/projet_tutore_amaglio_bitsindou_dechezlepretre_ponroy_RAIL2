@@ -8,8 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-
-
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -156,8 +155,15 @@ public class VueMenus extends VueSimulation {
         });
 
         //Tuto
-        Button modeTuto = new Button("Tutoriel");
-        modeTuto.setPrefSize(200,100);
+        Button modeTuto = new Button();
+        javafx.scene.image.Image img = new Image("file:images/tuto.png");
+        ImageView view = new ImageView(img);
+        modeTuto.setPrefSize(80, 80);
+        view.setFitHeight(80);
+        view.setPreserveRatio(true);
+
+        modeTuto.setStyle("-fx-background-color: transparent;");
+        modeTuto.setGraphic(view);
         modeTuto.setOnAction(e -> {
             SimulationTutoriel simulationTutoriel = new SimulationTutoriel();
             MoteurJeu.jeu = simulationTutoriel;
@@ -165,7 +171,7 @@ public class VueMenus extends VueSimulation {
         });
 
         //Ajout des boutons au conteneur de boutons
-        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes, modeTuto);
+        buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
 
 
         //Bouton pour quitter l'application
@@ -176,7 +182,7 @@ public class VueMenus extends VueSimulation {
         quitter.setOnAction(e -> this.primaryStage.close());
 
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, quitter);
+        root.getChildren().addAll(title, buttonBox, quitter,modeTuto);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Menu principal");

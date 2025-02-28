@@ -62,7 +62,7 @@ public class InformationsIa {
                         "de sortir.",vboxMain);
         initLabel("Arbre de décision aléatoire",
                 "Cette IA fonctionne comme la version 1.0 mais il y ajoute de "+"\n"+
-                        "l'aléatoire en ayant une change daller vers une direction égale à "+"\n"+
+                        "l'aléatoire en ayant une chance d'aller vers une direction égale à "+"\n"+
                         "la probabilité de présence de l'adversaire.",vboxMain);
         initLabel("Réseau de neurones 1.0",
                 "L'IA se déplace en suivant un réseau de neurones.",vboxMain);

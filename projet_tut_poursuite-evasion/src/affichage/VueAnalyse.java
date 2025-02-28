@@ -35,7 +35,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     private PieChart camembert = new PieChart();
     private LineChart<String, Number> courbes;
     private LancerAnalyse lancerAnalyse;
-//    private TextField nbIterations;
     private int nbIterationsInt;
     private ObservableList<PieChart.Data> pieChartData;
     private final Rectangle[][] caseFiltreChaleur = new Rectangle[Simulation.CARTE.length][Simulation.CARTE[0].length];
@@ -320,10 +319,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         VBox topContainer = new VBox(10);
         topContainer.setAlignment(Pos.TOP_CENTER); // Garde l'alignement en haut mais centré en largeur
 
-        // Centrer nbIteration dans la VBox
-//        nbIteration.setAlignment(Pos.CENTER);
-//        VBox.setMargin(nbIteration, new Insets(0, 0, 0, 0)); // Évite les décalages
-
         topContainer.getChildren().addAll(nbIteration, choixContainer, retourMenu);
         return topContainer;
     }
@@ -550,9 +545,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         // Mise à jour du filtre de chaleur
         updateFiltreChaleur();
-
-//        //Mise à jour des points de départ
-//        updateStartPos();
 
     }
 

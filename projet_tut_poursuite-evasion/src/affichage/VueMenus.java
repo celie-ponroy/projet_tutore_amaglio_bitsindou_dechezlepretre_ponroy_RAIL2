@@ -314,7 +314,7 @@ public class VueMenus extends VueSimulation {
     }
 
     /**
-     * Affiche le
+     * Affiche le bouton de retour
      */
     public Button retourBtn(){
         //Bouton "Retour"

@@ -1,0 +1,88 @@
+@startuml
+package "affichage"{
+    class InformationsIa {
+        static final int WIDTH
+        static final int HEIGHT
+        
+        +static VBox getInfosPrisonnier()
+        +static VBox getInfosGardien()
+        +static void popUpPrisonnier()
+        +static void popUpGardien()
+        +static void popUpNonInteractif()
+        -static void initLabel(String titre, String description, VBox vboxMain)
+        -static void toggleLabel(Text description)
+        +static Button getButtonInfo()
+    }
+    
+    class VueMenus {
+        + Button retourBtn()
+        + void afficherTuto(Jeu j, Scene scene, Pane root)
+        + String chargementBouton(Button okButton)
+    }
+    
+    class VueMenusNonInteractive {
+        + String chargementBouton(Button okButton) 
+    }
+    
+    class FiltreVision {
+        + static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY, Joueur joueur)
+        + static void updateFiltre(Rectangle[][] filtreVision, Joueur joueur)
+    }
+
+    class VueTutoriel {
+        - int CENTRE
+        - VBox instructions
+        - Rectangle[][] filtreVision
+        + VueTutoriel(SimulationTutoriel, double, double)
+        - void init()
+        - void updateInfos()
+        - void setInfoDebutPerso()
+        - void setInfoDeplacement()
+        - void ajouterTouche(GridPane, String, String, int, int)
+        - void setInfoGardien()
+        - void setInfoFin()
+        - void clearInfos()
+        + void update(Jeu)
+        + void updateFiltreVision()
+        + void setOpacityPersonnage()
+        + void updatePositions()
+    }
+}
+package lancercalculs{
+    class LancerAnalyse {
+        - boolean caseDepart
+        - HashMap<Position, Integer> casesDepartPris
+        - HashMap<Position, Integer> casesDepartGard
+        + HashMap<Position, Integer> getCasesDepartGard()
+        + HashMap<Position, Integer> getCasesDepartPris()
+    }
+    
+}
+
+package moteur {
+    class ClavierTuto {
+        - SimulationTutoriel simulation
+        + ClavierTuto(SimulationTutoriel s)
+        + void handle(KeyEvent keyEvent)
+    }
+}
+
+package simulation.tuto {
+    class SimulationTutoriel {
+        - EtatTuto etatActuel
+        - boolean gardienVus
+        + SimulationTutoriel()
+        + void deplacementJoueur(Deplacement d)
+        + void update(KeyEvent keyEvent)
+        - Deplacement getDeplacement(KeyEvent keyEvent)
+    }
+
+    enum EtatTuto {
+        DEBUT_Perso
+        DEPLACEMENT
+        GARDIEN
+        DEPLACEMENT_GARDIEN
+        FIN
+    }
+}
+@enduml

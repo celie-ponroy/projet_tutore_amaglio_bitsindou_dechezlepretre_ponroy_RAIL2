@@ -4,7 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class DataCollector {
-    public static void saveData(double[] bayesianValues, double x, double y, int decisionMove, String fichierDeSauevgarde) {
+    public static void saveData(double[] bayesianValues, double x, double y, double[] carteReel, double decisionMove, String fichierDeSauevgarde) {
         try (FileWriter writer = new FileWriter(fichierDeSauevgarde, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append("\"");
@@ -14,6 +14,10 @@ public class DataCollector {
             sb.append("\",\"");
             sb.append(x).append(",").append(y).append("\",");
             sb.append("\"");
+            for (double value : carteReel) {
+                sb.append(value).append(",");
+            }
+            sb.append("\",\"");
             sb.append(decisionMove).append("\"\n");
             writer.write(sb.toString());
         } catch (IOException e) {

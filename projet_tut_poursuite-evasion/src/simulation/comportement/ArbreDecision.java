@@ -11,7 +11,7 @@ public class ArbreDecision{
      * @param p2
      * @return
      */
-    public Deplacement direction(Position p1, Position p2) {//TODO : recherche de chemin
+    public Deplacement direction(Position p1, Position p2) {
         if (p1.getX() == p2.getX()) {
             if (p1.getY() < p2.getY()) {
                 return Deplacement.BAS;

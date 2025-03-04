@@ -9,6 +9,7 @@ import simulation.personnages.Position;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public class LancerCalculsDataSet {
@@ -22,8 +23,8 @@ public class LancerCalculsDataSet {
             file.delete();
         }
 
-        DataCollector.etiquettage("\"map\",\"pos\",\"dep\"","donnees/game_data_validation.csv");
-        DataCollector.etiquettage("\"map\",\"pos\",\"dep\"","donnees/game_data.csv");
+        DataCollector.etiquettage("\"map\",\"pos\",\"rmap\",\"dep\"", "donnees/game_data_validation.csv");
+        DataCollector.etiquettage("\"map\",\"pos\",\"rmap\",\"dep\"", "donnees/game_data.csv");
 
         Simulation sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
         List<double[][]> bayesien;
@@ -31,7 +32,8 @@ public class LancerCalculsDataSet {
         List<Position> positions;
 
         int[] deplacementInt = new int[Deplacement.values().length];
-        int nbIteration = 7000;
+        HashMap<Position, Integer> sortie = new HashMap();
+        int nbIteration = 1000;
         String nomFichier = "";
         for (int i = 0; i < nbIteration; i++) {
             //on récupére les déplacements
@@ -45,11 +47,19 @@ public class LancerCalculsDataSet {
             //si it > 80% du nbIte choisit, on enregistre dans les donnée de validations
             nomFichier = (i >= nbIteration * 0.8) ? "donnees/game_data_validation.csv" : "donnees/game_data.csv";
             System.out.println(nomFichier);
+            System.out.println("deplacement size : " + deplacements.size());
+            System.out.println("positions size : " + positions.size());
             for (int j = 0; j < deplacements.size(); j++) {
+
                 deplacementInt[deplacements.get(j).ordinal()] += 1;
-                double x = (double) (positions.get(j).getX()) / sim.CARTE[0].length;
-                double y = (double) (positions.get(j).getY()) / sim.CARTE.length;
-                DataCollector.saveData(Outil.applatissement(bayesien.get(j + 1)), x, y, deplacements.get(j).ordinal(), nomFichier);
+                int x = positions.get(j).getX();
+                int y = positions.get(j).getY();
+                DataCollector.saveData(Outil.applatissement(bayesien.get(j + 1)), x, y, Outil.applatissement(sim.getCarteMursSortie()), deplacements.get(j).ordinal(), nomFichier);
+            }
+            if (!sortie.containsKey(Simulation.getPosSortie())) {
+                sortie.put(Simulation.getPosSortie(), 1);
+            } else {
+                sortie.replace(Simulation.getPosSortie(), sortie.get(Simulation.getPosSortie()) + 1);
             }
             LancerCalculs.initSansDS();
             sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
@@ -58,6 +68,9 @@ public class LancerCalculsDataSet {
 
         for (int i = 0; i < deplacementInt.length; i++) {
             System.out.println(Deplacement.values()[i] + " " + deplacementInt[i]);
+        }
+        for (Position p : sortie.keySet()) {
+            System.out.println("sortie " + p + ":  " + sortie.get(p));
         }
     }
 }

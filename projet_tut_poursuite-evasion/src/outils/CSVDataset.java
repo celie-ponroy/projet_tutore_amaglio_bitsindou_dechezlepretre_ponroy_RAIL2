@@ -17,7 +17,6 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class CSVDataset extends RandomAccessDataset {
 
@@ -32,26 +31,37 @@ public class CSVDataset extends RandomAccessDataset {
     public Record get(NDManager manager, long index) {
         CSVRecord record = csvRecords.get(Math.toIntExact(index));
 
-        // Conversion de la colonne "map" en un tableau de float
+        // Conversion de la colonne "mapBayesienne" en un tableau de float
         float[] mapValues = parseMap(record.get("map"));
-        NDArray bayesien = manager.create(mapValues).reshape(Simulation.CARTE.length, Simulation.CARTE[0].length); // Shape (10, 10)
-
-        // Conversion de la colonne "map" en un tableau de float
-        NDArray realMap = manager.create(Simulation.CARTE).reshape(Simulation.CARTE.length, Simulation.CARTE[0].length);
 
         // Conversion de la colonne "pos" en un tableau de float
         float[] posValues = parseMap(record.get("pos"));
-        NDArray pos = manager.create(posValues);
+        float[] posMapValue = new float[Simulation.getTailleCarte()];
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE[0].length; j++) {
+                if (i == posValues[0] && j == posValues[1]) {
+                    posMapValue[(j * Simulation.CARTE[0].length) + i] = 1;
+                } else {
+                    posMapValue[(Simulation.CARTE[0].length * j) + i] = 0;
+                }
+            }
+        }
 
-        // Conversion de "dep" en float
+        // Conversion de la colonne "realMap" en un tableau de float
+        float[] realMapsValues = parseMap(record.get("rmap"));
+
+        //Creation des tenseurs de position et deplacement
+        NDArray posR = manager.create(posMapValue).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length);
+
         NDArray dep = manager.create(Float.parseFloat(record.get("dep")));
 
-        // Combiner les cartes en un seul tenseur
-        NDArray inputData = NDArrays.concat(new NDList(bayesien, realMap), 2);
+        // Crée les cartes avec la dimension des canaux
+        NDArray bayesien = manager.create(mapValues).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length); // (1, H, W)
+        NDArray realMap = manager.create(realMapsValues).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length); // (1, H, W)
 
-        // Créer le record
-        NDList inputs = new NDList(inputData, pos); // Entrées combinées
-        return new Record(inputs, new NDList(dep));
+        // Concatène sur l'axe des canaux (0 -> channel)
+        NDArray inputData = NDArrays.concat(new NDList(bayesien, realMap, posR)); // Résultat : (3, H, W)
+        return new Record(new NDList(inputData), new NDList(dep));
     }
 
     @Override
@@ -61,12 +71,12 @@ public class CSVDataset extends RandomAccessDataset {
 
     private float[] parseMap(String mapString) {
         // Diviser la chaîne sur les virgules et convertir chaque élément en float
-        return Stream.of(mapString.split(","))
-                .mapToDouble(Double::parseDouble)
-                .collect(() -> new float[mapString.split(",").length],
-                        (arr, val) -> arr[arr.length - 1] = (float) val,
-                        (arr1, arr2) -> {
-                        });
+        String[] strs = mapString.split(",");
+        float[] mapValues = new float[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            mapValues[i] = Float.parseFloat(strs[i]);
+        }
+        return mapValues;
     }
 
     @Override
@@ -92,7 +102,7 @@ public class CSVDataset extends RandomAccessDataset {
             try (Reader reader = Files.newBufferedReader(Paths.get(nomFichier));
                  CSVParser csvParser =
                          new CSVParser(reader, CSVFormat.DEFAULT
-                                 .withHeader("map","pos", "dep")
+                                 .withHeader("map", "pos","rmap", "dep")
                                  .withFirstRecordAsHeader()
                                  .withIgnoreHeaderCase()
                                  .withTrim())) {

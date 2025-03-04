@@ -2,14 +2,30 @@ package simulation.comportement;
 
 import ai.djl.MalformedModelException;
 import ai.djl.Model;
-
-import ai.djl.basicmodelzoo.basic.Mlp;
 import ai.djl.ndarray.NDArray;
+import ai.djl.ndarray.NDArrays;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.nn.Activation;
+import ai.djl.nn.Block;
+import ai.djl.nn.Blocks;
+import ai.djl.nn.SequentialBlock;
+import ai.djl.nn.convolutional.Conv2d;
+import ai.djl.nn.core.Linear;
+import ai.djl.nn.pooling.Pool;
+import ai.djl.training.DefaultTrainingConfig;
+import ai.djl.training.EasyTrain;
+import ai.djl.training.Trainer;
+import ai.djl.training.TrainingConfig;
+import ai.djl.training.evaluator.Accuracy;
+import ai.djl.training.listener.TrainingListener;
+import ai.djl.training.loss.Loss;
 import ai.djl.translate.Batchifier;
+import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
+import outils.CSVDataset;
 import outils.Outil;
 import simulation.Comportements;
 import simulation.Deplacement;
@@ -26,18 +42,41 @@ public class ReseauDeNeurones implements Comportement {
     Model model;
     private Translator<NDArray, Integer> translator;
 
-    public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage)  {
+    public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) throws TranslateException, IOException {
+
+        SequentialBlock block = new SequentialBlock();
+
+        // Entrée 1 : Carte combinée (10, 10, 2)
+        Block CNN = new SequentialBlock()
+                .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(32).build())
+                .add(Activation.reluBlock())
+                .add(Pool.maxPool2dBlock(new Shape(2, 2)))
+                .add(Blocks.batchFlattenBlock()); // Aplatir les caractéristiques
+
+        // Couches fully connected
+        block.add(CNN);
+        block.add(Linear.builder().setUnits(128).build());
+        block.add(Activation.reluBlock());
+        block.add(Linear.builder().setUnits(64).build());
+        block.add(Activation.reluBlock());
+        block.add(Linear.builder().setUnits(32).build());
+        block.add(Activation.reluBlock());
+        block.add(Linear.builder().setUnits(Deplacement.values().length).build());
+
+        // Créer le modèle
+        Model model = Model.newInstance(nomReseau);
+        model.setBlock(block);
+        try {
+            model.load(Paths.get("donnees/mlp"));
+            System.out.println("Réseau chargé");
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+
         this.sim = simulation;
         this.personnage = personnage;
-
-        Path modelDir = Paths.get("donnees/mlp");
-        model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()+2, Deplacement.values().length, new int[] {269, 269,269,269}));
-        try {
-            model.load(modelDir);
-        }catch (MalformedModelException | IOException ex) {
-            System.out.println(ex.getMessage());
-        }
+        this.model = model;
 
         this.translator = new Translator<NDArray, Integer>() {
             @Override
@@ -49,12 +88,9 @@ public class ReseauDeNeurones implements Comportement {
             @Override
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
-                NDArray probabilities = list.singletonOrThrow().softmax(0);
-                for(int i = 0; i < probabilities.size(); i++) {
-                    //System.out.println(i);
-                    System.out.println(probabilities.get(i));
-                }
-                return (int) probabilities.argMax().getLong();
+                NDArray softmax = list.singletonOrThrow().softmax(0);
+                NDArray probabilities = softmax.argMax();
+                 return (int) probabilities.getLong();
             }
 
             @Override
@@ -69,24 +105,59 @@ public class ReseauDeNeurones implements Comportement {
     public Deplacement prendreDecision() {
         var predictor = model.newPredictor(translator);
         NDManager manager = NDManager.newBaseManager();
-        double[] tableau = new double[Simulation.getTailleCarte()+2];
-        double[] tableau2 = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
-        for (int i = 0; i < tableau2.length; i++) {
-            tableau[i] = tableau2[i];
-        }
-        tableau[tableau.length-2] = (double) personnage.getPosition().getY() /Simulation.CARTE.length;
-        tableau[tableau.length-1] = (double) personnage.getPosition().getX() /Simulation.CARTE[0].length;
 
-        NDArray array = manager.create(tableau);
-        float[] popolola = new float[Simulation.getTailleCarte()+2];
-        for (int i = 0; i < popolola.length; i++) {
-            popolola[i] = Float.parseFloat(String.valueOf(tableau[i]));
+        //Creation de l'entré du RN
+        // Conversion de la colonne "map" en un tableau de float
+        float[] mapValues = Outil.conversionDoubleFloat(Outil.applatissement(sim.getCarteBayesienne(sim.getGardien())));
+        // Conversion de la colonne "pos" en un tableau de float
+        float[] posValues = new float[2];
+        posValues[0] = sim.getGardien().getPosition().getX();
+        posValues[1] = sim.getGardien().getPosition().getY();
+        float[] posMapValue = new float[Simulation.getTailleCarte()];
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
+            for (int j = 0; j < Simulation.CARTE[0].length; j++) {
+                if (i == posValues[0] && j == posValues[1]) {
+                    posMapValue[(j * Simulation.CARTE[0].length) + i] = 1;
+                } else {
+                    posMapValue[(Simulation.CARTE[0].length * j) + i] = 0;
+                }
+            }
         }
-        NDArray arrayFlaot = manager.create(popolola);
+        StringBuilder d = new StringBuilder();
+        for (int i=0; i<sim.getCarteBayesienne(sim.getGardien()).length; i++) {
+            for (int j = 0; j < sim.getCarteBayesienne(sim.getGardien())[0].length; j++) {
+                d.append(mapValues[i]).append(",");
+            }
+            d.append("\n");
+        }
+        System.out.println("entrée bayesienne : ");
+        System.out.println(d);
+
+
+        float[] carteReel = Outil.conversionDoubleFloat(Outil.applatissement(sim.getCarteMursSortie()));
+        d = new StringBuilder();
+        for (int i=0; i<Simulation.CARTE.length ; i++) {
+            for (int j = 0; j < Simulation.CARTE[0].length; j++) {
+                d.append(carteReel[i]);
+            }
+            d.append("\n");
+        }
+        System.out.println("carte reel : ");
+        NDArray posR = manager.create(posMapValue).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length);
+
+        // Crée les cartes avec la dimension des canaux
+        NDArray bayesien = manager.create(mapValues).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length); // (1, H, W)
+        NDArray realMap = manager.create(carteReel).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length); // (1, H, W)
+        // Concatène sur l'axe des canaux (0 -> channel)
+        NDArray inputData = NDArrays.concat(new NDList(bayesien, realMap, posR)); // Résultat : (2, H, W)
+
         Integer resultat = 0;
         try {
-            resultat = predictor.predict(arrayFlaot);
-        } catch (ai.djl.translate.TranslateException te){
+            resultat = predictor.predict(inputData);
+            System.out.println("resultats : " + resultat);
+        } catch (Exception e ) {
+            System.out.println("erreur");
+            System.out.println(e.getMessage());
             return Deplacement.AUCUN;
         }
         return Deplacement.values()[resultat];

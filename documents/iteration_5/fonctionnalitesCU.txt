@@ -1,0 +1,10 @@
+Ajout d'une couche CNN au réseau de neurones (Matias)
+    Renseignement sur le fonctionnement du CNN et ajout d'une couche sur le réseau de neurones
+
+Modification du format de données d'apprentissage et d'entré des réseaux de neurones (Matias & Luc)
+    Passage d'une carte de probabilité à 3 carte différentes contenant : la position de l'agent,
+    les probabilités de présence de l'autre agent et la position des murs sur la carte.
+	
+Apprentissage de l’arbre de décision du gardien par les réseau de neurone (Matias & Luc)
+	Les réseaux de neurones à réussit a apprendre l'abre de décision sur un cas simple
+	(réseau avec et sans CNN apprenant en parallel pour réalisé des comparaisont entre réseau)

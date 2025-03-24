@@ -64,7 +64,8 @@ public abstract class VueSimulation extends Pane {
                     image = this.imageMur;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SOL.ordinal() ||
                         Simulation.CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() ||
-                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
+                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()
+                        ||Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
                     image = this.imageSol;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     image = this.imageSortie;

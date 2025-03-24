@@ -4,12 +4,15 @@ import simulation.Simulation;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public abstract class Personnage implements Serializable {
     protected Position position;
+    protected HashMap<Position,ArrayList<Position>> vision;
 
-    public Personnage(int x, int y) {
+    public Personnage(int x, int y,HashMap<Position,ArrayList<Position>> vision) {
         this.position = new Position(x, y);
+        this.vision = vision;
     }
 
     public abstract void deplacer(Position p);
@@ -23,7 +26,7 @@ public abstract class Personnage implements Serializable {
     }
 
     public ArrayList<Position> getVision() {
-        return Simulation.VISION.get(this.position);
+        return vision.get(this.position);
     }
 
     @Override

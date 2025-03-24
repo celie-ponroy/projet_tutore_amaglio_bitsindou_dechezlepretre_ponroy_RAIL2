@@ -20,7 +20,7 @@ public class ChargementCarte {
                 int car;
                 for (int i = 0; i < ligne.length(); i++) {
                     car = ligne.charAt(i) - '0';
-                    if (car >= CaseEnum.MUR.ordinal() && car <= CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
+                    if (car >= CaseEnum.MUR.ordinal() && car <= CaseEnum.CAMERA.ordinal()) {
                         nbLigne[i] = car;
                     } else {
                         nbLigne[i] = CaseEnum.SOL.ordinal();

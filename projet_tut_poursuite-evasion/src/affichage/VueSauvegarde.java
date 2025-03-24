@@ -19,7 +19,7 @@ import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
-import static simulation.Simulation.CARTE;
+import static simulation.Simulation.*;
 
 public class VueSauvegarde extends VueSimulation{
     private Label iterationLabel; // Label pour afficher le nombre d'itération
@@ -220,13 +220,17 @@ public class VueSauvegarde extends VueSimulation{
         gardienView.setOpacity(1);
         if(interactive){
             Position p;
+            Joueur tmp;
+            Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
+
             if(simulation.getJoueur()==simulation.getGardien()){
                 p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
+                tmp =  new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
             }else {
                 p = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
+                tmp =  new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
+
             }
-            Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
-            Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
             if (tmp.getVision().contains(p)) {
                 viewInteractifAdversaire.setOpacity(1);
             }else {
@@ -356,7 +360,13 @@ public class VueSauvegarde extends VueSimulation{
     }
     public void initFiltreVision(Pane laby){
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
-        Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
+        Joueur tmp;
+        if(simulation.getJoueur()==simulation.getPrisonnier()){
+            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
+        }else{
+            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
+        }
+
         this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE,0,0,tmp);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
@@ -366,7 +376,12 @@ public class VueSauvegarde extends VueSimulation{
     }
     public void updateFiltreVision() {
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
-        Joueur tmp = new Joueur(ptmp.getX(),ptmp.getY());
+        Joueur tmp;
+        if(simulation.getJoueur()==simulation.getPrisonnier()){
+            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
+        }else{
+            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
+        }
         FiltreVision.updateFiltre(filtreVision, tmp);
     }
 }

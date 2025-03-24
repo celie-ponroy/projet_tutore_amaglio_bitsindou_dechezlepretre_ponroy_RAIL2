@@ -24,7 +24,8 @@ public class Simulation implements Jeu {
     protected Comportement comportementGardien;
     protected Comportement comportementPrisonnier;
     public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
-    public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
+    public static final HashMap<Position, ArrayList<Position>> VISION_G = CalculVision.recupererVision("G");
+    public static final HashMap<Position, ArrayList<Position>> VISION_P = CalculVision.recupererVision("P");
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
@@ -49,8 +50,8 @@ public class Simulation implements Jeu {
         this.nbDeplacementsPerso = 0;
 
         //les 2 personnages sont des agents
-        this.prisonnier = new Agent(9, 18);
-        this.gardien = new Agent(5, 4);
+        this.prisonnier = new Agent(9, 18,VISION_P);
+        this.gardien = new Agent(5, 4,VISION_G);
         this.positionnerAgentsSpawnAleatoire();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
@@ -154,8 +155,8 @@ public class Simulation implements Jeu {
         this.victoirePrisonnier = false;
 
         if (perso) {
-            this.prisonnier = new Joueur(9, 18);
-            this.gardien = new Agent(5, 4);
+            this.prisonnier = new Joueur(9, 18,VISION_P);
+            this.gardien = new Agent(5, 4,VISION_G);
 
             //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
@@ -186,8 +187,8 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(gardien, list1);
 
         } else {
-            this.gardien = new Joueur(5, 4);
-            this.prisonnier = new Agent(9, 18);
+            this.gardien = new Joueur(5, 4,VISION_G);
+            this.prisonnier = new Agent(9, 18,VISION_G);
 
             this.positionnerAgentsSpawnAleatoire();
             switch (ComportementAdversaire) {
@@ -556,11 +557,14 @@ public class Simulation implements Jeu {
      */
     public boolean estVisible(Personnage p1, boolean role) {
         Position pos1 = p1.getPosition();
+        HashMap<Position,ArrayList<Position>> VISION;
         Position pos2;
         if (role) {
             pos2 = this.gardien.getPosition();
+            VISION = VISION_G;
         } else {
             pos2 = this.prisonnier.getPosition();
+            VISION = VISION_P;
         }
         if (pos1.equals(pos2)) {
             return true;

@@ -48,8 +48,8 @@ public class Simulation implements Jeu {
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(3, 5);
         this.gardien = new Agent(3, 1);
-        this.positionnerAgentsSpawnAleatoire();
-        //this.positionnerAleatoirement();
+        //this.positionnerAgentsSpawnAleatoire();
+        this.positionnerAleatoirement();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
         List<Deplacement> depG = new ArrayList<>();
@@ -77,7 +77,7 @@ public class Simulation implements Jeu {
                 break;
             case Comportements.ReseauArbreDeterministe:
                 try {
-                    this.comportementGardien = new ReseauDeNeurones("mlp_50_30_20", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("mlp_", this, this.gardien);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -173,7 +173,7 @@ public class Simulation implements Jeu {
                     this.comportementGardien = new Aleatoire(this, this.gardien);
                     break;
                 case Comportements.ReseauArbreDeterministe:
-                    this.comportementGardien = new ReseauDeNeurones("mlp_50_30_20", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeurones("mlp_", this, this.gardien);
                     break;
                 case Comportements.ReseauArbreAleatoire:
                     //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);

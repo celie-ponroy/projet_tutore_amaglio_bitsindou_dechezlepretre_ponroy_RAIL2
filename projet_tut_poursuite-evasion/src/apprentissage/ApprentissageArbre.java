@@ -41,6 +41,10 @@ public class ApprentissageArbre {
         SequentialBlock block = new SequentialBlock();
         block.add(Blocks.batchFlattenBlock(inputSize));
         //block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(350).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(300).build());
+        block.add(Activation::relu);
         block.add(Linear.builder().setUnits(256).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(200).build());
@@ -111,6 +115,6 @@ public class ApprentissageArbre {
 
         model.setProperty("Epoch", String.valueOf(epoch));
 
-        model.save(modelDir, "mlp_" + 50 + "_" + 30 + "_" + 20);
+        model.save(modelDir, "mlp_");
     }
 }

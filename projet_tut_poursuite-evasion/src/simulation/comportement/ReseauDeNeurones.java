@@ -32,7 +32,7 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {256,256, 128,128, 64,64, 32, 32}));
+        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {350, 300, 256,200, 128,100, 64,50, 32, 20}));
         try {
             model.load(modelDir);
             System.out.println("Chargement ok !");
@@ -51,11 +51,7 @@ public class ReseauDeNeurones implements Comportement {
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray probabilities = list.singletonOrThrow().softmax(0);
-//                for(int i = 0; i < probabilities.size(); i++) {
-//                    System.out.print(i+" : ");
-//                    System.out.print(probabilities.get(i)+"\t");
-//                }
-//
+
                 return (int) probabilities.argMax().getLong();
             }
 
@@ -74,17 +70,6 @@ public class ReseauDeNeurones implements Comportement {
         double[] cartePos = Outil.applatissement(sim.getGardien().getPositionCarte());
         double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
         double[] carte = Outil.applatissement(sim.getCarteMursSortie());
-//        for (int i = 0; i < tableau2.length; i++) {
-//            tableau[i] = tableau2[i];
-//        }
-//        tableau[tableau.length-2] = (double) personnage.getPosition().getY() /Simulation.CARTE.length;
-//        tableau[tableau.length-1] = (double) personnage.getPosition().getX() /Simulation.CARTE[0].length;
-
-//        NDArray array = manager.create(tableau);
-//        float[] popolola = new float[Simulation.getTailleCarte()+2];
-//        for (int i = 0; i < popolola.length; i++) {
-//            popolola[i] = Float.parseFloat(String.valueOf(tableau[i]));
-//        }
         float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
         //Outil.afficher_tab(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
 //        System.out.println("\nCarte Pos");

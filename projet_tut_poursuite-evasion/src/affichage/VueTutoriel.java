@@ -142,6 +142,10 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
 
     }
 
+
+    /**
+     * Informations sur les touches de déplacement
+     */
     private void setInfoDeplacement(){
         clearInfos();
         Label title = new Label("Vous pouvez vous déplacer avec les touches suivantes :");
@@ -186,19 +190,20 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
 
         //on affiche les infos du gardien
         instructions.getChildren().add(new Label("Oh vous avez vu le gardien , si il vous attrape c'est perdu"));
-        //ajout image gardien
-        //ajout case gardien
         ImageView image = new ImageView("file:images/gardien.png");
         image.setFitWidth(100);
         image.setPreserveRatio(true);
         instructions.getChildren().add(image);
         instructions.getChildren().add(new Label("Ceci est le gardien"));
-        //image case gardien
         ImageView imageCase = new ImageView("file:images/raccourciGardien.png");
         imageCase.setFitWidth(100);
         imageCase.setPreserveRatio(true);
         instructions.getChildren().add(imageCase);
-        instructions.getChildren().add(new Label("Le gardien peut traverser ses grilles mais pas vous attention !"));
+        instructions.getChildren().add(new Label("Le gardien peut traverser ses grilles mais pas le prisonnier attention !"));
+        ImageView imageCamera = new ImageView("file:images/cameraicon.png");
+        instructions.getChildren().add(imageCamera);
+        instructions.getChildren().add(new Label("Le gardien peut voir à distance grâce à des caméra"));
+
         instructions.getChildren().add(new Label("Appyer sur espace pour continuer"));
 
     }

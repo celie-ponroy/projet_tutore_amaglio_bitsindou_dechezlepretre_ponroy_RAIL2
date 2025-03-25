@@ -72,11 +72,8 @@ public class PageAccueil {
         boutons.getChildren().addAll(lancerJeu, tutoriel);
         root.getChildren().add(boutons);
 
-
-
-
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Page d'acceuil");
+        primaryStage.setTitle("Page d'accueil");
         primaryStage.show();
 
 

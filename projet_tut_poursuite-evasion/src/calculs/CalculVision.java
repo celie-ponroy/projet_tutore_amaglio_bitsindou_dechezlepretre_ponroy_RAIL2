@@ -20,7 +20,7 @@ public class CalculVision {
      */
     public static HashMap<Position, ArrayList<Position>> recupererVision(String G_P) {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
-        //on recupere la vision depuis le fichier vision.txt
+        //on récupère la vision depuis le fichier vision.txt
         try {
             BufferedReader br = new BufferedReader(new FileReader("./donnees/vision"+G_P+".txt"));
             String line;
@@ -109,6 +109,14 @@ public class CalculVision {
 
         return res;
     }
+
+    /**
+     * Ajoute à la vision une camera (zonne de vision en plus)
+     * @param vision vison à laquellle on ajoute
+     * @param x position x de la caméra
+     * @param y position y de la caméra
+     * @param taille portée de la caméra
+     */
     public static void ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x,int y , int taille) {
         var casesAlarme = calculerVision(x,y,taille);
         cleanVisionCase(casesAlarme,new Position(x,y));

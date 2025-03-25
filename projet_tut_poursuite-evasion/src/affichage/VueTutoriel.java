@@ -220,7 +220,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         this.getChildren().add(label);
-        Button retourMenuBtn = new Button("Revenir au menu principal");
+        Button retourMenuBtn = new Button("Commercer");
         retourMenuBtn.getStyleClass().add("important");
         retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {

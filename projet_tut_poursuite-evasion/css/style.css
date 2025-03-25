@@ -9,6 +9,17 @@
 .button:hover {
     -fx-background-color: #415A77;
 }
+.gris {
+    -fx-font-size: 20pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-padding: 10;
+    -fx-background-color: #d4d5d2;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 3, 0.0, 0, 1);
+}
+
+.gris:hover {
+    -fx-background-color: #9b9c9b;
+}
 
 .root {
     -fx-font-size: 14px;
@@ -25,6 +36,11 @@
 .titre {
     -fx-font-size: 20pt;
     -fx-font-family: "Times New Roman";
+    -fx-text-fill: #1B263B;
+}
+.grostitre{
+    -fx-font-size: 40pt;
+    -fx-font-family: "Roboto";
     -fx-text-fill: #1B263B;
 }
 .infos{
@@ -87,7 +103,7 @@
 
 }
 .valider{
-    -fx-background-color:  #50C950
+    -fx-background-color: #89d889
 }
 .valider:hover{
     -fx-background-color: #40B340;

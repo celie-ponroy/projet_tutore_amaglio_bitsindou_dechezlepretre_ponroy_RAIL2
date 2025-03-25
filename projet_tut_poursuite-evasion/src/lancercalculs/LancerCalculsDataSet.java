@@ -32,7 +32,7 @@ public class LancerCalculsDataSet {
         List<Position> positions;
 
         int[] deplacementInt = new int[Deplacement.values().length];
-        int nbIteration = 1000;
+        int nbIteration = 5000;
         String nomFichier = "";
         for (int i = 0; i < nbIteration; i++) {
             //on récupére les déplacements
@@ -58,7 +58,7 @@ public class LancerCalculsDataSet {
                 deps[deplacements.get(j).ordinal()] = 1;
                 DataCollector.saveData(Outil.concatener_tab(carte, Outil.concatener_tab(carteBaye, cartePos)), deplacements.get(j).ordinal(), nomFichier);
             }
-            LancerCalculs.initSansDS();
+            //LancerCalculs.initSansDS();
             sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
             System.out.println(i);
         }

@@ -44,6 +44,14 @@ public class ChargementCarte {
         //On détermine aléatoirement la sortie
         Case sortie = sorties.get((int)(Math.random()*sorties.size()));
         carte[sortie.getY()][sortie.getX()] = CaseEnum.SORTIE.ordinal();
+//        System.out.println("Sortie"+sortie.toString());
+//        System.out.println("here");
+//        for(int[] ligne : lignes){
+//            for(int i = 0; i < ligne.length; i++){
+//                System.out.print(ligne[i]);
+//            }
+//            System.out.println();
+//        }
         return carte;
     }
 }

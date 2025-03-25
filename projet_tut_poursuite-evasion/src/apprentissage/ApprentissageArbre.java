@@ -40,13 +40,22 @@ public class ApprentissageArbre {
         //parametrage nb couches / neurones
         SequentialBlock block = new SequentialBlock();
         block.add(Blocks.batchFlattenBlock(inputSize));
-        block.add(Linear.builder().setUnits(269).build());
+        //block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(256).build());
         block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(269).build());
+        block.add(Linear.builder().setUnits(200).build());
         block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(269).build());
+        block.add(Linear.builder().setUnits(128).build());
         block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(269).build());
+        block.add(Linear.builder().setUnits(100).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(64).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(50).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(32).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(20).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(outputSize).build());
 

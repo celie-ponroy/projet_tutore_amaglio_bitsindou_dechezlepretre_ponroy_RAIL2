@@ -32,9 +32,10 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {269, 269,269,269}));
+        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {256,256, 128,128, 64,64, 32, 32}));
         try {
             model.load(modelDir);
+            System.out.println("Chargement ok !");
         }catch (MalformedModelException | IOException ex) {
             System.out.println(ex.getMessage());
         }
@@ -86,30 +87,30 @@ public class ReseauDeNeurones implements Comportement {
 //        }
         float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
         //Outil.afficher_tab(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
-        System.out.println("\nCarte Pos");
-        System.out.println(sim.getGardien().getPosition());
-        for(int i = 0; i < Simulation.CARTE.length; i++){
-            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-                System.out.print(sim.getGardien().getPositionCarte()[i][j]+" ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("\nCarte Baye");
-        for(int i = 0; i < Simulation.CARTE.length; i++){
-            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-                System.out.print(sim.getCarteBayesienne(sim.getGardien())[i][j]+" ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("\nCarte");
-        for(int i = 0; i < Simulation.CARTE.length; i++){
-            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-                System.out.print(sim.getCarteMursSortie()[i][j]+" ");
-            }
-            System.out.println();
-        }
+//        System.out.println("\nCarte Pos");
+//        System.out.println(sim.getGardien().getPosition());
+//        for(int i = 0; i < Simulation.CARTE.length; i++){
+//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+//                System.out.print(sim.getGardien().getPositionCarte()[i][j]+" ");
+//            }
+//            System.out.println();
+//        }
+//
+//        System.out.println("\nCarte Baye");
+//        for(int i = 0; i < Simulation.CARTE.length; i++){
+//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+//                System.out.print(sim.getCarteBayesienne(sim.getGardien())[i][j]+" ");
+//            }
+//            System.out.println();
+//        }
+//
+//        System.out.println("\nCarte");
+//        for(int i = 0; i < Simulation.CARTE.length; i++){
+//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
+//                System.out.print(sim.getCarteMursSortie()[i][j]+" ");
+//            }
+//            System.out.println();
+//        }
 
         NDArray arrayFlaot = manager.create(input);
         Integer resultat = 0;
@@ -119,7 +120,7 @@ public class ReseauDeNeurones implements Comportement {
             System.out.println(te.getMessage());
             return Deplacement.AUCUN;
         }
-        System.out.println(Deplacement.values()[resultat]);
+        //System.out.println(Deplacement.values()[resultat]);
         return Deplacement.values()[resultat];
     }
 

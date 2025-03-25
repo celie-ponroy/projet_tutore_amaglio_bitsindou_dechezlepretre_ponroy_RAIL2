@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import lancercalculs.LancerCalculs;
 
+import java.io.IOException;
+
 public class MoteurJeu extends Application {
 
     /**
@@ -17,6 +19,11 @@ public class MoteurJeu extends Application {
      * Creation de l'application de jeu
      */
     public void start(Stage primaryStage) {
+        try {
+            LancerCalculs.initSansDS();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
         vueMenus.afficherMenuPrincipal();
 

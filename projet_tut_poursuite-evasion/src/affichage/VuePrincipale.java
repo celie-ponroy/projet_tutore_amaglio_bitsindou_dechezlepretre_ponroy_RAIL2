@@ -58,10 +58,30 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
         //affichage itération
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
-        iterationLabel.setLayoutX(DECALAGE);
+        iterationLabel.setLayoutX(DECALAGE); //tout à droite du labyrinthe
         iterationLabel.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
         iterationLabel.setStyle("-fx-font-size: 12px; -fx-border-color: black; -fx-padding: 10;");
         this.getChildren().add(iterationLabel);
+
+        //Bouton pour revenir au menu principal
+        Button retourMenuBtn = new Button("Revenir au menu principal");
+        retourMenuBtn.getStyleClass().add("important");
+        retourMenuBtn.setPrefSize(230, 30);
+        //tout à gauche du labyrinthe
+        retourMenuBtn.setLayoutX(DECALAGE + TAILLE_CELLULE * Simulation.CARTE[0].length - retourMenuBtn.getPrefWidth());
+        retourMenuBtn.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
+        retourMenuBtn.setOnAction(e -> {
+            SoundManager.stopAllMusic();
+            SoundManager.playFondMusic();
+            //Ferme la fenetre actuelle
+            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
+            stage.close();
+            //retour au menu principal
+            VueMenus vm = new VueMenus();
+            vm.afficherMenuPrincipal();
+        });
+        this.getChildren().add(retourMenuBtn);
+
     }
 
     /**

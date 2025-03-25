@@ -109,6 +109,8 @@ public abstract class VueSimulation extends Pane {
             updatePositions();
         }
 
+
+
         return labyrinthePane;
     }
 

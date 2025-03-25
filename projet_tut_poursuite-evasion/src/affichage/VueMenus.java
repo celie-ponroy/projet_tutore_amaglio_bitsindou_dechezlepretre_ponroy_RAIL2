@@ -532,7 +532,7 @@ public class VueMenus extends VueSimulation {
         AtomicReference<Simulation> simulation = new AtomicReference<>();
         //récuperration du nom de la sauvegarde
         List<String> choices =  Sauvegarde.nomsSauvegardes();
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("simu.ser", choices);
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.getFirst(), choices);
         dialog.setTitle("Choix sauvegarde");
         dialog.setContentText("Sauvegarde à choisir :");
 
@@ -541,18 +541,18 @@ public class VueMenus extends VueSimulation {
             try{
                 System.out.println("Chargement de la sauvegarde");
                 simulation.set(Sauvegarde.charger(letter));
+                VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation.get());
+                vs.update();
+                root.getChildren().clear();
+                root.getChildren().add(vs);
+                primaryStage.setScene(scene);
                 System.out.println("Partie chargée");
 
             }catch (Exception e){
                 System.out.println("Erreur lors du chargement de la sauvegarde de :"+letter+".ser");
             }
-
         });
-        VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation.get());
-        vs.update();
-        root.getChildren().clear();
-        root.getChildren().add(vs);
-        primaryStage.setScene(scene);
+
     }
 
     /**

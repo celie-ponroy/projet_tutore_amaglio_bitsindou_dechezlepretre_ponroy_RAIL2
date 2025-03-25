@@ -23,6 +23,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private VueBayesienne vB1,vB2;
+    private Rectangle[][] casesCameras;
 
 
     //constructeur
@@ -37,6 +38,12 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     private void init() {
         Pane labyPane = initLabyrinthe(true);
+        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+        for (Rectangle[] rect : casesCameras) {
+            for (Rectangle sousrect : rect) {
+                labyPane.getChildren().add(sousrect);
+            }
+        }
 
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(10);

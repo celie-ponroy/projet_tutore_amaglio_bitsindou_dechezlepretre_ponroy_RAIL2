@@ -60,9 +60,20 @@ public class CalculVision {
      */
     public static void ecrireVision() throws IOException {
 
-        HashMap vision = calculerCarteVision(true);
+        HashMap vision = calculerCarteVision();
+        HashMap<Position, ArrayList<Position>> camera = new HashMap();
+        for (int y = 0; y < CARTE.length; y++) {
+            for (int x = 0; x < CARTE[0].length; x++) {
+                if (CARTE[y][x] == CaseEnum.CAMERA.ordinal()) {
+                    var c = ajoutCamera(vision,x,y,3);
+                    if(c != null)
+                        camera.put(new Position(x,y),c);
+                }
+            }
+        }
         ecrireFichierVision(vision,"G");
-        vision = calculerCarteVision(false);
+        ecrireFichierVision(camera,"C");
+        vision = calculerCarteVision();
         ecrireFichierVision(vision,"P");
 
     }
@@ -84,7 +95,7 @@ public class CalculVision {
      *
      * @return la liste des cases pour toutes les positions de la carte
      */
-    public static HashMap calculerCarteVision(boolean gardien) {
+    public static HashMap calculerCarteVision() {
         HashMap<Position, ArrayList<Position>> res = new HashMap();
         for (int y = 0; y < CARTE.length; y++) {
             for (int x = 0; x < CARTE[0].length; x++) {
@@ -97,24 +108,17 @@ public class CalculVision {
             }
         }
         cleanVision(res);
-        if(gardien){
-            for (int y = 0; y < CARTE.length; y++) {
-                for (int x = 0; x < CARTE[0].length; x++) {
-                    if (CARTE[y][x] == CaseEnum.CAMERA.ordinal()) {
-                        ajoutCamera(res,x,y,3);
-                    }
-                }
-            }
-        }
+
 
         return res;
     }
-    public static void ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x,int y , int taille) {
+    public static  ArrayList<Position> ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x,int y , int taille) {
         var casesAlarme = calculerVision(x,y,taille);
         cleanVisionCase(casesAlarme,new Position(x,y));
         for (var key : vision.keySet()) {
             vision.get(key).addAll(casesAlarme);
         }
+        return casesAlarme;
     }
 
     /**

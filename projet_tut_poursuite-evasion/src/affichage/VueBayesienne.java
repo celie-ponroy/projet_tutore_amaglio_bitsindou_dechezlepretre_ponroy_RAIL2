@@ -14,6 +14,7 @@ public class VueBayesienne extends VueSimulation {
     private Personnage perso; // Personnage à afficher
     private Image imagePerso;
     private Rectangle[][] caseBayesienne;
+    private Rectangle[][] casesCameras;
     private int tour;
     private int decalageX = 0;
     private int decalageY = 0;
@@ -63,6 +64,12 @@ public class VueBayesienne extends VueSimulation {
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
         caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE,decalageX,decalageY);
         for (Rectangle[] rect : caseBayesienne) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
+            }
+        }
+        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,decalageX,decalageY);
+        for (Rectangle[] rect : casesCameras) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
             }

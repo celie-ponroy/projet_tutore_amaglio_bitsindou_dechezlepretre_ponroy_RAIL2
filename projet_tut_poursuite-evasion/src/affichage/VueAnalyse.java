@@ -51,6 +51,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         camembert.setLabelsVisible(true);
         this.courbes = new LineChart<>(new CategoryAxis(), new NumberAxis());
         courbes.setTitle("Nombre de déplacements par parties");
+
     }
 
     /**
@@ -217,6 +218,15 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 laby.getChildren().add(rectangle);
             }
         }
+        if(avec_camera){
+            var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+            for (Rectangle[] rect : casesCameras) {
+                for (Rectangle sousrect : rect) {
+                    laby.getChildren().add(sousrect);
+                }
+            }
+        }
+
         graphiques.getChildren().addAll(camembert,laby, courbes);
 
         // Conteneur pour centrer les graphiques verticalement et horizontalement

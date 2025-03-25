@@ -46,6 +46,12 @@ public class VueSauvegarde extends VueSimulation{
      */
     private void init() {
         Pane labyPane = initLabyrinthe(true);
+        var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+        for (Rectangle[] rect : casesCameras) {
+            for (Rectangle sousrect : rect) {
+                labyPane.getChildren().add(sousrect);
+            }
+        }
 
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(10);
@@ -367,7 +373,7 @@ public class VueSauvegarde extends VueSimulation{
             tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
         }
 
-        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE,0,0,tmp);
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE,0,0,tmp,avec_camera);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
                 laby.getChildren().add(sousrect);
@@ -382,6 +388,6 @@ public class VueSauvegarde extends VueSimulation{
         }else{
             tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
         }
-        FiltreVision.updateFiltre(filtreVision, tmp);
+        FiltreVision.updateFiltre(filtreVision, tmp,avec_camera);
     }
 }

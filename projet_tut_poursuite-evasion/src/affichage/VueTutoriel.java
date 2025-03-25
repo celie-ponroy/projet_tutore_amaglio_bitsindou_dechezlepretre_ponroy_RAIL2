@@ -251,7 +251,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
      * Met à jour le filtre de vision. (etat deplacement)
      */
     public void updateFiltreVision() {
-        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur());
+        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(),avec_camera);
     }
 
     /**

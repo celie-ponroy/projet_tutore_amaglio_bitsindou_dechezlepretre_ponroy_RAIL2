@@ -27,7 +27,7 @@ package simulation.comportement;
     @Override
     public Deplacement prendreDecision() {
         //si on voit l'autre personnage
-        if (simulation.estVisible(personnage, false)) {
+        if (simulation.estVisible(simulation.getPrisonnier(), true)) {
             //on va vers l'autre personnage
             //on recupere le chemin
             Stack<Position> s = Simulation.CHEMINS_G.get(List.of(simulation.getGardien().getPosition(), simulation.getPrisonnier().getPosition()));

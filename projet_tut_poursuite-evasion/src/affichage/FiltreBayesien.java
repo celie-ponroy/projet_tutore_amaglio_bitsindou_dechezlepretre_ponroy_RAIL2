@@ -3,6 +3,9 @@ package affichage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
+import simulation.personnages.Position;
+
+import java.util.Collection;
 
 public class FiltreBayesien  {
     /**

@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import musique.SoundManager;
 import sauvegarde.Sauvegarde;
 import simulation.Deplacement;
 import simulation.Simulation;
@@ -119,15 +120,19 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         //Pop up pour afficher la fin de la partie
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()){
+            SoundManager soundManager = new SoundManager();
             if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
+                soundManager.playDrawMusic();
                 alert.setHeaderText("Egalité !");
                 alert.setContentText("Le nombre de coup est dépassé !\n" +
                         "Cliquez sur OK pour voir l'historique");
             }else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
+                soundManager.playWinMusic();
                 alert.setHeaderText("Félicitations !");
                 alert.setContentText("Vous avez gagné la partie !\n" +
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
+                soundManager.playLooseMusic();
                 alert.setHeaderText("Dommage...");
                 alert.setContentText("L'IA a été plus rusée, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
             }

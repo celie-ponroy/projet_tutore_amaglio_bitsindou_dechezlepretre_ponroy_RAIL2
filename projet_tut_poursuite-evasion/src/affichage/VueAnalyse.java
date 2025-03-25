@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import lancercalculs.LancerAnalyse;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import musique.SoundManager;
 import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import simulation.Simulation;
@@ -301,6 +302,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         lancerBtn.setPrefSize(150, 50);
         // Dans le bouton lancerBtn
         lancerBtn.setOnAction(e -> {
+
             if (comboBoxGardien.getValue() == null || comboBoxPrisonnier.getValue() == null ||
                     (comboBoxPrisonnier.getValue() == null && comboBoxGardien.getValue() == null ||
                             nbIterations.getText().isEmpty())) {

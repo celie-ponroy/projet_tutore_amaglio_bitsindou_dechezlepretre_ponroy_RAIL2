@@ -25,11 +25,13 @@ public abstract class VueSimulation extends Pane {
     protected Image imagePrisonnier;
     protected Image imageGardien;// Pane principal pour afficher le jeu
     protected Image imageRaccourciGardien;
+    protected Image imageCamera;
     protected ImageView prisonnierView; // Vue pour le prisonnier
     protected ImageView gardienView; // Vue pour le gardien
     protected int TAILLE_CELLULE = 25;
     private Pane labyrinthePane;// Taille des cases du labyrinthe
     protected Simulation simulation;
+    protected boolean avec_camera = true;
 
 
 
@@ -40,6 +42,7 @@ public abstract class VueSimulation extends Pane {
         this.imagePrisonnier = new Image("file:images/prisonnier.png");
         this.imageGardien = new Image("file:images/gardien.png");
         this.imageRaccourciGardien = new Image("file:images/raccourciGardien.png");
+        this.imageCamera = new Image("file:images/camera.png");
     }
 
     /**
@@ -64,14 +67,17 @@ public abstract class VueSimulation extends Pane {
                     image = this.imageMur;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SOL.ordinal() ||
                         Simulation.CARTE[i][j] == CaseEnum.SPAWN_GARDIEN.ordinal() ||
-                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()
-                        ||Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
+                        Simulation.CARTE[i][j] == CaseEnum.SPAWN_PRISONNIER.ordinal()) {
                     image = this.imageSol;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     image = this.imageSortie;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
                     image = this.imageRaccourciGardien;
 
+                }else if (Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
+                    if(avec_camera)
+                        image = this.imageCamera;
+                    else image = this.imageSol;
                 }
 
                 if (image != null) {
@@ -212,5 +218,13 @@ public abstract class VueSimulation extends Pane {
                 sauvegarder.getStyleClass().add("nonValider");
             }
         });
+    }
+
+    /**
+     * permets de changer si on affiche les caméras ou non
+     * @param avec_camera
+     */
+    public void setAvec_camera(boolean avec_camera) {
+        this.avec_camera = avec_camera;
     }
 }

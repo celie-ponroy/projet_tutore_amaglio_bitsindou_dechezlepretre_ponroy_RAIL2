@@ -154,21 +154,7 @@ public class VueMenus extends VueSimulation {
             afficherMenuSauvegarde(this.primaryStage, root, scene);
         });
 
-        //Tuto
-        Button modeTuto = new Button();
-        javafx.scene.image.Image img = new Image("file:images/tuto.png");
-        ImageView view = new ImageView(img);
-        modeTuto.setPrefSize(80, 80);
-        view.setFitHeight(80);
-        view.setPreserveRatio(true);
 
-        modeTuto.setStyle("-fx-background-color: transparent;");
-        modeTuto.setGraphic(view);
-        modeTuto.setOnAction(e -> {
-            SimulationTutoriel simulationTutoriel = new SimulationTutoriel();
-            MoteurJeu.jeu = simulationTutoriel;
-            afficherTuto(simulationTutoriel, scene, root);
-        });
 
         //Ajout des boutons au conteneur de boutons
         buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
@@ -182,7 +168,7 @@ public class VueMenus extends VueSimulation {
         quitter.setOnAction(e -> this.primaryStage.close());
 
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, quitter,modeTuto);
+        root.getChildren().addAll(title, buttonBox, quitter);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Menu principal");
@@ -347,20 +333,7 @@ public class VueMenus extends VueSimulation {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
 
-    /**
-     * Permet d'afficher le tutoriel
-     * @param j
-     * @param scene
-     * @param root
-     */
-    public void afficherTuto(Jeu j ,Scene scene, Pane root){
-        VueTutoriel vueTutoriel = new VueTutoriel((SimulationTutoriel) j, WIDTH, HEIGHT);
-        j.ajouterObservateur(vueTutoriel);
-        root.getChildren().clear();
-        root.getChildren().add(vueTutoriel);
-        ClavierTuto clavier = new ClavierTuto((SimulationTutoriel) MoteurJeu.jeu);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
-    }
+
 
     /**
      * Affiche le menu de choix de la difficulté de l'IA

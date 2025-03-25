@@ -19,15 +19,24 @@ import simulation.personnages.Position;
 import java.io.Serializable;
 import java.util.Optional;
 
+/**
+ * Classe pour la vue principale non interactive
+ */
 public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu{
 
+    /**
+     * Attributs
+     */
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
     private VueBayesienne vB1,vB2;
     private Rectangle[][] casesCameras;
 
-
-    //constructeur
+    /**
+     * Constructeur
+     * @param width largeur
+     * @param height hauteur
+     */
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
         TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
@@ -50,7 +59,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         iterationLabel.setLayoutX(10);
         iterationLabel.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
         iterationLabel.setStyle("-fx-font-size: 11px;-fx-border-color: black; -fx-padding: 10;");
-
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
         if (!this.getChildren().contains(iterationLabel)) {
@@ -79,7 +87,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         // HBox pour aligner les éléments (vue bayésienne 1, labyrinthe, vue bayésienne 2)
         HBox hbox = new HBox(20); // Espacement de 20px entre les éléments
 
-
         // Ajout des éléments à la HBox
         hbox.getChildren().add(vBoxGardien);
         hbox.getChildren().add(labyPane);
@@ -88,7 +95,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
         this.getChildren().clear();
         this.getChildren().addAll(hbox);
-
     }
 
     /**
@@ -109,6 +115,9 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     }
 
 
+    /**
+     * Méthode qui gère l'oppacité des personnages
+     */
     @Override
     protected void setOpacityPersonnage() {
         prisonnierView.setOpacity(1);
@@ -120,7 +129,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     protected void updatePositions() {
         // Met à jour la position du prisonnier
-
         Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
         Position g = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
         setPositions(p, prisonnierView);
@@ -198,8 +206,6 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             this.getChildren().add(hboxBouttons);
             this.getChildren().add(sauvegarder);
             this.getChildren().add(retourMenuBtn);
-
-
         }
     }
 

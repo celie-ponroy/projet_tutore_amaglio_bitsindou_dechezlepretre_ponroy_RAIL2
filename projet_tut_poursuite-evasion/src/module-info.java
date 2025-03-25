@@ -3,6 +3,7 @@ module com.example.projet_tut_poursuiteevasion {
     requires javafx.fxml;
     requires java.desktop;
     requires java.sql;
+    requires javafx.media;
 
 
     opens moteur to javafx.fxml;

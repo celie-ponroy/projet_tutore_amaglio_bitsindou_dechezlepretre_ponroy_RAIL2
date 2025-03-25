@@ -1,28 +1,28 @@
 package affichage;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
-import sauvegarde.Sauvegarde;
-import simulation.Deplacement;
+import musique.SoundManager;
 import simulation.Simulation;
 import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
-
-import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Optional;
 
+import static musique.SoundManager.*;
+
+/**
+ * Classe pour la vue principale de la simulation
+ */
 public class VuePrincipale extends VueSimulation implements DessinJeu {
+
+    /**
+     * Attributs
+     */
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle[][] filtreVision; // Filtre pour cacher les cases non visibles
     private int tour;
@@ -30,8 +30,11 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     protected int DECALAGE;
 
 
-    //constructeur
-
+    /**
+     * Constructeur de la vue principale
+     * @param width largeur de la fenêtre
+     * @param height hauteur de la fenêtre
+     */
     public VuePrincipale(double width, double height) {
         super();
         if(width<height){
@@ -61,6 +64,9 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         this.getChildren().add(iterationLabel);
     }
 
+    /**
+     * Méthode pour mettre à jour les chmaps de vision des personnages
+     */
     @Override
     protected void setOpacityPersonnage() {
 
@@ -80,15 +86,16 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         } else {
             imageP2.setOpacity(0);
         }
-
     }
 
+    /**
+     * Méthode pour mettre à jour les positions des personnages
+     */
     @Override
     protected void updatePositions() {
         setPositions(simulation.getPrisonnier().getPosition(), prisonnierView);
         setPositions(simulation.getGardien().getPosition(), gardienView);
     }
-
 
     /**
      * Méthode principale de l'interface DessinJeu
@@ -97,38 +104,42 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void update(Jeu jeu) {
         // Récuperation de la simulation
         this.simulation = (Simulation)jeu;
-        //mise à jour du décalage en fonction de la carte
 
+        //mise à jour du décalage en fonction de la carte
         if (this.getChildren().isEmpty()) {
             DECALAGE -= simulation.CARTE[0].length*TAILLE_CELLULE/2;
             // Si le labyrinthe n'est pas encore initialisé
             init();
             initFiltreVision();
             setOpacityPersonnage();
-
-
         } else {
             // Sinon, il met juste a jour les positions des personnages
             updateDirections(this.simulation.getNbTours()-1);
             updatePositions();
             updateIteration();
             setOpacityPersonnage();
-
             setFiltreVision();
         }
 
         //Pop up pour afficher la fin de la partie
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()){
+            SoundManager.stopAllMusic(); //on arrete toutes musiques
             if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
+                //on met le son de l'égalité
+                playDrawMusic();
                 alert.setHeaderText("Egalité !");
                 alert.setContentText("Le nombre de coup est dépassé !\n" +
                         "Cliquez sur OK pour voir l'historique");
             }else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
+                //on met le son de la victoire
+                playWinMusic();
                 alert.setHeaderText("Félicitations !");
                 alert.setContentText("Vous avez gagné la partie !\n" +
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
+                //on met le son de la défaite
+                playLooseMusic();
                 alert.setHeaderText("Dommage...");
                 alert.setContentText("L'IA a été plus rusée, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
             }
@@ -158,8 +169,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour initialiser un filtre sur les cases non visibles
      */
     public void initFiltreVision() {
-        //this.getChildren().add(FiltreVision.createLightSpot(9,(Joueur) simulation.getJoueur(),TAILLE_CELLULE,DECALAGE,0));
-
         this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur(),avec_camera);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
@@ -184,7 +193,6 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         sauvegarder.setOnAction(e -> {
             lancerSauvegarde(sauvegarder);
         });
-
         tour=0;
         //initaliser la map (enlever la vision)
         Arrays.stream(filtreVision).forEach(rectangles -> Arrays.stream(rectangles).forEach(rectangle -> rectangle.setOpacity(0)));
@@ -199,7 +207,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
                 this.getChildren().add(sousrect);
             }
         }
-        //on mets les perso à l'emplacement ini
+        //on met les perso à l'emplacement ini
 
         Position pPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(0);
         Position pGardien= simulation.getHistoriquePosition().get(simulation.getGardien()).get(1);
@@ -226,6 +234,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         retourMenuBtn.getStyleClass().add("important");
         retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
+            SoundManager.stopAllMusic();
+            SoundManager.playFondMusic();
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
             stage.close();
@@ -261,7 +271,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             this.iterationLabel.setText("Fin");
         }
         updateDirections(tour);
-        //on mets a jour la carte bayesienne
+        //on met a jour la carte bayesienne
         Personnage agent = simulation.getPrisonnier();
         if (simulation.getJoueur() == simulation.getPrisonnier())
             agent = simulation.getGardien();

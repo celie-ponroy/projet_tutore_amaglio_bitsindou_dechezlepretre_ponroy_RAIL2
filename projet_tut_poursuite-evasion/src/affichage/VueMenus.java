@@ -16,32 +16,35 @@ import javafx.scene.text.Text;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.Clavier;
-import moteur.ClavierTuto;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import musique.SoundManager;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
-import simulation.tuto.SimulationTutoriel;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import javafx.scene.image.Image;
 import javafx.scene.Cursor;
+import static affichage.PageAccueil.lancerPageAcceuil;
+import static musique.SoundManager.playGameMusic;
 
+/**
+ * Classe pour gérer les menus du jeu interactif
+ */
 public class VueMenus extends VueSimulation {
 
+    /**
+     * Attributs
+     */
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
     private static MoteurJeu jeu;
-
     protected Stage primaryStage; //scene
     private String choixPersonnage;
 
     /**
      * constructeur avec paramètre jeu
-     *
      * @param j le moteur de jeu
      */
     public VueMenus(MoteurJeu j) {
@@ -68,13 +71,6 @@ public class VueMenus extends VueSimulation {
         this.choixPersonnage = "";
     }
 
-    /**
-     * Permet d'initialiser la taille de la fenêtre à la taille de l'écran
-     */
-//    private void initPrimaryStage() {
-//        this.primaryStage = new Stage();
-//        this.primaryStage.setFullScreen(true);
-//    }
 
     @Override
     protected void setOpacityPersonnage() {
@@ -88,8 +84,7 @@ public class VueMenus extends VueSimulation {
     }
 
     /**
-     * permet de changer la scene et son nom
-     *
+     * Méthode pour afficher la scene
      * @param scene la scene
      * @param title le titre de la scene
      */
@@ -127,7 +122,6 @@ public class VueMenus extends VueSimulation {
             afficherMenuPersonnage();// Appel le menu des choix des personnages
         });
 
-
         //Bouton du mode non interactif
         Button modeNonInteractif = new Button("Mode non interactif");
         modeNonInteractif.setPrefSize(200, 100);
@@ -136,7 +130,6 @@ public class VueMenus extends VueSimulation {
             VueMenusNonInteractive vni = new VueMenusNonInteractive(jeu);
             vni.afficherMenuIA(this.primaryStage);
         });
-
 
         //Bouton pour le mode analyse
         Button modeAnalyse = new Button("Mode analyse");
@@ -154,21 +147,18 @@ public class VueMenus extends VueSimulation {
             afficherMenuSauvegarde(this.primaryStage, root, scene);
         });
 
-
-
         //Ajout des boutons au conteneur de boutons
         buttonBox.getChildren().addAll(modeInteractif, modeNonInteractif, modeAnalyse, modePartiesSauvegardes);
 
+        //Bouton pour revenir à la page d'accueil
+        Button retour = new Button("Retour");
+        retour.getStyleClass().add("important");
 
-        //Bouton pour quitter l'application
-        Button quitter = new Button("Quitter");
-        quitter.getStyleClass().add("important");
-
-        quitter.setPrefSize(230, 50);
-        quitter.setOnAction(e -> this.primaryStage.close());
+        retour.setPrefSize(230, 50);
+        retour.setOnAction(e -> lancerPageAcceuil(jeu, primaryStage));
 
         //Ajout des éléments à la scene principale
-        root.getChildren().addAll(title, buttonBox, quitter);
+        root.getChildren().addAll(title, buttonBox, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
         setScene(scene, "Menu principal");
@@ -333,8 +323,6 @@ public class VueMenus extends VueSimulation {
         scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
 
-
-
     /**
      * Affiche le menu de choix de la difficulté de l'IA
      */
@@ -383,6 +371,9 @@ public class VueMenus extends VueSimulation {
 
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
+            //on stop la musique de fond et on met en place la musique de jeu
+            SoundManager.stopFondMusic();
+
             //Chargement du bouton
             String originalText = chargementBouton(okButton);
 
@@ -444,6 +435,7 @@ public class VueMenus extends VueSimulation {
                     //on change le nom de la scene
                     setScene(scene, "Simulation interactive");
                     MoteurJeu.jeu = simulation;
+                    playGameMusic(); //lance la musique de jeu
                     //Affichage du jeu
                     afficherJeu(MoteurJeu.jeu, root, scene);
                 }
@@ -564,7 +556,6 @@ public class VueMenus extends VueSimulation {
 
     /**
      * Permet de récupérer le choix de personnage de l'utilisateur
-     *
      * @return le choix du personnage
      */
     public String getChoixPersonnage() {
@@ -573,7 +564,6 @@ public class VueMenus extends VueSimulation {
 
     /**
      * Permet de changer le choix de personnage de l'utilisateur
-     *
      * @param choixPersonnage le choix du personnage
      */
     public void setChoixPersonnage(String choixPersonnage) {

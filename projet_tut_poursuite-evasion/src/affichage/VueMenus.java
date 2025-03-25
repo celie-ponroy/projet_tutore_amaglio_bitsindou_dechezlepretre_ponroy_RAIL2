@@ -532,6 +532,13 @@ public class VueMenus extends VueSimulation {
         AtomicReference<Simulation> simulation = new AtomicReference<>();
         //récuperration du nom de la sauvegarde
         List<String> choices =  Sauvegarde.nomsSauvegardes();
+        if(choices.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Attention !");
+            alert.setHeaderText("Aucune sauvegarde n'a été faite.");
+            alert.showAndWait();
+            return;
+        }
         ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.getFirst(), choices);
         dialog.setTitle("Choix sauvegarde");
         dialog.setContentText("Sauvegarde à choisir :");

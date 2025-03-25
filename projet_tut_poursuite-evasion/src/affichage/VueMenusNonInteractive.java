@@ -12,8 +12,12 @@ import javafx.stage.Stage;
 import moteur.MoteurJeu;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import musique.SoundManager;
 import simulation.Comportements;
 import simulation.Simulation;
+
+import static musique.SoundManager.playGameMusic;
+import static musique.SoundManager.stopFondMusic;
 
 /**
  * Classe qui affiche les menus non interactifs
@@ -120,6 +124,8 @@ public class VueMenusNonInteractive {
 
         // Événement lié au bouton de validation
         okButton.setOnAction(e -> {
+            SoundManager.stopFondMusic();
+//            soundManager.playGameMusic();
             // Chargement du bouton
             String originalText = chargementBouton(okButton);
 
@@ -191,6 +197,7 @@ public class VueMenusNonInteractive {
                     //Si la simulation n'est pas null on lance la simulation
                     if (simulation != null) {
                         MoteurJeu.jeu = simulation;
+                        playGameMusic();
 
                         // Affichage du jeu
                         VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive(WIDTH, HEIGHT);

@@ -23,6 +23,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static musique.SoundManager.*;
+
 public class VuePrincipale extends VueSimulation implements DessinJeu {
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private Rectangle[][] filtreVision; // Filtre pour cacher les cases non visibles
@@ -114,26 +116,31 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             updatePositions();
             updateIteration();
             setOpacityPersonnage();
-
             setFiltreVision();
         }
 
         //Pop up pour afficher la fin de la partie
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()){
-            SoundManager soundManager = new SoundManager();
+            SoundManager.stopAllMusic();
             if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
-                soundManager.playDrawMusic();
+                //on arrete la musique du jeu et on met le son de l'égalité
+                System.out.println("Son de l'égalité");
+                playDrawMusic();
                 alert.setHeaderText("Egalité !");
                 alert.setContentText("Le nombre de coup est dépassé !\n" +
                         "Cliquez sur OK pour voir l'historique");
             }else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
-                soundManager.playWinMusic();
+                //on arrete la musique du jeu et on met le son de la victoire
+                System.out.println("Son de la victoire");
+                playWinMusic();
                 alert.setHeaderText("Félicitations !");
                 alert.setContentText("Vous avez gagné la partie !\n" +
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
-                soundManager.playLooseMusic();
+                //on arrete la musique du jeu et on met le son de la défaite
+                System.out.println("Son de la défaite");
+                playLooseMusic();
                 alert.setHeaderText("Dommage...");
                 alert.setContentText("L'IA a été plus rusée, vous avez perdu !\n" + "Cliquez sur OK pour voir l'historique");
             }
@@ -231,6 +238,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         retourMenuBtn.getStyleClass().add("important");
         retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
+            SoundManager.stopAllMusic();
+            SoundManager.playFondMusic();
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
             stage.close();

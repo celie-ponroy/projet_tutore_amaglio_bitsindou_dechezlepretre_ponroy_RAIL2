@@ -10,6 +10,7 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
+import musique.SoundManager;
 import sauvegarde.Sauvegarde;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
@@ -175,6 +176,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             retourMenuBtn.setPrefSize(410, 75);
             retourMenuBtn.getStyleClass().add("important");
             retourMenuBtn.setOnAction(e -> {
+                SoundManager.stopAllMusic();
+                SoundManager.playFondMusic();
                 //Ferme la fenetre actuelle
                 Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
                 stage.close();

@@ -269,9 +269,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         }
 
-        graphiques.getChildren().addAll(camembert,laby, courbes);
-
-
         // Conteneur pour centrer les graphiques verticalement et horizontalement
         VBox graphiquesWrapper = new VBox(graphiques);
         graphiquesWrapper.setAlignment(Pos.CENTER);

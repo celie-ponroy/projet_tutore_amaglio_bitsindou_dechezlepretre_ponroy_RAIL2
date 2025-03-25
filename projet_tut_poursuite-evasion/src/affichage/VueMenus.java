@@ -19,6 +19,7 @@ import moteur.Clavier;
 import moteur.ClavierTuto;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import musique.SoundManager;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
@@ -29,6 +30,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import javafx.scene.image.Image;
 import javafx.scene.Cursor;
+
+import static musique.SoundManager.playGameMusic;
 
 public class VueMenus extends VueSimulation {
 
@@ -383,6 +386,9 @@ public class VueMenus extends VueSimulation {
 
         //Évenements lier au choix de difficulté
         okButton.setOnAction(e -> {
+            //on stop la musique de fond et on met en place la musique de jeu
+            SoundManager.stopFondMusic();
+//            soundManager.playGameMusic();
             //Chargement du bouton
             String originalText = chargementBouton(okButton);
 
@@ -444,6 +450,7 @@ public class VueMenus extends VueSimulation {
                     //on change le nom de la scene
                     setScene(scene, "Simulation interactive");
                     MoteurJeu.jeu = simulation;
+                    playGameMusic();
                     //Affichage du jeu
                     afficherJeu(MoteurJeu.jeu, root, scene);
                 }

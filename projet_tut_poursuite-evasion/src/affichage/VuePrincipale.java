@@ -46,6 +46,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Initialise le labyrinthe et les personnages
      */
     private void init() {
+        this.setAvec_camera(true);
         var laby = initLabyrinthe(true);
         //au centre
         laby.setLayoutX(DECALAGE);
@@ -159,7 +160,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     public void initFiltreVision() {
         //this.getChildren().add(FiltreVision.createLightSpot(9,(Joueur) simulation.getJoueur(),TAILLE_CELLULE,DECALAGE,0));
 
-        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur());
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur(),avec_camera);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
@@ -171,7 +172,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour lettre un filtre sur les cases non visibles
      */
     public void setFiltreVision() {
-        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur());
+        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(),avec_camera);
     }
 
     /**

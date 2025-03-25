@@ -31,11 +31,11 @@ public class PageAccueil {
 
         root.getStylesheets().add("style.css");
         root.setStyle("-fx-background-color: #778DA9;");
-        root.setSpacing(20);
+        root.setSpacing(100);
         root.setAlignment(Pos.CENTER);
 
-        Label title = new Label("Poursuite - Évasion IA");
-        title.getStyleClass().add("grostitre");
+        ImageView title = new ImageView("file:images/titre.png");
+        title.setFitWidth(WIDTH-300);
         root.getChildren().add(title);
         HBox personnages = new HBox();
         ImageView gardien = new ImageView("file:images/gardien.png");
@@ -46,12 +46,15 @@ public class PageAccueil {
         prisonnier.setPreserveRatio(true);
         personnages.getChildren().addAll(gardien, prisonnier);
         personnages.setAlignment(Pos.CENTER);
-        personnages.setSpacing(50);
+        personnages.setSpacing(350);
 
         root.getChildren().add(personnages);
-
+        VBox boutons = new VBox();
+        boutons.setAlignment(Pos.CENTER);
+        boutons.setSpacing(50);
         Button lancerJeu = new Button("Commencer");
         lancerJeu.getStyleClass().add("gris");
+        lancerJeu.setPrefSize(250,100);
         lancerJeu.setOnAction(e->{
             VueMenus vueMenus = new VueMenus(jeu);
             vueMenus.afficherMenuPrincipal();
@@ -60,18 +63,17 @@ public class PageAccueil {
 
         Button tutoriel = new Button("Tutoriel");
         tutoriel.getStyleClass().add("valider");
+        tutoriel.setPrefSize(150,50);
         tutoriel.setOnAction(e->{
             SimulationTutoriel simulationTutoriel = new SimulationTutoriel();
             MoteurJeu.jeu = simulationTutoriel;
             afficherTuto(simulationTutoriel, scene, root);
         });
-        root.getChildren().addAll(lancerJeu, tutoriel);
-
-
-
+        boutons.getChildren().addAll(lancerJeu, tutoriel);
+        root.getChildren().add(boutons);
 
         primaryStage.setScene(scene);
-        primaryStage.setTitle("Page d'acceuil");
+        primaryStage.setTitle("Page d'accueil");
         primaryStage.show();
 
 

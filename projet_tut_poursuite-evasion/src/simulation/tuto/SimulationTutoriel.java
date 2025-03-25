@@ -40,7 +40,7 @@ public class SimulationTutoriel extends Simulation {
         if (!verifierDeplacemnt(joueur, d)) {
             return;
         }
-        //on déplace d'abbord le joueur
+        //on déplace d'abord le joueur
 
         deplacerPersonnage(joueur, d);
         miseAJourFinJeu();

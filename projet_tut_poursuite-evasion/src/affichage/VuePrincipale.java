@@ -199,6 +199,12 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
                 this.getChildren().add(sousrect);
             }
         }
+        var camera = FiltreCamera.initFiltre(TAILLE_CELLULE,DECALAGE,0);
+        for (Rectangle[] rect : camera) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
+            }
+        }
         //on mets les perso à l'emplacement ini
 
         Position pPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(0);

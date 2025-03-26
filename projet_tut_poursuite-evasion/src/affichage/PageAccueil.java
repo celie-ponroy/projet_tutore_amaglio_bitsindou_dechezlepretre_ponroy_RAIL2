@@ -80,7 +80,6 @@ public class PageAccueil {
         boutons.getChildren().addAll(lancerJeu, tutoriel, quitter);
         root.getChildren().add(boutons);
 
-
         Button credits = new Button("Crédits");
         credits.setStyle("-fx-background-color: transparent;");
         credits.setPrefSize(150,50);

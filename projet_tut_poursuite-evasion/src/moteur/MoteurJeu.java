@@ -4,6 +4,9 @@ import affichage.PageAccueil;
 import affichage.VueMenus;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lancercalculs.LancerCalculs;
+
+import java.io.IOException;
 import musique.SoundManager;
 
 import static musique.SoundManager.playFondMusic;
@@ -23,6 +26,12 @@ public class MoteurJeu extends Application {
         PageAccueil.lancerPageAcceuil((MoteurJeu) jeu, primaryStage);
         SoundManager soundManager = new SoundManager();
         playFondMusic();
+
+        try {
+            LancerCalculs.initSansDS();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }

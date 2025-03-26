@@ -23,6 +23,7 @@ import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import javafx.scene.Cursor;
@@ -347,7 +348,7 @@ public class VueMenus extends VueSimulation {
         //Création de la combobox pour le choix de la difficulté en fonction du personnage séléctionné
         ComboBox<String> comboBox = new ComboBox<>();
         //si le choix du personnage de l'utilisateur est le prisonnier, on adapte la combobox
-        if (choixPersonnage == "Prisonnier") { //si l'utilisateur joue le prisonnier
+        if (Objects.equals(choixPersonnage, "Prisonnier")) { //si l'utilisateur joue le prisonnier
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision aléatoire");
@@ -381,12 +382,12 @@ public class VueMenus extends VueSimulation {
             Task<Simulation> task = new Task<>() {
                 @Override
                 protected Simulation call() throws Exception {
-                    Simulation simulation;
+                    Simulation simulation = null;
 
                     //Switch pour le choix de la difficulté de l'agent en fonction du choix de l'utilisateur
                     switch (comboBox.getValue()) {
                         case "Arbre de décision déterministe 1.0":
-                            if (choixPersonnage == "Prisonnier") {
+                            if (choixPersonnage.equals("Prisonnier")) {
                                 simulation = new Simulation(true, Comportements.ArbreDeterministe);
                             } else {
                                 simulation = new Simulation(false, Comportements.ArbreDeterministe);
@@ -399,14 +400,14 @@ public class VueMenus extends VueSimulation {
                             simulation = new Simulation(true, Comportements.ArbreAleatoire);
                             break;
                         case "Comportement aléatoire":
-                            if (choixPersonnage == "Prisonnier") {
+                            if (choixPersonnage.equals("Prisonnier")) {
                                 simulation = new Simulation(true, Comportements.Aleatoire);
                             } else {
                                 simulation = new Simulation(false, Comportements.Aleatoire);
                             }
                             break;
                         case "Réseau de neurones 1.0":
-                            if (choixPersonnage == "Prisonnier") {
+                            if (choixPersonnage.equals("Prisonnier")) {
                                 simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
                             } else {
                                 simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);

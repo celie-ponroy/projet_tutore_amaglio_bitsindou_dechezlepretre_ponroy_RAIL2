@@ -1,7 +1,5 @@
 package outils;
 
-
-import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +23,7 @@ public class Outil {
 
     public static void afficher_tab(double[] tab) {
         for (int i = 0; i < tab.length; i++) {
-            System.out.printf("%5f\t", tab[i]);
+            System.out.printf("%.1f,", tab[i]);
         }
         System.out.println();
     }
@@ -37,6 +35,22 @@ public class Outil {
             }
             System.out.println();
         }
-
+    }
+    public static float[] doubleToFloat(double[] tab){
+        float[] res = new float[tab.length];
+        for(int i = 0; i < tab.length; i++){
+            res[i] = (float) tab[i];
+        }
+        return res;
+    }
+    public static double[] concatener_tab(double[] t1, double[] t2){
+        double[] res = new double[t1.length+t2.length];
+        for(int i = 0; i < t1.length; i++){
+            res[i] = t1[i];
+        }
+        for(int i = 0; i < t2.length; i++){
+            res[i+t1.length] = t2[i];
+        }
+        return res;
     }
 }

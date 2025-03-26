@@ -2,6 +2,7 @@ package calculs;
 
 import outils.ChargementCarte;
 import simulation.CaseEnum;
+import simulation.Simulation;
 import simulation.personnages.Position;
 
 import java.awt.geom.Line2D;
@@ -11,7 +12,7 @@ import java.util.*;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
-    static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+   public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
 
     /**
      * Recuperer la vision depuis le fichier vision.txt

@@ -24,7 +24,7 @@ public class Bayesien implements Serializable {
         for (int i = 0; i < carte.length; i++) {
             for (int j = 0; j < carte[0].length; j++) {
                 //Initialisation du tableau a -1
-                carteBayesienne[i][j] = -1.0;
+                carteBayesienne[i][j] = 0;
                 if (!(carte[i][j] == CaseEnum.MUR.ordinal())) {
                     casesValides.add(new Case(j, i));
                     carteBayesienne[i][j] = 0;

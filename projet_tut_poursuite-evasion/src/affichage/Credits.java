@@ -3,7 +3,8 @@ import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Screen;
@@ -18,7 +19,7 @@ public class Credits {
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
 
         VBox creditsBox = new VBox(30);
-        creditsBox.setStyle("-fx-background-color: black; -fx-padding: 20;");
+        creditsBox.setSpacing(20);
         creditsBox.setAlignment(Pos.CENTER);
 
         this.creerTache(creditsBox, "Développeurs", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio"});
@@ -38,16 +39,16 @@ public class Credits {
         this.creerTache(creditsBox,"Decors",new String[]{"mur.png","sol.png","sortie.png", "camera.png","raccourciGardien.png"});
         this.creerTache(creditsBox, "En la mémoire de", new String[]{"Librairies Java abandonnées n°1 : Libraie de M. Boniface", "Librairies Java abandonnées n°2 : Neuroph","La patience de Matias"});
         this.creerTache(creditsBox, "Soutenances", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson"});
-        this.creerTache(creditsBox,"Avec la participation de", new String[]{"Luc Dechezleprêtre","Matias Amaglio","Maëlle Bitsindou","Célie Ponroy" , "Guenaël Cabanes"});
+        this.creerTache(creditsBox,"Avec la participation de", new String[]{"Matias Amaglio","Luc Dechezleprêtre","Maëlle Bitsindou","Célie Ponroy" , "Guenaël Cabanes"});
         this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson","Charlemiam","Les deux collègues de M. Cabanes","Nino Arcelin"});
         this.creerTache(creditsBox,"Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
 
         ScrollPane scrollPane = new ScrollPane(creditsBox);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        scrollPane.setStyle("-fx-background: black;");
         scrollPane.setFitToWidth(true);
 
         Scene scene = new Scene(scrollPane, screenWidth, screenHeight);
+        scene.getStylesheets().add("style.css");
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Crédits défilants");
@@ -57,7 +58,7 @@ public class Credits {
 
         creditsBox.setTranslateY(screenHeight);
 
-        TranslateTransition transition = new TranslateTransition(Duration.seconds(15), creditsBox);
+        TranslateTransition transition = new TranslateTransition(Duration.seconds(30), creditsBox);
         transition.setToY(-creditsBox.getBoundsInParent().getHeight()); // Monte jusqu'à disparaître
         transition.setCycleCount(1);
         transition.setInterpolator(javafx.animation.Interpolator.LINEAR);

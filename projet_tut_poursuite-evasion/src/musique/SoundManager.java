@@ -80,10 +80,12 @@ public class SoundManager {
         fondMusic.stop();
     }
 
+
     /**
      * Méthode pour arrêter toutes les musiques
      */
     public static void stopAllMusic() {
+        if (fondMusic != null) fondMusic.stop();
         if (gameMusic != null) gameMusic.stop();
         if (drawMusic != null) drawMusic.stop();
         if (winMusic != null) winMusic.stop();

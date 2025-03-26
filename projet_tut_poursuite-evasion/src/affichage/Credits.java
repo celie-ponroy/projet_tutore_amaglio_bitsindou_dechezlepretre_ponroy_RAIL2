@@ -33,7 +33,7 @@ public class Credits {
         this.creerTache(creditsBox, "Arbre de décision", new String[]{ "Célie Ponroy"});
         this.creerTache(creditsBox, "Analyse", new String[]{"Maëlle Bitsindou"});
         this.creerTache(creditsBox, "Sauvegarde", new String[]{"Célie Ponroy"});
-        this.creerTache(creditsBox,"Débat Houleux", new String[]{"Luc Dechezleprêtre","Matias Amaglio","Célie Ponroy","Maëlle Bitsindou" });
+        this.creerTache(creditsBox,"Débats huleux", new String[]{"Luc Dechezleprêtre","Matias Amaglio","Célie Ponroy","Maëlle Bitsindou" });
         this.creerTache(creditsBox,"Création du sujet", new String[]{"Célie Ponroy","Maëlle Bitsindou","Luc Dechezleprêtre","Matias Amaglio","Guenaël Cabanes"});
         this.creerTache(creditsBox,"Acteurs",new String[]{"gardien.png","prisonnier.png"});
         this.creerTache(creditsBox,"Decors",new String[]{"mur.png","sol.png","sortie.png", "camera.png","raccourciGardien.png"});
@@ -42,6 +42,7 @@ public class Credits {
         this.creerTache(creditsBox,"Avec la participation de", new String[]{"Matias Amaglio","Luc Dechezleprêtre","Maëlle Bitsindou","Célie Ponroy" , "Guenaël Cabanes"});
         this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson","Charlemiam","Les deux collègues de M. Cabanes","Nino Arcelin"});
         this.creerTache(creditsBox,"Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
+        this.creerTache(creditsBox,"BUT Informatique 2025", new String[]{""});
 
         ScrollPane scrollPane = new ScrollPane(creditsBox);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

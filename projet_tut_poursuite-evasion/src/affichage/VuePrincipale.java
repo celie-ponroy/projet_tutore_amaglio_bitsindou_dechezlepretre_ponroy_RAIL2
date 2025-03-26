@@ -64,23 +64,23 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         this.getChildren().add(iterationLabel);
 
         //Bouton pour revenir au menu principal
-        Button retourMenuBtn = new Button("Revenir au menu principal");
-        retourMenuBtn.getStyleClass().add("important");
-        retourMenuBtn.setPrefSize(230, 30);
-        //tout à gauche du labyrinthe
-        retourMenuBtn.setLayoutX(DECALAGE + TAILLE_CELLULE * Simulation.CARTE[0].length - retourMenuBtn.getPrefWidth());
-        retourMenuBtn.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
-        retourMenuBtn.setOnAction(e -> {
-            SoundManager.stopAllMusic();
-            SoundManager.playFondMusic();
-            //Ferme la fenetre actuelle
-            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-            stage.close();
-            //retour au menu principal
-            VueMenus vm = new VueMenus();
-            vm.afficherMenuPrincipal();
-        });
-        this.getChildren().add(retourMenuBtn);
+//        Button retourMenuBtn = new Button("Revenir au menu principal");
+//        retourMenuBtn.getStyleClass().add("important");
+//        retourMenuBtn.setPrefSize(230, 30);
+//        //tout à gauche du labyrinthe
+//        retourMenuBtn.setLayoutX(DECALAGE + TAILLE_CELLULE * Simulation.CARTE[0].length - retourMenuBtn.getPrefWidth());
+//        retourMenuBtn.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
+//        retourMenuBtn.setOnAction(e -> {
+//            SoundManager.stopAllMusic();
+//            SoundManager.playFondMusic();
+//            //Ferme la fenetre actuelle
+//            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
+//            stage.close();
+//            //retour au menu principal
+//            VueMenus vm = new VueMenus();
+//            vm.afficherMenuPrincipal();
+//        });
+//        this.getChildren().add(retourMenuBtn);
 
     }
 
@@ -145,6 +145,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         if(simulation.etreFini()){
             SoundManager.stopAllMusic(); //on arrete toutes musiques
+            //on enleve l'affichage du bouton retour au menu
+//            this.getChildren().remove(this.getChildren().size()-1);
             if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
                 //on met le son de l'égalité
                 playDrawMusic();
@@ -223,6 +225,12 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
         caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.getHistoriqueBayesien().get(agent).get(0),TAILLE_CELLULE,DECALAGE,0);
         for (Rectangle[] rect : caseBayesienneHisto) {
+            for (Rectangle sousrect : rect) {
+                this.getChildren().add(sousrect);
+            }
+        }
+        var cases = FiltreCamera.initFiltre(TAILLE_CELLULE,DECALAGE,0);
+        for (Rectangle[] rect : cases) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
             }

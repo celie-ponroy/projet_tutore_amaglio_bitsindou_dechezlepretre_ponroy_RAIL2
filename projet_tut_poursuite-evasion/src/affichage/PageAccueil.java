@@ -22,8 +22,8 @@ public class PageAccueil {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
 
-    public static void lancerPageAcceuil(MoteurJeu jeu){
-        var primaryStage = new Stage();
+    public static void lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage){
+//        var primaryStage = new Stage();
         primaryStage.setFullScreen(true);
 
         final VBox root = new VBox();
@@ -69,7 +69,15 @@ public class PageAccueil {
             MoteurJeu.jeu = simulationTutoriel;
             afficherTuto(simulationTutoriel, scene, root);
         });
-        boutons.getChildren().addAll(lancerJeu, tutoriel);
+
+        //Bouton pour quitter l'application
+        Button quitter = new Button("Quitter");
+        quitter.getStyleClass().add("important");
+
+        quitter.setPrefSize(100, 50);
+        quitter.setOnAction(e -> primaryStage.close());
+
+        boutons.getChildren().addAll(lancerJeu, tutoriel, quitter);
         root.getChildren().add(boutons);
 
 

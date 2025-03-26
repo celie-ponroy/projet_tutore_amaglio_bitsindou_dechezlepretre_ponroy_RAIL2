@@ -8,12 +8,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import moteur.ClavierTuto;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import musique.SoundManager;
 import simulation.tuto.SimulationTutoriel;
 
 import java.awt.*;
@@ -77,7 +79,39 @@ public class PageAccueil {
         quitter.setPrefSize(100, 50);
         quitter.setOnAction(e -> primaryStage.close());
 
-        boutons.getChildren().addAll(lancerJeu, tutoriel, quitter);
+        // Bouton Son
+        Button boutonSon = new Button();
+        ImageView iconeSon = new ImageView("file:images/son.png"); // Image du son activé
+        iconeSon.setFitWidth(50);
+        iconeSon.setPreserveRatio(true);
+        boutonSon.setGraphic(iconeSon);
+        boutonSon.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // Bouton invisible
+        iconeSon.setFitWidth(30);
+        iconeSon.setPreserveRatio(true);
+
+        // Positionnement en bas à droite
+        HBox hb = new HBox();
+        hb.getChildren().add(boutonSon);
+        hb.setAlignment(Pos.BOTTOM_RIGHT);
+        root.getChildren().add(hb);
+
+        // Variable pour suivre l'état du son
+        final boolean[] isMuted = {false};
+
+        // Action du bouton
+        boutonSon.setOnAction(e -> {
+            isMuted[0] = !isMuted[0]; // Inverse l'état du son
+            if (isMuted[0]) {
+                SoundManager.stopAllMusic(); // Coupe le son
+                iconeSon.setImage(new ImageView("file:images/mute.png").getImage()); // Change l'icône
+            } else {
+                SoundManager.playFondMusic(); // Remet le son
+                iconeSon.setImage(new ImageView("file:images/son.png").getImage());
+            }
+        });
+
+        boutons.getChildren().addAll(lancerJeu, tutoriel, quitter, boutonSon);
+
         root.getChildren().add(boutons);
 
         primaryStage.setScene(scene);

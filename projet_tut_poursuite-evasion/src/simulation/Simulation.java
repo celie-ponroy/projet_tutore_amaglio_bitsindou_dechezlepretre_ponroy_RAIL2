@@ -26,7 +26,7 @@ public class Simulation implements Jeu {
     public static final int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION_G = CalculVision.recupererVision("G");
     public static final HashMap<Position, ArrayList<Position>> VISION_P = CalculVision.recupererVision("P");
-    public static final HashMap<Position,ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
+    public static final HashMap<Position, ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
@@ -51,8 +51,8 @@ public class Simulation implements Jeu {
         this.nbDeplacementsPerso = 0;
 
         //les 2 personnages sont des agents
-        this.prisonnier = new Agent(9, 18,VISION_P);
-        this.gardien = new Agent(5, 4,VISION_G);
+        this.prisonnier = new Agent(9, 18, VISION_P);
+        this.gardien = new Agent(5, 4, VISION_G);
         this.positionnerAgentsSpawnAleatoire();
         historiqueDeplacement = new HashMap<>();
         List<Deplacement> depP = new ArrayList<>();
@@ -69,45 +69,9 @@ public class Simulation implements Jeu {
         posG.add(this.gardien.getPosition());
         historiquePosition.put(this.gardien, posG);
 
-        switch (ComportementGardien) {
-            case Comportements.ArbreDeterministe:
-                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
-                break;
-            case Comportements.ArbreAleatoire:
-                this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
-                break;
-            case Comportements.Aleatoire:
-                this.comportementGardien = new Aleatoire(this, this.gardien);
-                break;
-            case Comportements.ReseauArbreDeterministe:
-                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
-                break;
-            case Comportements.ReseauArbreAleatoire:
-                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
-                break;
-            default:
-                break;
-        }
-
-        switch (ComportementPrisonier) {
-            case Comportements.ArbreDeterministe:
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
-                break;
-            case Comportements.ArbreDeterministev2:
-                this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
-                break;
-            case Comportements.Aleatoire:
-                this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
-                break;
-            case Comportements.ReseauArbreDeterministe:
-                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
-                break;
-            case Comportements.ReseauArbreAleatoire:
-                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
-                break;
-            default:
-                break;
-        }
+        //ajout des comportements
+        setComportementsGardient(ComportementGardien);
+        setComportementsPrisonier(ComportementPrisonier);
 
         //initialisation des victoires
         this.victoireGardien = false;
@@ -134,8 +98,7 @@ public class Simulation implements Jeu {
 
         deplacerAgents();
     }
-
-
+    
     /**
      * Constructeur secondaire pour le mode interactif
      *
@@ -156,31 +119,14 @@ public class Simulation implements Jeu {
         this.victoirePrisonnier = false;
 
         if (perso) {
-            this.prisonnier = new Joueur(9, 18,VISION_P);
-            this.gardien = new Agent(5, 4,VISION_G);
+            this.prisonnier = new Joueur(9, 18, VISION_P);
+            this.gardien = new Agent(5, 4, VISION_G);
 
             //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
 
-            switch (ComportementAdversaire) {
-                case Comportements.ArbreDeterministe:
-                    this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
-                    break;
-                case Comportements.ArbreAleatoire:
-                    this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
-                    break;
-                case Comportements.Aleatoire:
-                    this.comportementGardien = new Aleatoire(this, this.gardien);
-                    break;
-                case Comportements.ReseauArbreDeterministe:
-                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
-                    break;
-                case Comportements.ReseauArbreAleatoire:
-                    //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
-                    break;
-                default:
-                    break;
-            }
+            setComportementsGardient(ComportementAdversaire);
+
             bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
@@ -188,29 +134,12 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(gardien, list1);
 
         } else {
-            this.gardien = new Joueur(5, 4,VISION_G);
-            this.prisonnier = new Agent(9, 18,VISION_G);
+            this.gardien = new Joueur(5, 4, VISION_G);
+            this.prisonnier = new Agent(9, 18, VISION_G);
 
             this.positionnerAgentsSpawnAleatoire();
-            switch (ComportementAdversaire) {
-                case Comportements.ArbreDeterministe:
-                    this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
-                    break;
-                case Comportements.ArbreDeterministev2:
-                    this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
-                    break;
-                case Comportements.Aleatoire:
-                    this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
-                    break;
-                case Comportements.ReseauArbreDeterministe:
-                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
-                    break;
-                case Comportements.ReseauArbreAleatoire:
-                    //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
-                    break;
-                default:
-                    break;
-            }
+
+            setComportementsPrisonier(ComportementAdversaire);
 
             bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
@@ -240,7 +169,7 @@ public class Simulation implements Jeu {
     /**
      * Constructeur par copie
      */
-    public Simulation(Simulation simulation){
+    public Simulation(Simulation simulation) {
         this.gardien = simulation.gardien;
         this.prisonnier = simulation.prisonnier;
         this.comportementGardien = simulation.comportementGardien;
@@ -256,7 +185,6 @@ public class Simulation implements Jeu {
         this.victoirePrisonnier = simulation.victoirePrisonnier;
         this.observateurs = new ArrayList<>();
     }
-
 
     /**
      * Methode permettant d'ajouter un observateur
@@ -391,7 +319,7 @@ public class Simulation implements Jeu {
             this.historiqueDeplacement.get(joueur).removeLast();
             this.historiqueDeplacement.get(joueur).add(d);
             miseAJourFinJeu();
-            if (!this.estFini){
+            if (!this.estFini) {
                 deplacerPersonnage(agent, deplacementAgent);
                 this.historiqueDeplacement.get(agent).removeLast();
                 this.historiqueDeplacement.get(agent).add(deplacementAgent);
@@ -497,7 +425,6 @@ public class Simulation implements Jeu {
         return valide;
     }
 
-
     /**
      * permets de savoir si le deplacement est valide
      *
@@ -550,6 +477,60 @@ public class Simulation implements Jeu {
     }
 
     /**
+     * Méthode permetant de set le comportement du gardient a partir de l'enum Comportement
+     *
+     * @param comportements enums représantant le comportement chosit
+     */
+    public void setComportementsGardient(Comportements comportements) {
+        switch (comportements) {
+            case Comportements.ArbreDeterministe:
+                this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
+                break;
+            case Comportements.ArbreAleatoire:
+                this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
+                break;
+            case Comportements.Aleatoire:
+                this.comportementGardien = new Aleatoire(this, this.gardien);
+                break;
+            case Comportements.ReseauArbreDeterministe:
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                break;
+            case Comportements.ReseauArbreAleatoire:
+                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Méthode permetant de set le comportement du prisonier a partir de l'enum Comportement
+     *
+     * @param comportements enums représantant le comportement chosit
+     */
+    public void setComportementsPrisonier(Comportements comportements) {
+        switch (comportements) {
+            case Comportements.ArbreDeterministe:
+                this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
+                break;
+            case Comportements.ArbreDeterministev2:
+                this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
+                break;
+            case Comportements.Aleatoire:
+                this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
+                break;
+            case Comportements.ReseauArbreDeterministe:
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                break;
+            case Comportements.ReseauArbreAleatoire:
+                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
      * Methode permettant de savoir si un personnage est visible par un autre
      *
      * @param p1   le personnage qui est observé
@@ -558,7 +539,7 @@ public class Simulation implements Jeu {
      */
     public boolean estVisible(Personnage p1, boolean role) {
         Position pos1 = p1.getPosition();
-        HashMap<Position,ArrayList<Position>> VISION;
+        HashMap<Position, ArrayList<Position>> VISION;
         Position pos2;
         if (role) {
             pos2 = this.gardien.getPosition();
@@ -661,7 +642,7 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui récupère la victoire du gardien
      */
-    public  boolean getVictoireGardien() {
+    public boolean getVictoireGardien() {
         return this.victoireGardien;
     }
 
@@ -671,6 +652,7 @@ public class Simulation implements Jeu {
     public int getNbDeplacementsPerso() {
         return nbDeplacementsPerso;
     }
+
     public HashMap<Personnage, List<Deplacement>> getHistoriqueDeplacement() {
         return historiqueDeplacement;
     }
@@ -682,6 +664,7 @@ public class Simulation implements Jeu {
     public HashMap<Personnage, List<double[][]>> getHistoriqueBayesien() {
         return historiqueBayesien;
     }
+
     public void supprimerObservateurs() {
         this.observateurs.clear();
     }

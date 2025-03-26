@@ -1,6 +1,5 @@
 package simulation.comportement;
 
-import ai.djl.MalformedModelException;
 import ai.djl.Model;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDArrays;
@@ -15,18 +14,10 @@ import ai.djl.nn.convolutional.Conv2d;
 import ai.djl.nn.core.Linear;
 import ai.djl.nn.norm.Dropout;
 import ai.djl.nn.pooling.Pool;
-import ai.djl.training.DefaultTrainingConfig;
-import ai.djl.training.EasyTrain;
-import ai.djl.training.Trainer;
-import ai.djl.training.TrainingConfig;
-import ai.djl.training.evaluator.Accuracy;
-import ai.djl.training.listener.TrainingListener;
-import ai.djl.training.loss.Loss;
 import ai.djl.translate.Batchifier;
 import ai.djl.translate.TranslateException;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
-import outils.CSVDataset;
 import outils.Outil;
 import simulation.Comportements;
 import simulation.Deplacement;
@@ -34,18 +25,18 @@ import simulation.Simulation;
 import simulation.personnages.Personnage;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ReseauDeNeurones implements Comportement {
+public class ReseauDeNeuronesCNN implements Comportement {
     Simulation sim;
     Personnage personnage;
     static SequentialBlock block;
     Model model;
     private Translator<NDArray, Integer> translator;
 
-    public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) throws TranslateException, IOException {
-        if (block == null){
+    public ReseauDeNeuronesCNN(String nomReseau, Simulation simulation, Personnage personnage) throws TranslateException, IOException {
+        if (block == null) {
+            System.out.println("le bloc est null");
             setBlock();
         }
 
@@ -55,7 +46,7 @@ public class ReseauDeNeurones implements Comportement {
         try {
             model.load(Paths.get("donnees/mlp"));
             System.out.println("Réseau chargé");
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -75,7 +66,7 @@ public class ReseauDeNeurones implements Comportement {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray softmax = list.singletonOrThrow().softmax(0);
                 NDArray probabilities = softmax.argMax();
-                 return (int) probabilities.getLong();
+                return (int) probabilities.getLong();
             }
 
             @Override
@@ -109,25 +100,22 @@ public class ReseauDeNeurones implements Comportement {
             }
         }
         StringBuilder d = new StringBuilder();
-        for (int i=0; i<sim.getCarteBayesienne(sim.getGardien()).length; i++) {
+        for (int i = 0; i < sim.getCarteBayesienne(sim.getGardien()).length; i++) {
             for (int j = 0; j < sim.getCarteBayesienne(sim.getGardien())[0].length; j++) {
                 d.append(mapValues[i]).append(",");
             }
             d.append("\n");
         }
-        System.out.println("entrée bayesienne : ");
-        System.out.println(d);
-
 
         float[] carteReel = Outil.conversionDoubleFloat(Outil.applatissement(sim.getCarteMursSortie()));
         d = new StringBuilder();
-        for (int i=0; i<Simulation.CARTE.length ; i++) {
+        for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[0].length; j++) {
                 d.append(carteReel[i]);
             }
             d.append("\n");
         }
-        System.out.println("carte reel : ");
+
         NDArray posR = manager.create(posMapValue).reshape(1, Simulation.CARTE.length, Simulation.CARTE[0].length);
 
         // Crée les cartes avec la dimension des canaux
@@ -140,7 +128,7 @@ public class ReseauDeNeurones implements Comportement {
         try {
             resultat = predictor.predict(inputData);
             System.out.println("resultats : " + resultat);
-        } catch (Exception e ) {
+        } catch (Exception e) {
             System.out.println("erreur");
             System.out.println(e.getMessage());
             return Deplacement.AUCUN;
@@ -150,14 +138,14 @@ public class ReseauDeNeurones implements Comportement {
 
     @Override
     public Comportements getType() {
-        return Comportements.ReseauArbreAleatoire;
+        return Comportements.ReseauArbreCNN;
     }
 
     /**
      * Creation du squellette du RN
      */
-    public static void setBlock(){
-        SequentialBlock block = new SequentialBlock();
+    public static void setBlock() {
+        block = new SequentialBlock();
         // Entrée 1 : Carte combinée (10, 10, 2)
         Block CNN = new SequentialBlock()
                 .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(32).build())
@@ -186,7 +174,7 @@ public class ReseauDeNeurones implements Comportement {
         block.add(Linear.builder().setUnits(Deplacement.values().length).build());
     }
 
-    public static SequentialBlock getBlock(){
+    public static SequentialBlock getBlock() {
         return block;
     }
 }

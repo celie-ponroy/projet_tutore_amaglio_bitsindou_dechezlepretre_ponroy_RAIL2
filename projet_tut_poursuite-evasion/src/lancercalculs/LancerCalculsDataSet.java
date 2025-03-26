@@ -33,7 +33,7 @@ public class LancerCalculsDataSet {
 
         int[] deplacementInt = new int[Deplacement.values().length];
         HashMap<Position, Integer> sortie = new HashMap();
-        int nbIteration = 1000;
+        int nbIteration = 5000;
         String nomFichier = "";
         for (int i = 0; i < nbIteration; i++) {
             //on récupére les déplacements
@@ -46,9 +46,6 @@ public class LancerCalculsDataSet {
 
             //si it > 80% du nbIte choisit, on enregistre dans les donnée de validations
             nomFichier = (i >= nbIteration * 0.8) ? "donnees/game_data_validation.csv" : "donnees/game_data.csv";
-            System.out.println(nomFichier);
-            System.out.println("deplacement size : " + deplacements.size());
-            System.out.println("positions size : " + positions.size());
             for (int j = 0; j < deplacements.size(); j++) {
 
                 deplacementInt[deplacements.get(j).ordinal()] += 1;
@@ -61,16 +58,9 @@ public class LancerCalculsDataSet {
             } else {
                 sortie.replace(Simulation.getPosSortie(), sortie.get(Simulation.getPosSortie()) + 1);
             }
-            LancerCalculs.initSansDS();
+            //LancerCalculs.initSansDS();
             sim = new Simulation(Comportements.ArbreAleatoire, Comportements.ArbreDeterministev2);
             System.out.println(i);
-        }
-
-        for (int i = 0; i < deplacementInt.length; i++) {
-            System.out.println(Deplacement.values()[i] + " " + deplacementInt[i]);
-        }
-        for (Position p : sortie.keySet()) {
-            System.out.println("sortie " + p + ":  " + sortie.get(p));
         }
     }
 }

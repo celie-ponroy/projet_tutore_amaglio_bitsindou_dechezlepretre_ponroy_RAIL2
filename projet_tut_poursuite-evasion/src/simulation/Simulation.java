@@ -8,7 +8,10 @@ import outils.ChargementCarte;
 import simulation.comportement.*;
 import simulation.personnages.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Stack;
 
 public class Simulation implements Jeu {
     private List<DessinJeu> observateurs;
@@ -20,7 +23,7 @@ public class Simulation implements Jeu {
     private boolean victoireGardien;
     private Comportement comportementGardien;
     private Comportement comportementPrisonnier;
-    public static int[][] CARTE = ChargementCarte.charger("donnees/petitLaby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION = CalculVision.recupererVision();
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
@@ -75,14 +78,14 @@ public class Simulation implements Jeu {
             case Comportements.Aleatoire:
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
-            case Comportements.ReseauArbreDeterministe:
+            case Comportements.ReseauArbreCNN:
                 try {
-                    this.comportementGardien = new ReseauDeNeurones("CNN", this, this.gardien);
+                    this.comportementGardien = new ReseauDeNeuronesCNN("CNN", this, this.gardien);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
                 break;
-            case Comportements.ReseauArbreAleatoire:
+            case Comportements.ReseauArbreMLP:
                 //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
                 break;
             default:
@@ -99,11 +102,8 @@ public class Simulation implements Jeu {
             case Comportements.Aleatoire:
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
-            case Comportements.ReseauArbreDeterministe:
+            case Comportements.ReseauRenforcement:
                 //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
-                break;
-            case Comportements.ReseauArbreAleatoire:
-                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);
                 break;
             default:
                 break;
@@ -174,8 +174,8 @@ public class Simulation implements Jeu {
                     break;
                 case Comportements.ReseauArbreDeterministe:
                     try {
-                        this.comportementGardien = new ReseauDeNeurones("CNN", this, this.gardien);
-                    }catch (Exception e) {
+                        this.comportementGardien = new ReseauDeNeuronesCNN("CNN", this, this.gardien);
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
 
@@ -245,7 +245,7 @@ public class Simulation implements Jeu {
     /**
      * Constructeur par copie
      */
-    public Simulation(Simulation simulation){
+    public Simulation(Simulation simulation) {
         this.gardien = simulation.gardien;
         this.prisonnier = simulation.prisonnier;
         this.comportementGardien = simulation.comportementGardien;
@@ -316,15 +316,15 @@ public class Simulation implements Jeu {
             }
         }
 
-        Case spawnGardien = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+        Case spawnGardien = casesValides.get((int) Math.round((Math.random() * (casesValides.size() - 1))));
         //On retire la case pour eviter le spawn de deux agent sur la meme case
         casesValides.remove(spawnGardien);
-        Case spawnPrisonnier = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+        Case spawnPrisonnier = casesValides.get((int) Math.round((Math.random() * (casesValides.size() - 1))));
 
-        this.prisonnier.setPosition(new Position(spawnGardien.getX(),spawnGardien.getY()));
+        this.prisonnier.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
         this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
-        System.out.println("gardien : Y="+spawnGardien.getY()+" X="+spawnGardien.getX());
-        System.out.println("prisonier : Y="+spawnPrisonnier.getY()+" X="+spawnPrisonnier.getX());
+        System.out.println("gardien : Y=" + spawnGardien.getY() + " X=" + spawnGardien.getX());
+        System.out.println("prisonier : Y=" + spawnPrisonnier.getY() + " X=" + spawnPrisonnier.getX());
         int casesHaut = 0;
         int casesBas = 0;
 
@@ -347,12 +347,12 @@ public class Simulation implements Jeu {
             actualisationBayesienne(this.prisonnier, this.gardien);
 
             Deplacement d1 = this.comportementPrisonnier.prendreDecision();
-            System.out.println("décision prisonier : "+d1);
+            // System.out.println("décision prisonier : "+d1);
             Deplacement d2 = this.comportementGardien.prendreDecision();
-            System.out.println("décision gardient réseau : "+d2);
-            Comportement c = new ArbreDecisionGardien(this,this.gardien);
+            // System.out.println("décision gardient réseau : "+d2);
+            Comportement c = new ArbreDecisionGardien(this, this.gardien);
             Deplacement d3 = c.prendreDecision();
-            System.out.println("décision gardient arbre : "+d3);
+            // System.out.println("décision gardient arbre : "+d3);
 
             historiqueDeplacement.get(prisonnier).add(d1);
             historiqueDeplacement.get(gardien).add(d2);
@@ -417,7 +417,7 @@ public class Simulation implements Jeu {
             this.historiqueDeplacement.get(joueur).removeLast();
             this.historiqueDeplacement.get(joueur).add(d);
             miseAJourFinJeu();
-            if (!this.estFini){
+            if (!this.estFini) {
                 deplacerPersonnage(agent, deplacementAgent);
                 this.historiqueDeplacement.get(agent).removeLast();
                 this.historiqueDeplacement.get(agent).add(deplacementAgent);
@@ -694,7 +694,7 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui récupère la victoire du gardien
      */
-    public  boolean getVictoireGardien() {
+    public boolean getVictoireGardien() {
         return this.victoireGardien;
     }
 
@@ -704,6 +704,7 @@ public class Simulation implements Jeu {
     public int getNbDeplacementsPerso() {
         return nbDeplacementsPerso;
     }
+
     public HashMap<Personnage, List<Deplacement>> getHistoriqueDeplacement() {
         return historiqueDeplacement;
     }
@@ -715,6 +716,7 @@ public class Simulation implements Jeu {
     public HashMap<Personnage, List<double[][]>> getHistoriqueBayesien() {
         return historiqueBayesien;
     }
+
     public void supprimerObservateurs() {
         this.observateurs.clear();
     }
@@ -737,9 +739,9 @@ public class Simulation implements Jeu {
             for (int j = 0; j < Simulation.CARTE[0].length; j++) {
                 if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     carteMursSortie[i][j] = 2.0;
-                }else if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
+                } else if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
                     carteMursSortie[i][j] = 1.0;
-                }else{
+                } else {
                     carteMursSortie[i][j] = 0.0;
                 }
             }

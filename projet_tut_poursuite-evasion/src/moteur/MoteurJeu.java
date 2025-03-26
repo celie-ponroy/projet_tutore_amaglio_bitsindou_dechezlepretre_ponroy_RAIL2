@@ -7,6 +7,9 @@ import javafx.stage.Stage;
 import lancercalculs.LancerCalculs;
 
 import java.io.IOException;
+import musique.SoundManager;
+
+import static musique.SoundManager.playFondMusic;
 
 public class MoteurJeu extends Application {
 
@@ -25,8 +28,9 @@ public class MoteurJeu extends Application {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        PageAccueil.lancerPageAcceuil((MoteurJeu) jeu);
-//        VueMenus vueMenus = new VueMenus((MoteurJeu) jeu);
-//        vueMenus.afficherMenuPrincipal();
+
+        PageAccueil.lancerPageAcceuil((MoteurJeu) jeu, primaryStage);
+        SoundManager soundManager = new SoundManager();
+        playFondMusic();
     }
 }

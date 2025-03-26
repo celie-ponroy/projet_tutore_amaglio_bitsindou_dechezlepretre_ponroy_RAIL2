@@ -21,6 +21,7 @@ import javafx.util.Duration;
 import lancercalculs.LancerAnalyse;
 import moteur.Jeu;
 import moteur.MoteurJeu;
+import musique.SoundManager;
 import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import simulation.Simulation;
@@ -38,6 +39,9 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     private int nbIterationsInt;
     private ObservableList<PieChart.Data> pieChartData;
     private final Rectangle[][] caseFiltreChaleur = new Rectangle[Simulation.CARTE.length][Simulation.CARTE[0].length];
+    RadioButton radioBtnTous = new RadioButton("Tous les deux");
+    RadioButton radioBtnPrisonnier = new RadioButton("Prisonnier");
+    RadioButton radioBtnGardien = new RadioButton("Gardien");
 
     //constructeur
     public VueAnalyse() {
@@ -91,7 +95,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         });
 
-
         // ComboBox gardien
         ComboBox<String> comboBoxGardien = new ComboBox<>();
         comboBoxGardien.getItems().addAll(
@@ -116,8 +119,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 }
             }
         });
-
-
 
         //Intput pour le nombre d'itérations (uniquement des chiffres jusqu'à 400 itérations)
         TextField nbIterations = new TextField();
@@ -210,13 +211,55 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // HBox pour les graphiques et le labyrinthe
         HBox graphiques = new HBox(20);
         graphiques.setAlignment(Pos.CENTER);
+
+        // Initialisation du labyrinthe
         var laby = initLabyrinthe(false);
         Rectangle[][] filtre = initFiltreChaleur();
-        for (Rectangle[] rectangles: filtre) {
-            for (Rectangle rectangle: rectangles) {
+
+        // On ajoute le filtre de déplacement au labyrinthe
+        for (Rectangle[] rectangles : filtre) {
+            for (Rectangle rectangle : rectangles) {
                 laby.getChildren().add(rectangle);
             }
         }
+
+        //Création d'un ToggleGroup pour les RadioButtons
+        ToggleGroup toggleGroup = new ToggleGroup();
+        radioBtnTous.setToggleGroup(toggleGroup);
+        radioBtnPrisonnier.setToggleGroup(toggleGroup);
+        radioBtnGardien.setToggleGroup(toggleGroup);
+
+        //Création d'un HBox pour les RadioButtons
+        HBox radioBtnContainer = new HBox(20);
+        radioBtnContainer.setAlignment(Pos.CENTER);
+        radioBtnContainer.getChildren().addAll(radioBtnTous, radioBtnPrisonnier, radioBtnGardien);
+
+        //Par défaut, le RadioButton "Tous les deux" est sélectionné
+        radioBtnTous.setSelected(true);
+        updateFiltreChaleur(lancerAnalyse.getCasesVisitees());
+
+        //Ajout d'un listener pour les RadioButtons qui met à jour le filtre de chaleur en fonction de la sélection
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (radioBtnPrisonnier.isSelected()) {
+                updateFiltreChaleur(lancerAnalyse.getCasesVisiteesPrisonnier());
+            } else if (radioBtnGardien.isSelected()) {
+                updateFiltreChaleur(lancerAnalyse.getCasesVisiteesGardien());
+            } else if (radioBtnTous.isSelected()) {
+                updateFiltreChaleur(lancerAnalyse.getCasesVisitees());
+            }
+        });
+
+        // On crée une VBox pour y mettre le laby
+        VBox labyContainer = new VBox(20);
+        labyContainer.setAlignment(Pos.CENTER);
+        labyContainer.setPadding(new Insets(0, 0, 0, 0));
+        labyContainer.setPrefSize(500, 500);
+        labyContainer.setSpacing(20); // Ajustez l'espacement si nécessaire
+        labyContainer.getChildren().add(laby);
+
+        // Ajoute le labyContainer à la HBox
+        graphiques.getChildren().addAll(camembert, labyContainer, courbes);
+
         if(avec_camera){
             var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
             for (Rectangle[] rect : casesCameras) {
@@ -226,12 +269,32 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         }
 
-        graphiques.getChildren().addAll(camembert,laby, courbes);
-
         // Conteneur pour centrer les graphiques verticalement et horizontalement
         VBox graphiquesWrapper = new VBox(graphiques);
         graphiquesWrapper.setAlignment(Pos.CENTER);
         VBox.setVgrow(graphiquesWrapper, Priority.ALWAYS);
+
+        // Conteneur pour la ComboBox, séparé du labyrinthe
+        VBox comboBoxContainer = new VBox(10);
+        comboBoxContainer.setAlignment(Pos.CENTER);
+        comboBoxContainer.getChildren().add(radioBtnContainer);
+
+        //on ajoute une marge en haut de la comboBox
+        VBox.setMargin(comboBoxContainer, new Insets(20, 0, 0, 0));
+
+        //on ajoute la comboBox au graphiqueWrapper
+        graphiquesWrapper.getChildren().add(comboBoxContainer);
+
+
+
+        // Conteneur principal pour aligner les graphiques et la ComboBox verticalement
+        VBox mainContainer = new VBox(20);
+        mainContainer.setAlignment(Pos.CENTER);
+        mainContainer.getChildren().addAll(graphiquesWrapper);
+
+        // Ajoute le mainContainer à votre scène principal
+        root.getChildren().add(mainContainer);
+
 
         //Bouton pour mettre en pause la simulation et afficher le texte "Reprendre"
         pauseBtn.setPrefSize(150, 50);
@@ -249,6 +312,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         lancerBtn.setPrefSize(150, 50);
         // Dans le bouton lancerBtn
         lancerBtn.setOnAction(e -> {
+
             if (comboBoxGardien.getValue() == null || comboBoxPrisonnier.getValue() == null ||
                     (comboBoxPrisonnier.getValue() == null && comboBoxGardien.getValue() == null ||
                             nbIterations.getText().isEmpty())) {
@@ -302,7 +366,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
                     }
                 });
-
                 analyseThread.start();
             }
         });
@@ -375,7 +438,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + comboBoxPrisonnier.getValue());
-
         }
 
         //Ajoute les comportements choisis dans un tableau
@@ -394,13 +456,13 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 nbIte = 1;
             }
 
-            // Effacer les anciennes données
+            // Efface les anciennes données
             pieChartData.clear();
 
-            // Enlever l'animation pour éviter les effets indésirables
+            // Enleve l'animation pour éviter les effets indésirables
             camembert.setAnimated(false);
 
-            // Ajouter de nouvelles données avec leurs couleurs associées
+            // Ajoute de nouvelles données avec leurs couleurs associées
             Map<String, String> couleurs = new HashMap<>();
 
             if (lancerAnalyse.getNbVictoireGardien() > 0) {
@@ -421,14 +483,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 couleurs.put("Match Null", "grey");
             }
 
-            // Appliquer les styles après que le graphique soit rendu
+            // Applique les styles après que le graphique soit rendu
             camembert.applyCss();
             camembert.layout();
 
             //Supprime les label
             camembert.setLabelsVisible(false);
 
-            // Appliquer les couleurs aux sections du camembert
+            // Applique les couleurs aux sections du camembert
             for (PieChart.Data data : pieChartData) {
                 String color = couleurs.getOrDefault(data.getName(), "black");
 
@@ -454,7 +516,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 }
             });
 
-            // Ajouter des tooltips pour afficher les pourcentages
+            // Ajoute des tooltips pour afficher les pourcentages
             for (PieChart.Data data : camembert.getData()) {
                 Tooltip tooltip = new Tooltip();
                 tooltip.setShowDelay(Duration.seconds(0.2));
@@ -487,7 +549,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Rotation des labels de l'axe X pour éviter le chevauchement
         xAxis.setTickLabelRotation(45);
 
-        //Augmenter la taille de l'axe des abscisses du graphique en fonction du nombre d'itérations
+        //Augmente la taille de l'axe des abscisses du graphique en fonction du nombre d'itérations
         xAxis.setCategories(FXCollections.observableArrayList(String.valueOf(nbIterationsInt)));
 
 
@@ -553,9 +615,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Mise à jour des courbes
         graphiqueCourbes();
 
-        // Mise à jour du filtre de chaleur
-        updateFiltreChaleur();
-
+        // Mise à jour du filtre de chaleur en fonction des radioButtons sélectionnés
+        if(radioBtnPrisonnier.isSelected()){
+            updateFiltreChaleur(lancerAnalyse.getCasesVisiteesPrisonnier());
+        } else if(radioBtnGardien.isSelected()){
+            updateFiltreChaleur(lancerAnalyse.getCasesVisiteesGardien());
+        } else if(radioBtnTous.isSelected()){
+            updateFiltreChaleur(lancerAnalyse.getCasesVisitees());
+        }
     }
 
     @Override
@@ -603,9 +670,9 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     }
 
     /**
-     * Méthode qui met à jour le filtre de chaleur
+     * Méthode qui met à jour le filtre de chaleur en fonction de la sélection des radionButtons
      */
-    public void updateFiltreChaleur() {
+    public void updateFiltreChaleur(HashMap<Position, Integer> listeCasesVisitees) {
         // Réinitialise les couleurs de toutes les cases
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
@@ -616,7 +683,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         }
 
-        // Met à jour pour les cases visitées et les cases de départ
+        // Met à jour pour les cases visitées et les cases de départ en fonction de la sélection des radioButtons
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE.length; j++) {
                 Rectangle rect = caseFiltreChaleur[i][j];
@@ -626,36 +693,83 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
                 boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
 
-                // Case visitée ordinaire
-                if (lancerAnalyse.getCasesVisitees().containsKey(currentPos)) {
-                    rect.setOpacity(1);
-                    int nbVisites = (int) lancerAnalyse.getCasesVisitees().get(currentPos);
-
-                    // Position de départ du prisonnier
+                // En fonction de la position actuelle des personnages sélectionnés par les radioButtons
+                if (radioBtnPrisonnier.isSelected()) {
+                    // Affiche les positions de départ du prisonnier
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
+                        rect.setOpacity(1);
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         Tooltip.install(rect, tooltip);
+                        System.out.println("Spawn prisonnier");
                     }
-                    // Position de départ du gardien
-                    else if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                    }
-                    // Case visitée normale
-                    else {
-                        double opacite = Math.pow(normaliser(nbVisites, lancerAnalyse.getCasesVisitees()), 0.5);
+                    // Affiche les cases visitées par le prisonnier
+                    if (listeCasesVisitees.containsKey(currentPos)) {
+                        int nbVisites = listeCasesVisitees.get(currentPos);
+                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
                         rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-
+                        rect.setOpacity(1);
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
+                        System.out.println("Cases visitees pri");
+                    }
+                } else if (radioBtnGardien.isSelected()) {
+                    // Affiche les positions de départ du gardien
+                    if (isGardienStart) {
+                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
+                        rect.setOpacity(1);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                        System.out.println("Spawn gardien");
+                    }
+                    // Affiche les cases visitées par le gardien
+                    if (listeCasesVisitees.containsKey(currentPos)) {
+                        int nbVisites = listeCasesVisitees.get(currentPos);
+                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
+                        rect.setOpacity(1);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Visites : " + nbVisites);
+                        Tooltip.install(rect, tooltip);
+                        System.out.println("Cases visitees gard");
+                    }
+                } else if (radioBtnTous.isSelected()) {
+                    // Affiche les positions de départ du prisonnier et du gardien
+                    if (isPrisonnierStart) {
+                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
+                        rect.setOpacity(1);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                        System.out.println("Spawn prisonnier + ");
+                    }
+                    if (isGardienStart) {
+                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
+                        rect.setOpacity(1);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
+                        Tooltip.install(rect, tooltip);
+                        System.out.println("Spawn gardien + ");
+                    }
+                    // Affiche les cases visitées par les deux
+                    if (listeCasesVisitees.containsKey(currentPos)) {
+                        int nbVisites = listeCasesVisitees.get(currentPos);
+                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
+                        rect.setOpacity(1);
+                        Tooltip tooltip = new Tooltip();
+                        tooltip.setText("Visites : " + nbVisites);
+                        Tooltip.install(rect, tooltip);
+                        System.out.println("Cases visitees tous");
                     }
                 }
             }
         }
     }
+
+
+
 }

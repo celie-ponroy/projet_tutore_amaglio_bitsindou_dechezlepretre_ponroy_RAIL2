@@ -6,17 +6,14 @@ import moteur.Jeu;
 import simulation.Comportements;
 import simulation.Simulation;
 import simulation.personnages.Position;
-
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 //Classe qui lance le nombre de simualtion en fonction du nombre de parties donnée par l'utilisateur et des comportements choisis
-//Elle se base sur le MVC
 public class LancerAnalyse implements Jeu {
 
-    //atributs
+    //attributs
     private boolean etreFini = false;
     private List<DessinJeu> observateurs;
     private int nbVictoireGardien;
@@ -25,8 +22,9 @@ public class LancerAnalyse implements Jeu {
     private int nbIterationCourrante;
     private int nbDeplacementPerso;
     private List<Integer> historiqueDeplacementsPerso = new ArrayList<>();
-    //HashMap pour stocker les cases et leur nombre de fois ou elles ont été visitées
     private HashMap casesVisitees = new HashMap();
+    private HashMap casesVisiteesPrisonnier = new HashMap();
+    private HashMap casesVisiteesGardien = new HashMap();
     private int nbIterationsTotal; // Nombre total d'itérations à effectuer
     private boolean pause;
     private boolean caseDepart;
@@ -83,11 +81,12 @@ public class LancerAnalyse implements Jeu {
             casesDepartGard.put(posDepartGardien, 1);
         }
 
-        // Mise à jour des cases visitées pour le prisonnier
-        updateCasesVisitees(posPrisonnier);
+        // Mise à jour des cases visitées par le prisonnier
+        updateCasesVisiteesPrisonnier(posPrisonnier);
 
-        // Mise à jour des cases visitées pour le gardien
-        updateCasesVisitees(posGardien);
+        // Mise à jour des cases visitées par le gardien
+        updateCasesVisiteesGardien(posGardien);
+
 
         // Mise à jour des statistiques
         if (simulation.getVictoireGardien() == simulation.getVictoirePrisonnier()) {
@@ -101,14 +100,14 @@ public class LancerAnalyse implements Jeu {
         // Notification des observateurs pour mise à jour de l'interface
         notifierObservateurs();
 
-        // On marque la fin si c'est la dernière partie
+        // True si la fin si c'est la dernière partie
         if (numeroPartie == nbIterationsTotal) {
             etreFini = true;
         }
     }
 
     /**
-     * Méthode utilitaire pour mettre à jour les cases visitées
+     * Méthode pour mettre à jour les cases visitées
      */
     private void updateCasesVisitees(List<Position> positions) {
         for (Position pos : positions) {
@@ -117,6 +116,40 @@ public class LancerAnalyse implements Jeu {
                 casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1);
             } else {
                 casesVisitees.put(pos, 1);
+            }
+        }
+    }
+
+    /**
+     * Méthode pour mettre à jour les cases visitées par le prisonnier
+     * @param positions
+     */
+    private void updateCasesVisiteesPrisonnier(List<Position> positions) {
+        for (Position pos : positions) {
+            //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
+            if (casesVisiteesPrisonnier.containsKey(pos)) {
+                casesVisiteesPrisonnier.put(pos, (int)casesVisiteesPrisonnier.get(pos) + 1);
+                casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
+            } else {
+                casesVisiteesPrisonnier.put(pos, 1);
+                casesVisitees.put(pos, 1); // Mise à jour des cases visitées par les deux personnages
+            }
+        }
+    }
+
+    /**
+     * Méthode pour mettre à jour les cases visitées par le gardien
+     * @param positions
+     */
+    private void updateCasesVisiteesGardien(List<Position> positions) {
+        for (Position pos : positions) {
+            //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
+            if (casesVisiteesGardien.containsKey(pos)) {
+                casesVisiteesGardien.put(pos, (int)casesVisiteesGardien.get(pos) + 1);
+                casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
+            } else {
+                casesVisiteesGardien.put(pos, 1);
+                casesVisitees.put(pos, 1); // Mise à jour des cases visitées par les deux personnages
             }
         }
     }
@@ -136,7 +169,6 @@ public class LancerAnalyse implements Jeu {
             }
         });
     }
-
 
     @Override
     public boolean etreFini() {
@@ -164,10 +196,18 @@ public class LancerAnalyse implements Jeu {
         return matchNull;
     }
 
+    /**
+     * Méthode qui retourne le nombre d'itérations courrantes
+     * @return nbIterationCourrante
+     */
     public int getNbIterationCourrante() {
         return nbIterationCourrante;
     }
 
+    /**
+     * Méthode qui retourne le nombre de déplacements du personnage
+     * @return nbDeplacementPerso
+     */
     public int getNbDeplacementPerso(int index ) {
         if (index >= 0 && index < historiqueDeplacementsPerso.size()) {
             return historiqueDeplacementsPerso.get(index);
@@ -175,11 +215,10 @@ public class LancerAnalyse implements Jeu {
         return -1; // Valeur par défaut en cas d'index invalide
     }
 
-
-    public List<Integer> getHistoriqueDeplacementsPrisonnier() {
-        return historiqueDeplacementsPerso;
-    }
-
+    /**
+     * Méthode qui retourne les cases visitées
+     * @return
+     */
     public HashMap <Position, Integer> getCasesVisitees() {
         return casesVisitees;
     }
@@ -196,19 +235,31 @@ public class LancerAnalyse implements Jeu {
         historiqueDeplacementsPerso.clear();
         etreFini = false;
         casesVisitees.clear();
+        casesVisiteesPrisonnier.clear();
+        casesVisiteesGardien.clear();
         notifierObservateurs();
     }
 
-
-    // Méthode pour définir le nombre total d'itérations
+    /**
+     * Méthode qui retourne le nombre total d'itérations
+     * @param nbIterations
+     */
     public void setNbIterationsTotal(int nbIterations) {
         this.nbIterationsTotal = nbIterations;
     }
 
+    /**
+     * Méthode qui retourne true si l'analyse est en pause
+     * @return true si l'analyse est en pause false sinon
+     */
     public synchronized boolean isPause() {
         return pause;
     }
 
+    /**
+     * Méthode qui met à jour l'état de pause de l'analyse
+     * @param b true ou false
+     */
     public void setPause(boolean b){
         this.pause = b;
     }
@@ -219,5 +270,13 @@ public class LancerAnalyse implements Jeu {
 
     public HashMap<Position, Integer> getCasesDepartPris() {
         return casesDepartPris;
+    }
+
+    public HashMap<Position, Integer> getCasesVisiteesPrisonnier() {
+        return casesVisiteesPrisonnier;
+    }
+
+    public HashMap<Position, Integer> getCasesVisiteesGardien() {
+        return casesVisiteesGardien;
     }
 }

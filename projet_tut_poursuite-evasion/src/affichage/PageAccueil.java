@@ -89,12 +89,6 @@ public class PageAccueil {
         iconeSon.setFitWidth(30);
         iconeSon.setPreserveRatio(true);
 
-        // Positionnement en bas à droite
-        HBox hb = new HBox();
-        hb.getChildren().add(boutonSon);
-        hb.setAlignment(Pos.BOTTOM_RIGHT);
-        root.getChildren().add(hb);
-
         // Variable pour suivre l'état du son
         final boolean[] isMuted = {false};
 

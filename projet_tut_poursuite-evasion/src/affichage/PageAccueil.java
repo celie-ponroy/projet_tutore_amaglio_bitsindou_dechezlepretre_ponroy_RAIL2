@@ -72,6 +72,16 @@ public class PageAccueil {
         boutons.getChildren().addAll(lancerJeu, tutoriel);
         root.getChildren().add(boutons);
 
+
+        Button credits = new Button("Crédits");
+        credits.setStyle("-fx-background-color: transparent;");
+        credits.setPrefSize(150,50);
+        credits.setOnAction(e->{
+            Credits c = new Credits();
+            c.start(primaryStage,jeu);
+        });
+        root.getChildren().add(credits);
+
         primaryStage.setScene(scene);
         primaryStage.setTitle("Page d'accueil");
         primaryStage.show();

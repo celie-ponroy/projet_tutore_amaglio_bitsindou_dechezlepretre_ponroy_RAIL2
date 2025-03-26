@@ -131,3 +131,7 @@
     -fx-border-color: black;
     -fx-padding: 30;
 }
+
+.scroll-pane .viewport {
+    -fx-background-image: url('fond_credits.png');
+}

@@ -13,6 +13,7 @@ import ai.djl.nn.Blocks;
 import ai.djl.nn.SequentialBlock;
 import ai.djl.nn.convolutional.Conv2d;
 import ai.djl.nn.core.Linear;
+import ai.djl.nn.norm.Dropout;
 import ai.djl.nn.pooling.Pool;
 import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.EasyTrain;
@@ -39,29 +40,14 @@ import java.nio.file.Paths;
 public class ReseauDeNeurones implements Comportement {
     Simulation sim;
     Personnage personnage;
+    static SequentialBlock block;
     Model model;
     private Translator<NDArray, Integer> translator;
 
     public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) throws TranslateException, IOException {
-
-        SequentialBlock block = new SequentialBlock();
-
-        // Entrée 1 : Carte combinée (10, 10, 2)
-        Block CNN = new SequentialBlock()
-                .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(32).build())
-                .add(Activation.reluBlock())
-                .add(Pool.maxPool2dBlock(new Shape(2, 2)))
-                .add(Blocks.batchFlattenBlock()); // Aplatir les caractéristiques
-
-        // Couches fully connected
-        block.add(CNN);
-        block.add(Linear.builder().setUnits(128).build());
-        block.add(Activation.reluBlock());
-        block.add(Linear.builder().setUnits(64).build());
-        block.add(Activation.reluBlock());
-        block.add(Linear.builder().setUnits(32).build());
-        block.add(Activation.reluBlock());
-        block.add(Linear.builder().setUnits(Deplacement.values().length).build());
+        if (block == null){
+            setBlock();
+        }
 
         // Créer le modèle
         Model model = Model.newInstance(nomReseau);
@@ -72,7 +58,6 @@ public class ReseauDeNeurones implements Comportement {
         }catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
 
         this.sim = simulation;
         this.personnage = personnage;
@@ -166,5 +151,42 @@ public class ReseauDeNeurones implements Comportement {
     @Override
     public Comportements getType() {
         return Comportements.ReseauArbreAleatoire;
+    }
+
+    /**
+     * Creation du squellette du RN
+     */
+    public static void setBlock(){
+        SequentialBlock block = new SequentialBlock();
+        // Entrée 1 : Carte combinée (10, 10, 2)
+        Block CNN = new SequentialBlock()
+                .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(32).build())
+                .add(Activation.leakyReluBlock(0.1f)) // Moins de neurones morts
+                .add(Pool.maxPool2dBlock(new Shape(2, 2), new Shape(1, 1))) // Stride 1 pour moins réduire
+                .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(64).build()) // Plus de filtres
+                .add(Activation.leakyReluBlock(0.1f))
+                .add(Pool.maxPool2dBlock(new Shape(2, 2))) // Normal
+                .add(Conv2d.builder().setKernelShape(new Shape(3, 3)).setFilters(128).build()) // Encore plus de filtres
+                .add(Activation.leakyReluBlock(0.1f))
+                .add(Pool.maxPool2dBlock(new Shape(2, 2)))
+                .add(Blocks.batchFlattenBlock());
+
+        block.add(CNN);
+        block.add(Linear.builder().setUnits(256).build());
+        block.add(Activation.reluBlock());
+        block.add(Dropout.builder().optRate(0.3f).build());
+
+        block.add(Linear.builder().setUnits(128).build());
+        block.add(Activation.reluBlock());
+        block.add(Dropout.builder().optRate(0.3f).build());
+
+        block.add(Linear.builder().setUnits(64).build());
+        block.add(Activation.reluBlock());
+        block.add(Dropout.builder().optRate(0.3f).build());
+        block.add(Linear.builder().setUnits(Deplacement.values().length).build());
+    }
+
+    public static SequentialBlock getBlock(){
+        return block;
     }
 }

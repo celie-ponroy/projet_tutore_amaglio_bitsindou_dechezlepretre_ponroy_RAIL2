@@ -64,7 +64,7 @@ public class Credits {
         transition.setInterpolator(javafx.animation.Interpolator.LINEAR);
         transition.setOnFinished(e -> {
             PageAccueil.lancerPageAcceuil( jeu,primaryStage);
-            primaryStage.close();});
+        });
         transition.play();
     }
 

@@ -11,6 +11,7 @@ import simulation.Simulation;
 import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
+
 import java.util.Arrays;
 
 import static musique.SoundManager.*;
@@ -32,17 +33,18 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
     /**
      * Constructeur de la vue principale
-     * @param width largeur de la fenêtre
+     *
+     * @param width  largeur de la fenêtre
      * @param height hauteur de la fenêtre
      */
     public VuePrincipale(double width, double height) {
         super();
-        if(width<height){
-            TAILLE_CELLULE = (int) (width/ (Simulation.CARTE[0].length)*0.75);
-        }else{
-            TAILLE_CELLULE = (int) (height/ (Simulation.CARTE.length)*0.75);
+        if (width < height) {
+            TAILLE_CELLULE = (int) (width / (Simulation.CARTE[0].length) * 0.75);
+        } else {
+            TAILLE_CELLULE = (int) (height / (Simulation.CARTE.length) * 0.75);
         }
-        DECALAGE = (int)width/2 ;
+        DECALAGE = (int) width / 2;
     }
 
     /**
@@ -59,28 +61,9 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         //affichage itération
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(DECALAGE); //tout à droite du labyrinthe
-        iterationLabel.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
+        iterationLabel.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + 10);
         iterationLabel.setStyle("-fx-font-size: 12px; -fx-border-color: black; -fx-padding: 10;");
         this.getChildren().add(iterationLabel);
-
-        //Bouton pour revenir au menu principal
-//        Button retourMenuBtn = new Button("Revenir au menu principal");
-//        retourMenuBtn.getStyleClass().add("important");
-//        retourMenuBtn.setPrefSize(230, 30);
-//        //tout à gauche du labyrinthe
-//        retourMenuBtn.setLayoutX(DECALAGE + TAILLE_CELLULE * Simulation.CARTE[0].length - retourMenuBtn.getPrefWidth());
-//        retourMenuBtn.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+10);
-//        retourMenuBtn.setOnAction(e -> {
-//            SoundManager.stopAllMusic();
-//            SoundManager.playFondMusic();
-//            //Ferme la fenetre actuelle
-//            Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-//            stage.close();
-//            //retour au menu principal
-//            VueMenus vm = new VueMenus();
-//            vm.afficherMenuPrincipal();
-//        });
-//        this.getChildren().add(retourMenuBtn);
 
     }
 
@@ -123,18 +106,18 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
     @Override
     public void update(Jeu jeu) {
         // Récuperation de la simulation
-        this.simulation = (Simulation)jeu;
+        this.simulation = (Simulation) jeu;
 
         //mise à jour du décalage en fonction de la carte
         if (this.getChildren().isEmpty()) {
-            DECALAGE -= simulation.CARTE[0].length*TAILLE_CELLULE/2;
+            DECALAGE -= simulation.CARTE[0].length * TAILLE_CELLULE / 2;
             // Si le labyrinthe n'est pas encore initialisé
             init();
             initFiltreVision();
             setOpacityPersonnage();
         } else {
             // Sinon, il met juste a jour les positions des personnages
-            updateDirections(this.simulation.getNbTours()-1);
+            updateDirections(this.simulation.getNbTours() - 1);
             updatePositions();
             updateIteration();
             setOpacityPersonnage();
@@ -143,17 +126,17 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
 
         //Pop up pour afficher la fin de la partie
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        if(simulation.etreFini()){
+        if (simulation.etreFini()) {
             SoundManager.stopAllMusic(); //on arrete toutes musiques
             //on enleve l'affichage du bouton retour au menu
 //            this.getChildren().remove(this.getChildren().size()-1);
-            if(!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()){
+            if (!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()) {
                 //on met le son de l'égalité
                 playDrawMusic();
                 alert.setHeaderText("Egalité !");
                 alert.setContentText("Le nombre de coup est dépassé !\n" +
                         "Cliquez sur OK pour voir l'historique");
-            }else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
+            } else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
                 //on met le son de la victoire
                 playWinMusic();
                 alert.setHeaderText("Félicitations !");
@@ -191,7 +174,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour initialiser un filtre sur les cases non visibles
      */
     public void initFiltreVision() {
-        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE,0,(Joueur) simulation.getJoueur(),avec_camera);
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, DECALAGE, 0, (Joueur) simulation.getJoueur(), avec_camera);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
@@ -203,19 +186,19 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
      * Méthode pour lettre un filtre sur les cases non visibles
      */
     public void setFiltreVision() {
-        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(),avec_camera);
+        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(), avec_camera);
     }
 
     /**
      * Methode pour historique à la fin du jeu en mode interactif
      */
-    public void historique(){
+    public void historique() {
         Button sauvegarder = new Button("Sauvegarder");
         sauvegarder.setPrefSize(200, 75);
         sauvegarder.setOnAction(e -> {
             lancerSauvegarde(sauvegarder);
         });
-        tour=0;
+        tour = 0;
         //initaliser la map (enlever la vision)
         Arrays.stream(filtreVision).forEach(rectangles -> Arrays.stream(rectangles).forEach(rectangle -> rectangle.setOpacity(0)));
         //on mets la première carte bayesienne
@@ -223,13 +206,13 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         if (simulation.getJoueur() == simulation.getPrisonnier())
             agent = simulation.getGardien();
 
-        caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.getHistoriqueBayesien().get(agent).get(0),TAILLE_CELLULE,DECALAGE,0);
+        caseBayesienneHisto = FiltreBayesien.initFiltre(simulation.getHistoriqueBayesien().get(agent).get(0), TAILLE_CELLULE, DECALAGE, 0);
         for (Rectangle[] rect : caseBayesienneHisto) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
             }
         }
-        var cases = FiltreCamera.initFiltre(TAILLE_CELLULE,DECALAGE,0);
+        var cases = FiltreCamera.initFiltre(TAILLE_CELLULE, DECALAGE, 0);
         for (Rectangle[] rect : cases) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
@@ -238,8 +221,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         //on met les perso à l'emplacement ini
 
         Position pPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(0);
-        Position pGardien= simulation.getHistoriquePosition().get(simulation.getGardien()).get(1);
-        setPositions(pPrisonnier,prisonnierView);
+        Position pGardien = simulation.getHistoriquePosition().get(simulation.getGardien()).get(1);
+        setPositions(pPrisonnier, prisonnierView);
         prisonnierView.setOpacity(1);
         setPositions(pGardien, gardienView);
         gardienView.setOpacity(1);
@@ -275,7 +258,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         HBox hboxBouttons = new HBox();
 
         hboxBouttons.setLayoutX(DECALAGE);
-        hboxBouttons.setLayoutY(TAILLE_CELLULE*Simulation.CARTE.length+iterationLabel.getHeight()+15);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + iterationLabel.getHeight() + 15);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
         hboxBouttons.getChildren().add(sauvegarder);
@@ -304,10 +287,10 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         if (simulation.getJoueur() == simulation.getPrisonnier())
             agent = simulation.getGardien();
 
-        FiltreBayesien.updateBayes(caseBayesienneHisto,simulation.getHistoriqueBayesien().get(agent).get(tour));
+        FiltreBayesien.updateBayes(caseBayesienneHisto, simulation.getHistoriqueBayesien().get(agent).get(tour));
 
-        setPositions(simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour),prisonnierView);
-        setPositions(simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour),gardienView);
+        setPositions(simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour), prisonnierView);
+        setPositions(simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour), gardienView);
     }
 
 }

@@ -1,9 +1,10 @@
 package outils;
+
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class DataCollector {
-    public static void saveData(double[] bayesianValues, int decisionMove,String fichierDeSauevgarde) {
+    public static void saveData(double[] bayesianValues, int decisionMove, String fichierDeSauevgarde) {
         try (FileWriter writer = new FileWriter(fichierDeSauevgarde, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append("\"");
@@ -11,7 +12,7 @@ public class DataCollector {
                 sb.append(value).append(",");
             }
             //On supprime la virgule en trop
-            sb.deleteCharAt(sb.length()-1);
+            sb.deleteCharAt(sb.length() - 1);
             sb.append("\",\"");
             //sb.append(x).append(",").append(y).append("\",");
 //            for(int dep : decisionMove){
@@ -26,7 +27,8 @@ public class DataCollector {
             e.printStackTrace();
         }
     }
-    public static void etiquettage(String etiq,String fichierDeSauevgarde) {
+
+    public static void etiquettage(String etiq, String fichierDeSauevgarde) {
         try (FileWriter writer = new FileWriter(fichierDeSauevgarde, true)) {
             StringBuilder sb = new StringBuilder();
             sb.append(etiq).append("\n");

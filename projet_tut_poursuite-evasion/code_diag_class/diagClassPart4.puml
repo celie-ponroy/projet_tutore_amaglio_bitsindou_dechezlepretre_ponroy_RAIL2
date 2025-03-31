@@ -1,8 +1,9 @@
 @startuml
 package "calculs"{
   class CalculVision{
-    + {static} recupererVision(): HashMap<Position,ArrayList<Position>>
+    + {static} recupererVision(String G_P): HashMap<Position,ArrayList<Position>>
     + {static} ecrireVision(): void
+    + {static} ecrireFichierVision(HashMap vision, String nomfichier) : void
     + {static} calculerCarteVision(): HashMap
     + {static} calculerVision(int, int): ArrayList
     + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void

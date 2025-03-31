@@ -30,22 +30,23 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
     private Rectangle[][] filtreVision; // Filtre pour cacher les cases non visibles
 
 
-    public VueTutoriel(SimulationTutoriel simulation,double width, double height) {
+    public VueTutoriel(SimulationTutoriel simulation, double width, double height) {
         this.simulation = simulation;
-        if(width<height){
-            TAILLE_CELLULE = (int) (width/ (Simulation.CARTE[0].length)*0.75);
-        }else{
-            TAILLE_CELLULE = (int) (height/ (Simulation.CARTE.length)*0.75);
+        if (width < height) {
+            TAILLE_CELLULE = (int) (width / (Simulation.CARTE[0].length) * 0.75);
+        } else {
+            TAILLE_CELLULE = (int) (height / (Simulation.CARTE.length) * 0.75);
         }
-        CENTRE = (int)width/2 ;
+        CENTRE = (int) width / 2;
         this.init();
 
     }
-    private void init(){
+
+    private void init() {
         //zone a gauche avec les instructions
         instructions = new VBox(15);
         instructions.setAlignment(javafx.geometry.Pos.CENTER);
-        int hauteur = TAILLE_CELLULE*Simulation.CARTE.length;
+        int hauteur = TAILLE_CELLULE * Simulation.CARTE.length;
         instructions.setPrefSize(CENTRE, hauteur);
         instructions.setStyle("-fx-background-color: #f0f0f0;-fx-border-color: black;-fx-border-width: 1px;-fx-border-radius: 5px;");
         setLayoutX(0);
@@ -60,7 +61,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = new Rectangle(TAILLE_CELLULE, TAILLE_CELLULE);
                 rectangle.setFill(Color.rgb(44, 88, 245));
-                rectangle.setLayoutX(j * TAILLE_CELLULE+CENTRE);
+                rectangle.setLayoutX(j * TAILLE_CELLULE + CENTRE);
                 rectangle.setLayoutY(i * TAILLE_CELLULE);
                 filtreVision[j][i] = rectangle;
                 rectangle.setOpacity(0.5);
@@ -75,7 +76,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         ImageView imageP2 = gardienView;
 
         //si le joueur choisit le personnage prsionnnier, on cache le gardien du champ de vision
-        if (simulation.estVisible(simulation.getGardien(),false)) {
+        if (simulation.estVisible(simulation.getGardien(), false)) {
             imageP2.setOpacity(1);
         } else {
             imageP2.setOpacity(0);
@@ -88,12 +89,13 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
     @Override
     protected void updatePositions() {
         setPositions(this.simulation.getPrisonnier().getPosition(), this.prisonnierView);
-        setPositions( this.simulation.getGardien().getPosition(), this.gardienView);
+        setPositions(this.simulation.getGardien().getPosition(), this.gardienView);
     }
-    private void updateInfos(){
+
+    private void updateInfos() {
         //on clear les infos si besoin et on les remplace
         SimulationTutoriel tuto = (SimulationTutoriel) this.simulation;
-        switch (tuto.etatActuel){
+        switch (tuto.etatActuel) {
             case DEBUT_Perso:
                 //on affiche les infos du début
                 filtrePrisonnier();
@@ -115,7 +117,8 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
                 break;
         }
     }
-    private void setInfoDebutPerso(){
+
+    private void setInfoDebutPerso() {
         clearInfos();
         //explications du prisonnier et de son but
         //image du perso avec son but
@@ -146,7 +149,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
     /**
      * Informations sur les touches de déplacement
      */
-    private void setInfoDeplacement(){
+    private void setInfoDeplacement() {
         clearInfos();
         Label title = new Label("Vous pouvez vous déplacer avec les touches suivantes :");
         title.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
@@ -169,6 +172,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         instructions.getChildren().add(title);
         instructions.getChildren().add(grid);
     }
+
     private void ajouterTouche(GridPane grid, String texte, String imagePath, int row, int col) {
         ImageView icon = new ImageView(new Image("file:images/fleches/" + imagePath));
         icon.setFitHeight(40);
@@ -185,7 +189,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         grid.add(box, col, row);
     }
 
-    private void setInfoGardien(){
+    private void setInfoGardien() {
         clearInfos();
 
         //on affiche les infos du gardien
@@ -211,12 +215,12 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
     /**
      * Affiche le fin du tutoriel.
      */
-    private void setInfoFin(){
+    private void setInfoFin() {
         this.getChildren().clear();
         //on affiche les infos de fin
         Label label = new Label("Bravo vous avez fini le tutoriel :)");
         label.setAlignment(Pos.CENTER);
-        label.setLayoutX(CENTRE-100);
+        label.setLayoutX(CENTRE - 100);
         label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 
         this.getChildren().add(label);
@@ -231,14 +235,15 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
             VueMenus vm = new VueMenus();
             vm.afficherMenuPrincipal();
         });
-        retourMenuBtn.setLayoutX(CENTRE-175);
+        retourMenuBtn.setLayoutX(CENTRE - 175);
         retourMenuBtn.setLayoutY(200);
         this.getChildren().add(retourMenuBtn);
     }
+
     /**
      * Efface les informations affichées.
      */
-    private void clearInfos(){
+    private void clearInfos() {
         //on clear les infos
         instructions.getChildren().clear();
     }
@@ -256,13 +261,13 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
      * Met à jour le filtre de vision. (etat deplacement)
      */
     public void updateFiltreVision() {
-        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(),avec_camera);
+        FiltreVision.updateFiltre(filtreVision, (Joueur) simulation.getJoueur(), avec_camera);
     }
 
     /**
      * Filtre pour mettre en avant les cases du gardien. (etat gardien)
      */
-    public void filtreGardien(){
+    public void filtreGardien() {
         //on mets en avant les cases du gardien et de ses cases
         Position posGardien = simulation.getGardien().getPosition();
         for (int i = 0; i < Simulation.CARTE.length; i++) {
@@ -270,16 +275,17 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
                 Rectangle rectangle = filtreVision[j][i];
                 if (posGardien.equals(new Position(j, i)) || Simulation.CARTE[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
                     rectangle.setOpacity(0);
-                }else{
+                } else {
                     rectangle.setOpacity(0.5);
                 }
             }
         }
     }
+
     /**
      * Filtre pour mettre en avant les cases du gardien. (etat debut perso)
      */
-    public void filtrePrisonnier(){
+    public void filtrePrisonnier() {
         //on mets en avant les cases du gardien et de ses cases
         Position posPri = simulation.getPrisonnier().getPosition();
         for (int i = 0; i < Simulation.CARTE.length; i++) {
@@ -287,7 +293,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
                 Rectangle rectangle = filtreVision[j][i];
                 if (posPri.equals(new Position(j, i)) || Simulation.getPosSortie().equals(new Position(j, i))) {
                     rectangle.setOpacity(0);
-                }else{
+                } else {
                     rectangle.setOpacity(0.5);
                 }
             }

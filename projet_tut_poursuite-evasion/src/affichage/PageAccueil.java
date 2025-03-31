@@ -1,4 +1,5 @@
 package affichage;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -24,7 +25,7 @@ public class PageAccueil {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
 
-    public static void lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage){
+    public static void lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage) {
 //        var primaryStage = new Stage();
         primaryStage.setFullScreen(true);
 
@@ -37,7 +38,7 @@ public class PageAccueil {
         root.setAlignment(Pos.CENTER);
 
         ImageView title = new ImageView("file:images/titre.png");
-        title.setFitWidth(WIDTH-300);
+        title.setFitWidth(WIDTH - 300);
         root.getChildren().add(title);
         HBox personnages = new HBox();
         ImageView gardien = new ImageView("file:images/gardien.png");
@@ -56,17 +57,17 @@ public class PageAccueil {
         boutons.setSpacing(50);
         Button lancerJeu = new Button("Commencer");
         lancerJeu.getStyleClass().add("gris");
-        lancerJeu.setPrefSize(250,100);
-        lancerJeu.setOnAction(e->{
+        lancerJeu.setPrefSize(250, 100);
+        lancerJeu.setOnAction(e -> {
             VueMenus vueMenus = new VueMenus(jeu);
             vueMenus.afficherMenuPrincipal();
             primaryStage.close();
-            });
+        });
 
         Button tutoriel = new Button("Tutoriel");
         tutoriel.getStyleClass().add("valider");
-        tutoriel.setPrefSize(150,50);
-        tutoriel.setOnAction(e->{
+        tutoriel.setPrefSize(150, 50);
+        tutoriel.setOnAction(e -> {
             SimulationTutoriel simulationTutoriel = new SimulationTutoriel();
             MoteurJeu.jeu = simulationTutoriel;
             afficherTuto(simulationTutoriel, scene, root);
@@ -110,10 +111,10 @@ public class PageAccueil {
 
         Button credits = new Button("Crédits");
         credits.setStyle("-fx-background-color: transparent;");
-        credits.setPrefSize(150,50);
-        credits.setOnAction(e->{
+        credits.setPrefSize(150, 50);
+        credits.setOnAction(e -> {
             Credits c = new Credits();
-            c.start(primaryStage,jeu);
+            c.start(primaryStage, jeu);
         });
         root.getChildren().add(credits);
 
@@ -123,13 +124,15 @@ public class PageAccueil {
 
 
     }
+
     /**
      * Permet d'afficher le tutoriel
+     *
      * @param j
      * @param scene
      * @param root
      */
-    public static void afficherTuto(Jeu j, Scene scene, Pane root){
+    public static void afficherTuto(Jeu j, Scene scene, Pane root) {
         VueTutoriel vueTutoriel = new VueTutoriel((SimulationTutoriel) j, WIDTH, HEIGHT);
         j.ajouterObservateur(vueTutoriel);
         root.getChildren().clear();

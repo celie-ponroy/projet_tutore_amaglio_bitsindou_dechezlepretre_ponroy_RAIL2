@@ -68,7 +68,9 @@ package "simulation"{
     - victoirePrisonnier : boolean
     - victoireGardien : boolean
     + {static} final CARTE : int[][]
-    + {static} final VISION : HashMap<Position, ArrayList<Position>>
+    + {static} final VISION_G : HashMap<Position, ArrayList<Position>>
+    + {static} final VISION_P : HashMap<Position, ArrayList<Position>>
+    + {static} final VISION_CAMERAS : HashMap<Position, ArrayList<Position>>
     + {static} final CHEMIN_G : HashMap<List<Position>, Stack>
     + {static} final CHEMIN_P : HashMap<List<Position>, Stack>
     - historiquePosition : HashMap<Personnage, List<Position>>

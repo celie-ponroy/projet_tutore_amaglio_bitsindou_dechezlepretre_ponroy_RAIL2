@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class Agent extends Personnage implements Serializable {
 
     public Agent(int x, int y, HashMap<Position, ArrayList<Position>> vision) {
-        super(x, y,vision);
+        super(x, y, vision);
     }
 
     @Override

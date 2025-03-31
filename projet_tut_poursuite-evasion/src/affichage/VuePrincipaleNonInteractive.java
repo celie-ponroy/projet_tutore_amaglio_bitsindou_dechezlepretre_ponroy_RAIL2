@@ -22,24 +22,25 @@ import java.util.Optional;
 /**
  * Classe pour la vue principale non interactive
  */
-public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu{
+public class VuePrincipaleNonInteractive extends VueSimulation implements DessinJeu {
 
     /**
      * Attributs
      */
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
-    private VueBayesienne vB1,vB2;
+    private VueBayesienne vB1, vB2;
     private Rectangle[][] casesCameras;
 
     /**
      * Constructeur
-     * @param width largeur
+     *
+     * @param width  largeur
      * @param height hauteur
      */
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
-        TAILLE_CELLULE = (int) ((width-6*10)/ (Simulation.CARTE[0].length)*0.33);
+        TAILLE_CELLULE = (int) ((width - 6 * 10) / (Simulation.CARTE[0].length) * 0.33);
         this.tour = 0;
     }
 
@@ -48,7 +49,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     private void init() {
         Pane labyPane = initLabyrinthe(true);
-        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, 0, 0);
         for (Rectangle[] rect : casesCameras) {
             for (Rectangle sousrect : rect) {
                 labyPane.getChildren().add(sousrect);
@@ -57,7 +58,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
 
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(10);
-        iterationLabel.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*1);
+        iterationLabel.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 1);
         iterationLabel.setStyle("-fx-font-size: 11px;-fx-border-color: black; -fx-padding: 10;");
 
         // Vérifiez si `vbox` est déjà présent avant de l'ajouter
@@ -71,8 +72,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         // Création des deux vues bayésiennes dans des VBox distinctes
 
         //Création des vues bayesiennes
-        vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier(),0,0,TAILLE_CELLULE);
-        vB2 = new VueBayesienne(this.simulation,simulation.getGardien(),0,0,TAILLE_CELLULE);
+        vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
+        vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
 
         VBox vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
         VBox vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB2);
@@ -142,8 +143,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     @Override
     public void update(Jeu jeu) {
         // Récuperation de la simulation
-        this.simulation = (Simulation)jeu;
-        if(simulation.etreFini()){
+        this.simulation = (Simulation) jeu;
+        if (simulation.etreFini()) {
 
             init();
             Button sauvegarder = new Button("Sauvegarder");
@@ -152,8 +153,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             sauvegarder.setOnAction(e -> {
                 lancerSauvegarde(sauvegarder);
             });
-            sauvegarder.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
-            sauvegarder.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*7);
+            sauvegarder.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            sauvegarder.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 7);
 
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
@@ -193,13 +194,13 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 VueMenus vm = new VueMenus();
                 vm.afficherMenuPrincipal();
             });
-            retourMenuBtn.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
-            retourMenuBtn.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*11);
+            retourMenuBtn.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            retourMenuBtn.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 11);
 
             //ajout des boutons
             HBox hboxBouttons = new HBox();
-            hboxBouttons.setLayoutX(TAILLE_CELLULE*simulation.CARTE[0].length+30+TAILLE_CELLULE*2);
-            hboxBouttons.setLayoutY(TAILLE_CELLULE*simulation.CARTE.length+TAILLE_CELLULE*3);
+            hboxBouttons.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            hboxBouttons.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 3);
             hboxBouttons.setSpacing(10);
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);

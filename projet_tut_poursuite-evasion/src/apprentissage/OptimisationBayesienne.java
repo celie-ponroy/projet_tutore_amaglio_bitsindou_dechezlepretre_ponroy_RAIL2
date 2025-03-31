@@ -54,8 +54,8 @@ public class OptimisationBayesienne {
         // Résultat final
         try {
             FileWriter fw = new FileWriter("meuilleur R2SEAU.txt");
-            for (int i =0; i<testedConfigs.size(); i++) {
-                fw.write("neurones et couches : "+testedConfigs.get(i)[0] + " " + testedConfigs.get(i)[1] +" loss : "+lossResults.get(i)+ "\n");
+            for (int i = 0; i < testedConfigs.size(); i++) {
+                fw.write("neurones et couches : " + testedConfigs.get(i)[0] + " " + testedConfigs.get(i)[1] + " loss : " + lossResults.get(i) + "\n");
             }
             fw.close();
             System.out.println("Le texte a été écrit avec succès");
@@ -190,7 +190,6 @@ public class OptimisationBayesienne {
         block.add(Linear.builder().setUnits(outputSize).build());
 
 
-
         //creation du modele du réseau a sauvegarder
         Model model = Model.newInstance("reseau_Arbre");
         model.setBlock(block);
@@ -202,19 +201,23 @@ public class OptimisationBayesienne {
                 .addTrainingListeners(new TrainingListener() {
                     @Override
                     public void onEpoch(Trainer trainer) {
-                        if (trainer.getTrainingResult().getTrainLoss()<lossMini){
+                        if (trainer.getTrainingResult().getTrainLoss() < lossMini) {
                             lossMini = trainer.getTrainingResult().getTrainLoss();
                         }
                     }
+
                     @Override
                     public void onTrainingBatch(Trainer trainer, BatchData batchData) {
                     }
+
                     @Override
                     public void onValidationBatch(Trainer trainer, BatchData batchData) {
                     }
+
                     @Override
                     public void onTrainingBegin(Trainer trainer) {
                     }
+
                     @Override
                     public void onTrainingEnd(Trainer trainer) {
                     }

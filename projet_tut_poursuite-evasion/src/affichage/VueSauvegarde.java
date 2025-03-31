@@ -21,20 +21,20 @@ import simulation.personnages.Position;
 
 import static simulation.Simulation.*;
 
-public class VueSauvegarde extends VueSimulation{
+public class VueSauvegarde extends VueSimulation {
     private Label iterationLabel; // Label pour afficher le nombre d'itération
     private int tour;
-    private VueBayesienne vB1,vB2;
+    private VueBayesienne vB1, vB2;
     private Rectangle[][] filtreVision;
-    private ImageView viewInteractifPerso,viewInteractifAdversaire;
+    private ImageView viewInteractifPerso, viewInteractifAdversaire;
     boolean interactive;
 
 
     //constructeur
-    public VueSauvegarde(double width, double height,Simulation simulation) {
+    public VueSauvegarde(double width, double height, Simulation simulation) {
         super();
         this.simulation = simulation;
-        TAILLE_CELLULE = (int) ((width-6*10)/ (CARTE[0].length)*0.33);
+        TAILLE_CELLULE = (int) ((width - 6 * 10) / (CARTE[0].length) * 0.33);
         this.tour = 0;
         viewInteractifAdversaire = new ImageView();
         viewInteractifPerso = new ImageView();
@@ -46,7 +46,7 @@ public class VueSauvegarde extends VueSimulation{
      */
     private void init() {
         Pane labyPane = initLabyrinthe(true);
-        var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+        var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, 0, 0);
         for (Rectangle[] rect : casesCameras) {
             for (Rectangle sousrect : rect) {
                 labyPane.getChildren().add(sousrect);
@@ -55,7 +55,7 @@ public class VueSauvegarde extends VueSimulation{
 
         this.iterationLabel = new Label("Nombre d'itération: " + simulation.getNbTours());
         iterationLabel.setLayoutX(10);
-        iterationLabel.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*1);
+        iterationLabel.setLayoutY(TAILLE_CELLULE * CARTE.length + TAILLE_CELLULE * 1);
         iterationLabel.setStyle("-fx-font-size: 11px;-fx-border-color: black; -fx-padding: 10;");
 
 
@@ -73,23 +73,23 @@ public class VueSauvegarde extends VueSimulation{
         interactive = simulation.getJoueur() != null;
         VBox vBoxGardien;
         VBox vBoxPrisonnier;
-        if(interactive){
+        if (interactive) {
             filtreVision = new Rectangle[simulation.CARTE[0].length][simulation.CARTE.length];
 
-            if(simulation.getJoueur()==simulation.getGardien()){
+            if (simulation.getJoueur() == simulation.getGardien()) {
                 vBoxGardien = creerVision("Vue joueur gardien"); //on ajoute le filtre vision
-                vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier(),0,0,TAILLE_CELLULE);
-                vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier",vB1);
-            }else {
-                vB2 = new VueBayesienne(this.simulation,simulation.getGardien(),0,0,TAILLE_CELLULE);
+                vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
+                vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB1);
+            } else {
+                vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
                 vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB2);
                 vBoxPrisonnier = creerVision("Vue joueur prisonnier");
             }
-        }else {
-            vB1 = new VueBayesienne(this.simulation,simulation.getPrisonnier(),0,0,TAILLE_CELLULE);
-            vB2 = new VueBayesienne(this.simulation,simulation.getGardien(),0,0,TAILLE_CELLULE);
+        } else {
+            vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
+            vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
             vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
-            vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier",vB2);
+            vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB2);
         }
 
         // Mise en forme des VBox
@@ -136,7 +136,7 @@ public class VueSauvegarde extends VueSimulation{
     /**
      * Crée une vue Vision associée à un personnage.
      */
-    private VBox creerVision( String titre) {
+    private VBox creerVision(String titre) {
         var laby = creerLabyvision();
         //filtre vision
         initFiltreVision(laby);
@@ -152,7 +152,8 @@ public class VueSauvegarde extends VueSimulation{
 
         return vueVBox;
     }
-    private Pane creerLabyvision(){
+
+    private Pane creerLabyvision() {
         // Création d'un conteneur pour le labyrinthe
         Pane labyrinthePane = new Pane();
         labyrinthePane.setPrefSize(TAILLE_CELLULE * Simulation.CARTE[0].length,
@@ -196,11 +197,11 @@ public class VueSauvegarde extends VueSimulation{
         }
 
         // Initialisation des personnages
-        if(simulation.getJoueur()==simulation.getGardien()) {
+        if (simulation.getJoueur() == simulation.getGardien()) {
             this.viewInteractifPerso.setImage(imageGardien);
             this.viewInteractifAdversaire.setImage(imagePrisonnier);
 
-        }else{
+        } else {
             this.viewInteractifPerso.setImage(imagePrisonnier);
             this.viewInteractifAdversaire.setImage(imageGardien);
         }
@@ -211,7 +212,7 @@ public class VueSauvegarde extends VueSimulation{
         this.viewInteractifAdversaire.setFitHeight(TAILLE_CELLULE);
 
         // Ajouter les personnages au conteneur labyrinthe
-        labyrinthePane.getChildren().addAll(this.viewInteractifPerso,this.viewInteractifAdversaire);
+        labyrinthePane.getChildren().addAll(this.viewInteractifPerso, this.viewInteractifAdversaire);
 
         // Placement initial des personnages
         updatePositions();
@@ -224,22 +225,22 @@ public class VueSauvegarde extends VueSimulation{
     protected void setOpacityPersonnage() {
         prisonnierView.setOpacity(1);
         gardienView.setOpacity(1);
-        if(interactive){
+        if (interactive) {
             Position p;
             Joueur tmp;
             Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
 
-            if(simulation.getJoueur()==simulation.getGardien()){
+            if (simulation.getJoueur() == simulation.getGardien()) {
                 p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
-                tmp =  new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
-            }else {
+                tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_G);
+            } else {
                 p = simulation.getHistoriquePosition().get(simulation.getGardien()).get(tour);
-                tmp =  new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
+                tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_P);
 
             }
             if (tmp.getVision().contains(p)) {
                 viewInteractifAdversaire.setOpacity(1);
-            }else {
+            } else {
                 viewInteractifAdversaire.setOpacity(0);
             }
         }
@@ -256,17 +257,17 @@ public class VueSauvegarde extends VueSimulation{
         setPositions(p, prisonnierView);
         setPositions(g, gardienView);
         setOpacityPersonnage();
-        if(simulation.getJoueur()==simulation.getGardien()) {
+        if (simulation.getJoueur() == simulation.getGardien()) {
             setPositions(g, viewInteractifPerso);
             setPositions(p, viewInteractifAdversaire);
-            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getGardien()) ,"gardien", viewInteractifPerso);
-            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getPrisonnier()) ,"prisonnier", viewInteractifAdversaire);
+            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getGardien()), "gardien", viewInteractifPerso);
+            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getPrisonnier()), "prisonnier", viewInteractifAdversaire);
 
-        }else {
+        } else {
             setPositions(p, viewInteractifPerso);
             setPositions(g, viewInteractifAdversaire);
-            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getGardien()) ,"gardien", viewInteractifAdversaire);
-            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getPrisonnier()) ,"prisonnier", viewInteractifPerso);
+            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getGardien()), "gardien", viewInteractifAdversaire);
+            VueSimulation.updateDirectionPersonnage(tour, simulation.getHistoriqueDeplacement().get(simulation.getPrisonnier()), "prisonnier", viewInteractifPerso);
 
         }
         updateDirections(tour);
@@ -286,13 +287,13 @@ public class VueSauvegarde extends VueSimulation{
                 tour -= 1;
                 updatePositions();
                 updateIteration();
-                if(vB2==null){
+                if (vB2 == null) {
                     vB1.update(tour);
                     updateFiltreVision();
-                }else if(vB1==null){
+                } else if (vB1 == null) {
                     vB2.update(tour);
                     updateFiltreVision();
-                }else {
+                } else {
                     vB1.update(tour);
                     vB2.update(tour);
                 }
@@ -306,13 +307,13 @@ public class VueSauvegarde extends VueSimulation{
                 tour += 1;
                 updatePositions();
                 updateIteration();
-                if(vB2==null){
+                if (vB2 == null) {
                     vB1.update(tour);
                     updateFiltreVision();
-                }else if(vB1==null){
+                } else if (vB1 == null) {
                     vB2.update(tour);
                     updateFiltreVision();
-                }else {
+                } else {
                     vB1.update(tour);
                     vB2.update(tour);
                 }
@@ -330,13 +331,13 @@ public class VueSauvegarde extends VueSimulation{
             VueMenus vm = new VueMenus();
             vm.afficherMenuPrincipal();
         });
-        retourMenuBtn.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
-        retourMenuBtn.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*7);
+        retourMenuBtn.setLayoutX(TAILLE_CELLULE * CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+        retourMenuBtn.setLayoutY(TAILLE_CELLULE * CARTE.length + TAILLE_CELLULE * 7);
 
         //ajout des boutons
         HBox hboxBouttons = new HBox();
-        hboxBouttons.setLayoutX(TAILLE_CELLULE* CARTE[0].length+30+TAILLE_CELLULE*2);
-        hboxBouttons.setLayoutY(TAILLE_CELLULE* CARTE.length+TAILLE_CELLULE*3);
+        hboxBouttons.setLayoutX(TAILLE_CELLULE * CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+        hboxBouttons.setLayoutY(TAILLE_CELLULE * CARTE.length + TAILLE_CELLULE * 3);
         hboxBouttons.setSpacing(10);
         hboxBouttons.getChildren().add(precedent);
         hboxBouttons.getChildren().add(suivant);
@@ -352,7 +353,7 @@ public class VueSauvegarde extends VueSimulation{
     public void updateIteration() {
         // Mise à jour du texte du label
         this.iterationLabel.setText("Tour: " + tour);
-        if(tour == simulation.getNbTours() ){
+        if (tour == simulation.getNbTours()) {
             this.iterationLabel.setText("Fin");
         }
     }
@@ -364,30 +365,32 @@ public class VueSauvegarde extends VueSimulation{
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);
     }
-    public void initFiltreVision(Pane laby){
+
+    public void initFiltreVision(Pane laby) {
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
         Joueur tmp;
-        if(simulation.getJoueur()==simulation.getPrisonnier()){
-            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
-        }else{
-            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
+        if (simulation.getJoueur() == simulation.getPrisonnier()) {
+            tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_P);
+        } else {
+            tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_G);
         }
 
-        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE,0,0,tmp,avec_camera);
+        this.filtreVision = FiltreVision.initFiltre(TAILLE_CELLULE, 0, 0, tmp, avec_camera);
         for (Rectangle[] rect : filtreVision) {
             for (Rectangle sousrect : rect) {
                 laby.getChildren().add(sousrect);
             }
         }
     }
+
     public void updateFiltreVision() {
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
         Joueur tmp;
-        if(simulation.getJoueur()==simulation.getPrisonnier()){
-            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_P);
-        }else{
-            tmp = new Joueur(ptmp.getX(),ptmp.getY(),VISION_G);
+        if (simulation.getJoueur() == simulation.getPrisonnier()) {
+            tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_P);
+        } else {
+            tmp = new Joueur(ptmp.getX(), ptmp.getY(), VISION_G);
         }
-        FiltreVision.updateFiltre(filtreVision, tmp,avec_camera);
+        FiltreVision.updateFiltre(filtreVision, tmp, avec_camera);
     }
 }

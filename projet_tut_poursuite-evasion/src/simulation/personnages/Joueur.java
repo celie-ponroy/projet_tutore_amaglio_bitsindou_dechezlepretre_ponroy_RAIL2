@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Joueur extends Personnage implements Serializable {
-    public Joueur(int x, int y, HashMap<Position,ArrayList<Position>> vision){
-        super(x,y,vision);
+    public Joueur(int x, int y, HashMap<Position, ArrayList<Position>> vision) {
+        super(x, y, vision);
     }
 
 

@@ -23,11 +23,6 @@ package "affichage"{
     class VueMenusNonInteractive {
         + String chargementBouton(Button okButton) 
     }
-    
-    class FiltreVision {
-        + static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY, Joueur joueur)
-        + static void updateFiltre(Rectangle[][] filtreVision, Joueur joueur)
-    }
 
     class VueTutoriel {
         - int CENTRE

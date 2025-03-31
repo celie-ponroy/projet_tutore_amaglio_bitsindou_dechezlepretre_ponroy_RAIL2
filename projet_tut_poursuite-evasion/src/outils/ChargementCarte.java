@@ -14,17 +14,17 @@ public class ChargementCarte {
         int[][] carte;
         List<int[]> lignes = new ArrayList<>();
         List<Case> sorties = new ArrayList<>();
-        try{
+        try {
             BufferedReader bf = new BufferedReader(new FileReader(nom));
             String ligne = bf.readLine();
             int y = 0;
-            while (ligne != null){
+            while (ligne != null) {
                 int[] nbLigne = new int[ligne.length()];
                 int car;
                 for (int i = 0; i < ligne.length(); i++) {
                     car = ligne.charAt(i) - '0';
                     if (car >= CaseEnum.MUR.ordinal() && car <= CaseEnum.CAMERA.ordinal()) {
-                        if(car == CaseEnum.SORTIE.ordinal()){
+                        if (car == CaseEnum.SORTIE.ordinal()) {
                             sorties.add(new Case(i, y));
                         }
                         nbLigne[i] = car;
@@ -41,7 +41,7 @@ public class ChargementCarte {
         }
         carte = lignes.toArray(new int[0][]);
         //On détermine aléatoirement la sortie
-        Case sortie = sorties.get((int)(Math.random()*sorties.size()));
+        Case sortie = sorties.get((int) (Math.random() * sorties.size()));
         carte[sortie.getY()][sortie.getX()] = CaseEnum.SORTIE.ordinal();
         return carte;
     }

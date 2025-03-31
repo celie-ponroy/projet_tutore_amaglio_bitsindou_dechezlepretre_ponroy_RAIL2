@@ -2,6 +2,7 @@ package musique;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
 import java.nio.file.Paths;
 
 /**
@@ -27,6 +28,7 @@ public class SoundManager {
 
     /**
      * Crée un lecteur de musique à partir d'un fichier
+     *
      * @param filePath : chemin du fichier de musique
      * @return le lecteur de musique
      */

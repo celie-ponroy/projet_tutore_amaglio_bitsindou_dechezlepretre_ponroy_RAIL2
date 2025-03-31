@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import musique.SoundManager;
 import simulation.Comportements;
 import simulation.Simulation;
+
 import static musique.SoundManager.playGameMusic;
 
 /**
@@ -242,10 +243,10 @@ public class VueMenusNonInteractive {
         });
         HBox hBoxButtons = new HBox();
         hBoxButtons.setSpacing(20);
-        hBoxButtons.getChildren().addAll(okButton ,info);
+        hBoxButtons.getChildren().addAll(okButton, info);
         hBoxButtons.setAlignment(Pos.CENTER);
         // Ajout des éléments à la racine
-        root.getChildren().addAll(title, container, hBoxButtons,retour);
+        root.getChildren().addAll(title, container, hBoxButtons, retour);
 
         // Création et affichage de la scène
         primaryStage.setScene(scene);

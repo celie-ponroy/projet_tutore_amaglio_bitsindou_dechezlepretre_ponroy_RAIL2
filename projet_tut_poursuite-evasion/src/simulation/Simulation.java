@@ -23,7 +23,7 @@ public class Simulation implements Jeu {
     public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION_G = CalculVision.recupererVision("G");
     public static final HashMap<Position, ArrayList<Position>> VISION_P = CalculVision.recupererVision("P");
-    public static final HashMap<Position,ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
+    public static final HashMap<Position, ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
     public static final HashMap<List<Position>, Stack> CHEMINS_G = CalculChemins.recupererCheminGardien();
     public static final HashMap<List<Position>, Stack> CHEMINS_P = CalculChemins.recupererCheminPrisonnier();
 
@@ -48,8 +48,8 @@ public class Simulation implements Jeu {
         this.nbDeplacementsPerso = 0;
 
         //les 2 personnages sont des agents
-        this.prisonnier = new Agent(9, 18,VISION_P);
-        this.gardien = new Agent(5, 4,VISION_G);
+        this.prisonnier = new Agent(9, 18, VISION_P);
+        this.gardien = new Agent(5, 4, VISION_G);
         this.positionnerAgentsSpawnAleatoire();
 
         historiqueDeplacement = new HashMap<>();
@@ -158,8 +158,8 @@ public class Simulation implements Jeu {
         this.victoirePrisonnier = false;
 
         if (perso) {
-            this.prisonnier = new Joueur(9, 18,VISION_P);
-            this.gardien = new Agent(5, 4,VISION_G);
+            this.prisonnier = new Joueur(9, 18, VISION_P);
+            this.gardien = new Agent(5, 4, VISION_G);
             //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
             switch (ComportementAdversaire) {
@@ -188,8 +188,8 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(gardien, list1);
 
         } else {
-            this.gardien = new Joueur(5, 4,VISION_G);
-            this.prisonnier = new Agent(9, 18,VISION_G);
+            this.gardien = new Joueur(5, 4, VISION_G);
+            this.prisonnier = new Agent(9, 18, VISION_G);
 
             this.positionnerAgentsSpawnAleatoire();
             switch (ComportementAdversaire) {
@@ -241,7 +241,7 @@ public class Simulation implements Jeu {
     /**
      * Constructeur par copie
      */
-    public Simulation(Simulation simulation){
+    public Simulation(Simulation simulation) {
         this.gardien = simulation.gardien;
         this.prisonnier = simulation.prisonnier;
         this.comportementGardien = simulation.comportementGardien;
@@ -312,12 +312,12 @@ public class Simulation implements Jeu {
             }
         }
 
-        Case spawnGardien = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+        Case spawnGardien = casesValides.get((int) Math.round((Math.random() * (casesValides.size() - 1))));
         //On retire la case pour eviter le spawn de deux agent sur la meme case
         casesValides.remove(spawnGardien);
-        Case spawnPrisonnier = casesValides.get((int) Math.round((Math.random() * (casesValides.size()-1))));
+        Case spawnPrisonnier = casesValides.get((int) Math.round((Math.random() * (casesValides.size() - 1))));
 
-        this.prisonnier.setPosition(new Position(spawnGardien.getX(),spawnGardien.getY()));
+        this.prisonnier.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
         this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
 
         int casesHaut = 0;
@@ -407,7 +407,7 @@ public class Simulation implements Jeu {
             this.historiqueDeplacement.get(joueur).removeLast();
             this.historiqueDeplacement.get(joueur).add(d);
             miseAJourFinJeu();
-            if (!this.estFini){
+            if (!this.estFini) {
                 deplacerPersonnage(agent, deplacementAgent);
                 this.historiqueDeplacement.get(agent).removeLast();
                 this.historiqueDeplacement.get(agent).add(deplacementAgent);
@@ -574,7 +574,7 @@ public class Simulation implements Jeu {
      */
     public boolean estVisible(Personnage p1, boolean role) {
         Position pos1 = p1.getPosition();
-        HashMap<Position,ArrayList<Position>> VISION;
+        HashMap<Position, ArrayList<Position>> VISION;
         Position pos2;
         if (role) {
             pos2 = this.gardien.getPosition();
@@ -686,7 +686,7 @@ public class Simulation implements Jeu {
     /**
      * Méthode qui récupère la victoire du gardien
      */
-    public  boolean getVictoireGardien() {
+    public boolean getVictoireGardien() {
         return this.victoireGardien;
     }
 
@@ -696,6 +696,7 @@ public class Simulation implements Jeu {
     public int getNbDeplacementsPerso() {
         return nbDeplacementsPerso;
     }
+
     public HashMap<Personnage, List<Deplacement>> getHistoriqueDeplacement() {
         return historiqueDeplacement;
     }
@@ -707,6 +708,7 @@ public class Simulation implements Jeu {
     public HashMap<Personnage, List<double[][]>> getHistoriqueBayesien() {
         return historiqueBayesien;
     }
+
     public void supprimerObservateurs() {
         this.observateurs.clear();
     }
@@ -779,10 +781,10 @@ public class Simulation implements Jeu {
         this.victoirePrisonnier = victoirePrisonnier;
     }
 
-    public double[][] getCarteDouble(){
+    public double[][] getCarteDouble() {
         double[][] carte = new double[Simulation.CARTE.length][Simulation.CARTE[0].length];
-        for(int i = 0; i < carte.length; i++){
-            for(int j = 0; j < carte[0].length; j++){
+        for (int i = 0; i < carte.length; i++) {
+            for (int j = 0; j < carte[0].length; j++) {
                 carte[i][j] = (double) Simulation.CARTE[i][j];
             }
         }
@@ -795,9 +797,9 @@ public class Simulation implements Jeu {
             for (int j = 0; j < Simulation.CARTE[0].length; j++) {
                 if (Simulation.CARTE[i][j] == CaseEnum.SORTIE.ordinal()) {
                     carteMursSortie[i][j] = 2.0;
-                }else if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
+                } else if (Simulation.CARTE[i][j] == CaseEnum.MUR.ordinal()) {
                     carteMursSortie[i][j] = 1.0;
-                }else{
+                } else {
                     carteMursSortie[i][j] = 0.0;
                 }
             }

@@ -20,6 +20,8 @@ import simulation.tuto.SimulationTutoriel;
 
 import java.awt.*;
 
+import static musique.SoundManager.stopBtnMusic;
+
 public class PageAccueil {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
@@ -58,9 +60,11 @@ public class PageAccueil {
         lancerJeu.getStyleClass().add("gris");
         lancerJeu.setPrefSize(250,100);
         lancerJeu.setOnAction(e->{
-            VueMenus vueMenus = new VueMenus(jeu);
+            SoundManager.playBtnMusic();
+            System.out.println("Lancement du jeu");
+            VueMenus vueMenus = new VueMenus(jeu,primaryStage); //nouveau constructeur
             vueMenus.afficherMenuPrincipal();
-            primaryStage.close();
+//            primaryStage.close();
             });
 
         Button tutoriel = new Button("Tutoriel");
@@ -120,8 +124,6 @@ public class PageAccueil {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Page d'accueil");
         primaryStage.show();
-
-
     }
     /**
      * Permet d'afficher le tutoriel

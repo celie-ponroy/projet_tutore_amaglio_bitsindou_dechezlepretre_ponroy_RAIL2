@@ -15,6 +15,7 @@ public class SoundManager {
     private static MediaPlayer looseMusic; // Musique de défaite
     private static MediaPlayer drawMusic; // Musique de match nul
     private static MediaPlayer gameMusic; // Musique de jeu
+    private static MediaPlayer btnMusic; // Musique de menu
 
     // Constructeur
     public SoundManager() {
@@ -23,6 +24,7 @@ public class SoundManager {
         looseMusic = createMediaPlayer("sons/loose.mp3");
         drawMusic = createMediaPlayer("sons/draw.mp3");
         gameMusic = createMediaPlayer("sons/game.mp3");
+        btnMusic = createMediaPlayer("sons/bouton.mp3");
     }
 
     /**
@@ -73,6 +75,10 @@ public class SoundManager {
         drawMusic.play();
     }
 
+    public static void playBtnMusic() {
+        btnMusic.play();
+    }
+
     /**
      * Méthode pour arrêter la musique de fond
      */
@@ -80,7 +86,9 @@ public class SoundManager {
         fondMusic.stop();
     }
 
-
+    public static void stopBtnMusic() {
+        btnMusic.stop();
+    }
     /**
      * Méthode pour arrêter toutes les musiques
      */

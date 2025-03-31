@@ -51,7 +51,7 @@ public class VueMenus extends VueSimulation {
     public VueMenus(MoteurJeu j) {
         this.jeu = j;
         this.primaryStage = new Stage();
-        this.primaryStage.setFullScreen(true);
+//        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
     }
 
@@ -72,6 +72,16 @@ public class VueMenus extends VueSimulation {
         this.choixPersonnage = "";
     }
 
+    /**
+     * constructeur avec paramètres jeu et stage
+     * @param j le moteur de jeu
+     * @param stage le stage à utiliser
+     */
+    public VueMenus(MoteurJeu j, Stage stage) {
+        this.jeu = j;
+        this.primaryStage = stage;
+        this.choixPersonnage = "";
+    }
 
     @Override
     protected void setOpacityPersonnage() {
@@ -92,7 +102,9 @@ public class VueMenus extends VueSimulation {
     private void setScene(Scene scene, String title) {
         this.primaryStage.setScene(scene);
         this.primaryStage.setTitle(title);
-        this.primaryStage.show();
+        if (!this.primaryStage.isShowing()) {
+            this.primaryStage.show();
+        }
     }
 
 

@@ -8,3 +8,12 @@ Modification du format de données d'apprentissage et d'entré des réseaux de n
 Apprentissage de l’arbre de décision du gardien par les réseau de neurone (Matias & Luc)
 	Les réseaux de neurones à réussit a apprendre l'abre de décision sur un cas simple
 	(réseau avec et sans CNN apprenant en parallel pour réalisé des comparaisont entre réseau)
+
+Ajout d'une Vue "d'informations" sur les différents comportements (Célie)
+
+Amélioration vue Analyse (Maëlle)
+
+Ajout tutoriel (Célie)
+	Ajout d'un tutoriel pour améliorer l'expérience utilisateur
+
+Amélioration Interface (Maëlle & Célie) 

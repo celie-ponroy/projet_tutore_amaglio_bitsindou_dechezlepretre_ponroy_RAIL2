@@ -85,7 +85,7 @@ public class SoundManager {
     public static void stopFondMusic() {
         fondMusic.stop();
     }
-
+    
     public static void stopBtnMusic() {
         btnMusic.stop();
     }

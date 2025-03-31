@@ -21,3 +21,12 @@ Modifications de l'analyse (Maëlle)
 
 
 Amélioration Interface (Célie & Maëlle)
+
+Optimisation des paramètres MLP(Luc)
+
+Optimisation des paramètres CNN(Matias)
+
+Refactoring choix comportement Simulation (Matias)
+
+Début refactoring MLP et CNN (Matias)
+	- refactoring pour combiner les deux branches de réseau de neurones sans conflits

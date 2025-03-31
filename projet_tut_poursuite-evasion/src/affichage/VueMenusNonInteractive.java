@@ -3,7 +3,6 @@ package affichage;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -42,7 +41,6 @@ public class VueMenusNonInteractive {
      */
     public void afficherMenuIA(Stage primaryStage) {
         final VBox root = new VBox();
-        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         root.getStylesheets().add("style.css");
         root.setSpacing(20);
@@ -118,9 +116,8 @@ public class VueMenusNonInteractive {
         retour.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retour.getScene().getWindow();
-            stage.close();
             //retour au menu principal
-            VueMenus vm = new VueMenus();
+            VueMenus vm = new VueMenus(stage);
             vm.afficherMenuPrincipal();
         });
 
@@ -207,7 +204,7 @@ public class VueMenusNonInteractive {
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();
                         root.getChildren().add(vp);
-                        primaryStage.setScene(scene);
+                        primaryStage.getScene().setRoot(root);
                     }
 
                     // Réinitialisation du bouton
@@ -249,9 +246,8 @@ public class VueMenusNonInteractive {
         root.getChildren().addAll(title, container, hBoxButtons, retour);
 
         // Création et affichage de la scène
-        primaryStage.setScene(scene);
+        primaryStage.getScene().setRoot(root);
         primaryStage.setTitle("Choix de la difficulté de l'IA");
-        primaryStage.show();
     }
 
     /**

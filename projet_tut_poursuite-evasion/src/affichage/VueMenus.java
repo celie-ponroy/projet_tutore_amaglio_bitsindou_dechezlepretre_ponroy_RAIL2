@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -36,7 +37,7 @@ import static musique.SoundManager.playGameMusic;
 /**
  * Classe pour gérer les menus du jeu interactif
  */
-public class VueMenus extends VueSimulation {
+public class VueMenus {
 
     /**
      * Attributs
@@ -59,14 +60,6 @@ public class VueMenus extends VueSimulation {
         this.choixPersonnage = "";
     }
 
-    /**
-     * constructeur sans paramètre
-     */
-    public VueMenus() {
-        this.primaryStage = new Stage();
-        this.primaryStage.setFullScreen(true);
-        this.choixPersonnage = "";
-    }
 
     /**
      * constructeur pour accepter un stage
@@ -75,27 +68,18 @@ public class VueMenus extends VueSimulation {
         this.primaryStage = primaryStage;
         this.choixPersonnage = "";
     }
-
-
-    @Override
-    protected void setOpacityPersonnage() {
-        this.gardienView.setOpacity(0);
-        this.prisonnierView.setOpacity(0);
-    }
-
-    @Override
-    protected void updatePositions() {
-
-    }
-
     /**
      * Méthode pour afficher la scene
      *
-     * @param scene la scene
+     * @param root pour modifier la scene
      * @param title le titre de la scene
      */
-    private void setScene(Scene scene, String title) {
-        this.primaryStage.setScene(scene);
+    private void setScene(Parent root, String title) {
+        if(this.primaryStage.getScene() == null) {
+            this.primaryStage.setScene(new Scene(root, WIDTH, HEIGHT));
+        }else{
+            this.primaryStage.getScene().setRoot(root);
+        }
         this.primaryStage.setTitle(title);
         this.primaryStage.show();
     }
@@ -107,7 +91,6 @@ public class VueMenus extends VueSimulation {
     public void afficherMenuPrincipal() {
 
         final VBox root = new VBox();
-        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         root.getStylesheets().add("style.css");
         root.setSpacing(20);
@@ -150,7 +133,7 @@ public class VueMenus extends VueSimulation {
         Button modePartiesSauvegardes = new Button("Parties sauvegardées");
         modePartiesSauvegardes.setPrefSize(200, 100);
         modePartiesSauvegardes.setOnAction(e -> {
-            afficherMenuSauvegarde(this.primaryStage, root, scene);
+            afficherMenuSauvegarde(this.primaryStage, root);
         });
 
         //Ajout des boutons au conteneur de boutons
@@ -167,7 +150,7 @@ public class VueMenus extends VueSimulation {
         root.getChildren().addAll(title, buttonBox, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
-        setScene(scene, "Menu principal");
+        setScene(root, "Menu principal");
     }
 
 
@@ -175,13 +158,11 @@ public class VueMenus extends VueSimulation {
      * Affiche le menu de choix du personnage
      */
     public void afficherMenuPersonnage() {
-        VBox root2 = new VBox();
-        final Scene scene2 = new Scene(root2, WIDTH, HEIGHT);
-
-        root2.getStylesheets().add("style.css");
-        root2.setSpacing(20);
-        root2.setPrefSize(800, 600);
-        root2.setAlignment(Pos.CENTER);
+        VBox root = new VBox();
+        root.getStylesheets().add("style.css");
+        root.setSpacing(20);
+        root.setPrefSize(800, 600);
+        root.setAlignment(Pos.CENTER);
 
         Label title2 = new Label("Veuillez choisir un personnage:");
         title2.getStyleClass().add("titre");
@@ -288,11 +269,10 @@ public class VueMenus extends VueSimulation {
         buttonBox2.getChildren().addAll(vboxPris, vboxGard);
 
         //Ajout des éléments au VBox principal
-        root2.getChildren().addAll(title2, buttonBox2, retour);
+        root.getChildren().addAll(title2, buttonBox2, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
-
-        setScene(scene2, "Choix du personnage");
+        setScene(root, "Choix du personnage");
     }
 
     /**
@@ -308,8 +288,7 @@ public class VueMenus extends VueSimulation {
             Stage stage = (Stage) retour.getScene().getWindow();
             stage.close();
             //retour au menu principal
-            VueMenus vm = new VueMenus();
-            vm.afficherMenuPrincipal();
+            this.afficherMenuPrincipal();
         });
 
         return retour;
@@ -318,7 +297,7 @@ public class VueMenus extends VueSimulation {
     /**
      * Permet d'afficher le jeu (mode interactif)
      */
-    public void afficherJeu(Jeu j, Pane root, Scene scene) {
+    public void afficherJeu(Jeu j, Pane root) {
         //Affichage du jeu
         VuePrincipale vp = new VuePrincipale(WIDTH, HEIGHT);
         vp.update(j);
@@ -326,7 +305,7 @@ public class VueMenus extends VueSimulation {
         root.getChildren().clear();
         root.getChildren().add(vp);
         Clavier clavier = new Clavier((Simulation) MoteurJeu.jeu);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, clavier);
+        primaryStage.getScene().addEventHandler(KeyEvent.KEY_PRESSED, clavier);
     }
 
     /**
@@ -334,7 +313,6 @@ public class VueMenus extends VueSimulation {
      */
     public void afficherMenuIA() {
         final VBox root = new VBox();
-        final Scene scene = new Scene(root, WIDTH, HEIGHT);
 
         root.getStylesheets().add("style.css");
         root.setSpacing(20);
@@ -342,7 +320,7 @@ public class VueMenus extends VueSimulation {
         root.setAlignment(Pos.CENTER);
 
         //on change le nom de la scene
-        setScene(scene, "Choix de la difficulté de l'IA adverse");
+        setScene(root, "Choix de la difficulté de l'IA adverse");
 
         Label title = new Label("Veuillez choisir un niveau de difficulté:");
         title.getStyleClass().add("titre");
@@ -439,11 +417,11 @@ public class VueMenus extends VueSimulation {
                 Simulation simulation = task.getValue();
                 if (simulation != null) {
                     //on change le nom de la scene
-                    setScene(scene, "Simulation interactive");
+                    setScene(root, "Simulation interactive");
                     MoteurJeu.jeu = simulation;
                     playGameMusic(); //lance la musique de jeu
                     //Affichage du jeu
-                    afficherJeu(MoteurJeu.jeu, root, scene);
+                    afficherJeu(MoteurJeu.jeu, root);
                 }
 
                 // Réinitialise le bouton avec le texte original
@@ -494,7 +472,7 @@ public class VueMenus extends VueSimulation {
         root.getChildren().addAll(title, buttonBox, buttonBox2, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
-        setScene(scene, "Choix de la difficulté de l'IA adverse");
+        setScene(root, "Choix de la difficulté de l'IA adverse");
     }
 
     /**
@@ -526,7 +504,7 @@ public class VueMenus extends VueSimulation {
     /**
      * Affiche le menu de sauvegarde
      */
-    public void afficherMenuSauvegarde(Stage primaryStage, VBox root, Scene scene) {
+    public void afficherMenuSauvegarde(Stage primaryStage, VBox root) {
         AtomicReference<Simulation> simulation = new AtomicReference<>();
         //récuperration du nom de la sauvegarde
         List<String> choices = Sauvegarde.nomsSauvegardes();
@@ -550,7 +528,7 @@ public class VueMenus extends VueSimulation {
                 vs.update();
                 root.getChildren().clear();
                 root.getChildren().add(vs);
-                primaryStage.setScene(scene);
+                primaryStage.getScene().setRoot(root);
                 System.out.println("Partie chargée");
 
             } catch (Exception e) {
@@ -585,6 +563,4 @@ public class VueMenus extends VueSimulation {
         VueAnalyse va = new VueAnalyse();
         va.createAnalyseView(primaryStage);
     }
-
-
 }

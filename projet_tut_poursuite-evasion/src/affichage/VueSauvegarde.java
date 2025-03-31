@@ -153,6 +153,10 @@ public class VueSauvegarde extends VueSimulation {
         return vueVBox;
     }
 
+    /**
+     * Creer un laby avec une vision (mode interactif)
+     * @return
+     */
     private Pane creerLabyvision() {
         // Création d'un conteneur pour le labyrinthe
         Pane labyrinthePane = new Pane();
@@ -366,6 +370,10 @@ public class VueSauvegarde extends VueSimulation {
         im.setY(p.getY() * TAILLE_CELLULE);
     }
 
+    /**
+     * Initialise le filtre de la vision
+     * @param laby
+     */
     public void initFiltreVision(Pane laby) {
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
         Joueur tmp;
@@ -383,6 +391,9 @@ public class VueSauvegarde extends VueSimulation {
         }
     }
 
+    /**
+     * Mets à jour le filtre de la vision
+     */
     public void updateFiltreVision() {
         Position ptmp = simulation.getHistoriquePosition().get(simulation.getJoueur()).get(tour);
         Joueur tmp;

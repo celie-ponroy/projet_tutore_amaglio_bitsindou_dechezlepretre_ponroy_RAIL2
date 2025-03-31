@@ -26,7 +26,10 @@ public class Position implements Serializable {
         return y;
     }
 
-
+    /**
+     * Déplace la position selon le déplacement
+     * @param d Déplacement en question
+     */
     public void deplacement(Deplacement d) {
         switch (d) {
             case BAS:
@@ -60,6 +63,25 @@ public class Position implements Serializable {
         }
     }
 
+    /**
+     * Renvoi les cases adjacentes de la position
+     * @return
+     */
+    public ArrayList<Position> casesAdjacentes() {
+        ArrayList<Position> res = new ArrayList<>();
+        int x = this.x;
+        int y = this.y;
+        for (int y1 = -1; y1 <= 1; y1++) {
+            for (int x1 = -1; x1 <= 1; x1++) {
+                if (x1 == 0 && y1 == 0) {
+                    continue;
+                }
+                res.add(new Position(x + x1, y + y1));
+            }
+        }
+        return res;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -77,19 +99,6 @@ public class Position implements Serializable {
         return "(" + x + ";" + y + ")";
     }
 
-    public ArrayList<Position> casesAdjacentes() {
-        ArrayList<Position> res = new ArrayList<>();
-        int x = this.x;
-        int y = this.y;
-        for (int y1 = -1; y1 <= 1; y1++) {
-            for (int x1 = -1; x1 <= 1; x1++) {
-                if (x1 == 0 && y1 == 0) {
-                    continue;
-                }
-                res.add(new Position(x + x1, y + y1));
-            }
-        }
-        return res;
-    }
+
 
 }

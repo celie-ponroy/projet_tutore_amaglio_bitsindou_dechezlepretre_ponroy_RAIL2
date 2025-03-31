@@ -98,6 +98,12 @@ public class CalculChemins {
         bos.close();
     }
 
+    /**
+     * Calcule les chemins
+     * @param gardien
+     * @param nomCarte
+     * @return
+     */
     public static HashMap<List<Position>, Stack> calculerChemins(Boolean gardien, String nomCarte) {
         CARTE = ChargementCarte.charger(nomCarte);
 

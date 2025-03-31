@@ -15,6 +15,11 @@ import moteur.MoteurJeu;
 
 
 public class Credits {
+    /**
+     * Lance les crédits
+     * @param primaryStage la stage ou s'affiche les crédits
+     * @param jeu pour relancer la page d'accueil
+     */
     public void start(Stage primaryStage, MoteurJeu jeu) {
         double screenWidth = Screen.getPrimary().getBounds().getWidth();
         double screenHeight = Screen.getPrimary().getBounds().getHeight();
@@ -70,6 +75,12 @@ public class Credits {
         transition.play();
     }
 
+    /**
+     * Permets de creer et d'ajouter une tache
+     * @param credit vbox où est ajouté la tache
+     * @param tache  nom de la tache à ajouter
+     * @param noms noms des participants de la tache
+     */
     private void creerTache(VBox credit, String tache, String[] noms) {
         Text tacheText = new Text(tache);
         tacheText.setFont(new Font("Verdana", 24));

@@ -25,8 +25,13 @@ public class PageAccueil {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
 
+    /**
+     * Lance la page d'accueil
+     * @param jeu le jeu qui sera lancé en continuant
+     * @param primaryStage la fenetre où on affiche la page
+     */
     public static void lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage) {
-//        var primaryStage = new Stage();
+
         primaryStage.setFullScreen(true);
 
         final VBox root = new VBox();
@@ -121,8 +126,6 @@ public class PageAccueil {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Page d'accueil");
         primaryStage.show();
-
-
     }
 
     /**

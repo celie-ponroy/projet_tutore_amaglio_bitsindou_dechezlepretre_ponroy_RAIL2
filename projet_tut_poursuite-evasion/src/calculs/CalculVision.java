@@ -79,6 +79,12 @@ public class CalculVision {
 
     }
 
+    /**
+     * Ecrit la vision dans un fichier
+     * @param vision la vision a écrire
+     * @param nomfichier nom de fichier
+     * @throws IOException
+     */
     public static void ecrireFichierVision(HashMap vision, String nomfichier) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision" + nomfichier + ".txt"));
         for (int y = 0; y < CARTE.length; y++) {
@@ -117,14 +123,13 @@ public class CalculVision {
 
 
     /**
-     * Ajoute à la vision une camera (zonne de vision en plus)
+     * Ajoute à la vision une caméra (zonne de vision en plus)
      *
      * @param vision vison à laquellle on ajoute
      * @param x      position x de la caméra
      * @param y      position y de la caméra
      * @param taille portée de la caméra
      */
-
     public static ArrayList<Position> ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x, int y, int taille) {
         var casesAlarme = calculerVision(x, y, taille);
         cleanVisionCase(casesAlarme, new Position(x, y));
@@ -156,25 +161,19 @@ public class CalculVision {
 
                 int coordoneeVisionX = x + tailledecalage;
                 int coordoneeVisionY = y + tailledecalage;
-
-
                 if (coordoneeCarteY < 0 || coordoneeCarteY >= CARTE.length || coordoneeCarteX < 0 || coordoneeCarteX >= CARTE[0].length) {
                     vision[coordoneeVisionY][coordoneeVisionX] = CaseEnum.MUR.ordinal();
-
-
                     continue;
                 }
                 vision[coordoneeVisionY][coordoneeVisionX] = CARTE[coordoneeCarteY][coordoneeCarteX];
 
             }
         }
-
         //determiner une liste de murs
         List<Position> murs = new ArrayList<>();
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 if (vision[y + tailledecalage][x + tailledecalage] == CaseEnum.MUR.ordinal()) {
-
                     murs.add(new Position(xPerso + x, yPerso + y));
                 }
             }
@@ -183,11 +182,7 @@ public class CalculVision {
         for (int y = -tailledecalage; y <= tailledecalage; y++) {
             for (int x = -tailledecalage; x <= tailledecalage; x++) {
                 //si la case est un mur
-
-
                 if (!(vision[y + tailledecalage][x + tailledecalage] == CaseEnum.MUR.ordinal())) {//si la case est pas un mur
-
-
                     //on trace une droite entre le personnage et la case
                     int xCaseCourante = xPerso + x;
                     int yCaseCourante = yPerso + y;
@@ -195,8 +190,6 @@ public class CalculVision {
                     Line2D line = new Line2D.Double(xPerso, yPerso, xCaseCourante, yCaseCourante);
                     boolean visible = true;
                     for (Position mur : murs) {
-                        //on regarde si la droite un des cotés du mur
-                        //nonVisible =
                         if (line.intersects(mur.getX() - 0.5, mur.getY() - 0.5, 1, 1)) {
                             visible = false;
                         }
@@ -223,6 +216,11 @@ public class CalculVision {
         }
     }
 
+    /**
+     * Nettoie la vision d'une case par rapport à une position
+     * @param visionCur
+     * @param pPerso
+     */
     private static void cleanVisionCase(ArrayList<Position> visionCur, Position pPerso) {
         Iterator<Position> iterator = visionCur.iterator();
         while (iterator.hasNext()) {
@@ -236,7 +234,6 @@ public class CalculVision {
 
     /**
      * Parcours de la carte pour voir si il y a un chemin entre la case et le personnage
-     *
      * @param pPerso
      * @param positionCur
      * @param visionCur

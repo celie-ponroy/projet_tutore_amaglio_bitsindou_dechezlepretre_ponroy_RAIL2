@@ -290,7 +290,6 @@ public class Simulation implements Jeu {
             this.nbTours++;
 
             miseAJourFinJeu();
-
         }
 
         historiquePosition.get(prisonnier).add(prisonnier.getPosition());

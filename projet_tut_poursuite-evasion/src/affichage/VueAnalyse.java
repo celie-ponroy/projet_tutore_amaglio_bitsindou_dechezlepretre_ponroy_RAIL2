@@ -771,5 +771,4 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         }
     }
 
-
 }

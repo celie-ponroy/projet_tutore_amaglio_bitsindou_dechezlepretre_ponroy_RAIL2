@@ -43,6 +43,11 @@ public class ArbreDecision {
         return Deplacement.AUCUN;
     }
 
+    /**
+     * Renvoi une direction opposée du déplacement en paramettre
+     * @param d le déplacement en question
+     * @return
+     */
     public Deplacement oppose(Deplacement d) {
         switch (d) {
             case HAUT:

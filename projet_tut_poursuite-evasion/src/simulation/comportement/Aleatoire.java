@@ -17,6 +17,10 @@ public class Aleatoire implements Comportement, java.io.Serializable {
 
     }
 
+    /**
+     * Renvoi un déplacement choisit aléatoirement dans les cases disponibles
+     * @return
+     */
     @Override
     public Deplacement prendreDecision() {
         Deplacement deplacement = deplacementAleatoire();
@@ -48,6 +52,10 @@ public class Aleatoire implements Comportement, java.io.Serializable {
         return Comportements.Aleatoire;
     }
 
+    /**
+     * Choisit une direction aléatoire
+     * @return
+     */
     private Deplacement deplacementAleatoire() {
         int random = (int) (Math.random() * 9);
         Deplacement deplacement = Deplacement.AUCUN;

@@ -42,6 +42,9 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
 
     }
 
+    /**
+     * initialise la vue
+     */
     private void init() {
         //zone a gauche avec les instructions
         instructions = new VBox(15);
@@ -92,6 +95,9 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         setPositions(this.simulation.getGardien().getPosition(), this.gardienView);
     }
 
+    /**
+     * Mets à jour la partie info selon l'état actuel de la simulationTuto
+     */
     private void updateInfos() {
         //on clear les infos si besoin et on les remplace
         SimulationTutoriel tuto = (SimulationTutoriel) this.simulation;
@@ -118,6 +124,10 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         }
     }
 
+    /**
+     * Informations lorsque l'état est DEBUT_Perso
+     * affiche les informations relatives au prisonnier
+     */
     private void setInfoDebutPerso() {
         clearInfos();
         //explications du prisonnier et de son but
@@ -173,6 +183,14 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         instructions.getChildren().add(grid);
     }
 
+    /**
+     * Méthode qui permet d'ajouter une touche avec son image à son emplacement dans la grip
+     * @param grid où on ajoute
+     * @param texte la touche corespondant à l'image
+     * @param imagePath l'image de la flèche
+     * @param row ligne
+     * @param col colone
+     */
     private void ajouterTouche(GridPane grid, String texte, String imagePath, int row, int col) {
         ImageView icon = new ImageView(new Image("file:images/fleches/" + imagePath));
         icon.setFitHeight(40);
@@ -188,7 +206,10 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
 
         grid.add(box, col, row);
     }
-
+    /**
+     * Informations lorsque l'état est GARDIEN
+     * affiche les informations relatives au gardien
+     */
     private void setInfoGardien() {
         clearInfos();
 

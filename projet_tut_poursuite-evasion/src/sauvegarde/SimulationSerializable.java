@@ -28,6 +28,10 @@ public class SimulationSerializable implements Serializable {
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private HashMap<Personnage, Bayesien> bayesiens;
 
+    /**
+     * Constructeur
+     * @param simulation simulation à copier
+     */
     public SimulationSerializable(Simulation simulation) {
         this.nbTours = simulation.getNbTours();
         this.estFini = simulation.etreFini();
@@ -49,6 +53,10 @@ public class SimulationSerializable implements Serializable {
         this.historiquePosition = simulation.getHistoriquePosition();
     }
 
+    /**
+     * Creer une simulation à partir des informations connues
+     * @return la simulation
+     */
     public Simulation creerSimulation() {
         Simulation simulation;
         if (comportementGardien != null && comportementPrisonnier != null) {

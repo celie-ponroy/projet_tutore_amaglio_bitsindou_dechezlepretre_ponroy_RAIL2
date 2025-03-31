@@ -15,6 +15,10 @@ public abstract class Personnage implements Serializable {
         this.vision = vision;
     }
 
+    /**
+     * Déplace la personnage
+     * @param p la position où il se déplace
+     */
     public abstract void deplacer(Position p);
 
     public void setPosition(Position position) {

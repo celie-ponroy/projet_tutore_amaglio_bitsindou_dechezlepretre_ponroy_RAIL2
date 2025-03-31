@@ -46,6 +46,10 @@ public class Sauvegarde {
         return simSer.creerSimulation();
     }
 
+    /**
+     * Retourne tous les fichiers de sauvegarde
+     * @return liste de noms de fichiers
+     */
     public static ArrayList<String> nomsSauvegardes() {
         File repertoire = new File("donnees/sauvegardes_simulation/");
         File[] decksfiles = repertoire.listFiles();

@@ -1,0 +1,22 @@
+Ajout de musique (Maëlle)
+	(ajout de la dépendance javafx-media)
+	-ajout de musique de fond pour le menu et les parties
+	-ajout de bruitage 
+
+Ajout de caméras pour le gardien (Célie)
+	Ajout d'un avantage de vision du gardien 
+	- modification de la vision
+	- modification du visuel pour pouvoir voir les caméras
+	- ajout d'explications dans le tutoriel
+	
+
+Ajout de page de Crédits (Célie)
+
+Débug Sauvegarde (Célie)
+	ajout de gestion d'exceptions
+
+Modifications de l'analyse (Maëlle)
+	ajout de la possibilité de choisir les cases les plus visités selon un personnage
+
+
+Amélioration Interface (Célie & Maëlle)

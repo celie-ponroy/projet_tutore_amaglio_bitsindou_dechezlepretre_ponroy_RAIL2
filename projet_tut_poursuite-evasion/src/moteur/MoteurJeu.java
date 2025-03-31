@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import lancercalculs.LancerCalculs;
 
 import java.io.IOException;
+
 import musique.SoundManager;
 
 import static musique.SoundManager.playFondMusic;

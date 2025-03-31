@@ -17,3 +17,6 @@ Ajout tutoriel (Célie)
 	Ajout d'un tutoriel pour améliorer l'expérience utilisateur
 
 Amélioration Interface (Maëlle & Célie) 
+
+Ajout sprite directionnels (Célie)
+	les sprites des personnages se dirigent maintenant dans la direction du déplacement. 

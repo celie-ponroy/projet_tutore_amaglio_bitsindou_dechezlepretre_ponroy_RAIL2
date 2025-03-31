@@ -48,7 +48,7 @@ public class Aleatoire implements Comportement, java.io.Serializable {
         return Comportements.Aleatoire;
     }
 
-    private Deplacement deplacementAleatoire(){
+    private Deplacement deplacementAleatoire() {
         int random = (int) (Math.random() * 9);
         Deplacement deplacement = Deplacement.AUCUN;
         if (random == 0) {

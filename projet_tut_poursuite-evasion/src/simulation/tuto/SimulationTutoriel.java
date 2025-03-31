@@ -12,13 +12,14 @@ public class SimulationTutoriel extends Simulation {
     public EtatTuto etatActuel;
     public boolean gardienVus = false;
 
-    public SimulationTutoriel(){
-        super(true , Comportements.ArbreAleatoire);
+    public SimulationTutoriel() {
+        super(true, Comportements.ArbreAleatoire);
         etatActuel = EtatTuto.DEBUT_Perso;
         Position gardien = getPosSortie();
         gardien.deplacement(Deplacement.BAS);
         this.gardien.setPosition(gardien);
     }
+
     /**
      * Permet de déplacer le joueur (prisonnier ou gardien) en fonction du déplacement
      *
@@ -31,9 +32,9 @@ public class SimulationTutoriel extends Simulation {
         Joueur joueur = (Joueur) this.getJoueur();
         Personnage agent = this.gardien;
 
-        if(!gardienVus){
+        if (!gardienVus) {
             deplacementAgent = Deplacement.AUCUN;
-        }else {
+        } else {
             deplacementAgent = this.comportementGardien.prendreDecision();
         }
         //initialisation du déplacement du joueur
@@ -44,9 +45,9 @@ public class SimulationTutoriel extends Simulation {
 
         deplacerPersonnage(joueur, d);
         miseAJourFinJeu();
-        if (!this.estFini){
+        if (!this.estFini) {
             deplacerPersonnage(agent, deplacementAgent);
-        }else {
+        } else {
             this.etatActuel = EtatTuto.FIN;
         }
 
@@ -56,14 +57,14 @@ public class SimulationTutoriel extends Simulation {
         historiqueBayesien.get(agent).add(cartebay);
 
         //gestion des interactions et de la fin du jeu
-        if(etatActuel == EtatTuto.DEPLACEMENT && this.estVisible(gardien,false)){
+        if (etatActuel == EtatTuto.DEPLACEMENT && this.estVisible(gardien, false)) {
             this.etatActuel = EtatTuto.GARDIEN;
             gardienVus = true;
             this.notifierObservateurs();
             return;
         }
         miseAJourFinJeu();
-        if(this.estFini){
+        if (this.estFini) {
             this.etatActuel = EtatTuto.FIN;
         }
         this.notifierObservateurs();
@@ -72,11 +73,11 @@ public class SimulationTutoriel extends Simulation {
     /**
      * update
      */
-    public void update(KeyEvent keyEvent){
-        switch (etatActuel){
+    public void update(KeyEvent keyEvent) {
+        switch (etatActuel) {
             case DEBUT_Perso:
                 //on affiche les informations du perso
-                if(keyEvent.getCode().toString().equals("SPACE")){
+                if (keyEvent.getCode().toString().equals("SPACE")) {
                     etatActuel = EtatTuto.DEPLACEMENT;
                     notifierObservateurs();
                 }
@@ -85,7 +86,7 @@ public class SimulationTutoriel extends Simulation {
                 deplacementJoueur(getDeplacement(keyEvent));
                 break;
             case GARDIEN:
-                if(keyEvent.getCode().toString().equals("SPACE")){
+                if (keyEvent.getCode().toString().equals("SPACE")) {
                     etatActuel = EtatTuto.DEPLACEMENT_GARDIEN;
                     notifierObservateurs();
                 }
@@ -98,7 +99,8 @@ public class SimulationTutoriel extends Simulation {
                 break;
         }
     }
-    private Deplacement getDeplacement(KeyEvent keyEvent){
+
+    private Deplacement getDeplacement(KeyEvent keyEvent) {
         switch (keyEvent.getCode()) {
             case Z:
             case NUMPAD8:

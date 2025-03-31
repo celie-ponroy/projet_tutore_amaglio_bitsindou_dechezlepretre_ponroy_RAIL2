@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Stack;
 
-public class ArbreDecisionPrisonnier extends ArbreDecision implements Comportement , Serializable {
+public class ArbreDecisionPrisonnier extends ArbreDecision implements Comportement, Serializable {
     private Simulation simulation;
     private Personnage personnage;
 
@@ -46,6 +46,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         return deplacementRes;
 
     }
+
     @Override
     public Comportements getType() {
         return Comportements.ArbreDeterministe;

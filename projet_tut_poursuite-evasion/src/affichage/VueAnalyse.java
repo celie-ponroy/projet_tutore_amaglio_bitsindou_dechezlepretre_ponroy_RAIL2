@@ -26,6 +26,7 @@ import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import simulation.Simulation;
 import simulation.personnages.Position;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -60,7 +61,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     /**
      * Méthode qui crée la vue analysevoici
      */
-    public VBox createAnalyseView(Stage primaryStage){
+    public VBox createAnalyseView(Stage primaryStage) {
         // VBox principale
         VBox root = new VBox(30);
         root.getStylesheets().add("style.css");
@@ -188,7 +189,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Conteneur pour les ComboBox et les boutons
         HBox choixContainer = new HBox(20);
         choixContainer.setAlignment(Pos.CENTER);
-        choixContainer.getChildren().addAll(info,gardienContainer, prisonnierContainer, iterationContainer, lancerBtn, pauseBtn);
+        choixContainer.getChildren().addAll(info, gardienContainer, prisonnierContainer, iterationContainer, lancerBtn, pauseBtn);
 
         // Conteneur pour le label du nombre d'itérations avec un espacement en bas
         VBox nbIterationContainer = new VBox(nbIteration);
@@ -196,7 +197,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         VBox.setMargin(nbIterationContainer, new Insets(0, 0, 40, 0)); // Ajoute un espace sous le label
 
         //Création du container top
-        VBox topContainer = initTopContainer(nbIterationContainer,choixContainer, retourMenu);
+        VBox topContainer = initTopContainer(nbIterationContainer, choixContainer, retourMenu);
 
         // HBox pour aligner la légende à gauche et le topContainer au centre
         HBox headerContainer = new HBox(20);
@@ -260,8 +261,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Ajoute le labyContainer à la HBox
         graphiques.getChildren().addAll(camembert, labyContainer, courbes);
 
-        if(avec_camera){
-            var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,0,0);
+        if (avec_camera) {
+            var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, 0, 0);
             for (Rectangle[] rect : casesCameras) {
                 for (Rectangle sousrect : rect) {
                     laby.getChildren().add(sousrect);
@@ -284,7 +285,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         //on ajoute la comboBox au graphiqueWrapper
         graphiquesWrapper.getChildren().add(comboBoxContainer);
-
 
 
         // Conteneur principal pour aligner les graphiques et la ComboBox verticalement
@@ -398,6 +398,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
     /**
      * Méthode qui gère les choix des ComboBox
+     *
      * @return les comportements choisis
      */
     public Comportements[] choixComboBox(ComboBox<String> comboBoxPrisonnier, ComboBox<String> comboBoxGardien) {
@@ -533,7 +534,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     }
 
 
-
     /**
      * Méthode créant le graphique en courbes en fonction des simulations effectuées
      */
@@ -602,6 +602,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
     /**
      * Met à jour la vue
+     *
      * @param jeu jeu a afficher
      */
     @Override
@@ -616,11 +617,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         graphiqueCourbes();
 
         // Mise à jour du filtre de chaleur en fonction des radioButtons sélectionnés
-        if(radioBtnPrisonnier.isSelected()){
+        if (radioBtnPrisonnier.isSelected()) {
             updateFiltreChaleur(lancerAnalyse.getCasesVisiteesPrisonnier());
-        } else if(radioBtnGardien.isSelected()){
+        } else if (radioBtnGardien.isSelected()) {
             updateFiltreChaleur(lancerAnalyse.getCasesVisiteesGardien());
-        } else if(radioBtnTous.isSelected()){
+        } else if (radioBtnTous.isSelected()) {
             updateFiltreChaleur(lancerAnalyse.getCasesVisitees());
         }
     }
@@ -659,7 +660,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         int sum = 0;
         double res = 0;
         // pour chaque valeur de getcasesVisitees on ajoute la valeur à sum
-        for (Position i :casesVisitees.keySet()) {
+        for (Position i : casesVisitees.keySet()) {
             //on verifie que la somme ne soit pas nulle
             if (casesVisitees.get(i) != 0) {
                 sum += casesVisitees.get(i);
@@ -769,7 +770,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         }
     }
-
 
 
 }

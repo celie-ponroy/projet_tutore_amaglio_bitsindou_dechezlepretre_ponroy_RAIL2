@@ -19,15 +19,34 @@ package "moteur"{
     + start(Stage): void
   }
 }
-
+package "musique" {
+    class SoundManager{
+     - {static} fondMusic : MediaPlayer
+     - {static} winMusic :MediaPlayer
+     - {static} looseMusic MediaPlayer
+     - {static} drawMusic : MediaPlayer
+     - {static} gameMusic : MediaPlayer
+     + SoundManager()
+     + {static} playFondMusic() : void
+     + {static} playGameMusic() : void
+     + {static} playWinMusic() : void
+     + {static} playLooseMusic : void
+     + {static} playDrawMusic : void
+     + {static} stopFondMusic() : void
+     + {static} stopAllMusic() : void
+    }
+}
 package "affichage" {
   Interface DessinJeu{
     + update(Jeu): void
   }
   class FiltreVision{
-    + {static} initFiltre(int, int, int, Joueur): Rectangle[][]
-    + {static} updateFiltre(Rectangle[][], Joueur): void
+    + {static} initFiltre(int, int, int, Joueur,boolean): Rectangle[][]
+    + {static} updateFiltre(Rectangle[][], Joueur,boolean): void
   }
+  class FiltreCamera{
+      + {static} initFiltre(int, int, int): Rectangle[][]
+    }
   class VueSimulation{
     # imageMur: Image
     # imageSol : Image
@@ -39,12 +58,14 @@ package "affichage" {
     # TAILLE_CELLULE : int
     - labyrinthePane : Pane
     # simulation : Simulation
+    # avec_camera : boolean
     + VueSimulation()
     # initLabyrinthe(boolean): void
     # {abstract} setOpacityPersonnage(): void
     # {abstract} updatePositions(): void
     + {static} updateDirectionPersonnage(int, List<Deplacement>, String, ImageView): void
     # setPositions(Position, ImageView): void
+    + setAvec_Camera (boolean ): void
   }
   class FiltreBayesien{
     + {static} initFiltre(double[][], int): Rectangle[][]
@@ -97,6 +118,12 @@ package "affichage" {
     + updateIteration(): void
     + setPositions(Position, ImageView): void
   }
+  class PageAccueil{
+     - {static} WIDTH : double
+     - {static} HEIGHT : double
+     + {static} lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage) : void
+     + {static} void afficherTuto(Jeu j, Scene scene, Pane root):void
+    }
   class VueMenus{
     - {static} WIDTH : double
     - {static} HEIGHT : double

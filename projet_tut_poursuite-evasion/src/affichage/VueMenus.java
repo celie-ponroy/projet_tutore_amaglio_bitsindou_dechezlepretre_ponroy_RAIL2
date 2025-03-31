@@ -22,11 +22,14 @@ import musique.SoundManager;
 import sauvegarde.Sauvegarde;
 import simulation.Comportements;
 import simulation.Simulation;
+
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
+
 import javafx.scene.Cursor;
+
 import static affichage.PageAccueil.lancerPageAcceuil;
 import static musique.SoundManager.playGameMusic;
 
@@ -46,6 +49,7 @@ public class VueMenus extends VueSimulation {
 
     /**
      * constructeur avec paramètre jeu
+     *
      * @param j le moteur de jeu
      */
     public VueMenus(MoteurJeu j) {
@@ -86,6 +90,7 @@ public class VueMenus extends VueSimulation {
 
     /**
      * Méthode pour afficher la scene
+     *
      * @param scene la scene
      * @param title le titre de la scene
      */
@@ -119,7 +124,7 @@ public class VueMenus extends VueSimulation {
         //Bouton du mode interactif
         Button modeInteractif = new Button("Mode interactif");
         modeInteractif.setPrefSize(200, 100);
-        modeInteractif.setOnAction(e ->{//Affichage du menu de choix du personnage
+        modeInteractif.setOnAction(e -> {//Affichage du menu de choix du personnage
             afficherMenuPersonnage();// Appel le menu des choix des personnages
         });
 
@@ -143,7 +148,7 @@ public class VueMenus extends VueSimulation {
 
         //Boutton parties sauvegardées
         Button modePartiesSauvegardes = new Button("Parties sauvegardées");
-        modePartiesSauvegardes.setPrefSize(200,100);
+        modePartiesSauvegardes.setPrefSize(200, 100);
         modePartiesSauvegardes.setOnAction(e -> {
             afficherMenuSauvegarde(this.primaryStage, root, scene);
         });
@@ -283,7 +288,7 @@ public class VueMenus extends VueSimulation {
         buttonBox2.getChildren().addAll(vboxPris, vboxGard);
 
         //Ajout des éléments au VBox principal
-        root2.getChildren().addAll(title2, buttonBox2,retour);
+        root2.getChildren().addAll(title2, buttonBox2, retour);
 
         //Affichage de la scene et changement du titre de la fenêtre
 
@@ -293,9 +298,9 @@ public class VueMenus extends VueSimulation {
     /**
      * Affiche le bouton de retour
      */
-    public Button retourBtn(){
+    public Button retourBtn() {
         //Bouton "Retour"
-        Button retour = new Button ("Retour au menu principal");
+        Button retour = new Button("Retour au menu principal");
         retour.setPrefSize(230, 50);
         retour.getStyleClass().add("important"); //rend le bouton rouge
         retour.setOnAction(e -> {
@@ -465,16 +470,16 @@ public class VueMenus extends VueSimulation {
             // Démarre le task dans un nouveau thread
             new Thread(task).start();
         });
-        
+
         //ajout bouton informatif
         Button info = InformationsIa.getButtonInfo();
 
         info.setOnAction(e -> {
             //on lance un popup
-            if(choixPersonnage == "Prisonnier") {
+            if (choixPersonnage == "Prisonnier") {
                 InformationsIa.popUpGardien();
 
-            }else {
+            } else {
                 InformationsIa.popUpPrisonnier();
             }
         });
@@ -524,8 +529,8 @@ public class VueMenus extends VueSimulation {
     public void afficherMenuSauvegarde(Stage primaryStage, VBox root, Scene scene) {
         AtomicReference<Simulation> simulation = new AtomicReference<>();
         //récuperration du nom de la sauvegarde
-        List<String> choices =  Sauvegarde.nomsSauvegardes();
-        if(choices.isEmpty()) {
+        List<String> choices = Sauvegarde.nomsSauvegardes();
+        if (choices.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Attention !");
             alert.setHeaderText("Aucune sauvegarde n'a été faite.");
@@ -538,7 +543,7 @@ public class VueMenus extends VueSimulation {
 
         Optional<String> result = dialog.showAndWait();
         result.ifPresent((letter) -> {
-            try{
+            try {
                 System.out.println("Chargement de la sauvegarde");
                 simulation.set(Sauvegarde.charger(letter));
                 VueSauvegarde vs = new VueSauvegarde(WIDTH, HEIGHT, simulation.get());
@@ -548,8 +553,8 @@ public class VueMenus extends VueSimulation {
                 primaryStage.setScene(scene);
                 System.out.println("Partie chargée");
 
-            }catch (Exception e){
-                System.out.println("Erreur lors du chargement de la sauvegarde de :"+letter+".ser");
+            } catch (Exception e) {
+                System.out.println("Erreur lors du chargement de la sauvegarde de :" + letter + ".ser");
             }
         });
 
@@ -557,6 +562,7 @@ public class VueMenus extends VueSimulation {
 
     /**
      * Permet de récupérer le choix de personnage de l'utilisateur
+     *
      * @return le choix du personnage
      */
     public String getChoixPersonnage() {
@@ -565,6 +571,7 @@ public class VueMenus extends VueSimulation {
 
     /**
      * Permet de changer le choix de personnage de l'utilisateur
+     *
      * @param choixPersonnage le choix du personnage
      */
     public void setChoixPersonnage(String choixPersonnage) {
@@ -578,7 +585,6 @@ public class VueMenus extends VueSimulation {
         VueAnalyse va = new VueAnalyse();
         va.createAnalyseView(primaryStage);
     }
-
 
 
 }

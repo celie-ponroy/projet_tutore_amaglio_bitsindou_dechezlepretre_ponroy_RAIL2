@@ -1,4 +1,5 @@
 package affichage;
+
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,23 +27,23 @@ public class Credits {
         this.creerTache(creditsBox, "Graphisme", new String[]{"Célie Ponroy", "Matias Amaglio"});
         this.creerTache(creditsBox, "Musique", new String[]{"Maëlle Bitsindou"});
         this.creerTache(creditsBox, "Conception", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio"});
-        this.creerTache(creditsBox, "Tests empiriques", new String[]{"Matias Amaglio","Maëlle Bitsindou","Célie Ponroy", "Luc Dechezleprêtre" });
+        this.creerTache(creditsBox, "Tests empiriques", new String[]{"Matias Amaglio", "Maëlle Bitsindou", "Célie Ponroy", "Luc Dechezleprêtre"});
         this.creerTache(creditsBox, "Création de page de crédits", new String[]{"Célie Ponroy"});
-        this.creerTache(creditsBox, "Réseaux de neurones", new String[]{ "Matias Amaglio","Luc Dechezleprêtre"});
-        this.creerTache(creditsBox, "Interface", new String[]{ "Maëlle Bitsindou","Célie Ponroy" });
-        this.creerTache(creditsBox, "Arbre de décision", new String[]{ "Célie Ponroy"});
+        this.creerTache(creditsBox, "Réseaux de neurones", new String[]{"Matias Amaglio", "Luc Dechezleprêtre"});
+        this.creerTache(creditsBox, "Interface", new String[]{"Maëlle Bitsindou", "Célie Ponroy"});
+        this.creerTache(creditsBox, "Arbre de décision", new String[]{"Célie Ponroy"});
         this.creerTache(creditsBox, "Analyse", new String[]{"Maëlle Bitsindou"});
         this.creerTache(creditsBox, "Sauvegarde", new String[]{"Célie Ponroy"});
-        this.creerTache(creditsBox,"Débats huleux", new String[]{"Luc Dechezleprêtre","Matias Amaglio","Célie Ponroy","Maëlle Bitsindou" });
-        this.creerTache(creditsBox,"Création du sujet", new String[]{"Célie Ponroy","Maëlle Bitsindou","Luc Dechezleprêtre","Matias Amaglio","Guenaël Cabanes"});
-        this.creerTache(creditsBox,"Acteurs",new String[]{"gardien.png","prisonnier.png"});
-        this.creerTache(creditsBox,"Decors",new String[]{"mur.png","sol.png","sortie.png", "camera.png","raccourciGardien.png"});
-        this.creerTache(creditsBox, "En la mémoire de", new String[]{"Librairies Java abandonnées n°1 : Libraie de M. Boniface", "Librairies Java abandonnées n°2 : Neuroph","La patience de Matias"});
+        this.creerTache(creditsBox, "Débats huleux", new String[]{"Luc Dechezleprêtre", "Matias Amaglio", "Célie Ponroy", "Maëlle Bitsindou"});
+        this.creerTache(creditsBox, "Création du sujet", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes"});
+        this.creerTache(creditsBox, "Acteurs", new String[]{"gardien.png", "prisonnier.png"});
+        this.creerTache(creditsBox, "Decors", new String[]{"mur.png", "sol.png", "sortie.png", "camera.png", "raccourciGardien.png"});
+        this.creerTache(creditsBox, "En la mémoire de", new String[]{"Librairies Java abandonnées n°1 : Libraie de M. Boniface", "Librairies Java abandonnées n°2 : Neuroph", "La patience de Matias"});
         this.creerTache(creditsBox, "Soutenances", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson"});
-        this.creerTache(creditsBox,"Avec la participation de", new String[]{"Matias Amaglio","Luc Dechezleprêtre","Maëlle Bitsindou","Célie Ponroy" , "Guenaël Cabanes"});
-        this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson","Charlemiam","Les deux collègues de M. Cabanes","Nino Arcelin"});
-        this.creerTache(creditsBox,"Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
-        this.creerTache(creditsBox,"BUT Informatique 2025", new String[]{""});
+        this.creerTache(creditsBox, "Avec la participation de", new String[]{"Matias Amaglio", "Luc Dechezleprêtre", "Maëlle Bitsindou", "Célie Ponroy", "Guenaël Cabanes"});
+        this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson", "Charlemiam", "Les deux collègues de M. Cabanes", "Nino Arcelin"});
+        this.creerTache(creditsBox, "Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
+        this.creerTache(creditsBox, "BUT Informatique 2025", new String[]{""});
 
         ScrollPane scrollPane = new ScrollPane(creditsBox);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
@@ -64,12 +65,12 @@ public class Credits {
         transition.setCycleCount(1);
         transition.setInterpolator(javafx.animation.Interpolator.LINEAR);
         transition.setOnFinished(e -> {
-            PageAccueil.lancerPageAcceuil( jeu,primaryStage);
+            PageAccueil.lancerPageAcceuil(jeu, primaryStage);
         });
         transition.play();
     }
 
-    private void creerTache( VBox credit, String tache, String[] noms){
+    private void creerTache(VBox credit, String tache, String[] noms) {
         Text tacheText = new Text(tache);
         tacheText.setFont(new Font("Verdana", 24));
         tacheText.setStyle("-fx-fill: yellow; -fx-font-weight: bold; -fx-font-size: 24px;");

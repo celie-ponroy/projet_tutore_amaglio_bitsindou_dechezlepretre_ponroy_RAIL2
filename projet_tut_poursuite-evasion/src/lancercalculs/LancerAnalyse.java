@@ -6,6 +6,7 @@ import moteur.Jeu;
 import simulation.Comportements;
 import simulation.Simulation;
 import simulation.personnages.Position;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +29,8 @@ public class LancerAnalyse implements Jeu {
     private int nbIterationsTotal; // Nombre total d'itérations à effectuer
     private boolean pause;
     private boolean caseDepart;
-    private HashMap <Position, Integer> casesDepartPris = new HashMap<>();
-    private HashMap <Position, Integer> casesDepartGard = new HashMap<>();
+    private HashMap<Position, Integer> casesDepartPris = new HashMap<>();
+    private HashMap<Position, Integer> casesDepartGard = new HashMap<>();
 
 
     //constructeur
@@ -38,8 +39,8 @@ public class LancerAnalyse implements Jeu {
         nbVictoirePrisonnier = 0;
         matchNull = 0;
         observateurs = new ArrayList<>();
-        nbIterationCourrante=0;
-        nbDeplacementPerso=0;
+        nbIterationCourrante = 0;
+        nbDeplacementPerso = 0;
         pause = false;
         caseDepart = false;
     }
@@ -64,20 +65,20 @@ public class LancerAnalyse implements Jeu {
         List<Position> posGardien = simulation.getHistoriquePosition().get(simulation.getGardien());
 
         //Récupération de la position de départ(toute première position) du prisonnier et du gardien
-       Position posDepartPrisonnier = posPrisonnier.get(0);
-       Position posDepartGardien = posGardien.get(0);
+        Position posDepartPrisonnier = posPrisonnier.get(0);
+        Position posDepartGardien = posGardien.get(0);
 
-       //Mise à jour de la position de départ du prisonnier
-        if(casesDepartPris.containsKey(posDepartPrisonnier)) {
+        //Mise à jour de la position de départ du prisonnier
+        if (casesDepartPris.containsKey(posDepartPrisonnier)) {
             casesDepartPris.put(posDepartPrisonnier, (int) casesDepartPris.get(posDepartPrisonnier) + 1);
-        }else{
+        } else {
             casesDepartPris.put(posDepartPrisonnier, 1);
         }
 
         //Mise à jour de la position de départ du gardien
-        if(casesDepartGard.containsKey(posDepartGardien)) {
+        if (casesDepartGard.containsKey(posDepartGardien)) {
             casesDepartGard.put(posDepartGardien, (int) casesDepartGard.get(posDepartGardien) + 1);
-        }else{
+        } else {
             casesDepartGard.put(posDepartGardien, 1);
         }
 
@@ -113,7 +114,7 @@ public class LancerAnalyse implements Jeu {
         for (Position pos : positions) {
             //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
             if (casesVisitees.containsKey(pos)) {
-                casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1);
+                casesVisitees.put(pos, (int) casesVisitees.get(pos) + 1);
             } else {
                 casesVisitees.put(pos, 1);
             }
@@ -122,14 +123,15 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode pour mettre à jour les cases visitées par le prisonnier
+     *
      * @param positions
      */
     private void updateCasesVisiteesPrisonnier(List<Position> positions) {
         for (Position pos : positions) {
             //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
             if (casesVisiteesPrisonnier.containsKey(pos)) {
-                casesVisiteesPrisonnier.put(pos, (int)casesVisiteesPrisonnier.get(pos) + 1);
-                casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
+                casesVisiteesPrisonnier.put(pos, (int) casesVisiteesPrisonnier.get(pos) + 1);
+                casesVisitees.put(pos, (int) casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
             } else {
                 casesVisiteesPrisonnier.put(pos, 1);
                 casesVisitees.put(pos, 1); // Mise à jour des cases visitées par les deux personnages
@@ -139,14 +141,15 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode pour mettre à jour les cases visitées par le gardien
+     *
      * @param positions
      */
     private void updateCasesVisiteesGardien(List<Position> positions) {
         for (Position pos : positions) {
             //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
             if (casesVisiteesGardien.containsKey(pos)) {
-                casesVisiteesGardien.put(pos, (int)casesVisiteesGardien.get(pos) + 1);
-                casesVisitees.put(pos, (int)casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
+                casesVisiteesGardien.put(pos, (int) casesVisiteesGardien.get(pos) + 1);
+                casesVisitees.put(pos, (int) casesVisitees.get(pos) + 1); // Mise à jour des cases visitées par les deux personnages
             } else {
                 casesVisiteesGardien.put(pos, 1);
                 casesVisitees.put(pos, 1); // Mise à jour des cases visitées par les deux personnages
@@ -198,6 +201,7 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre d'itérations courrantes
+     *
      * @return nbIterationCourrante
      */
     public int getNbIterationCourrante() {
@@ -206,9 +210,10 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre de déplacements du personnage
+     *
      * @return nbDeplacementPerso
      */
-    public int getNbDeplacementPerso(int index ) {
+    public int getNbDeplacementPerso(int index) {
         if (index >= 0 && index < historiqueDeplacementsPerso.size()) {
             return historiqueDeplacementsPerso.get(index);
         }
@@ -217,9 +222,10 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne les cases visitées
+     *
      * @return
      */
-    public HashMap <Position, Integer> getCasesVisitees() {
+    public HashMap<Position, Integer> getCasesVisitees() {
         return casesVisitees;
     }
 
@@ -242,6 +248,7 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre total d'itérations
+     *
      * @param nbIterations
      */
     public void setNbIterationsTotal(int nbIterations) {
@@ -250,6 +257,7 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne true si l'analyse est en pause
+     *
      * @return true si l'analyse est en pause false sinon
      */
     public synchronized boolean isPause() {
@@ -258,9 +266,10 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui met à jour l'état de pause de l'analyse
+     *
      * @param b true ou false
      */
-    public void setPause(boolean b){
+    public void setPause(boolean b) {
         this.pause = b;
     }
 

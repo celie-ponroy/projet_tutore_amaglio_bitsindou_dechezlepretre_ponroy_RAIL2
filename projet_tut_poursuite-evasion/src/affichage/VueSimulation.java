@@ -34,7 +34,6 @@ public abstract class VueSimulation extends Pane {
     protected boolean avec_camera = true;
 
 
-
     VueSimulation() {
         this.imageMur = new Image("file:images/murs.png");
         this.imageSol = new Image("file:images/sol.png");
@@ -74,8 +73,8 @@ public abstract class VueSimulation extends Pane {
                 } else if (Simulation.CARTE[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
                     image = this.imageRaccourciGardien;
 
-                }else if (Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
-                    if(avec_camera)
+                } else if (Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
+                    if (avec_camera)
                         image = this.imageCamera;
                     else image = this.imageSol;
                 }
@@ -117,7 +116,6 @@ public abstract class VueSimulation extends Pane {
         }
 
 
-
         return labyrinthePane;
     }
 
@@ -135,44 +133,45 @@ public abstract class VueSimulation extends Pane {
     /**
      * Mets à jour les directions des sprites personnages
      */
-    protected void updateDirections(int tour){
+    protected void updateDirections(int tour) {
         var historiqueDeplacementP = this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier());
         updateDirectionPersonnage(tour, historiqueDeplacementP, "prisonnier", prisonnierView);
         var historiqueDeplacementG = this.simulation.getHistoriqueDeplacement().get(this.simulation.getGardien());
         updateDirectionPersonnage(tour, historiqueDeplacementG, "gardien", gardienView);
     }
+
     /**
      * Mets à jour les directions des sprites personnages
      */
-    static public void updateDirectionPersonnage(int tour, List<Deplacement> historiqueDeplacement,String nomPerso, ImageView view){
-        if(historiqueDeplacement.isEmpty()) {
+    static public void updateDirectionPersonnage(int tour, List<Deplacement> historiqueDeplacement, String nomPerso, ImageView view) {
+        if (historiqueDeplacement.isEmpty()) {
             System.out.println("Historique de déplacement vide");
             return;
         }
-        if(historiqueDeplacement.size() <= tour||tour==0) {
-            view.setImage(new Image("file:images/"+nomPerso+".png"));
+        if (historiqueDeplacement.size() <= tour || tour == 0) {
+            view.setImage(new Image("file:images/" + nomPerso + ".png"));
             return;
         }
 
-        switch (historiqueDeplacement.get(tour)){
+        switch (historiqueDeplacement.get(tour)) {
             case HAUT:
-                view.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
+                view.setImage(new Image("file:images/" + nomPerso + "_haut.png"));
                 break;
             case BAS:
-                view.setImage(new Image("file:images/"+nomPerso+"_bas.png"));
+                view.setImage(new Image("file:images/" + nomPerso + "_bas.png"));
                 break;
             case GAUCHE:
             case DIAG_BAS_GAUCHE:
             case DIAG_HAUT_GAUCHE:
-                view.setImage(new Image("file:images/"+nomPerso+"_gauche.png"));
+                view.setImage(new Image("file:images/" + nomPerso + "_gauche.png"));
                 break;
             case DROITE:
             case DIAG_BAS_DROITE:
             case DIAG_HAUT_DROITE:
-                view.setImage(new Image("file:images/"+nomPerso+"_droite.png"));
+                view.setImage(new Image("file:images/" + nomPerso + "_droite.png"));
                 break;
             case AUCUN:
-                view.setImage(new Image("file:images/"+nomPerso+".png"));
+                view.setImage(new Image("file:images/" + nomPerso + ".png"));
                 break;
         }
 
@@ -191,29 +190,30 @@ public abstract class VueSimulation extends Pane {
 
     /**
      * Permets de sauvegarder la parie courrante peut se lancer a la fin de la partie)
+     *
      * @param sauvegarder
      */
-    protected void lancerSauvegarde(Button sauvegarder){
+    protected void lancerSauvegarde(Button sauvegarder) {
         TextInputDialog dialog = new TextInputDialog("sauvegarde");
         dialog.setTitle("Veillez nommez votre sauvegarde");
         dialog.setContentText("Veillez nommez votre sauvegarde:");
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(name -> {
-            if(Sauvegarde.nomsSauvegardes().contains(result.get().toString()+".ser")){
+            if (Sauvegarde.nomsSauvegardes().contains(result.get().toString() + ".ser")) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setContentText("Le nom selectionné est déja attribué voullez vous l'écraser?");
 
                 Optional<ButtonType> result2 = alert.showAndWait();
-                if (result2.get() == ButtonType.OK){
+                if (result2.get() == ButtonType.OK) {
                 } else {
                     sauvegarder.getStyleClass().add("nonValider");
                 }
 
             }
             try {
-                Sauvegarde.sauvegarder(this.simulation,result.get()+".ser");
+                Sauvegarde.sauvegarder(this.simulation, result.get() + ".ser");
                 sauvegarder.getStyleClass().add("valider");
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 sauvegarder.getStyleClass().add("nonValider");
             }
@@ -222,6 +222,7 @@ public abstract class VueSimulation extends Pane {
 
     /**
      * permets de changer si on affiche les caméras ou non
+     *
      * @param avec_camera
      */
     public void setAvec_camera(boolean avec_camera) {

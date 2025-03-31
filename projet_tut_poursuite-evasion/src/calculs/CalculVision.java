@@ -12,7 +12,7 @@ import java.util.*;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
-   public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
 
     /**
      * Recuperer la vision depuis le fichier vision.txt
@@ -23,7 +23,7 @@ public class CalculVision {
         HashMap<Position, ArrayList<Position>> vision = new HashMap<>();
         //on récupère la vision depuis le fichier vision.txt
         try {
-            BufferedReader br = new BufferedReader(new FileReader("./donnees/vision"+G_P+".txt"));
+            BufferedReader br = new BufferedReader(new FileReader("./donnees/vision" + G_P + ".txt"));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(":");
@@ -66,20 +66,21 @@ public class CalculVision {
         for (int y = 0; y < CARTE.length; y++) {
             for (int x = 0; x < CARTE[0].length; x++) {
                 if (CARTE[y][x] == CaseEnum.CAMERA.ordinal()) {
-                    var c = ajoutCamera(vision,x,y,3);
-                    if(c != null)
-                        camera.put(new Position(x,y),c);
+                    var c = ajoutCamera(vision, x, y, 3);
+                    if (c != null)
+                        camera.put(new Position(x, y), c);
                 }
             }
         }
-        ecrireFichierVision(vision,"G");
-        ecrireFichierVision(camera,"C");
+        ecrireFichierVision(vision, "G");
+        ecrireFichierVision(camera, "C");
         vision = calculerCarteVision();
-        ecrireFichierVision(vision,"P");
+        ecrireFichierVision(vision, "P");
 
     }
+
     public static void ecrireFichierVision(HashMap vision, String nomfichier) throws IOException {
-        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision"+nomfichier+".txt"));
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("./donnees/vision" + nomfichier + ".txt"));
         for (int y = 0; y < CARTE.length; y++) {
             for (int x = 0; x < CARTE[0].length; x++) {
                 //afficher la position
@@ -105,7 +106,7 @@ public class CalculVision {
                     res.put(new Position(x, y), new ArrayList());
                     continue;
                 }
-                res.put(new Position(x, y), calculerVision(x, y,29));
+                res.put(new Position(x, y), calculerVision(x, y, 29));
             }
         }
         cleanVision(res);
@@ -117,15 +118,16 @@ public class CalculVision {
 
     /**
      * Ajoute à la vision une camera (zonne de vision en plus)
+     *
      * @param vision vison à laquellle on ajoute
-     * @param x position x de la caméra
-     * @param y position y de la caméra
+     * @param x      position x de la caméra
+     * @param y      position y de la caméra
      * @param taille portée de la caméra
      */
 
-    public static  ArrayList<Position> ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x,int y , int taille) {
-        var casesAlarme = calculerVision(x,y,taille);
-        cleanVisionCase(casesAlarme,new Position(x,y));
+    public static ArrayList<Position> ajoutCamera(HashMap<Position, ArrayList<Position>> vision, int x, int y, int taille) {
+        var casesAlarme = calculerVision(x, y, taille);
+        cleanVisionCase(casesAlarme, new Position(x, y));
         for (var key : vision.keySet()) {
             vision.get(key).addAll(casesAlarme);
         }
@@ -220,7 +222,8 @@ public class CalculVision {
 
         }
     }
-    private static void cleanVisionCase( ArrayList<Position> visionCur, Position pPerso) {
+
+    private static void cleanVisionCase(ArrayList<Position> visionCur, Position pPerso) {
         Iterator<Position> iterator = visionCur.iterator();
         while (iterator.hasNext()) {
             Position position = iterator.next();

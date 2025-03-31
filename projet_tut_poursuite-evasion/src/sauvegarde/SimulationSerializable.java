@@ -28,36 +28,36 @@ public class SimulationSerializable implements Serializable {
     private HashMap<Personnage, double[][]> carteBayesiennes;
     private HashMap<Personnage, Bayesien> bayesiens;
 
-    public SimulationSerializable(Simulation simulation){
-        this.nbTours=simulation.getNbTours();
-        this.estFini=simulation.etreFini();
-        this.gardien=simulation.getGardien();
-        this.prisonnier=simulation.getPrisonnier();
-        this.victoireGardien=simulation.getVictoireGardien();
-        this.victoirePrisonnier=simulation.getVictoirePrisonnier();
-        this.historiqueBayesien=simulation.getHistoriqueBayesien();
-        this.historiqueDeplacement=simulation.getHistoriqueDeplacement();
-        this.bayesiens=simulation.getBayesiens();
-        this.carteBayesiennes=simulation.getCarteBayesiennes();
-        if(simulation.getComportementGardien()!=null){
-            this.comportementGardien=simulation.getComportementGardien().getType();
+    public SimulationSerializable(Simulation simulation) {
+        this.nbTours = simulation.getNbTours();
+        this.estFini = simulation.etreFini();
+        this.gardien = simulation.getGardien();
+        this.prisonnier = simulation.getPrisonnier();
+        this.victoireGardien = simulation.getVictoireGardien();
+        this.victoirePrisonnier = simulation.getVictoirePrisonnier();
+        this.historiqueBayesien = simulation.getHistoriqueBayesien();
+        this.historiqueDeplacement = simulation.getHistoriqueDeplacement();
+        this.bayesiens = simulation.getBayesiens();
+        this.carteBayesiennes = simulation.getCarteBayesiennes();
+        if (simulation.getComportementGardien() != null) {
+            this.comportementGardien = simulation.getComportementGardien().getType();
         }
-        if (simulation.getComportementPrisonnier()!=null){
-            this.comportementPrisonnier=simulation.getComportementPrisonnier().getType();
+        if (simulation.getComportementPrisonnier() != null) {
+            this.comportementPrisonnier = simulation.getComportementPrisonnier().getType();
         }
 
-        this.historiquePosition=simulation.getHistoriquePosition();
+        this.historiquePosition = simulation.getHistoriquePosition();
     }
 
-    public Simulation creerSimulation(){
+    public Simulation creerSimulation() {
         Simulation simulation;
-        if(comportementGardien!=null&&comportementPrisonnier!=null) {
-             simulation = new Simulation(comportementGardien, comportementPrisonnier);
-        }else{
-            boolean joueur = comportementPrisonnier==null;
-            if(joueur) {
+        if (comportementGardien != null && comportementPrisonnier != null) {
+            simulation = new Simulation(comportementGardien, comportementPrisonnier);
+        } else {
+            boolean joueur = comportementPrisonnier == null;
+            if (joueur) {
                 simulation = new Simulation(joueur, comportementGardien);
-            }else {
+            } else {
                 simulation = new Simulation(joueur, comportementPrisonnier);
             }
         }

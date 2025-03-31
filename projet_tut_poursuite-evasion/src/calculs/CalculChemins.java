@@ -75,10 +75,11 @@ public class CalculChemins {
     public static void ecrireChemins(String nomCarte) throws IOException {
         //ecrire dans les fichiers
 
-        ecrireFichier("./donnees/cheminsP.txt",false, nomCarte);
-        ecrireFichier("./donnees/cheminsG.txt",true, nomCarte);
+        ecrireFichier("./donnees/cheminsP.txt", false, nomCarte);
+        ecrireFichier("./donnees/cheminsG.txt", true, nomCarte);
     }
-    private static void ecrireFichier(String nomFichier,Boolean gardien, String nomCarte) throws IOException {
+
+    private static void ecrireFichier(String nomFichier, Boolean gardien, String nomCarte) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(nomFichier));
         HashMap vision = calculerChemins(gardien, nomCarte);
         for (int y1 = 0; y1 < CARTE.length; y1++) {
@@ -97,8 +98,8 @@ public class CalculChemins {
         bos.close();
     }
 
-    public static HashMap<List<Position>,Stack> calculerChemins(Boolean gardien, String nomCarte){
-         CARTE = ChargementCarte.charger(nomCarte);
+    public static HashMap<List<Position>, Stack> calculerChemins(Boolean gardien, String nomCarte) {
+        CARTE = ChargementCarte.charger(nomCarte);
 
         //changer la carte pour prendre en compte les raccourcis
 

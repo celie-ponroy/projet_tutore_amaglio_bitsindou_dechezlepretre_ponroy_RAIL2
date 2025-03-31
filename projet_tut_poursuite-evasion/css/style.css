@@ -9,6 +9,7 @@
 .button:hover {
     -fx-background-color: #415A77;
 }
+
 .gris {
     -fx-font-size: 20pt;
     -fx-font-family: "Segoe UI Semibold";
@@ -38,35 +39,42 @@
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
 }
-.grostitre{
+
+.grostitre {
     -fx-font-size: 40pt;
     -fx-font-family: "Roboto";
     -fx-text-fill: #1B263B;
 }
-.infos{
+
+.infos {
     -fx-font-size: 16pt;
     -fx-font-family: "Roboto";
     -fx-text-fill: #778DA9;
 }
-.cache{
+
+.cache {
     visibility: hidden;
     -fx-font-size: 0px;
 }
-.petit{
+
+.petit {
     -fx-font-size: 12pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
 }
-.infos{
+
+.infos {
     -fx-font-size: 16pt;
     -fx-font-family: "Roboto";
     -fx-text-fill: #778DA9;
 }
-.cache{
+
+.cache {
     visibility: hidden;
     -fx-font-size: 0px;
 }
-.petit{
+
+.petit {
     -fx-font-size: 12pt;
     -fx-font-family: "Times New Roman";
     -fx-text-fill: #1B263B;
@@ -95,27 +103,34 @@
 .chart-legend-item {
     -fx-text-fill: black;
 }
-.important{
-    -fx-background-color:  #C95050
+
+.important {
+    -fx-background-color: #C95050
 }
-.important:hover{
+
+.important:hover {
     -fx-background-color: #B34040;
 
 }
-.valider{
+
+.valider {
     -fx-background-color: #89d889
 }
-.valider:hover{
+
+.valider:hover {
     -fx-background-color: #40B340;
 }
-.nonValider{
-    -fx-background-color:  #C95050
+
+.nonValider {
+    -fx-background-color: #C95050
 }
+
 .nonValider:hover {
     -fx-background-color: #B34040;
 }
+
 /*pop up */
-.popup{
+.popup {
     -fx-background-color: #E0E1DD;
     -fx-border-width: 2px;
     -fx-border-radius: 10px;

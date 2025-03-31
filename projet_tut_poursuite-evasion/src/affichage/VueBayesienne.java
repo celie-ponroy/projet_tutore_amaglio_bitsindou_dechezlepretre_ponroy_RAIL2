@@ -22,7 +22,7 @@ public class VueBayesienne extends VueSimulation {
     /**
      * Constructeur dans le cas où l'on souhaiterait afficher qu'un seul personnage et son bayésien
      */
-    public VueBayesienne(Simulation s, Personnage p, int decalageX, int decalageY,int tailleCellule) {
+    public VueBayesienne(Simulation s, Personnage p, int decalageX, int decalageY, int tailleCellule) {
         super();
         TAILLE_CELLULE = tailleCellule;
         this.simulation = s;
@@ -62,13 +62,13 @@ public class VueBayesienne extends VueSimulation {
         this.getChildren().add(initLabyrinthe(true));
         // Initialisation de la carte bayesienne
         double[][] carteBayes = simulation.getCarteBayesienne(personnage);
-        caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE,decalageX,decalageY);
+        caseBayesienne = FiltreBayesien.initFiltre(carteBayes, TAILLE_CELLULE, decalageX, decalageY);
         for (Rectangle[] rect : caseBayesienne) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
             }
         }
-        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE,decalageX,decalageY);
+        casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, decalageX, decalageY);
         for (Rectangle[] rect : casesCameras) {
             for (Rectangle sousrect : rect) {
                 this.getChildren().add(sousrect);
@@ -107,11 +107,11 @@ public class VueBayesienne extends VueSimulation {
      * Met à jour les probabilités bayesiennes uniquement du joueur
      */
     private void updateBayes() {
-        if(tour>=simulation.getNbTours()){
+        if (tour >= simulation.getNbTours()) {
             return;
         }
-        var carte = simulation.getHistoriqueBayesien().get(this.perso).get(tour+1);
-        FiltreBayesien.updateBayes(caseBayesienne,carte);
+        var carte = simulation.getHistoriqueBayesien().get(this.perso).get(tour + 1);
+        FiltreBayesien.updateBayes(caseBayesienne, carte);
     }
 
     /**
@@ -129,38 +129,38 @@ public class VueBayesienne extends VueSimulation {
     @Override
     protected void updateDirections(int tour) {
         var historiqueDeplacement = this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier());
-        if(historiqueDeplacement.isEmpty()) {
+        if (historiqueDeplacement.isEmpty()) {
             System.out.println("Historique de déplacement vide");
             return;
         }
         String nomPerso = "prisonnier";
-        if(perso==this.simulation.getGardien()){
+        if (perso == this.simulation.getGardien()) {
             nomPerso = "gardien";
         }
-        if(this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier()).size() <= tour||tour==0) {
-           persoView.setImage(new Image("file:images/"+nomPerso+".png"));
+        if (this.simulation.getHistoriqueDeplacement().get(this.simulation.getPrisonnier()).size() <= tour || tour == 0) {
+            persoView.setImage(new Image("file:images/" + nomPerso + ".png"));
             return;
         }
 
-        switch (this.simulation.getHistoriqueDeplacement().get(perso).get(tour)){
+        switch (this.simulation.getHistoriqueDeplacement().get(perso).get(tour)) {
             case HAUT:
-                persoView.setImage(new Image("file:images/"+nomPerso+"_haut.png"));
+                persoView.setImage(new Image("file:images/" + nomPerso + "_haut.png"));
                 break;
             case BAS:
-                persoView.setImage(new Image("file:images/"+nomPerso+"_bas.png"));
+                persoView.setImage(new Image("file:images/" + nomPerso + "_bas.png"));
                 break;
             case GAUCHE:
             case DIAG_BAS_GAUCHE:
             case DIAG_HAUT_GAUCHE:
-                persoView.setImage(new Image("file:images/"+nomPerso+"_gauche.png"));
+                persoView.setImage(new Image("file:images/" + nomPerso + "_gauche.png"));
                 break;
             case DROITE:
             case DIAG_BAS_DROITE:
             case DIAG_HAUT_DROITE:
-                persoView.setImage(new Image("file:images/"+nomPerso+"_droite.png"));
+                persoView.setImage(new Image("file:images/" + nomPerso + "_droite.png"));
                 break;
             case AUCUN:
-                prisonnierView.setImage(new Image("file:images/"+nomPerso+".png"));
+                prisonnierView.setImage(new Image("file:images/" + nomPerso + ".png"));
                 break;
         }
     }

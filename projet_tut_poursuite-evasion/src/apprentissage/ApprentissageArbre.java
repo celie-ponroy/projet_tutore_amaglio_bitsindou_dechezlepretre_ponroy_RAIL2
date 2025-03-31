@@ -32,9 +32,8 @@ public class ApprentissageArbre {
         //LancerCalculs.init();
 
         Application application = Application.Tabular.SOFTMAX_REGRESSION;
-        long inputSize = Simulation.getTailleCarte()* 3L;
+        long inputSize = Simulation.getTailleCarte() * 3L;
         long outputSize = 9;
-
 
 
         //parametrage nb couches / neurones

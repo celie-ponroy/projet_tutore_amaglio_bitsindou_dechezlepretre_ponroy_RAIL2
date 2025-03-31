@@ -9,6 +9,7 @@ Ajout de caméras pour le gardien (Célie)
 	- modification du visuel pour pouvoir voir les caméras
 	- ajout d'explications dans le tutoriel
 	
+Ajout Page d'Accueil(Célie)
 
 Ajout de page de Crédits (Célie)
 

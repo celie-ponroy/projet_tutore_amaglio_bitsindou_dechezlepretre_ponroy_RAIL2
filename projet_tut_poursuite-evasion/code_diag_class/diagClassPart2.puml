@@ -166,6 +166,24 @@ package "simulation"{
       + Joueur(int, int)
     }
   }
+  package "tuto"{
+    enum EtatTuto {
+        DEBUT_Perso
+        DEPLACEMENT
+        GARDIEN
+        DEPLACEMENT_GARDIEN
+        FIN
+    }
+    class SimulationTutoriel{
+        - etatActuel: EtatTuto
+        - gardienVue: boolean
+        + SimulationTutoriel()
+        + deplacementJoueur(Deplacement): void
+        + update(KeyEvent): void
+        - getDeplacement(KeyEvent): Deplacement
+    }
+
+  }
 }
 
 
@@ -203,6 +221,8 @@ Simulation "1" --> "1" Personnage: gardien
 Simulation "1" --> "1" Personnage: prisonnier
 Simulation "1" --> "1" Comportement: comportementGardien
 Simulation "1" --> "1" Comportement: comportementPrisonnier
+
+Simulation <|-- SimulationTutoriel
 
 
 @enduml

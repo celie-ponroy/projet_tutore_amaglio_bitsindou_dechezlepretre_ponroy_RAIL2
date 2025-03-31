@@ -15,6 +15,9 @@ package "lancercalculs"{
     - historiqueDeplacementPerso: List<Integer>
     - casesVisitees: HashMap
     - pause: boolean
+    - caseDepart: boolean
+    - casesDepartPris: HashMap<Position, Integer>
+    - casesDepartGard: HashMap<Position, Integer>
     + LancerAnalyse()
     + lancerAnalyse(int, Comportements, Comportements): void
     - updateCasesVisitees(List<Position>): void
@@ -27,6 +30,8 @@ package "lancercalculs"{
     + getHistoriqueDeplacementPrisonnier(): List<Integer>
     + getCasesVisitees(): HashMap<Position, Integer>
     + setNbIterationsTotal(int): void
+    + getCasesDepartGard(): HashMap<Position, Integer>
+    + getCasesDepartPris(): HashMap<Position, Integer>
     + reinitialiser(): void
     + isPause()
   }

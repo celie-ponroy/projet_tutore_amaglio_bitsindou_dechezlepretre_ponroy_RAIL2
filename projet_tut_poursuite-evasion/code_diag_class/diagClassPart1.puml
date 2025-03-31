@@ -43,6 +43,8 @@ package "affichage" {
   class FiltreVision{
     + {static} initFiltre(int, int, int, Joueur,boolean): Rectangle[][]
     + {static} updateFiltre(Rectangle[][], Joueur,boolean): void
+    + {static} Rectangle[][] initFiltre(int, int, int, Joueur)
+    + {static} void updateFiltre(Rectangle[][], Joueur)
   }
   class FiltreCamera{
       + {static} initFiltre(int, int, int): Rectangle[][]
@@ -141,12 +143,16 @@ package "affichage" {
     + afficherMenuSauvegarde(Stage, VBox, Scene): void
     + getChoixPersonnage(): String
     + setChoixPersonnage(String): void
+    + retourBtn(): Button
+    + afficherTuto(Jeu, Scene, Pane)
+    + chargementBouton(Button): String
   }
   class VueMenusNonInteractive{
     - {static} WIDTH : double
     - {static} HEIGHT : double
     + VuePrincipaleNonInteractive(MoteurJeu)
     + afficherMenuIA(Stage): void
+    + chargementBouton(Button): String
   }
   class VueSauvegarde{
     - iterationLabel : Label
@@ -168,6 +174,37 @@ package "affichage" {
     + initFiltreVision(Pane): void
     + updateFiltreVision(): void
   }
+  class InformationsIa{
+    + {static, final} WIDTH : int
+    + {static, final} HEIGHT : int
+    + {static} VBox getInfosPrisonnier()
+    + {static} VBox getInfosGardien()
+    + {static} void popUpPrisonnier()
+    + {static} void popUpGardien()
+    + {static} void popUpNonInteractif()
+    - {static} void toggleLabel(String, String, VBox)
+    - {static} void toggleLabel(Text)
+    + {static} Button getButtonInfo()
+
+  }
+
+  class VueTutoriel{
+    - CENTRE : int
+    - instructions : VBox
+    - filtreVision : Rectangle[][]
+    + VueTutoriel(SimulationTutoriel, double,double)
+    - init() : void
+    - updateInfos(): void
+    - setInfoDebutPerso(): void
+    - setInfoDeplacement(): void
+    - ajouterTouche(GridPane, String, String, int, int): void
+    - setInfoGradien(): void
+    - setInfosFin(): void
+    - setInfosFin(): void
+
+  }
+
+
 }
 
 MoteurJeu --|> Application

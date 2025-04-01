@@ -74,7 +74,8 @@ public class VueMenusNonInteractive {
         gardienComboBox.getItems().add("Arbre de décision déterministe");
         gardienComboBox.getItems().add("Arbre de décision aléatoire");
         gardienComboBox.getItems().add("Comportement aléatoire");
-        gardienComboBox.getItems().add("Réseau de neurones 1.0");
+        gardienComboBox.getItems().add("Réseau de neurones MLP");
+        gardienComboBox.getItems().add("Réseau de neurones CNN");
 
         gardienBox.getChildren().addAll(gardienLabel, gardienComboBox);
 
@@ -97,7 +98,7 @@ public class VueMenusNonInteractive {
         prisonnierComboBox.getItems().add("Arbre de décision déterministe 1.0");
         prisonnierComboBox.getItems().add("Arbre de décision déterministe 2.0");
         prisonnierComboBox.getItems().add("Comportement aléatoire");
-        prisonnierComboBox.getItems().add("Réseau de neurones 1.0");
+        prisonnierComboBox.getItems().add("Réseau de neurones renforcement");
 
         prisonnierBox.getChildren().addAll(prisonnierLabel, prisonnierComboBox);
 
@@ -161,8 +162,11 @@ public class VueMenusNonInteractive {
                             case "Comportement aléatoire":
                                 comportementG = Comportements.Aleatoire;
                                 break;
-                            case "Réseau de neurones 1.0":
-                                comportementG = Comportements.ReseauArbreDeterministe;
+                            case "Réseau de neurones MLP":
+                                comportementG = Comportements.ReseauArbreMLP;
+                                break;
+                            case "Réseau de neurones CNN":
+                                comportementG = Comportements.ReseauArbreCNN;
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + gardienComboBox.getValue());
@@ -179,8 +183,8 @@ public class VueMenusNonInteractive {
                             case "Comportement aléatoire":
                                 comportementP = Comportements.Aleatoire;
                                 break;
-                            case "Réseau de neurones v1":
-                                comportementP = Comportements.ReseauArbreDeterministe;
+                            case "Réseau de neurones renforcement":
+                                comportementP = Comportements.ReseauRenforcement;
                                 break;
                             default:
                                 throw new IllegalStateException("Unexpected value: " + prisonnierComboBox.getValue());

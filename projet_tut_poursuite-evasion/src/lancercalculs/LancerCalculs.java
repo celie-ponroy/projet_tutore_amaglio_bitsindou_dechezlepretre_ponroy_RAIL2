@@ -11,6 +11,11 @@ import java.io.IOException;
 public class LancerCalculs {
     static String laby = "donnees/laby.txt";
 
+    /**
+     * Methode qui lance le calcule de la vision, des chemin et du dataset
+     * @throws IOException
+     * @throws TranslateException
+     */
     public static void init() throws IOException, TranslateException {
         int[][] carte = ChargementCarte.charger(laby);
         System.out.println("Chargement chemin...");
@@ -21,9 +26,13 @@ public class LancerCalculs {
         CalculVision.ecrireVision();
         Simulation.CARTE = carte;
         System.out.println("Calcul dataset...");
-        LancerCalculsDataSet.launch();
+        LancerCalculsDataSetArbreCNN.launch();
     }
 
+    /**
+     * Methode qui lance le calcule de la vision et des chemins
+     * @throws IOException
+     */
     public static void initSansDS() throws IOException {
         int[][] carte = ChargementCarte.charger(laby);
         System.out.println("Chargement chemin...");

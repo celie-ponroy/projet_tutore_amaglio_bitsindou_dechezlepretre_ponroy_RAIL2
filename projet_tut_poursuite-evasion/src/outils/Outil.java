@@ -21,6 +21,53 @@ public class Outil {
         return flatCarte;
     }
 
+
+    /**
+     * Méthode qui permet de transformer un tableau a double entree d'int en float
+     *
+     * @param tab tableau d'int a transformer
+     * @return tableau de float
+     */
+    public static float[][] conversionIntFloat(int[][] tab) {
+        float[][] realMapFloat = new float[tab.length][tab[0].length]; // Nouveau tableau de float
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab[i].length; j++) {
+                realMapFloat[i][j] = (float) tab[i][j]; // Conversion de int en float
+            }
+        }
+        return realMapFloat;
+    }
+
+    /**
+     * Méthode qui permet de transformer un tableau a double entree d'int en float
+     *
+     * @param tab tableau d'int a transformer
+     * @return tableau de float
+     */
+    public static float[][] conversionDoubleFloat(double[][] tab) {
+        float[][] realMapFloat = new float[tab.length][tab[0].length]; // Nouveau tableau de float
+        for (int i = 0; i < tab.length; i++) {
+            for (int j = 0; j < tab[i].length; j++) {
+                realMapFloat[i][j] = (float) tab[i][j]; // Conversion de int en float
+            }
+        }
+        return realMapFloat;
+    }
+
+    /**
+     * Méthode qui permet de transformer un tableau a double entree d'int en float
+     *
+     * @param tab tableau d'int a transformer
+     * @return tableau de float
+     */
+    public static float[] conversionDoubleFloat(double[] tab) {
+        float[] realMapFloat = new float[tab.length]; // Nouveau tableau de float
+        for (int i = 0; i < tab.length; i++) {
+            realMapFloat[i] = (float) tab[i]; // Conversion de int en float
+        }
+        return realMapFloat;
+    }
+
     public static void afficher_tab(double[] tab) {
         for (int i = 0; i < tab.length; i++) {
             System.out.printf("%.1f,", tab[i]);

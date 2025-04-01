@@ -353,13 +353,15 @@ public class VueMenus extends VueSimulation {
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision aléatoire");
             comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones 1.0");
+            comboBox.getItems().add("Réseau de neurones MLP");
+            comboBox.getItems().add("Réseau de neurones CNN");
+
         } else { //si l'utilisateur joue le gardien
             //Ajout de chaque choix possible
             comboBox.getItems().add("Arbre de décision déterministe 1.0");
             comboBox.getItems().add("Arbre de décision déterministe 2.0");
             comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones 1.0");
+            comboBox.getItems().add("Réseau de neurones renforcement");
         }
 
         HBox buttonBox = new HBox(comboBox);
@@ -406,12 +408,14 @@ public class VueMenus extends VueSimulation {
                                 simulation = new Simulation(false, Comportements.Aleatoire);
                             }
                             break;
-                        case "Réseau de neurones 1.0":
-                            if (choixPersonnage.equals("Prisonnier")) {
-                                simulation = new Simulation(true, Comportements.ReseauArbreDeterministe);
-                            } else {
-                                simulation = new Simulation(false, Comportements.ReseauArbreDeterministe);
-                            }
+                        case "Réseau de neurones MLP":
+                                simulation = new Simulation(true, Comportements.ReseauArbreMLP);
+                            break;
+                        case "Réseau de neurones CNN":
+                            simulation = new Simulation(true, Comportements.ReseauArbreCNN);
+                            break;
+                        case "Réseau de neurones renforcement":
+                            simulation = new Simulation(true, Comportements.ReseauRenforcement);
                             break;
                         case null:
                             Platform.runLater(() -> {

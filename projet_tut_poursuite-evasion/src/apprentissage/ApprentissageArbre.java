@@ -1,25 +1,23 @@
 package apprentissage;
 
 
-import ai.djl.Application;
 import ai.djl.Model;
-import ai.djl.nn.Activation;
-import ai.djl.nn.Blocks;
+import ai.djl.ndarray.NDManager;
 import ai.djl.nn.SequentialBlock;
-import ai.djl.nn.core.Linear;
-import ai.djl.nn.norm.Dropout;
 import ai.djl.training.DefaultTrainingConfig;
 import ai.djl.training.EasyTrain;
 import ai.djl.training.Trainer;
 import ai.djl.training.TrainingConfig;
+import ai.djl.training.dataset.Dataset;
 import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
-import ai.djl.training.loss.SoftmaxCrossEntropyLoss;
 import ai.djl.translate.TranslateException;
-import lancercalculs.LancerCalculs;
 import outils.CSVDataset;
-import simulation.Simulation;
+import outils.CSVDatasetMLP;
+import outils.CSVDatasetCNN;
+import simulation.comportement.ReseauDeNeurones;
+import simulation.comportement.ReseauDeNeuronesCNN;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -28,44 +26,33 @@ import java.nio.file.Paths;
 
 public class ApprentissageArbre {
     public static void main(String[] args) throws IOException, TranslateException {
-        //M"thode pour recalculer le dataset
+        //Methode pour recalculer le dataset
         //LancerCalculs.init();
-
-        Application application = Application.Tabular.SOFTMAX_REGRESSION;
-        long inputSize = Simulation.getTailleCarte()* 3L;
-        long outputSize = 9;
-
-
-
-        //parametrage nb couches / neurones
+        String nonReseau = "reseau_" + args[0];
+        CSVDataset csvDataset;
+        CSVDataset csvDatasetValidate;
         SequentialBlock block = new SequentialBlock();
-        block.add(Blocks.batchFlattenBlock(inputSize));
-        //block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(350).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(300).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(256).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(200).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(128).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(100).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(64).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(50).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(32).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(20).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(outputSize).build());
+        switch (args[0]) {
+            case "cnn":
+                ReseauDeNeuronesCNN.setBlock();
+                block = ReseauDeNeuronesCNN.getBlock();
+                csvDataset = new CSVDatasetCNN.Builder().setSampling(32, true).build("donnees/game_data.csv");
+                csvDatasetValidate = new CSVDatasetCNN.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");
+                break;
+            case "mpl":
+                ReseauDeNeurones.setBlock();
+                block = ReseauDeNeurones.getBlock();
+                csvDataset = new CSVDatasetMLP.Builder().setSampling(32, true).build("donnees/game_data.csv");
+                csvDatasetValidate = new CSVDatasetMLP.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + args[0]);
+        }
 
-        //creation du modele du réseau a sauvegarder
-        Model model = Model.newInstance("reseau_Arbre");
+        // Créer le modèle
+        Model model = Model.newInstance(nonReseau);
         model.setBlock(block);
+
         //parametrage de l'entrainement
         //Loss l = new SoftmaxCrossEntropyLoss("test",1,-1,false,true);
         TrainingConfig config = new DefaultTrainingConfig(Loss.softmaxCrossEntropyLoss())
@@ -95,26 +82,31 @@ public class ApprentissageArbre {
                         trainer.getTrainingResult();
                     }
                 }); //affiche les info d'entrainement
-
         Trainer trainer = model.newTrainer(config);
-
 
         int epoch = 50;
 
-        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data.csv");
-        CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_validation.csv");
 
-        System.out.println(csvDataset.size());
-        System.out.println(csvDatasetValidate.size());
-
-        EasyTrain.fit(trainer, epoch, csvDataset, csvDatasetValidate);
+        //entrainement du réseau
+        EasyTrain.fit(trainer, epoch,(Dataset) csvDataset, (Dataset)csvDatasetValidate);
 
         //enregistrement du model
-        Path modelDir = Paths.get("donnees/mlp");
+        Path modelDir = Paths.get("donnees/reseau/"+args[0]);
         Files.createDirectories(modelDir);
 
         model.setProperty("Epoch", String.valueOf(epoch));
 
-        model.save(modelDir, "mlp_");
+        model.save(modelDir, args[0]);
+    }
+
+    /**
+     * Methode permetant d'afficher une ligne (record) du Dataset
+     * @param csvDataset set de donnees pour l'apprentissage
+     * @param csvDatasetValidate set de donnees pour le teste
+     */
+    public void afficherRecord(CSVDatasetCNN csvDataset, CSVDatasetCNN csvDatasetValidate) {
+        System.out.println("csv size : " + csvDataset.size());
+        System.out.println("csv validate size : " + csvDatasetValidate.size());
+        System.out.println(csvDataset.get(NDManager.newBaseManager(), 0).getData().get(0));
     }
 }

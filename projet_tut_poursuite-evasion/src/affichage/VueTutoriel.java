@@ -93,6 +93,7 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
      */
     @Override
     protected void updatePositions() {
+        updateDirections(this.simulation.getNbTours() -1);
         setPositions(this.simulation.getPrisonnier().getPosition(), this.prisonnierView);
         setPositions(this.simulation.getGardien().getPosition(), this.gardienView);
     }

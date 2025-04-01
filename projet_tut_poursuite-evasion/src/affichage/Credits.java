@@ -59,7 +59,6 @@ public class Credits {
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Crédits défilants");
-        primaryStage.setFullScreen(true);
         primaryStage.setFullScreenExitHint("");
         primaryStage.show();
 

@@ -119,7 +119,7 @@ public class PageAccueil {
 
         quitter.setPrefSize(150, 50);
         quitter.setOnAction(e -> primaryStage.close());
-        
+
         HBox boutonsMilieu = new HBox();
         boutonsMilieu.setAlignment(Pos.CENTER);
         boutonsMilieu.setSpacing(20);

@@ -1,11 +1,8 @@
-package affichage;
+package affichage.filtres;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
-import simulation.personnages.Position;
-
-import java.util.Collection;
 
 public class FiltreBayesien {
     /**
@@ -15,7 +12,7 @@ public class FiltreBayesien {
      * @param TAILLE_CELLULE
      * @return
      */
-    static Rectangle[][] initFiltre(double[][] carteBayes, int TAILLE_CELLULE, int DecalageX, int DecalageY) {
+    public static Rectangle[][] initFiltre(double[][] carteBayes, int TAILLE_CELLULE, int DecalageX, int DecalageY) {
         Rectangle[][] caseBayesienne = new Rectangle[carteBayes.length][carteBayes[0].length];
 
         for (int i = 0; i < Simulation.CARTE.length; i++) {
@@ -41,7 +38,7 @@ public class FiltreBayesien {
      * @param caseBayesienne
      * @param carteBayes
      */
-    static void updateBayes(Rectangle[][] caseBayesienne, double[][] carteBayes) {
+    public static void updateBayes(Rectangle[][] caseBayesienne, double[][] carteBayes) {
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = caseBayesienne[i][j];

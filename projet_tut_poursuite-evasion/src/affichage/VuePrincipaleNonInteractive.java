@@ -1,8 +1,6 @@
 package affichage;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
-import javafx.geometry.Insets;
+import affichage.filtres.FiltreCamera;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -11,13 +9,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import moteur.Jeu;
 import musique.SoundManager;
-import sauvegarde.Sauvegarde;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
-
-import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * Classe pour la vue principale non interactive

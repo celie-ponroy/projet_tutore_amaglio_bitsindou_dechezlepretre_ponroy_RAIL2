@@ -1,13 +1,8 @@
-package affichage;
+package affichage.filtres;
 
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import simulation.CaseEnum;
 import simulation.Simulation;
 import simulation.personnages.Joueur;
 import simulation.personnages.Position;
@@ -28,7 +23,7 @@ public class FiltreVision {
      * @param joueur
      * @return
      */
-    static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY, Joueur joueur, boolean avec_camera) {
+    public static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY, Joueur joueur, boolean avec_camera) {
         Rectangle[][] filtreVision = new Rectangle[Simulation.CARTE[0].length][Simulation.CARTE.length];
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
@@ -64,7 +59,7 @@ public class FiltreVision {
      * @param filtreVision
      * @param joueur
      */
-    static void updateFiltre(Rectangle[][] filtreVision, Joueur joueur, boolean avec_camera) {
+    public static void updateFiltre(Rectangle[][] filtreVision, Joueur joueur, boolean avec_camera) {
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {
                 Rectangle rectangle = filtreVision[j][i];

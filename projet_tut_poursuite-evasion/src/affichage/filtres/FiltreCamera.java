@@ -1,9 +1,8 @@
-package affichage;
+package affichage.filtres;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import simulation.Simulation;
-import simulation.personnages.Joueur;
 import simulation.personnages.Position;
 
 import java.util.Collection;
@@ -19,7 +18,7 @@ public class FiltreCamera {
      * @param DecalageY
      * @return
      */
-    static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY) {
+    public static Rectangle[][] initFiltre(int TAILLE_CELLULE, int DecalageX, int DecalageY) {
         Rectangle[][] filtreVision = new Rectangle[Simulation.CARTE[0].length][Simulation.CARTE.length];
         for (int i = 0; i < Simulation.CARTE.length; i++) {
             for (int j = 0; j < Simulation.CARTE[i].length; j++) {

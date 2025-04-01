@@ -224,11 +224,26 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setPrefSize(WIDTH, HEIGHT);
-        vBox.setSpacing(200);
+        vBox.setSpacing(100);
         //on affiche les infos de fin
         Label label = new Label("Bravo vous avez fini le tutoriel :)");
         label.getStyleClass().add("titre");
         vBox.getChildren().add(label);
+
+        HBox course = new HBox();
+        course.setAlignment(Pos.CENTER);
+        course.setSpacing(10);
+
+        ImageView gardien = new ImageView("file:images/gardien_course.gif");
+        gardien.setFitWidth(75);
+        gardien.setPreserveRatio(true);
+        course.getChildren().add(gardien);
+
+        ImageView prisonnier = new ImageView("file:images/prisonnier_course.gif");
+        prisonnier.setFitWidth(75);
+        prisonnier.setPreserveRatio(true);
+        course.getChildren().add(prisonnier);
+        vBox.getChildren().add(course);
 
         Button retourMenuBtn = new Button("Commencer");
         retourMenuBtn.getStyleClass().add("valider");

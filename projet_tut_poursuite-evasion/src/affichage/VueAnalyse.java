@@ -375,9 +375,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         root.setAlignment(Pos.BOTTOM_RIGHT);
 
         // Définition de la scène
-        Scene scene = new Scene(root, 800, 600);
-        primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
+        primaryStage.getScene().setRoot(root);
         primaryStage.setTitle("Analyse des données");
         primaryStage.show();
 

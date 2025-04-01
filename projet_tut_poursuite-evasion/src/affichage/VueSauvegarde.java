@@ -181,7 +181,10 @@ public class VueSauvegarde extends VueSimulation {
                     image = this.imageSortie;
                 } else if (Simulation.CARTE[i][j] == CaseEnum.RACCOURCI_GARDIEN.ordinal()) {
                     image = this.imageRaccourciGardien;
-
+                } else if (Simulation.CARTE[i][j] == CaseEnum.CAMERA.ordinal()) {
+                    if (avec_camera)
+                        image = this.imageCamera;
+                    else image = this.imageSol;
                 }
 
                 if (image != null) {
@@ -330,9 +333,8 @@ public class VueSauvegarde extends VueSimulation {
         retourMenuBtn.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-            stage.close();
             //retour au menu principal
-            VueMenus vm = new VueMenus();
+            VueMenus vm = new VueMenus(stage);
             vm.afficherMenuPrincipal();
         });
         retourMenuBtn.setLayoutX(TAILLE_CELLULE * CARTE[0].length + 30 + TAILLE_CELLULE * 2);

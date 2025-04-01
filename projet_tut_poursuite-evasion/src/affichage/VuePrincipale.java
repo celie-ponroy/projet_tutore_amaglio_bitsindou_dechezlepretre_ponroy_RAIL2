@@ -249,9 +249,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             SoundManager.playFondMusic();
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-            stage.close();
             //retour au menu principal
-            VueMenus vm = new VueMenus();
+            VueMenus vm = new VueMenus(stage);
             vm.afficherMenuPrincipal();
         });
 

@@ -189,9 +189,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 SoundManager.playFondMusic();
                 //Ferme la fenetre actuelle
                 Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-                stage.close();
                 //retour au menu principal
-                VueMenus vm = new VueMenus();
+                VueMenus vm = new VueMenus(stage);
                 vm.afficherMenuPrincipal();
             });
             retourMenuBtn.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);

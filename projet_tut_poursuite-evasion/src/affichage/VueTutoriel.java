@@ -28,6 +28,8 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
     private int CENTRE = 0;
     VBox instructions;
     private Rectangle[][] filtreVision; // Filtre pour cacher les cases non visibles
+    private int WIDTH ;
+    private int HEIGHT ;
 
 
     public VueTutoriel(SimulationTutoriel simulation, double width, double height) {
@@ -38,6 +40,8 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
             TAILLE_CELLULE = (int) (height / (Simulation.CARTE.length) * 0.75);
         }
         CENTRE = (int) width / 2;
+        this.WIDTH = (int) width;
+        this.HEIGHT = (int) height;
         this.init();
 
     }
@@ -238,27 +242,43 @@ public class VueTutoriel extends VueSimulation implements DessinJeu {
      */
     private void setInfoFin() {
         this.getChildren().clear();
+        VBox vBox = new VBox();
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPrefSize(WIDTH, HEIGHT);
+        vBox.setSpacing(100);
         //on affiche les infos de fin
         Label label = new Label("Bravo vous avez fini le tutoriel :)");
-        label.setAlignment(Pos.CENTER);
-        label.setLayoutX(CENTRE - 100);
-        label.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        label.getStyleClass().add("titre");
+        vBox.getChildren().add(label);
 
-        this.getChildren().add(label);
-        Button retourMenuBtn = new Button("Commercer");
-        retourMenuBtn.getStyleClass().add("important");
+        HBox course = new HBox();
+        course.setAlignment(Pos.CENTER);
+        course.setSpacing(10);
+
+        ImageView gardien = new ImageView("file:images/gardien_course.gif");
+        gardien.setFitWidth(75);
+        gardien.setPreserveRatio(true);
+        course.getChildren().add(gardien);
+
+        ImageView prisonnier = new ImageView("file:images/prisonnier_course.gif");
+        prisonnier.setFitWidth(75);
+        prisonnier.setPreserveRatio(true);
+        course.getChildren().add(prisonnier);
+        vBox.getChildren().add(course);
+
+        Button retourMenuBtn = new Button("Commencer");
+        retourMenuBtn.getStyleClass().add("valider");
         retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
-            stage.close();
             //retour au menu principal
-            VueMenus vm = new VueMenus();
+            VueMenus vm = new VueMenus(stage);
             vm.afficherMenuPrincipal();
         });
-        retourMenuBtn.setLayoutX(CENTRE - 175);
-        retourMenuBtn.setLayoutY(200);
-        this.getChildren().add(retourMenuBtn);
+        vBox.getChildren().add(retourMenuBtn);
+
+        this.getChildren().add(vBox);
     }
 
     /**

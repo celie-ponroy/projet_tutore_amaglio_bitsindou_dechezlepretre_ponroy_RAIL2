@@ -355,8 +355,8 @@ public class Simulation implements Jeu {
                 this.historiqueDeplacement.get(joueur).removeLast();
                 this.historiqueDeplacement.get(joueur).add(d);
             }
-            historiquePosition.get(prisonnier).add(prisonnier.getPosition());
-            historiquePosition.get(gardien).add(gardien.getPosition());
+            //historiquePosition.get(prisonnier).add(prisonnier.getPosition());
+            //historiquePosition.get(gardien).add(gardien.getPosition());
         }
 
         this.nbTours++;

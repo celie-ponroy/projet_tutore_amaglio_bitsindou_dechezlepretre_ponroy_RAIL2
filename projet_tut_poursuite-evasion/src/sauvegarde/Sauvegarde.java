@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Sauvegarde {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         //test de sauvegarde et de chargement
-        sauvegarder(new Simulation(true, Comportements.Aleatoire), "simu.ser");
+        sauvegarder(new Simulation(true, Comportements.AleatoireGard), "simu.ser");
         Simulation retour = charger("simu");
         System.out.println(retour);
         System.out.println(retour.getHistoriqueDeplacement());

@@ -1,6 +1,5 @@
 package affichage;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +20,6 @@ import moteur.Jeu;
 import moteur.MoteurJeu;
 import musique.SoundManager;
 import sauvegarde.Sauvegarde;
-import simulation.Comportements;
 import simulation.Simulation;
 
 import java.util.List;
@@ -334,18 +332,11 @@ public class VueMenus {
         //si le choix du personnage de l'utilisateur est le prisonnier, on adapte la combobox
         if (Objects.equals(choixPersonnage, "Prisonnier")) { //si l'utilisateur joue le prisonnier
             //Ajout de chaque choix possible
-            comboBox.getItems().add("Arbre de décision déterministe 1.0");
-            comboBox.getItems().add("Arbre de décision aléatoire");
-            comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones MLP");
-            comboBox.getItems().add("Réseau de neurones CNN");
+            comboBox = FabriqueComportement.creerComboBoxGardien();
 
         } else { //si l'utilisateur joue le gardien
             //Ajout de chaque choix possible
-            comboBox.getItems().add("Arbre de décision déterministe 1.0");
-            comboBox.getItems().add("Arbre de décision déterministe 2.0");
-            comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones renforcement");
+            comboBox = FabriqueComportement.creerComboBoxPrisonnier();
         }
 
         HBox buttonBox = new HBox(comboBox);
@@ -357,6 +348,7 @@ public class VueMenus {
         okButton.setPrefSize(150, 50);
 
         //Évenements lier au choix de difficulté
+        ComboBox<String> finalComboBox = comboBox;
         okButton.setOnAction(e -> {
             //on stop la musique de fond et on met en place la musique de jeu
             SoundManager.stopFondMusic();
@@ -371,49 +363,7 @@ public class VueMenus {
                     Simulation simulation = null;
 
                     //Switch pour le choix de la difficulté de l'agent en fonction du choix de l'utilisateur
-                    switch (comboBox.getValue()) {
-                        case "Arbre de décision déterministe 1.0":
-                            if (choixPersonnage.equals("Prisonnier")) {
-                                FabriqueComportement.creerComportement(true, "ArbreDeterministe");
-                            } else {
-                                FabriqueComportement.creerComportement(false, "ArbreDeterministe");
-                            }
-                            break;
-                        case "Arbre de décision déterministe 2.0":
-                            FabriqueComportement.creerComportement(true, "ArbreDeterministev2");
-                            break;
-                        case "Arbre de décision aléatoire":
-                            FabriqueComportement.creerComportement(true, "ArbreAleatoire");
-                            break;
-                        case "Comportement aléatoire":
-                            if (choixPersonnage.equals("Prisonnier")) {
-                                FabriqueComportement.creerComportement(true, "Aleatoire");
-                            } else {
-                                FabriqueComportement.creerComportement(false, "Aleatoire");
-                            }
-                            break;
-                        case "Réseau de neurones MLP":
-                                simulation = new Simulation(true, Comportements.ReseauArbreMLP);
-                            break;
-                        case "Réseau de neurones CNN":
-                            simulation = new Simulation(true, Comportements.ReseauArbreCNN);
-                            break;
-                        case "Réseau de neurones renforcement":
-                            simulation = new Simulation(true, Comportements.ReseauRenforcement);
-                            break;
-                        case null:
-                            Platform.runLater(() -> {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Information");
-                                alert.setHeaderText("Attention !");
-                                alert.setContentText("Veuillez choisir un niveau de difficulté");
-                                alert.showAndWait();
-                            });
-                            return null;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
-                    }
-                    return simulation;
+                    return FabriqueComportement.creerSimulation(finalComboBox.getValue());
                 }
             };
 

@@ -58,6 +58,10 @@ public class ArbreDecisionGardien extends ArbreDecision implements Comportement,
 
     @Override
     public Comportements getType() {
-        return Comportements.ArbreDeterministe;
+        if (personnage.equals(simulation.getGardien())) {
+            return Comportements.ArbreDeterministeGard;
+        } else {
+            return Comportements.ArbreDeterministePris;
+        }
     }
 }

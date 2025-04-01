@@ -70,10 +70,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // ComboBox prisonnier
         ComboBox<String> comboBoxPrisonnier = new ComboBox<>();
         comboBoxPrisonnier.getItems().addAll(
-                "Arbre de décision déterministe 1.0",
-                "Arbre de décision déterministe 2.0",
-                "Comportement aléatoire",
-                "Réseau de neurones renforcement"
+                FabriqueComportement.creerComboBoxPrisonnier().getItems()
         );
         //Ajout d'un titre dans la comboBox
         comboBoxPrisonnier.setPromptText("Choix du prisonnier");
@@ -95,11 +92,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // ComboBox gardien
         ComboBox<String> comboBoxGardien = new ComboBox<>();
         comboBoxGardien.getItems().addAll(
-                "Arbre de décision déterministe",
-                "Arbre de décision aléatoire",
-                "Comportement aléatoire",
-                "Réseau de neurones MLP",
-                "Réseau de neurones CNN"
+                FabriqueComportement.creerComboBoxGardien().getItems()
         );
         //Ajout d'un titre dans la comboBox avec une couleur grise
         comboBoxGardien.setPromptText("Choix du gardien");
@@ -400,44 +393,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         Comportements comportementP; //stocke le comportement du prisonnier choisi
         Comportements comportementG; //stocke le comportement du gardien choisi
 
-        //Switch pour le choix de difficulté du gardien
-        switch (comboBoxGardien.getValue()) {
-            case "Arbre de décision déterministe":
-                comportementG = Comportements.ArbreDeterministe;
-                break;
-            case "Arbre de décision aléatoire":
-                comportementG = Comportements.ArbreAleatoire;
-                break;
-            case "Comportement aléatoire":
-                comportementG = Comportements.Aleatoire;
-                break;
-            case "Réseau de neurones MLP":
-                comportementG = Comportements.ReseauArbreMLP;
-                break;
-            case "Réseau de neurones CNN":
-                comportementG = Comportements.ReseauArbreCNN;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + comboBoxGardien.getValue());
-        }
+        //Choix de difficulté du gardien
+        comportementG = FabriqueComportement.creerComportement(comboBoxGardien.getValue());
 
-        //Switch pour le choix de difficulté du prisonnier
-        switch (comboBoxPrisonnier.getValue()) {
-            case "Arbre de décision déterministe 1.0":
-                comportementP = Comportements.ArbreDeterministe;
-                break;
-            case "Arbre de décision déterministe 2.0":
-                comportementP = Comportements.ArbreDeterministev2;
-                break;
-            case "Comportement aléatoire":
-                comportementP = Comportements.Aleatoire;
-                break;
-            case "Réseau de neurones renforcement":
-                comportementP = Comportements.ReseauRenforcement;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + comboBoxPrisonnier.getValue());
-        }
+        //Choix de difficulté du prisonnier
+        comportementP = FabriqueComportement.creerComportement(comboBoxPrisonnier.getValue());
 
         //Ajoute les comportements choisis dans un tableau
         Comportements[] comportements = {comportementG, comportementP};

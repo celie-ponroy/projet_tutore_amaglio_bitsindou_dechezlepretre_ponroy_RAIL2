@@ -49,7 +49,11 @@ public class Aleatoire implements Comportement, java.io.Serializable {
 
     @Override
     public Comportements getType() {
-        return Comportements.Aleatoire;
+        if (perso.equals(simulation.getGardien())) {
+            return Comportements.AleatoireGard;
+        }else {
+            return Comportements.AleatoirePris;
+        }
     }
 
     /**

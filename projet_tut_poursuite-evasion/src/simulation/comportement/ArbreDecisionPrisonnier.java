@@ -49,7 +49,11 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
 
     @Override
     public Comportements getType() {
-        return Comportements.ArbreDeterministe;
+        if (personnage.equals(simulation.getPrisonnier())) {
+            return Comportements.ArbreDeterministePris;
+        }else {
+            return Comportements.ArbreDeterministeGard;
+        }
     }
 
 }

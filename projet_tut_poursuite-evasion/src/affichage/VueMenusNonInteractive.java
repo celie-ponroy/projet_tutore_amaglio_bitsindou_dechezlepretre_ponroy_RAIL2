@@ -71,11 +71,7 @@ public class VueMenusNonInteractive {
 
         //Combobox pour le choix de difficulté du gardien
         ComboBox<String> gardienComboBox = new ComboBox<>();
-        gardienComboBox.getItems().add("Arbre de décision déterministe");
-        gardienComboBox.getItems().add("Arbre de décision aléatoire");
-        gardienComboBox.getItems().add("Comportement aléatoire");
-        gardienComboBox.getItems().add("Réseau de neurones MLP");
-        gardienComboBox.getItems().add("Réseau de neurones CNN");
+        gardienComboBox.getItems().addAll(FabriqueComportement.creerComboBoxGardien().getItems());
 
         gardienBox.getChildren().addAll(gardienLabel, gardienComboBox);
 
@@ -95,11 +91,7 @@ public class VueMenusNonInteractive {
 
         //Combobox pour le choix de difficulté du prisonnier
         ComboBox<String> prisonnierComboBox = new ComboBox<>();
-        prisonnierComboBox.getItems().add("Arbre de décision déterministe 1.0");
-        prisonnierComboBox.getItems().add("Arbre de décision déterministe 2.0");
-        prisonnierComboBox.getItems().add("Comportement aléatoire");
-        prisonnierComboBox.getItems().add("Réseau de neurones renforcement");
-
+        prisonnierComboBox.getItems().addAll(FabriqueComportement.creerComboBoxPrisonnier().getItems());
         prisonnierBox.getChildren().addAll(prisonnierLabel, prisonnierComboBox);
 
         // Ajout des deux colonnes au conteneur principal
@@ -151,43 +143,10 @@ public class VueMenusNonInteractive {
                         Comportements comportementG;
 
                         // Switch pour le choix de difficulté du gardien
-                        switch (gardienComboBox.getValue()) {
-                            case "Arbre de décision déterministe":
-                                comportementG = Comportements.ArbreDeterministe;
-                                break;
-                            case "Arbre de décision aléatoire":
-                                comportementG = Comportements.ArbreAleatoire;
-                                break;
-                            case "Comportement aléatoire":
-                                comportementG = Comportements.Aleatoire;
-                                break;
-                            case "Réseau de neurones MLP":
-                                comportementG = Comportements.ReseauArbreMLP;
-                                break;
-                            case "Réseau de neurones CNN":
-                                comportementG = Comportements.ReseauArbreCNN;
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + gardienComboBox.getValue());
-                        }
+                        comportementG = FabriqueComportement.creerComportement(gardienComboBox.getValue());
 
                         // Switch pour le choix de difficulté du prisonnier
-                        switch (prisonnierComboBox.getValue()) {
-                            case "Arbre de décision déterministe 1.0":
-                                comportementP = Comportements.ArbreDeterministe;
-                                break;
-                            case "Arbre de décision déterministe 2.0":
-                                comportementP = Comportements.ArbreDeterministev2;
-                                break;
-                            case "Comportement aléatoire":
-                                comportementP = Comportements.Aleatoire;
-                                break;
-                            case "Réseau de neurones renforcement":
-                                comportementP = Comportements.ReseauRenforcement;
-                                break;
-                            default:
-                                throw new IllegalStateException("Unexpected value: " + prisonnierComboBox.getValue());
-                        }
+                        comportementP = FabriqueComportement.creerComportement(prisonnierComboBox.getValue());
 
                         // Création de la simulation
                         return new Simulation(comportementG, comportementP);

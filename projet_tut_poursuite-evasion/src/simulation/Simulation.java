@@ -1,7 +1,6 @@
 package simulation;
 
 import affichage.DessinJeu;
-import ai.djl.translate.TranslateException;
 import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
@@ -9,7 +8,6 @@ import outils.ChargementCarte;
 import simulation.comportement.*;
 import simulation.personnages.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +71,7 @@ public class Simulation implements Jeu {
         historiquePosition.put(this.gardien, posG);
 
         //ajout des comportements
-        setComportementsGardient(ComportementGardien);
+        setComportementsGardien(ComportementGardien);
         setComportementsPrisonier(ComportementPrisonier);
 
         //initialisation des victoires
@@ -128,7 +126,7 @@ public class Simulation implements Jeu {
             //Position aléatoire des agents
             this.positionnerAgentsSpawnAleatoire();
 
-            setComportementsGardient(ComportementAdversaire);
+            setComportementsGardien(ComportementAdversaire);
 
             bayesiens.put(this.gardien, new Bayesien());
             carteBayesiennes.put(gardien, bayesiens.get(this.gardien).getCarteBayesienne());
@@ -501,15 +499,15 @@ public class Simulation implements Jeu {
      *
      * @param comportements enums représantant le comportement chosit
      */
-    public void setComportementsGardient(Comportements comportements) {
+    public void setComportementsGardien(Comportements comportements) {
         switch (comportements) {
-            case Comportements.ArbreDeterministe:
+            case Comportements.ArbreDeterministeGard:
                 this.comportementGardien = new ArbreDecisionGardien(this, this.gardien);
                 break;
             case Comportements.ArbreAleatoire:
                 this.comportementGardien = new ArbreDecisionGardienAleatoire(this, this.gardien);
                 break;
-            case Comportements.Aleatoire:
+            case Comportements.AleatoireGard:
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreMLP:
@@ -531,13 +529,13 @@ public class Simulation implements Jeu {
      */
     public void setComportementsPrisonier(Comportements comportements) {
         switch (comportements) {
-            case Comportements.ArbreDeterministe:
+            case Comportements.ArbreDeterministePris:
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
                 break;
             case Comportements.ArbreDeterministev2:
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier2(this, this.prisonnier);
                 break;
-            case Comportements.Aleatoire:
+            case Comportements.AleatoirePris:
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauRenforcement:

@@ -15,6 +15,7 @@ import musique.SoundManager;
 import simulation.Comportements;
 import simulation.Simulation;
 
+import static affichage.PageAccueil.isMuted;
 import static musique.SoundManager.playGameMusic;
 
 /**
@@ -200,7 +201,9 @@ public class VueMenusNonInteractive {
                     //Si la simulation n'est pas null on lance la simulation
                     if (simulation != null) {
                         MoteurJeu.jeu = simulation;
-                        playGameMusic();//lance la musique de jeu
+                        if (isMuted == false){
+                            playGameMusic();
+                        }
 
                         // Affichage du jeu
                         VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive(WIDTH, HEIGHT);

@@ -31,6 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.scene.Cursor;
 
+import static affichage.PageAccueil.isMuted;
 import static affichage.PageAccueil.lancerPageAcceuil;
 import static musique.SoundManager.playGameMusic;
 
@@ -423,7 +424,9 @@ public class VueMenus {
                     //on change le nom de la scene
                     setScene(root, "Simulation interactive");
                     MoteurJeu.jeu = simulation;
-                    playGameMusic(); //lance la musique de jeu
+                    if (isMuted == false){
+                        playGameMusic();
+                    }
                     //Affichage du jeu
                     afficherJeu(MoteurJeu.jeu, root);
                 }

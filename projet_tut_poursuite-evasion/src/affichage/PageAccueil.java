@@ -21,8 +21,11 @@ import java.awt.*;
 
 import static musique.SoundManager.stopBtnMusic;
 public class PageAccueil {
+
+    //Attributs
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();
+    protected static boolean isMuted = false;
 
     /**
      * Lance la page d'accueil
@@ -136,29 +139,29 @@ public class PageAccueil {
      */
     private static Button creerBoutonSon() {
         Button boutonSon = new Button();
-        ImageView iconeSon = new ImageView("file:images/son.png"); // Image du son activé
+        ImageView iconeSon = new ImageView((isMuted ? "file:images/mute.png" : "file:images/son.png"));
         iconeSon.setFitWidth(50);
         iconeSon.setPreserveRatio(true);
+        
         boutonSon.setGraphic(iconeSon);
         boutonSon.setAlignment(Pos.BOTTOM_RIGHT);
         boutonSon.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;"); // Bouton invisible
         iconeSon.setFitWidth(30);
         iconeSon.setPreserveRatio(true);
 
-        // Variable pour suivre l'état du son
-        final boolean[] isMuted = {false};
-
         // Action du bouton
         boutonSon.setOnAction(e -> {
-            isMuted[0] = !isMuted[0]; // Inverse l'état du son
-            if (isMuted[0]) {
+            isMuted = !isMuted; // Mise à jour de l'attribut statique
+            if (isMuted) {
                 SoundManager.stopAllMusic(); // Coupe le son
                 iconeSon.setImage(new ImageView("file:images/mute.png").getImage()); // Change l'icône
             } else {
                 SoundManager.playFondMusic(); // Remet le son
                 iconeSon.setImage(new ImageView("file:images/son.png").getImage());
             }
-        });        return boutonSon;
+        });
+
+        return boutonSon;
     }
 
     /**

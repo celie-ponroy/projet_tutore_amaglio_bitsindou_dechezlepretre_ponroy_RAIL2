@@ -29,7 +29,7 @@ public class ArbreDecisionPrisonnier2 extends ArbreDecision implements Comportem
         if (s.empty())
             return direction(personnage.getPosition(), Simulation.getPosSortie());
         //si on voit pas le gardien
-        if (!simulation.estVisible(personnage, true)) {
+        if (!simulation.estVisible(simulation.getGardien(), false)) {
             //position la plus probable du gardien
             Case cG = simulation.getBayesiens().get(personnage).getPlusGrandeProbas().get(0);
             Position pG = new Position(cG.getX(), cG.getY());

@@ -138,7 +138,7 @@ public class Simulation implements Jeu {
 
         } else {
             this.gardien = new Joueur(5, 4, VISION_G);
-            this.prisonnier = new Agent(9, 18, VISION_G);
+            this.prisonnier = new Agent(9, 18, VISION_P);
 
             this.positionnerAgentsSpawnAleatoire();
 

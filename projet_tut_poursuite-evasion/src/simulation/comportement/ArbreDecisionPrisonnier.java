@@ -31,7 +31,7 @@ public class ArbreDecisionPrisonnier extends ArbreDecision implements Comporteme
         if (s.empty()) {
             deplacementRes = direction(personnage.getPosition(), Simulation.getPosSortie());
             //si on voit pas le gardien
-        } else if (!simulation.estVisible(personnage, true)) {
+        } else if (!simulation.estVisible(simulation.getGardien(), false)) {
             //on va vers la sortie
             deplacementRes = direction(personnage.getPosition(), s.getLast());
 

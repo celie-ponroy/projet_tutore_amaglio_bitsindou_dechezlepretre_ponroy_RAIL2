@@ -46,7 +46,7 @@ public class Credits {
         this.creerTache(creditsBox, "En la mémoire de", new String[]{"Librairies Java abandonnées n°1 : Libraie de M. Boniface", "Librairies Java abandonnées n°2 : Neuroph", "La patience de Matias"});
         this.creerTache(creditsBox, "Soutenances", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson"});
         this.creerTache(creditsBox, "Avec la participation de", new String[]{"Matias Amaglio", "Luc Dechezleprêtre", "Maëlle Bitsindou", "Célie Ponroy", "Guenaël Cabanes"});
-        this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson", "Charlemiam", "Les deux collègues de M. Cabanes", "Nino Arcelin"});
+        this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson", "Charlemiam", "Les deux collègues de M. Cabanes","Victor Georges", "Nino Arcelin"});
         this.creerTache(creditsBox, "Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
         this.creerTache(creditsBox, "BUT Informatique 2025", new String[]{""});
 

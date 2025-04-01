@@ -96,9 +96,8 @@ public class PageAccueil {
         lancerJeu.getStyleClass().add("gris");
         lancerJeu.setPrefSize(20+150+150, 100); //150=taillle petit boutons 20 = spacing
         lancerJeu.setOnAction(e -> {
-            VueMenus vueMenus = new VueMenus(jeu);
+            VueMenus vueMenus = new VueMenus(jeu,primaryStage);
             vueMenus.afficherMenuPrincipal();
-            primaryStage.close();
         });
 
         Button tutoriel = new Button("Tutoriel");

@@ -14,5 +14,7 @@ module com.example.projet_tut_poursuiteevasion {
     exports moteur;
     exports affichage;
     opens affichage to javafx.fxml;
+    exports affichage.filtres;
+    opens affichage.filtres to javafx.fxml;
 
 }

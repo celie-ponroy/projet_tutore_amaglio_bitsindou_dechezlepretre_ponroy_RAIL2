@@ -53,11 +53,10 @@ public class VueMenus {
      *
      * @param j le moteur de jeu
      */
-    public VueMenus(MoteurJeu j) {
+    public VueMenus(MoteurJeu j,Stage primaryStage) {
         this.jeu = j;
-        this.primaryStage = new Stage();
-        this.primaryStage.setFullScreen(true);
         this.choixPersonnage = "";
+        this.primaryStage = primaryStage;
     }
 
 
@@ -81,7 +80,6 @@ public class VueMenus {
             this.primaryStage.getScene().setRoot(root);
         }
         this.primaryStage.setTitle(title);
-        this.primaryStage.show();
     }
 
 
@@ -286,9 +284,10 @@ public class VueMenus {
         retour.setOnAction(e -> {
             //Ferme la fenetre actuelle
             Stage stage = (Stage) retour.getScene().getWindow();
-            stage.close();
             //retour au menu principal
+            this.primaryStage = stage;
             this.afficherMenuPrincipal();
+
         });
 
         return retour;

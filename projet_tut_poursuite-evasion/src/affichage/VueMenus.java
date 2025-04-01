@@ -374,22 +374,22 @@ public class VueMenus {
                     switch (comboBox.getValue()) {
                         case "Arbre de décision déterministe 1.0":
                             if (choixPersonnage.equals("Prisonnier")) {
-                                simulation = new Simulation(true, Comportements.ArbreDeterministe);
+                                FabriqueComportement.creerComportement(true, "ArbreDeterministe");
                             } else {
-                                simulation = new Simulation(false, Comportements.ArbreDeterministe);
+                                FabriqueComportement.creerComportement(false, "ArbreDeterministe");
                             }
                             break;
                         case "Arbre de décision déterministe 2.0":
-                            simulation = new Simulation(false, Comportements.ArbreDeterministev2);
+                            FabriqueComportement.creerComportement(true, "ArbreDeterministev2");
                             break;
                         case "Arbre de décision aléatoire":
-                            simulation = new Simulation(true, Comportements.ArbreAleatoire);
+                            FabriqueComportement.creerComportement(true, "ArbreAleatoire");
                             break;
                         case "Comportement aléatoire":
                             if (choixPersonnage.equals("Prisonnier")) {
-                                simulation = new Simulation(true, Comportements.Aleatoire);
+                                FabriqueComportement.creerComportement(true, "Aleatoire");
                             } else {
-                                simulation = new Simulation(false, Comportements.Aleatoire);
+                                FabriqueComportement.creerComportement(false, "Aleatoire");
                             }
                             break;
                         case "Réseau de neurones MLP":

@@ -2,11 +2,19 @@ package simulation.comportement;
 
 import ai.djl.MalformedModelException;
 import ai.djl.Model;
-
 import ai.djl.basicmodelzoo.basic.Mlp;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.Shape;
+import ai.djl.nn.Activation;
+import ai.djl.nn.Block;
+import ai.djl.nn.Blocks;
+import ai.djl.nn.SequentialBlock;
+import ai.djl.nn.convolutional.Conv2d;
+import ai.djl.nn.core.Linear;
+import ai.djl.nn.norm.Dropout;
+import ai.djl.nn.pooling.Pool;
 import ai.djl.translate.Batchifier;
 import ai.djl.translate.Translator;
 import ai.djl.translate.TranslatorContext;
@@ -22,15 +30,26 @@ import java.nio.file.Paths;
 
 public class ReseauDeNeurones implements Comportement {
     Simulation sim;
-    Personnage personnage;
     Model model;
+    static SequentialBlock block;
+    Personnage personnage;
     private Translator<NDArray, Integer> translator;
 
+    /**
+     * Constricteur reseau de neurone mlp
+     *
+     * @param nomReseau  nom du reseau
+     * @param simulation simulation dans laquel le reseau agira
+     */
     public ReseauDeNeurones(String nomReseau, Simulation simulation, Personnage personnage) {
         this.sim = simulation;
         this.personnage = personnage;
+        if (block == null) {
+            System.out.println("le bloc est null");
+            setBlock();
+        }
 
-        Path modelDir = Paths.get("donnees/mlp");
+        Path modelDir = Paths.get("donnees/reseau/mlp");
         model = Model.newInstance(nomReseau);
         model.setBlock(new Mlp(Simulation.getTailleCarte() * 3, Deplacement.values().length, new int[]{350, 300, 256, 200, 128, 100, 64, 50, 32, 20}));
         try {
@@ -60,42 +79,16 @@ public class ReseauDeNeurones implements Comportement {
                 return Batchifier.STACK;
             }
         };
-
     }
 
     @Override
     public Deplacement prendreDecision() {
         var predictor = model.newPredictor(translator);
         NDManager manager = NDManager.newBaseManager();
-        double[] cartePos = Outil.applatissement(sim.getGardien().getPositionCarte());
-        double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
+        double[] cartePos = Outil.applatissement(personnage.getPositionCarte());
+        double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(personnage));
         double[] carte = Outil.applatissement(sim.getCarteMursSortie());
         float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
-        //Outil.afficher_tab(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
-//        System.out.println("\nCarte Pos");
-//        System.out.println(sim.getGardien().getPosition());
-//        for(int i = 0; i < Simulation.CARTE.length; i++){
-//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-//                System.out.print(sim.getGardien().getPositionCarte()[i][j]+" ");
-//            }
-//            System.out.println();
-//        }
-//
-//        System.out.println("\nCarte Baye");
-//        for(int i = 0; i < Simulation.CARTE.length; i++){
-//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-//                System.out.print(sim.getCarteBayesienne(sim.getGardien())[i][j]+" ");
-//            }
-//            System.out.println();
-//        }
-//
-//        System.out.println("\nCarte");
-//        for(int i = 0; i < Simulation.CARTE.length; i++){
-//            for(int j = 0; j < Simulation.CARTE[0].length; j++){
-//                System.out.print(sim.getCarteMursSortie()[i][j]+" ");
-//            }
-//            System.out.println();
-//        }
 
         NDArray arrayFlaot = manager.create(input);
         Integer resultat = 0;
@@ -105,12 +98,19 @@ public class ReseauDeNeurones implements Comportement {
             System.out.println(te.getMessage());
             return Deplacement.AUCUN;
         }
-        //System.out.println(Deplacement.values()[resultat]);
         return Deplacement.values()[resultat];
     }
 
     @Override
     public Comportements getType() {
         return Comportements.ReseauArbreAleatoire;
+    }
+
+    public static void setBlock() {
+        block = new Mlp(Simulation.getTailleCarte() * 3, Deplacement.values().length, new int[]{350, 300, 256, 200, 128, 100, 64, 50, 32, 20});
+    }
+
+    public static SequentialBlock getBlock() {
+        return block;
     }
 }

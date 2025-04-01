@@ -25,7 +25,7 @@ public class MoteurJeu extends Application {
      */
     public void start(Stage primaryStage) {
         PageAccueil.lancerPageAcceuil((MoteurJeu) jeu, primaryStage);
-        SoundManager soundManager = new SoundManager();
+        SoundManager sn = new SoundManager();
         playFondMusic();
 
         try {

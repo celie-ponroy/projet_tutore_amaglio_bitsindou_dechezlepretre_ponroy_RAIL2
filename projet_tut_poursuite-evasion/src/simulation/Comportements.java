@@ -7,6 +7,8 @@ public enum Comportements implements Serializable {
     ArbreDeterministev2,
     Aleatoire,
     ArbreAleatoire,
-    ReseauArbreDeterministe,
-    ReseauArbreAleatoire;
+    ReseauArbreCNN,
+    ReseauRenforcement,
+    ReseauArbreMLP,
+    ReseauArbreAleatoire,;
 }

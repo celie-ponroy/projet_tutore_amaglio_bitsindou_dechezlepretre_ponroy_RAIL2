@@ -9,19 +9,15 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lancercalculs.LancerAnalyse;
 import moteur.Jeu;
 import moteur.MoteurJeu;
-import musique.SoundManager;
 import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import simulation.Simulation;
@@ -77,7 +73,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Arbre de décision déterministe 1.0",
                 "Arbre de décision déterministe 2.0",
                 "Comportement aléatoire",
-                "Réseau de neurones 1.0"
+                "Réseau de neurones renforcement"
         );
         //Ajout d'un titre dans la comboBox
         comboBoxPrisonnier.setPromptText("Choix du prisonnier");
@@ -102,7 +98,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Arbre de décision déterministe",
                 "Arbre de décision aléatoire",
                 "Comportement aléatoire",
-                "Réseau de neurones 1.0"
+                "Réseau de neurones MLP",
+                "Réseau de neurones CNN"
         );
         //Ajout d'un titre dans la comboBox avec une couleur grise
         comboBoxGardien.setPromptText("Choix du gardien");
@@ -414,8 +411,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             case "Comportement aléatoire":
                 comportementG = Comportements.Aleatoire;
                 break;
-            case "Réseau de neurones 1.0":
-                comportementG = Comportements.ReseauArbreDeterministe;
+            case "Réseau de neurones MLP":
+                comportementG = Comportements.ReseauArbreMLP;
+                break;
+            case "Réseau de neurones CNN":
+                comportementG = Comportements.ReseauArbreCNN;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + comboBoxGardien.getValue());
@@ -432,8 +432,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             case "Comportement aléatoire":
                 comportementP = Comportements.Aleatoire;
                 break;
-            case "Réseau de neurones v1":
-                comportementP = Comportements.ReseauArbreDeterministe;
+            case "Réseau de neurones renforcement":
+                comportementP = Comportements.ReseauRenforcement;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + comboBoxPrisonnier.getValue());
@@ -594,7 +594,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 });
             }
         }
-
         return courbes;
     }
 
@@ -701,7 +700,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier");
                     }
                     // Affiche les cases visitées par le prisonnier
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -712,7 +710,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees pri");
                     }
                 } else if (radioBtnGardien.isSelected()) {
                     // Affiche les positions de départ du gardien
@@ -722,7 +719,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien");
                     }
                     // Affiche les cases visitées par le gardien
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -733,7 +729,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees gard");
                     }
                 } else if (radioBtnTous.isSelected()) {
                     // Affiche les positions de départ du prisonnier et du gardien
@@ -743,7 +738,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier + ");
                     }
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
@@ -751,7 +745,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien + ");
                     }
                     // Affiche les cases visitées par les deux
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -762,7 +755,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees tous");
                     }
                 }
             }

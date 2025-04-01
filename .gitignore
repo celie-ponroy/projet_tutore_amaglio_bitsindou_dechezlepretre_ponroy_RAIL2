@@ -12,6 +12,8 @@ hello-view.fxml
 projet_tut_poursuite-evasion/donnees/sauvegardes_simulation/*
 projet_tut_poursuite-evasion/donnees/vision.txt
 projet_tut_poursuite-evasion/donnees/chemins*
+projet_tut_poursuite-evasion/donnees/game_data.csv
+projet_tut_poursuite-evasion/donnees/game_data_validation.csv
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

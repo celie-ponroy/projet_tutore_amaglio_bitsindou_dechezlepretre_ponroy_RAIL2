@@ -1,27 +1,23 @@
 package affichage;
 
+import affichage.filtres.FiltreCamera;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import lancercalculs.LancerAnalyse;
 import moteur.Jeu;
 import moteur.MoteurJeu;
-import musique.SoundManager;
 import simulation.Comportements;
 import javafx.scene.control.Tooltip;
 import simulation.Simulation;
@@ -701,7 +697,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier");
                     }
                     // Affiche les cases visitées par le prisonnier
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -712,7 +707,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees pri");
                     }
                 } else if (radioBtnGardien.isSelected()) {
                     // Affiche les positions de départ du gardien
@@ -722,7 +716,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien");
                     }
                     // Affiche les cases visitées par le gardien
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -733,7 +726,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees gard");
                     }
                 } else if (radioBtnTous.isSelected()) {
                     // Affiche les positions de départ du prisonnier et du gardien
@@ -743,7 +735,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier + ");
                     }
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
@@ -751,7 +742,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien + ");
                     }
                     // Affiche les cases visitées par les deux
                     if (listeCasesVisitees.containsKey(currentPos)) {
@@ -762,7 +752,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                         Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
                         Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees tous");
                     }
                 }
             }

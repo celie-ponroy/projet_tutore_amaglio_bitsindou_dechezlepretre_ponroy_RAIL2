@@ -1,9 +1,10 @@
 package affichage;
 
+import affichage.filtres.FiltreBayesien;
+import affichage.filtres.FiltreCamera;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
-import moteur.Jeu;
 import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;

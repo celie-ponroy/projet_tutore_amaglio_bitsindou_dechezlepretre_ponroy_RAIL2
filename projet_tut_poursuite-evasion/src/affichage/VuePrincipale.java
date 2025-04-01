@@ -1,5 +1,8 @@
 package affichage;
 
+import affichage.filtres.FiltreBayesien;
+import affichage.filtres.FiltreCamera;
+import affichage.filtres.FiltreVision;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;

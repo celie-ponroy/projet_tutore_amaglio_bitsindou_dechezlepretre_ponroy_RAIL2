@@ -1,5 +1,7 @@
 package affichage;
 
+import affichage.filtres.FiltreCamera;
+import affichage.filtres.FiltreVision;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,7 +15,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import simulation.CaseEnum;
-import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Joueur;
 import simulation.personnages.Personnage;

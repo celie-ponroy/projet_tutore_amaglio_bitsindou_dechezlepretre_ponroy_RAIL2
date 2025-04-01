@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -118,7 +119,7 @@ public class PageAccueil {
 
         quitter.setPrefSize(150, 50);
         quitter.setOnAction(e -> primaryStage.close());
-
+        
         HBox boutonsMilieu = new HBox();
         boutonsMilieu.setAlignment(Pos.CENTER);
         boutonsMilieu.setSpacing(20);

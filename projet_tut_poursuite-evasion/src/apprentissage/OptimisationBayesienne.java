@@ -13,7 +13,7 @@ import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.translate.TranslateException;
-import outils.CSVDataset;
+import outils.CSVDatasetCNN;
 import simulation.Simulation;
 
 import java.io.*;
@@ -227,8 +227,8 @@ public class OptimisationBayesienne {
 
         int epoch = 50;
 
-        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, false).build("donnees/game_data.csv");
-        CSVDataset csvDatasetValidate = new CSVDataset.Builder().setSampling(32, false).build("donnees/game_data_validation.csv");
+        CSVDatasetCNN csvDataset = new CSVDatasetCNN.Builder().setSampling(32, false).build("donnees/game_data.csv");
+        CSVDatasetCNN csvDatasetValidate = new CSVDatasetCNN.Builder().setSampling(32, false).build("donnees/game_data_validation.csv");
 
         EasyTrain.fit(trainer, epoch, csvDataset, csvDatasetValidate);
 

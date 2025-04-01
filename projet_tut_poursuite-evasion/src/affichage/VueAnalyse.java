@@ -73,7 +73,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Arbre de décision déterministe 1.0",
                 "Arbre de décision déterministe 2.0",
                 "Comportement aléatoire",
-                "Réseau de neurones 1.0"
+                "Réseau de neurones renforcement"
         );
         //Ajout d'un titre dans la comboBox
         comboBoxPrisonnier.setPromptText("Choix du prisonnier");
@@ -98,7 +98,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 "Arbre de décision déterministe",
                 "Arbre de décision aléatoire",
                 "Comportement aléatoire",
-                "Réseau de neurones 1.0"
+                "Réseau de neurones MLP",
+                "Réseau de neurones CNN"
         );
         //Ajout d'un titre dans la comboBox avec une couleur grise
         comboBoxGardien.setPromptText("Choix du gardien");
@@ -410,8 +411,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             case "Comportement aléatoire":
                 comportementG = Comportements.Aleatoire;
                 break;
-            case "Réseau de neurones 1.0":
-                comportementG = Comportements.ReseauArbreDeterministe;
+            case "Réseau de neurones MLP":
+                comportementG = Comportements.ReseauArbreMLP;
+                break;
+            case "Réseau de neurones CNN":
+                comportementG = Comportements.ReseauArbreCNN;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + comboBoxGardien.getValue());
@@ -428,8 +432,8 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             case "Comportement aléatoire":
                 comportementP = Comportements.Aleatoire;
                 break;
-            case "Réseau de neurones v1":
-                comportementP = Comportements.ReseauArbreDeterministe;
+            case "Réseau de neurones renforcement":
+                comportementP = Comportements.ReseauRenforcement;
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + comboBoxPrisonnier.getValue());
@@ -590,7 +594,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 });
             }
         }
-
         return courbes;
     }
 

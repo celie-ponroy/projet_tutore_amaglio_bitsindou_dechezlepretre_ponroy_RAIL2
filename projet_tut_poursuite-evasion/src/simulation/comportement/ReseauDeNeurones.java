@@ -32,7 +32,7 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte()*3, Deplacement.values().length, new int[] {350, 300, 256,200, 128,100, 64,50, 32, 20}));
+        model.setBlock(new Mlp(Simulation.getTailleCarte()*2, Deplacement.values().length, new int[] {25}));
         try {
             model.load(modelDir);
             System.out.println("Chargement ok !");
@@ -50,7 +50,7 @@ public class ReseauDeNeurones implements Comportement {
             @Override
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
-                NDArray probabilities = list.singletonOrThrow().softmax(0);
+                NDArray probabilities = list.singletonOrThrow();
 
                 return (int) probabilities.argMax().getLong();
             }
@@ -68,9 +68,10 @@ public class ReseauDeNeurones implements Comportement {
         var predictor = model.newPredictor(translator);
         NDManager manager = NDManager.newBaseManager();
         double[] cartePos = Outil.applatissement(sim.getGardien().getPositionCarte());
-        double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
+        //double[] carteBayesienne = Outil.applatissement(sim.getCarteBayesienne(sim.getGardien()));
         double[] carte = Outil.applatissement(sim.getCarteMursSortie());
-        float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
+        float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, cartePos));
+        //float[] input = Outil.doubleToFloat(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
         //Outil.afficher_tab(Outil.concatener_tab(carte, Outil.concatener_tab(carteBayesienne, cartePos)));
 //        System.out.println("\nCarte Pos");
 //        System.out.println(sim.getGardien().getPosition());

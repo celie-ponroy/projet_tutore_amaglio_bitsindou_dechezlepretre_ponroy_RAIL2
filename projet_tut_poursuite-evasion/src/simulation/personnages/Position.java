@@ -26,7 +26,11 @@ public class Position implements Serializable {
         return y;
     }
 
-
+    public Position getNouvellePosition(Deplacement d){
+        Position p = new Position(this.x, this.y);
+        p.deplacement(d);
+        return p;
+    }
     public void deplacement(Deplacement d) {
         switch (d) {
             case BAS:

@@ -35,4 +35,27 @@ public class DataCollector {
             e.printStackTrace();
         }
     }
+
+    public static void saveDateQLearning(double[] doubles, double[] reward, String s) {
+        try (FileWriter writer = new FileWriter(s, true)) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("\"");
+            for (double value : doubles) {
+                sb.append(value).append(",");
+            }
+            //On supprime la virgule en trop
+            sb.deleteCharAt(sb.length()-1);
+            sb.append("\",\"");
+            for(double val : reward){
+                sb.append(val);
+                sb.append(",");
+            }
+            sb.deleteCharAt(sb.length()-1);
+            sb.append("\"\n");
+
+            writer.write(sb.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

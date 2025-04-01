@@ -20,7 +20,7 @@ public class Simulation implements Jeu {
     protected boolean victoireGardien;
     protected Comportement comportementGardien;
     protected Comportement comportementPrisonnier;
-    public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/petitLaby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION_G = CalculVision.recupererVision("G");
     public static final HashMap<Position, ArrayList<Position>> VISION_P = CalculVision.recupererVision("P");
     public static final HashMap<Position, ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
@@ -506,7 +506,7 @@ public class Simulation implements Jeu {
                 this.comportementGardien = new Aleatoire(this, this.gardien);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreDeterministe", this, this.gardien);
+                this.comportementGardien = new ReseauDeNeurones("mlp_q", this, this.gardien);
                 break;
             case Comportements.ReseauArbreAleatoire:
                 //this.comportementGardien = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/G-RN-ArbreAleatoire", this, this.gardien);
@@ -533,7 +533,7 @@ public class Simulation implements Jeu {
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                this.comportementPrisonnier = new ReseauDeNeurones("mlp_q", this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreAleatoire:
                 //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);

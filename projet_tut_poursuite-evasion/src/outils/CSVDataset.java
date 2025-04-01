@@ -36,7 +36,7 @@ public class CSVDataset extends RandomAccessDataset {
         NDArray bayesien = manager.create(mapValues);
 
         // Conversion de "dep" en float
-        NDArray dep = manager.create(parseMap(record.get("dep")));
+        NDArray dep = manager.create(parseMap(record.get("reward")));
 
         return new Record(new NDList(bayesien), new NDList(dep));
     }
@@ -78,7 +78,7 @@ public class CSVDataset extends RandomAccessDataset {
             try (Reader reader = Files.newBufferedReader(Paths.get(nomFichier));
                  CSVParser csvParser =
                          new CSVParser(reader, CSVFormat.DEFAULT
-                                 .withHeader("input", "dep")
+                                 .withHeader("input", "reward")
                                  .withFirstRecordAsHeader()
                                  .withIgnoreHeaderCase()
                                  .withTrim())) {

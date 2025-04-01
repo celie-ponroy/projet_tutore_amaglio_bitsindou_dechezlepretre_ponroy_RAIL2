@@ -67,6 +67,7 @@ public class VueMenus {
         this.primaryStage = primaryStage;
         this.choixPersonnage = "";
     }
+
     /**
      * Méthode pour afficher la scene
      *

@@ -16,6 +16,9 @@ import moteur.MoteurJeu;
 import musique.SoundManager;
 import simulation.tuto.SimulationTutoriel;
 
+import java.awt.*;
+
+import static musique.SoundManager.stopBtnMusic;
 public class PageAccueil {
     private static double WIDTH = (int) Screen.getPrimary().getBounds().getWidth();
     private static double HEIGHT = (int) Screen.getPrimary().getBounds().getHeight();

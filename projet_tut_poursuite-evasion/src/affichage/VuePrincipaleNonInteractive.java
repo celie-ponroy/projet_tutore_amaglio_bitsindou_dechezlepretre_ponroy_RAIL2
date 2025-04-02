@@ -185,9 +185,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                     SoundManager.stopAllMusic();
                     SoundManager.playFondMusic();
                 }
-                //Ferme la fenetre actuelle
-                Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
                 //retour au menu principal
+                Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
                 VueMenus vm = new VueMenus(stage);
                 vm.afficherMenuPrincipal();
             });
@@ -199,8 +198,10 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             hboxBouttons.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
             hboxBouttons.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 3);
             hboxBouttons.setSpacing(10);
+
             hboxBouttons.getChildren().add(precedent);
             hboxBouttons.getChildren().add(suivant);
+
             this.getChildren().add(hboxBouttons);
             this.getChildren().add(sauvegarder);
             this.getChildren().add(retourMenuBtn);

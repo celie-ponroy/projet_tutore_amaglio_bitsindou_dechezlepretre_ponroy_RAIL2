@@ -409,11 +409,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
     public void afficherCamembert() {
         Platform.runLater(() -> {
-            int nbIte = lancerAnalyse.getNbIterationCourrante();
-            if (nbIte == 0) {
-                nbIte = 1;
-            }
-
             // Efface les anciennes données
             pieChartData.clear();
 
@@ -521,7 +516,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         // Ajout des données pour chaque partie
         for (int i = 0; i < nbIterationsInt; i++) {
-            String partie = "P" + (i + 1);  // Utilisation d'un format plus court pour les labels
+            String partie = "P" + (i + 1);
             series.getData().add(new XYChart.Data<>(partie, lancerAnalyse.getNbDeplacementPerso(i)));
         }
 
@@ -573,13 +568,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         graphiqueCourbes();
 
         // Mise à jour du filtre de chaleur en fonction des radioButtons sélectionnés
+        var liste = lancerAnalyse.getCasesVisitees();
         if (radioBtnPrisonnier.isSelected()) {
-            updateFiltreChaleur(lancerAnalyse.getCasesVisiteesPrisonnier());
+            liste = lancerAnalyse.getCasesVisiteesPrisonnier();
         } else if (radioBtnGardien.isSelected()) {
-            updateFiltreChaleur(lancerAnalyse.getCasesVisiteesGardien());
-        } else if (radioBtnTous.isSelected()) {
-            updateFiltreChaleur(lancerAnalyse.getCasesVisitees());
+            liste = lancerAnalyse.getCasesVisiteesGardien();
         }
+        updateFiltreChaleur(liste);
+
     }
 
     @Override
@@ -636,7 +632,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 Rectangle rect = caseFiltreChaleur[i][j];
                 rect.setFill(Color.rgb(0, 255, 0, 0));
                 rect.setOpacity(0);
-                Tooltip.uninstall(rect, null); // Enlever les anciens tooltips
             }
         }
 
@@ -660,18 +655,14 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 }
                 rect.setOpacity(1);
 
-                // En fonction de la position actuelle des personnages sélectionnés par les radioButtons
                 if (radioBtnPrisonnier.isSelected()||radioBtnTous.isSelected()) {
-                    // Affiche les cases visitées par le prisonnier
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         System.out.println("Spawn prisonnier" + lancerAnalyse.getCasesDepartPris().get(currentPos));
                     }
-
                 }
                 if (radioBtnGardien.isSelected()||radioBtnTous.isSelected()) {
-                    // Affiche les positions de départ du gardien
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));

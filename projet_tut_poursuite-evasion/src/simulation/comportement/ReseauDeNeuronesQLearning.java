@@ -104,7 +104,8 @@ public class ReseauDeNeuronesQLearning implements Comportement {
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray probabilities = list.singletonOrThrow();
-
+                System.out.println(probabilities);
+                System.out.println(probabilities.argMax().getLong());
                 return (int) probabilities.argMax().getLong();
             }
 

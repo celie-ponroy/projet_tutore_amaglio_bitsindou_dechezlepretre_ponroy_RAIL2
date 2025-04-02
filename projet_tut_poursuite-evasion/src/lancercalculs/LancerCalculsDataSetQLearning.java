@@ -39,7 +39,7 @@ public class LancerCalculsDataSetQLearning {
         double[] reward = new double[Deplacement.values().length];
         double[] carte = Outil.applatissement(sim.getCarteMursSortie());
         double[] cartePos;
-        double gamma = 0.5;
+        double gamma = 0.95;
         Personnage personnage = sim.getPrisonnier();
         rnq.setSim(sim);
         rnq.setPersonnage(personnage);
@@ -62,7 +62,7 @@ public class LancerCalculsDataSetQLearning {
                         }
                     }
                     else{
-                        reward[indiceDep] = -0.1;
+                        reward[indiceDep] = -0.3;
                     }
                     reward[indiceDep] += gamma*sortieRN;
                 }

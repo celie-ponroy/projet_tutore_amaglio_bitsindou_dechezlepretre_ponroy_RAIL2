@@ -83,7 +83,7 @@ public class ApprentissageQLearning {
                     }
                 }); //affiche les info d'entrainement
 
-        int epoch = 50;
+        int epoch = 500;
         int batchSize = 32;
 
         Trainer trainer = model.newTrainer(config);

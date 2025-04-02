@@ -140,8 +140,8 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(prisonnier, list1);
 
         }
-        this.positionnerAgentsSpawnAleatoire();
-        //this.positionnerAleatoirement();
+        //this.positionnerAgentsSpawnAleatoire();
+        this.positionnerAleatoirement();
 
         //historique
         historiquePosition = new HashMap<>();

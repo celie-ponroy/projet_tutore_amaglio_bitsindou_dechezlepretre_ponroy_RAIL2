@@ -6,7 +6,6 @@ import moteur.Jeu;
 import simulation.Comportements;
 import simulation.Simulation;
 import simulation.personnages.Position;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +122,6 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode pour mettre à jour les cases visitées par le prisonnier
-     *
      * @param positions
      */
     private void updateCasesVisiteesPrisonnier(List<Position> positions) {
@@ -141,7 +139,6 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode pour mettre à jour les cases visitées par le gardien
-     *
      * @param positions
      */
     private void updateCasesVisiteesGardien(List<Position> positions) {
@@ -201,7 +198,10 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre d'itérations courrantes
+<<<<<<< HEAD
      *
+=======
+>>>>>>> d33afe2 (Ajout choix perso analyse sans spwan)
      * @return nbIterationCourrante
      */
     public int getNbIterationCourrante() {
@@ -222,10 +222,9 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne les cases visitées
-     *
      * @return
      */
-    public HashMap<Position, Integer> getCasesVisitees() {
+    public HashMap <Position, Integer> getCasesVisitees() {
         return casesVisitees;
     }
 
@@ -248,7 +247,6 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre total d'itérations
-     *
      * @param nbIterations
      */
     public void setNbIterationsTotal(int nbIterations) {
@@ -257,7 +255,6 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne true si l'analyse est en pause
-     *
      * @return true si l'analyse est en pause false sinon
      */
     public synchronized boolean isPause() {

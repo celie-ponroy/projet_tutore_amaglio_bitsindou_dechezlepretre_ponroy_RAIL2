@@ -12,7 +12,7 @@ import java.util.*;
 // Classe permettant de calculer la vision
 
 public class CalculVision {
-   public static int[][] CARTE = ChargementCarte.charger("donnees/petitLaby.txt");
+   public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
 
     /**
      * Recuperer la vision depuis le fichier vision.txt

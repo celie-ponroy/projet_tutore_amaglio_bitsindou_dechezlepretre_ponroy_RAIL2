@@ -38,7 +38,7 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         model = Model.newInstance(nomReseau);
 
         SequentialBlock block = new SequentialBlock();
-        block.add(Blocks.batchFlattenBlock(Simulation.getTailleCarte()*2));
+        block.add(Blocks.batchFlattenBlock(Simulation.getTailleCarte()* 2L));
         block.add(Linear.builder().setUnits(50).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(25).build());

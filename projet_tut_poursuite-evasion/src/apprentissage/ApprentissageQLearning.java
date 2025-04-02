@@ -2,6 +2,7 @@ package apprentissage;
 
 import ai.djl.Application;
 import ai.djl.Model;
+import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Activation;
 import ai.djl.nn.Blocks;
 import ai.djl.nn.SequentialBlock;
@@ -76,20 +77,20 @@ public class ApprentissageQLearning {
                     }
                 }); //affiche les info d'entrainement
 
+        int epoch = 100;
+        int batchSize = 32;
+
         Trainer trainer = model.newTrainer(config);
+        trainer.initialize(new Shape(batchSize,inputSize));
 
-
-        int epoch = 10;
-        System.out.println("---------------------------------------------");
         ReseauDeNeuronesQLearning rn = new ReseauDeNeuronesQLearning(model);
         for (int i = 0; i < 100; i++) {
             LancerCalculsDataSetQLearning.launch(rn);
-            CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_Qlearning.csv");
+            CSVDataset csvDataset = new CSVDataset.Builder().setSampling(batchSize, true).build("donnees/game_data_Qlearning.csv");
 
             System.out.println(csvDataset.size());
 
             EasyTrain.fit(trainer, epoch, csvDataset, null);
-            System.out.println("****************************");
             rn = new ReseauDeNeuronesQLearning(model);
         }
         //enregistrement du model

@@ -20,7 +20,7 @@ public class Simulation implements Jeu {
     protected boolean victoireGardien;
     protected Comportement comportementGardien;
     protected Comportement comportementPrisonnier;
-    public static int[][] CARTE = ChargementCarte.charger("donnees/petitLaby.txt");
+    public static int[][] CARTE = ChargementCarte.charger("donnees/laby.txt");
     public static final HashMap<Position, ArrayList<Position>> VISION_G = CalculVision.recupererVision("G");
     public static final HashMap<Position, ArrayList<Position>> VISION_P = CalculVision.recupererVision("P");
     public static final HashMap<Position, ArrayList<Position>> VISION_CAMERAS = CalculVision.recupererVision("C");
@@ -119,10 +119,6 @@ public class Simulation implements Jeu {
             this.prisonnier = new Joueur(9, 18, VISION_P);
             this.gardien = new Agent(5, 4, VISION_G);
 
-            //Position aléatoire des agents
-            //this.positionnerAgentsSpawnAleatoire();
-            this.positionnerAleatoirement();
-
             setComportementsGardient(ComportementAdversaire);
 
             bayesiens.put(this.gardien, new Bayesien());
@@ -135,10 +131,8 @@ public class Simulation implements Jeu {
             this.gardien = new Joueur(5, 4, VISION_G);
             this.prisonnier = new Agent(9, 18, VISION_G);
 
-            //this.positionnerAgentsSpawnAleatoire();
-            this.positionnerAleatoirement();
             setComportementsPrisonier(ComportementAdversaire);
-
+            
             bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
             ArrayList<double[][]> list1 = new ArrayList<>();
@@ -146,6 +140,8 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(prisonnier, list1);
 
         }
+        this.positionnerAgentsSpawnAleatoire();
+        //this.positionnerAleatoirement();
 
         //historique
         historiquePosition = new HashMap<>();

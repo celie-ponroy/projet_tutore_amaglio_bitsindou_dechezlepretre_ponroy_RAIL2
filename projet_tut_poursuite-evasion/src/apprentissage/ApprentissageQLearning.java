@@ -14,8 +14,10 @@ import ai.djl.training.evaluator.Accuracy;
 import ai.djl.training.listener.TrainingListener;
 import ai.djl.training.loss.Loss;
 import ai.djl.translate.TranslateException;
+import lancercalculs.LancerCalculsDataSetQLearning;
 import outils.CSVDataset;
 import simulation.Simulation;
+import simulation.comportement.ReseauDeNeuronesQLearning;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +37,8 @@ public class ApprentissageQLearning {
         //parametrage nb couches / neurones
         SequentialBlock block = new SequentialBlock();
         block.add(Blocks.batchFlattenBlock(inputSize));
+        block.add(Linear.builder().setUnits(50).build());
+        block.add(Activation::relu);
         block.add(Linear.builder().setUnits(25).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(outputSize).build());
@@ -75,14 +79,19 @@ public class ApprentissageQLearning {
         Trainer trainer = model.newTrainer(config);
 
 
-        int epoch = 5;
+        int epoch = 10;
+        System.out.println("---------------------------------------------");
+        ReseauDeNeuronesQLearning rn = new ReseauDeNeuronesQLearning(model);
+        for (int i = 0; i < 100; i++) {
+            LancerCalculsDataSetQLearning.launch(rn);
+            CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_Qlearning.csv");
 
-        CSVDataset csvDataset = new CSVDataset.Builder().setSampling(32, true).build("donnees/game_data_Qlearning.csv");
+            System.out.println(csvDataset.size());
 
-        System.out.println(csvDataset.size());
-
-        EasyTrain.fit(trainer, epoch, csvDataset, null);
-
+            EasyTrain.fit(trainer, epoch, csvDataset, null);
+            System.out.println("****************************");
+            rn = new ReseauDeNeuronesQLearning(model);
+        }
         //enregistrement du model
         Path modelDir = Paths.get("donnees/mlp");
         Files.createDirectories(modelDir);

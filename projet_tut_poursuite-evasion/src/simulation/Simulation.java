@@ -120,7 +120,8 @@ public class Simulation implements Jeu {
             this.gardien = new Agent(5, 4, VISION_G);
 
             //Position aléatoire des agents
-            this.positionnerAgentsSpawnAleatoire();
+            //this.positionnerAgentsSpawnAleatoire();
+            this.positionnerAleatoirement();
 
             setComportementsGardient(ComportementAdversaire);
 
@@ -134,8 +135,8 @@ public class Simulation implements Jeu {
             this.gardien = new Joueur(5, 4, VISION_G);
             this.prisonnier = new Agent(9, 18, VISION_G);
 
-            this.positionnerAgentsSpawnAleatoire();
-
+            //this.positionnerAgentsSpawnAleatoire();
+            this.positionnerAleatoirement();
             setComportementsPrisonier(ComportementAdversaire);
 
             bayesiens.put(this.prisonnier, new Bayesien());
@@ -245,16 +246,16 @@ public class Simulation implements Jeu {
         this.prisonnier.setPosition(new Position(spawnGardien.getX(),spawnGardien.getY()));
         this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
 
-        int casesHaut = 0;
-        int casesBas = 0;
+//        int casesHaut = 0;
+//        int casesBas = 0;
 
-        for (Case c : casesValides) {
-            if (c.getY() > 3) {
-                casesBas++;
-            } else if (c.getY() < 3) {
-                casesHaut++;
-            }
-        }
+//        for (Case c : casesValides) {
+//            if (c.getY() > 3) {
+//                casesBas++;
+//            } else if (c.getY() < 3) {
+//                casesHaut++;
+//            }
+//        }
     }
 
     /**
@@ -459,6 +460,7 @@ public class Simulation implements Jeu {
 
         //verifier si le deplacement est possible
         if (murPresent(nvPos.getX(), nvPos.getY())) {
+            System.out.println();
             return false;
         }
         //verification des diagonales
@@ -533,7 +535,7 @@ public class Simulation implements Jeu {
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreDeterministe:
-                this.comportementPrisonnier = new ReseauDeNeurones("mlp_q", this, this.prisonnier);
+                this.comportementPrisonnier = new ReseauDeNeuronesQLearning("mlp_q", this, this.prisonnier);
                 break;
             case Comportements.ReseauArbreAleatoire:
                 //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreAleatoire", this, this.prisonnier);

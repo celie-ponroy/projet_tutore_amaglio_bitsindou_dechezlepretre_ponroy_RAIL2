@@ -39,7 +39,7 @@ public class Credits {
         this.creerTache(creditsBox, "Arbre de décision", new String[]{"Célie Ponroy"});
         this.creerTache(creditsBox, "Analyse", new String[]{"Maëlle Bitsindou"});
         this.creerTache(creditsBox, "Sauvegarde", new String[]{"Célie Ponroy"});
-        this.creerTache(creditsBox, "Débats huleux", new String[]{"Luc Dechezleprêtre", "Matias Amaglio", "Célie Ponroy", "Maëlle Bitsindou"});
+        this.creerTache(creditsBox, "Débats houleux", new String[]{"Luc Dechezleprêtre", "Matias Amaglio", "Célie Ponroy", "Maëlle Bitsindou"});
         this.creerTache(creditsBox, "Création du sujet", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes"});
         this.creerTache(creditsBox, "Acteurs", new String[]{"gardien.png", "prisonnier.png"});
         this.creerTache(creditsBox, "Decors", new String[]{"mur.png", "sol.png", "sortie.png", "camera.png", "raccourciGardien.png"});

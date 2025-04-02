@@ -36,14 +36,21 @@ public class ReseauDeNeuronesQLearning implements Comportement {
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-
+        long inputSize = Simulation.getTailleCarte()*2L;
+        int outputSize = Deplacement.values().length;
         SequentialBlock block = new SequentialBlock();
-        block.add(Blocks.batchFlattenBlock(Simulation.getTailleCarte()* 2L));
+        block.add(Blocks.batchFlattenBlock(inputSize));
+        block.add(Linear.builder().setUnits(350).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(250).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(200).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(150).build());
+        block.add(Activation::relu);
         block.add(Linear.builder().setUnits(50).build());
         block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(25).build());
-        block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(Deplacement.values().length).build());
+        block.add(Linear.builder().setUnits(outputSize).build());
         model.setBlock(block);
 
         try {

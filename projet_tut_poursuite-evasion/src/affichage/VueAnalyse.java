@@ -205,6 +205,15 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         // Initialisation du labyrinthe
         var laby = initLabyrinthe(false);
+        if (avec_camera) {
+            var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, 0, 0);
+            for (Rectangle[] rect : casesCameras) {
+                for (Rectangle sousrect : rect) {
+                    laby.getChildren().add(sousrect);
+                }
+            }
+        }
+
         Rectangle[][] filtre = initFiltreChaleur();
 
         // On ajoute le filtre de déplacement au labyrinthe
@@ -250,15 +259,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
         // Ajoute le labyContainer à la HBox
         graphiques.getChildren().addAll(camembert, labyContainer, courbes);
-
-        if (avec_camera) {
-            var casesCameras = FiltreCamera.initFiltre(TAILLE_CELLULE, 0, 0);
-            for (Rectangle[] rect : casesCameras) {
-                for (Rectangle sousrect : rect) {
-                    laby.getChildren().add(sousrect);
-                }
-            }
-        }
 
 
         // Conteneur pour centrer les graphiques verticalement et horizontalement
@@ -320,7 +320,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                     lancerAnalyse.reinitialiser();
                     courbes.getData().clear();
                     camembert.getData().clear();
-                    caseFiltreChaleur[0][0].setOpacity(0);
                 });
 
                 nbIterationsInt = Integer.parseInt(nbIterations.getText());
@@ -651,70 +650,34 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
                 boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
 
-                Tooltip tooltip = new Tooltip(); // Un seul Tooltip
-                int nbVisites = 0;
-                double opacite = 0;
+                Tooltip tooltip = new Tooltip();
+
+                if (listeCasesVisitees.containsKey(currentPos)) {
+                    int nbVisites = listeCasesVisitees.get(currentPos);
+                    double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                    rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
+                    tooltip.setText("Visites : " + nbVisites); // Mise à jour du texte
+                }
+                rect.setOpacity(1);
 
                 // En fonction de la position actuelle des personnages sélectionnés par les radioButtons
-                if (radioBtnPrisonnier.isSelected()) {
+                if (radioBtnPrisonnier.isSelected()||radioBtnTous.isSelected()) {
                     // Affiche les cases visitées par le prisonnier
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        nbVisites = listeCasesVisitees.get(currentPos);
-                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        tooltip.setText("Visites : " + nbVisites); // Mise à jour du texte
-                    }
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
-                        rect.setOpacity(1);
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
                         System.out.println("Spawn prisonnier" + lancerAnalyse.getCasesDepartPris().get(currentPos));
                     }
 
-                } else if (radioBtnGardien.isSelected()) {
-                    // Affiche les cases visitées par le gardien
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        nbVisites = listeCasesVisitees.get(currentPos);
-                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        tooltip.setText("Visites : " + nbVisites);
-                        System.out.println("Cases visitees pri");
-                    }
+                }
+                if (radioBtnGardien.isSelected()||radioBtnTous.isSelected()) {
                     // Affiche les positions de départ du gardien
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        rect.setOpacity(1);
-//                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-
-                    }
-                } else if (radioBtnTous.isSelected()) {
-                    // Affiche les cases visitées par les deux
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        nbVisites = listeCasesVisitees.get(currentPos);
-                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        tooltip.setText("Visites : " + nbVisites);
-                        System.out.println("Cases visitees pri");
-                    }
-                    // Affiche les positions de départ du prisonnier et du gardien
-                    if (isPrisonnierStart) {
-                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
-                        rect.setOpacity(1);
-                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                    }
-                    if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        rect.setOpacity(1);
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
                     }
-                    Tooltip.install(rect, tooltip);
-
-
                 }
+                Tooltip.install(rect, tooltip);
             }
         }
     }

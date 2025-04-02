@@ -38,9 +38,15 @@ public class ApprentissageQLearning {
         //parametrage nb couches / neurones
         SequentialBlock block = new SequentialBlock();
         block.add(Blocks.batchFlattenBlock(inputSize));
-        block.add(Linear.builder().setUnits(50).build());
+        block.add(Linear.builder().setUnits(350).build());
         block.add(Activation::relu);
-        block.add(Linear.builder().setUnits(25).build());
+        block.add(Linear.builder().setUnits(250).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(200).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(150).build());
+        block.add(Activation::relu);
+        block.add(Linear.builder().setUnits(50).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(outputSize).build());
 

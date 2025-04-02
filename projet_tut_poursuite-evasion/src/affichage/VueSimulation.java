@@ -1,7 +1,6 @@
 package affichage;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
+
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,7 +13,6 @@ import simulation.Deplacement;
 import simulation.Simulation;
 import simulation.personnages.Position;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 

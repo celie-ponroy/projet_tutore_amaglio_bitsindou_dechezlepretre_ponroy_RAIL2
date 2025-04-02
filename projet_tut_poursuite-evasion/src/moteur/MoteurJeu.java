@@ -1,7 +1,6 @@
 package moteur;
 
 import affichage.PageAccueil;
-import affichage.VueMenus;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lancercalculs.LancerCalculs;

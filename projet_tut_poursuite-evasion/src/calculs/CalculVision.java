@@ -2,7 +2,6 @@ package calculs;
 
 import outils.ChargementCarte;
 import simulation.CaseEnum;
-import simulation.Simulation;
 import simulation.personnages.Position;
 
 import java.awt.geom.Line2D;

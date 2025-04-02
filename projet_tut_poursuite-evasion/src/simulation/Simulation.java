@@ -1,7 +1,6 @@
 package simulation;
 
 import affichage.DessinJeu;
-import ai.djl.translate.TranslateException;
 import calculs.CalculChemins;
 import calculs.CalculVision;
 import moteur.Jeu;
@@ -9,7 +8,6 @@ import outils.ChargementCarte;
 import simulation.comportement.*;
 import simulation.personnages.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

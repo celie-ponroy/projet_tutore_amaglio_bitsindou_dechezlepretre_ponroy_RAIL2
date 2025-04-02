@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class LancerCalculsDataSetQLearning {
     public static void launch(ReseauDeNeuronesQLearning rnq) {
@@ -39,6 +40,7 @@ public class LancerCalculsDataSetQLearning {
         double[] reward = new double[Deplacement.values().length];
         double[] carte = Outil.applatissement(sim.getCarteMursSortie());
         double[] cartePos;
+        Position positionSortie = Simulation.getPosSortie();
         double gamma = 0.95;
         Personnage personnage = sim.getPrisonnier();
         rnq.setSim(sim);
@@ -62,7 +64,7 @@ public class LancerCalculsDataSetQLearning {
                         }
                     }
                     else{
-                        reward[indiceDep] = -0.3;
+                        reward[indiceDep] = 0;
                     }
                     reward[indiceDep] += gamma*sortieRN;
                 }

@@ -49,7 +49,7 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         block.add(Linear.builder().setUnits(150).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(50).build());
-        block.add(Activation::relu);
+        block.add(Activation::tanh);
         block.add(Linear.builder().setUnits(outputSize).build());
         model.setBlock(block);
 

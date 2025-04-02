@@ -47,7 +47,7 @@ public class ApprentissageQLearning {
         block.add(Linear.builder().setUnits(150).build());
         block.add(Activation::relu);
         block.add(Linear.builder().setUnits(50).build());
-        block.add(Activation::relu);
+        block.add(Activation::tanh);
         block.add(Linear.builder().setUnits(outputSize).build());
 
         //creation du modele du réseau a sauvegarder
@@ -83,14 +83,14 @@ public class ApprentissageQLearning {
                     }
                 }); //affiche les info d'entrainement
 
-        int epoch = 500;
+        int epoch = 15;
         int batchSize = 32;
 
         Trainer trainer = model.newTrainer(config);
         trainer.initialize(new Shape(batchSize,inputSize));
 
         ReseauDeNeuronesQLearning rn = new ReseauDeNeuronesQLearning(model);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             LancerCalculsDataSetQLearning.launch(rn);
             CSVDataset csvDataset = new CSVDataset.Builder().setSampling(batchSize, true).build("donnees/game_data_Qlearning.csv");
 

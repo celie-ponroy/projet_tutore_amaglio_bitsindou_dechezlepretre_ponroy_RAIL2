@@ -198,13 +198,6 @@ public class LancerAnalyse implements Jeu {
 
     /**
      * Méthode qui retourne le nombre d'itérations courrantes
-<<<<<<< HEAD
-<<<<<<< HEAD
-     *
-=======
->>>>>>> d33afe2 (Ajout choix perso analyse sans spwan)
-=======
->>>>>>> d33afe2887fa4b125810512b2148231528e975f3
      * @return nbIterationCourrante
      */
     public int getNbIterationCourrante() {

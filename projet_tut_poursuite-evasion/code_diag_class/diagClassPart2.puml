@@ -13,12 +13,16 @@ package "simulation"{
     AUCUN
   }
   enum Comportements{
-    ARBREDETERMINISTE
-    ARBREDETERMINISTEV2
-    ALEATOIRE
-    ARBREALEATOIRE
-    RESEAUARBREDETERMINISTE
-    RESEAUARBREALEATOIRE
+    ArbreDeterministePris
+    ArbreDeterministeGard
+    ArbreDeterministev2
+    AleatoirePris
+    AleatoireGard
+    ArbreAleatoire
+    ReseauArbreCNN
+    ReseauRenforcement
+    ReseauArbreMLP
+    ReseauArbreAleatoire
   }
   enum CaseEnum{
     MUR
@@ -27,19 +31,33 @@ package "simulation"{
     SPAWN_PRISONNIER
     SPAWN_GARDIEN
     RACCOURCI_GARDIEN
+    CAMERA
   }
 
 
   package "comportement"{
     class ReseauDeNeurones{
+        - model : Model
+        - block : SequencialBlock
         - translator: Translator<NDArray, Integer>
         + ReseauDeNeurones(String, Simulation, Personnage)
+        + {static} setBlock():void
+        + {static} getBlock():SequencialBlock
     }
-    Interface Comportement{
+    class ReseauDeNeuronesCNN{
+            - model : Model
+            - block : SequencialBlock
+            - translator: Translator<NDArray, Integer>
+            + ReseauDeNeuronesCNN(String, Simulation, Personnage)
+            + {static} setBlock():void
+            + {static} setBlock():SequencialBlock
+        }
+    interface Comportement{
         + prendreDecision(): Deplacement
         + getType(): Comportements
     }
     class Aleatoire{
+        + Aleatoire(Simulation,Personnage)
         - deplacementAleatoire(): Deplacement
     }
     class ArbreDecision{
@@ -55,77 +73,53 @@ package "simulation"{
     }
     class ArbreDecisionPrisonnier{
           + ArbreDecisionPrisonnier(Simulation, Personnage)
-          + oppose(Deplacement): Deplacement
     }
     class ArbreDecisionPrisonnier2{
           + ArbreDecisionPrisonnier(Simulation, Personnage)
-          + fuir(): Deplacement
+          - fuir(Position): Deplacement
     }
   }
   class Simulation{
-    - observateurs : List<DessinJeu>
-    - nbTours : int
-    - victoirePrisonnier : boolean
-    - victoireGardien : boolean
-    + {static} final CARTE : int[][]
+    # observateurs : List<DessinJeu>
+    # nbTours : int
+    # nbDeplacementsPerso : int
+    # victoirePrisonnier : boolean
+    # victoireGardien : boolean
+    + {static} CARTE : int[][]
     + {static} final VISION_G : HashMap<Position, ArrayList<Position>>
     + {static} final VISION_P : HashMap<Position, ArrayList<Position>>
     + {static} final VISION_CAMERAS : HashMap<Position, ArrayList<Position>>
     + {static} final CHEMIN_G : HashMap<List<Position>, Stack>
     + {static} final CHEMIN_P : HashMap<List<Position>, Stack>
-    - historiquePosition : HashMap<Personnage, List<Position>>
-    - historiqueBayesien : HashMap<Personnage, List<double[][]>>
-    - historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
-    - estFini : boolean
-    - carteBayesiennes : HashMap<Personnage, double[][]>
-    - bayesiens : HashMap<Personnage, Bayesien>
+    # historiquePosition : HashMap<Personnage, List<Position>>
+    # historiqueBayesien : HashMap<Personnage, List<double[][]>>
+    # historiqueDeplacement : HashMap<Personnage, List<Deplacement>>
+    # estFini : boolean
+    # carteBayesiennes : HashMap<Personnage, double[][]>
+    # bayesiens : HashMap<Personnage, Bayesien>
+    + Simulation(Comportements, Comportements)
     + Simulation(boolean, Comportements)
-    + Simulation(Comportement, Comportement)
     + Simulation(Simulation)
-    + positionnerAgentsSpawnAleatoire(): void
-    + positionnerAleatoirement(): void
+    # positionnerAgentsSpawnAleatoire(): void
+    # positionnerAleatoirement(): void
     + deplacerAgents(): void
-    + deplacerPersonnage(Personnage, Deplacement): boolean
     + deplacementJoueur(Deplacement): void
-    + verifierDeplacement(Personnage, Personnage): boolean
     + miseAJourFinJeu(): void
     + actualisationBayesienne(Personnage, Personnage): void
+    + {static} murPresent(int, int): boolean
+    + deplacerPersonnage(Personnage, Deplacement): boolean
+    + verifierDeplacement(Personnage, Deplacement): boolean
+    + setComportementsGardien(Comportements): void
+    + setComportementsPrisonnier(Comportements): void
     + estVisible(Personnage, boolean): boolean
-    + murPresent(int, int): boolean
-    + getPrisonnier(): Personnage
-    + getGardien(): Personnage
-    + getJoueur(): Personnage
-    + getPosSortie(): Position
-    + getNbTours(): int
-    + getCarteBayesienne(): HashMap<Personnage, double[][]>
-    + getBayesiens(): HashMap<Personnage, Bayesien>
-    + getVictoirePrisonnier(): boolean
-    + getVictoireGardien(): boolean
-    + getHistoriqueDeplacement(): HashMap<Personnage, List<Deplacement>>
-    + getHistoriquePosition(): HashMap<Personnage, List<Position>>
-    + getHistoriqueBayesien(): HashMap<Personnage, List<double[][]>>
-    + getComportementPrisonnier(): Comportement
-    + getComportementGardien(): Comportement
-    + setComportementPrisonnier(Comportement): void
-    + setComportementGardien(Comportement): void
-    + setCarteBayesiennes(HashMap<Personnage, double[][]>): void
-    + setBayesiens(HashMap<Personnage, Bayesien>): void
-    + setGardien(Personnage): void
-    + setPrisonnier(Personnage): void
-    + setEstFini(boolean): void
-    + setHistoriqueBayesien(HashMap<Personnage, List<double[][]>>): void
-    + setHistoriqueDeplacement(HashMap<Personnage, List<Deplacement>>): void
-    + setHistoriquePosition(HashMap<Personnage, List<Position>>): void
-    + setNbTours(int): void
-    + setVictoireGardien(boolean): void
-    + setVictoirePersonnage(boolean): void
-    + toString(): String
   }
 
   class Case{
     - x: int
     - y: int
-    - contenu: int
+    + Case (int ,int)
+    + getX ():int
+    + getY ():int
   }
 
   package "personnage"{
@@ -146,12 +140,12 @@ package "simulation"{
      + setY(int): void
      + getX(): int
      + getY(): int
-     + deplacer(int, int): void
-     + deplacer(Deplacement): void
+     + deplacement(Deplacement):void
      + casesAdjacentes(): ArrayList<Position>
     }
 
     class Personnage{
+      # vision : HashMap<Position,ArrayList<Position>>
       + Personnage(int, int)
       + {abstract} deplacer(Position): void
       + getPosition(): Position
@@ -159,8 +153,7 @@ package "simulation"{
       + getVision(): ArrayList<Position>
     }
     class Agent{
-      + Agent(int, int)
-
+      + Agent(int, int, HashMap<Position,ArrayList<Position>>)
     }
     class Joueur{
       + Joueur(int, int)
@@ -175,7 +168,6 @@ package "simulation"{
         FIN
     }
     class SimulationTutoriel{
-        - etatActuel: EtatTuto
         - gardienVue: boolean
         + SimulationTutoriel()
         + deplacementJoueur(Deplacement): void
@@ -190,25 +182,36 @@ package "simulation"{
 ReseauDeNeurones "1" --> "1" Simulation : simulation
 ReseauDeNeurones "1" --> "1" Personnage : personnage
 ReseauDeNeurones ..|> Comportement
+
+ReseauDeNeuronesCNN "1" --> "1" Simulation : simulation
+ReseauDeNeuronesCNN "1" --> "1" Personnage : personnage
+ReseauDeNeuronesCNN ..|> Comportement
+
 Aleatoire "1" --> "1" Simulation : simulation
 Aleatoire "1" --> "1" Personnage : perso
 Aleatoire ..|> Comportement
-ArbreDecisionPrisonnier --|> ArbreDecision
+
 ArbreDecisionGardien --|> ArbreDecision
-ArbreDecisionPrisonnier ..|> Comportement
 ArbreDecisionGardien ..|> Comportement
-ArbreDecisionPrisonnier "1" --> "1" Simulation: simulation
-ArbreDecisionPrisonnier "1" --> "1" Personnage: personnage
 ArbreDecisionGardien "1" --> "1" Simulation: simulation
 ArbreDecisionGardien "1" --> "1" Personnage: personnage
-ArbreDecisionGardienAleatoire "1" --> "1" Simulation: simulation
-ArbreDecisionGardienAleatoire "1" --> "1" Personnage: personnage
+
+ArbreDecisionPrisonnier --|> ArbreDecision
+ArbreDecisionPrisonnier ..|> Comportement
+ArbreDecisionPrisonnier "1" --> "1" Simulation: simulation
+ArbreDecisionPrisonnier "1" --> "1" Personnage: personnage
+
 ArbreDecisionGardienAleatoire ..|> Comportement
 ArbreDecisionGardienAleatoire --|> ArbreDecision
-ArbreDecisionPrisonnier2 "1" --> "1" Simulation: simulation
-ArbreDecisionPrisonnier2 "1" --> "1" Personnage: personnage
+ArbreDecisionGardienAleatoire "1" --> "1" Simulation: simulation
+ArbreDecisionGardienAleatoire "1" --> "1" Personnage: personnage
+
+
 ArbreDecisionPrisonnier2 --|> ArbreDecision
 ArbreDecisionPrisonnier2 ..|> Comportement
+ArbreDecisionPrisonnier2 "1" --> "1" Simulation: simulation
+ArbreDecisionPrisonnier2 "1" --> "1" Personnage: personnage
+
 
 
 
@@ -217,12 +220,12 @@ Agent --|> Personnage
 Joueur --|> Personnage
 Personnage "1" --> "1" Position : position
 
+SimulationTutoriel --|> Simulation
+SimulationTutoriel"1" --> "1" EtatTuto: etatActuel
+
 Simulation "1" --> "1" Personnage: gardien
 Simulation "1" --> "1" Personnage: prisonnier
 Simulation "1" --> "1" Comportement: comportementGardien
 Simulation "1" --> "1" Comportement: comportementPrisonnier
-
-Simulation <|-- SimulationTutoriel
-
 
 @enduml

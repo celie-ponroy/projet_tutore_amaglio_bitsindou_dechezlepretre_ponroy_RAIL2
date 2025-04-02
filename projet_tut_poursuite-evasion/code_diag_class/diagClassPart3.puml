@@ -2,11 +2,15 @@
 
 package "lancercalculs"{
   class LancerCalculs{
+    + {static} main(String[]): void
+    + {static} laby : String
     + {static} init(): void
     + {static} initSansDS(): void
+
   }
   class LancerAnalyse{
     - etreFini: boolean
+    _ observateurs: List<DessinJeu>
     - nbVictoireGardien: int
     - nbVictoirePrisonnier: int
     - matchNull: int
@@ -14,36 +18,34 @@ package "lancercalculs"{
     - nbDeplacementPerso: int
     - historiqueDeplacementPerso: List<Integer>
     - casesVisitees: HashMap
+    - casesVisiteesPrisonnier: HashMap
+    - casesVisiteesGardien: HashMap
+    - nbIterationTotal: int
     - pause: boolean
-    - caseDepart: boolean
     - casesDepartPris: HashMap<Position, Integer>
     - casesDepartGard: HashMap<Position, Integer>
     + LancerAnalyse()
     + lancerAnalyse(int, Comportements, Comportements): void
-    - updateCasesVisitees(List<Position>): void
     + etreFini(): boolean
-    + getNbVictoireGardien(): int
-    + getNbVictoirePrisonnier(): int
-    + getMatchNull(): int
-    + getNbIterationCourante(): int
-    + getNbDeplacementPerso(int): int
-    + getHistoriqueDeplacementPrisonnier(): List<Integer>
-    + getCasesVisitees(): HashMap<Position, Integer>
-    + setNbIterationsTotal(int): void
-    + getCasesDepartGard(): HashMap<Position, Integer>
-    + getCasesDepartPris(): HashMap<Position, Integer>
+    - updateCasesVisiteesPrisonnier(List<Position>): void
+    - updateCasesVisiteesGardien(List<Position>): void
     + reinitialiser(): void
-    + isPause()
+    + {synchronized} isPause(): boolean
   }
   class LancerCalculsChemins{
-    + main(): void
+    + {static} main(String[]): void
   }
   class LancerCalculsVision{
-      + main(): void
+    + {static} main(String[]): void
   }
-  class LancerCalculsDataset{
+  class LancerCalculsDatasetArbreCNN{
         + launch(): void
   }
+
+   class LancerCalculsDatasetArbreMLP{
+          + launch(): void
+    }
+
 }
 package "outil"{
     class ChargementCarte{
@@ -51,21 +53,43 @@ package "outil"{
     }
     class Outil{
       + {static} applatissement(double[][]): double[]
-      + {static} afficherTab(double[] tab): void
+      + conversionIntFloat(int[][]):float[][]
+      + conversionDoubleFloat(double[][]):float[][]
+      + conversionDoubleFloat(double[]):float[]
+      + {static} afficher_tab(double[]): void
+      + {static} afficher_doubleTab(int[][]): void
+      + {static} doubleToFloat(double[]): float[]
+      + {static} concatener_tab(double[],double[] ): double[]
     }
     class DataCollector{
-        + {static} saveData(double[], double, double, int): void
-        + {static} etiquettage(String): void
+        + {static} saveDataMLP(double[], double, double, int): void
+        + {static} saveDataCNN(double[], double, double, double[], double, String): void
+        + {static} etiquettage(String, String): void
     }
-    class CSVDataset{
+    interface CSVDataset{
+
+    }
+    class CSVDatasetCNN{
         - {final} csvRecords: List<CSVRecord>
-        + CSVDataset(Builder)
+        + CSVDatasetCNN(Builder)
         + get(NDManager, long): Record
         + availableSize(): long
         + parseMap(String): float[]
         + prepare(Progress): void
         + {static} builder(): Builder
     }
+    class CSVDatasetMLP{
+            - {final} csvRecords: List<CSVRecord>
+            + CSVDatasetMLP(Builder)
+            + get(NDManager, long): Record
+            + availableSize(): long
+            + parseMap(String): float[]
+            + prepare(Progress): void
+            + {static} builder(): Builder
+    }
 }
+CSVDatasetCNN ..|> CSVDataset
+CSVDatasetMLP ..|> CSVDataset
+
 
 @enduml

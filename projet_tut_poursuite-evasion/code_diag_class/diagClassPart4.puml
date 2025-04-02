@@ -1,21 +1,24 @@
 @startuml
 package "calculs"{
   class CalculVision{
-    + {static} recupererVision(String G_P): HashMap<Position,ArrayList<Position>>
+    + {static} carte : int[][]
+    + {static} recupererVision(String): HashMap<Position,ArrayList<Position>>
     + {static} ecrireVision(): void
-    + {static} ecrireFichierVision(HashMap vision, String nomfichier) : void
+    + {static} ecrireFichierVision(HashMap, String) : void
     + {static} calculerCarteVision(): HashMap
-    + {static} calculerVision(int, int): ArrayList
-    + {static} cleanVision(HashMap<Position, ArrayList<Position>>: void
-    + {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
+    + {static} ajoutCamera(HashMap<Position,ArrayList<Position>>, int,int,int) : ArrayList<Position>
+    + {static} calculerVision(int, int,int): ArrayList
+    - {static} cleanVision(HashMap<Position, ArrayList<Position>>): void
+    - {static} cleanVisionCase (ArrayList<Position>, Position):void
+    - {static} parcours(Position, Position, ArrayList<Position>, ArrayList<Position>): boolean
   }
   class CalculChemins {
-    - {static} carte : int[][]
-    + {static} lirefichier(String): HashMap<List<Position>,Stack>
+    + {static} carte : int[][]
     + {static} recupererCheminPrisonnier(): HashMap<List<Position>,Stack>
     + {static} recupererCheminGardien(): HashMap<List<Position>,Stack>
+    - {static} lirefichier(String): HashMap<List<Position>,Stack>
     + {static} ecrireChemins(String): void
-    + {static} ecrireFichier(String, Boolean, String): void
+    - {static} ecrireFichier(String, Boolean, String): void
     + {static} calculerChemins(Boolean, String): HashMap<List<Position>,Stack>
     + {static} isValid(int, int, Position): boolean
     + {static} isUnblocked(int[][], int, int, Position): boolean
@@ -52,8 +55,9 @@ package sauvegarde{
     }
 }
 package "apprentissage"{
-    class ApprentissageDeArbre{
-        + main(): void
+    class ApprentissageArbre{
+        + main(String[]): void
+        + afficherRecord(CSVDatasetCNN):void
     }
     class OptimisationBayesienne{
         - {static} final MIN_NEURONS: int
@@ -62,12 +66,12 @@ package "apprentissage"{
         - {static} final MAX_LAYERS: int
         - {static} final INITIAL_SAMPLES: int
         - {static} final ITERATIONS: int
-        - {static} lossMini: float
-        - {static} BETA: float
-        - {static} testedConfigs: List<int>
+        + {static} lossMini: float
+        + {static} BETA: float
+        - {static} testedConfigs: List<int[]>
         - {static} lossResults: List<Double>
         - {static} random: Random
-        + main(): void
+        + main(String[]): void
         - {static} getRandomConfig(): int[]
         - {static} suggestNextConfiguration(): int[]
         - {static} getRandomNearConfig(): int[]
@@ -78,9 +82,4 @@ package "apprentissage"{
     }
   }
 
-package "main"{
-  class Main{
-    + main(): void
-  }
-}
 @enduml

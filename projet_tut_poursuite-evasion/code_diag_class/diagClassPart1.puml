@@ -1,24 +1,31 @@
 @startuml
 
 package "moteur"{
-  Interface Jeu{
-    + init(): void
+  interface Jeu{
     + etreFini(): boolean
     + ajouterObservateur(DessinJeu): void
-    - notifierObservateurs(): void
+    + notifierObservateurs(): void
   }
   class Clavier{
-    - simulation : Simulation
+    - simulation: Simulation
+    + Clavier(Simulation)
     + handle(KeyEvent): void
   }
   class ClavierNonInteractif{
-    - simulation : Simulation
+    - simulation: Simulation
+    + ClavierNonInteractif(Simulation)
     + handle(KeyEvent): void
   }
+  class ClavierTuto{
+  - simulation: Simulation
+  + ClavierTuto(Simulation)
+  + handle(KeyEvent): void
+    }
   class MoteurJeu{
     + start(Stage): void
   }
 }
+
 package "musique" {
     class SoundManager{
      - {static} fondMusic : MediaPlayer
@@ -26,7 +33,9 @@ package "musique" {
      - {static} looseMusic MediaPlayer
      - {static} drawMusic : MediaPlayer
      - {static} gameMusic : MediaPlayer
+     - {static} btnMusic: MediaPlayer
      + SoundManager()
+     - createMediaPlayer(String): MediaPlayer
      + {static} playFondMusic() : void
      + {static} playGameMusic() : void
      + {static} playWinMusic() : void
@@ -37,18 +46,25 @@ package "musique" {
     }
 }
 package "affichage" {
-  Interface DessinJeu{
+  interface DessinJeu{
     + update(Jeu): void
   }
-  class FiltreVision{
-    + {static} initFiltre(int, int, int, Joueur,boolean): Rectangle[][]
-    + {static} updateFiltre(Rectangle[][], Joueur,boolean): void
-    + {static} Rectangle[][] initFiltre(int, int, int, Joueur)
-    + {static} void updateFiltre(Rectangle[][], Joueur)
+  package "filtres"{
+      class FiltreVision{
+          + {static} camera : Color
+          + {static} nuit : Color
+        + {static} initFiltre(int, int, int, Joueur,boolean): Rectangle[][]
+        + {static} updateFiltre(Rectangle[][], Joueur,boolean): void
+      }
+      class FiltreCamera{
+          + {static} camera : Color
+          + {static} initFiltre(int, int, int): Rectangle[][]
+        }
+    class FiltreBayesien{
+        + {static} initFiltre(double[][], int, int, int): Rectangle[][]
+        + {static} updateBayes(Rectangle[][], double[][])
+      }
   }
-  class FiltreCamera{
-      + {static} initFiltre(int, int, int): Rectangle[][]
-    }
   class VueSimulation{
     # imageMur: Image
     # imageSol : Image
@@ -62,17 +78,16 @@ package "affichage" {
     # simulation : Simulation
     # avec_camera : boolean
     + VueSimulation()
-    # initLabyrinthe(boolean): void
+    # initLabyrinthe(boolean): Pane
     # {abstract} setOpacityPersonnage(): void
     # {abstract} updatePositions(): void
+    # updateDirections(int): void
     + {static} updateDirectionPersonnage(int, List<Deplacement>, String, ImageView): void
     # setPositions(Position, ImageView): void
     + setAvec_Camera (boolean ): void
+    # lancerSauvegarde(Button): void
   }
-  class FiltreBayesien{
-    + {static} initFiltre(double[][], int): Rectangle[][]
-    + {static} updateBayes(Rectangle[][], double[][])
-  }
+
 
   class VuePrincipale{
     - iterationLabel: Label
@@ -82,8 +97,6 @@ package "affichage" {
     # DECALAGE : int
     + VuePrincipale(double, double)
     - init(): void
-    # setOpacityPersonnage(): void
-    # updatePositions: void
     + update(Jeu): void
     + updateIteration(): void
     + initFiltreVision(): void
@@ -93,38 +106,59 @@ package "affichage" {
   }
 
   class VueBayesienne{
-      - perso : Personnage
+      - perso: Personnage
       - persoView: ImageView
       - imagePerso: Image
       - caseBayesienne: Rectangle[][]
       - tour: int
       - decalageX : int
       - decalageY : int
+      - casesCameras: Rectangle[][]
       + VueBayesienne(Simulation, Personnage, int, int, int)
       - init(): void
-      + setOpacityPersonnage(): void
       # updatePositions(): void
       - updateBayes(): void
-      + update(int): void
       # updateDirections(int): void
   }
   class VuePrincipaleNonInteractive{
     - iterationLabel : Label
     - tour : int
+    - casesCameras: Rectangle[][]
     + VuePrincipaleNonInteractive(double, double)
     - init(): void
-    # setOpacityPersonnage(): void
-    # updatePositions(): void
-    + update(Jeu): void
-    + createBayesienneView(Personnage, String, VueBayesienne): VBox
+    + createBayesienneView(String, VueBayesienne): VBox
     + updateIteration(): void
-    + setPositions(Position, ImageView): void
+  }
+
+  class VueAnalyse{
+    - camembert: PieChart
+    - courbes: LineChart<String, Number>
+    - lancerAnalyse: LancerAnalyse
+    - nbIterationsInt: int
+    - caseFiltreChaleur: Rectangle[][]
+    - radioBtnPrisonnier: RadioButton
+    - radioBtnGardien: RadioButton
+    - radioBtnTous: RadioButton
+    + vueAnalyse()
+    + createAnalyseView(Stage): VBox
+    + initTopContainer(VBox, HBox, Button): VBox
+    + choixComboBox(ComboBox<String>,ComboBox<String>): Comportements[]
+    + afficherCamembert(): void
+    + graphiqueCourbes(): LineChart<String, Number>
+    + initFiltreChaleur(): Rectangle[][]
+    + normaliser(int, HashMap<Position, Integer>): double
+    + updateFiltreChaleur(HashMap<Position, Integer>): void
+
+
   }
   class PageAccueil{
      - {static} WIDTH : double
      - {static} HEIGHT : double
+     # {static} isMuted: boolean
      + {static} lancerPageAcceuil(MoteurJeu jeu, Stage primaryStage) : void
-     + {static} void afficherTuto(Jeu j, Scene scene, Pane root):void
+     - {static} ajoutBoutons(MoteurJeu, Stage, Pane): VBox
+     - {static} creerBoutonSon(): Button
+     + {static} void afficherTuto(Jeu , Scene , Pane):void
     }
   class VueMenus{
     - {static} WIDTH : double
@@ -132,15 +166,15 @@ package "affichage" {
     - {static} jeu : MoteurJeu
     # primaryStage: Stage
     - choixPersonnage : String
-    + VueMenus(MoteurJeu)
-    + VueMenus()
-    - initPrimayStage(): void
-    - setScene(Scene, String): void
+    + VueMenus(MoteurJeu, Stage)
+    + VueMenus(Stage)
+    - setScene(Parent, String): void
     + afficherMenuPrincipal(): void
     + afficherMenuPersonnage(): void
-    + afficherJeu(Jeu, Pane, Scene): void
+    + afficherJeu(Jeu, Pane): void
     + afficherMenuIA(): void
-    + afficherMenuSauvegarde(Stage, VBox, Scene): void
+    + afficherMenuSauvegarde(Stage, VBox): void
+    + afficherAnalyse(): void
     + getChoixPersonnage(): String
     + setChoixPersonnage(String): void
     + retourBtn(): Button
@@ -148,8 +182,7 @@ package "affichage" {
     + chargementBouton(Button): String
   }
   class VueMenusNonInteractive{
-    - {static} WIDTH : double
-    - {static} HEIGHT : double
+    - {static} jeu : MoteurJeu
     + VuePrincipaleNonInteractive(MoteurJeu)
     + afficherMenuIA(Stage): void
     + chargementBouton(Button): String
@@ -163,14 +196,11 @@ package "affichage" {
     - interactive :boolean
     + VueSauvegarde(double, double, Simulation)
     + init() : void
-    - createBayesienneView(Personnage, String, VueBayesienne): VBox
+    - createBayesienneView(String, VueBayesienne): VBox
     - creerVision(String) : VBox
     - creerLabyvision(): Pane
-    # setOpacityPersonnage(): void
-    # updatePositions(): void
     + update(): void
     + updateIteration(): void
-    + setPositions(Position, ImageView): void
     + initFiltreVision(Pane): void
     + updateFiltreVision(): void
   }
@@ -192,6 +222,8 @@ package "affichage" {
     - CENTRE : int
     - instructions : VBox
     - filtreVision : Rectangle[][]
+    - WIDTH :int
+    - HEIGHT: int
     + VueTutoriel(SimulationTutoriel, double,double)
     - init() : void
     - updateInfos(): void
@@ -200,10 +232,24 @@ package "affichage" {
     - ajouterTouche(GridPane, String, String, int, int): void
     - setInfoGradien(): void
     - setInfosFin(): void
-    - setInfosFin(): void
+    - clearInfos():void
+    + updateFiltreVision():void
+    + filtreGardien(): void
+    + filtrePrisonnier(): void
 
   }
 
+  class Credits{
+    + start(Stage, MoteurJeu) : void
+    - creerTache(VBox, String, String[]): void
+  }
+
+  class FabriqueComportment{
+    + {static} creerComboBoxPrisonnier():ComboBox<String>
+    + {static} creerComboBoxGardien():ComboBox<String>
+    + {static} creerSimulation(String):Simulation
+    + {static} creerComportement(String):Comportements
+  }
 
 }
 
@@ -223,5 +269,11 @@ VuePrincipaleNonInteractive "1" --> "1" VueBayesienne: vB2
 VueSauvegarde --|> VueSimulation
 VueSauvegarde "1" --> "1" VueBayesienne: vB1
 VueSauvegarde "1" --> "1" VueBayesienne: vB2
+VueAnalyse --|> VueSimulation
+VueAnalyse ..|> DessinJeu
+VueTutoriel --|> VueSimulation
+VueTutoriel ..|> DessinJeu
+
+
 
 @enduml

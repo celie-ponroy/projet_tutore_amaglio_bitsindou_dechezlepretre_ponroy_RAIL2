@@ -7,10 +7,5 @@ Etudiants :
 - Luc DechezLepretre
 - Matias Amaglio
 
-## Vidéo de démonstration : documents/video_demo.mp4
-<video width="640" height="360" controls>
-  <source src="documents/video_demo.mp4" type="video/mp4">
-  Votre navigateur ne prend pas en charge la lecture vidéo.
-</video>
 
 

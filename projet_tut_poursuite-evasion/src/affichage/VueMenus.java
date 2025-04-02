@@ -1,6 +1,5 @@
 package affichage;
 
-import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,7 +20,6 @@ import moteur.Jeu;
 import moteur.MoteurJeu;
 import musique.SoundManager;
 import sauvegarde.Sauvegarde;
-import simulation.Comportements;
 import simulation.Simulation;
 
 import java.util.List;
@@ -31,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javafx.scene.Cursor;
 
+import static affichage.PageAccueil.isMuted;
 import static affichage.PageAccueil.lancerPageAcceuil;
 import static musique.SoundManager.playGameMusic;
 
@@ -67,6 +66,7 @@ public class VueMenus {
         this.primaryStage = primaryStage;
         this.choixPersonnage = "";
     }
+
     /**
      * Méthode pour afficher la scene
      *
@@ -332,18 +332,11 @@ public class VueMenus {
         //si le choix du personnage de l'utilisateur est le prisonnier, on adapte la combobox
         if (Objects.equals(choixPersonnage, "Prisonnier")) { //si l'utilisateur joue le prisonnier
             //Ajout de chaque choix possible
-            comboBox.getItems().add("Arbre de décision déterministe 1.0");
-            comboBox.getItems().add("Arbre de décision aléatoire");
-            comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones MLP");
-            comboBox.getItems().add("Réseau de neurones CNN");
+            comboBox = FabriqueComportement.creerComboBoxGardien();
 
         } else { //si l'utilisateur joue le gardien
             //Ajout de chaque choix possible
-            comboBox.getItems().add("Arbre de décision déterministe 1.0");
-            comboBox.getItems().add("Arbre de décision déterministe 2.0");
-            comboBox.getItems().add("Comportement aléatoire");
-            comboBox.getItems().add("Réseau de neurones renforcement");
+            comboBox = FabriqueComportement.creerComboBoxPrisonnier();
         }
 
         HBox buttonBox = new HBox(comboBox);
@@ -355,6 +348,7 @@ public class VueMenus {
         okButton.setPrefSize(150, 50);
 
         //Évenements lier au choix de difficulté
+        ComboBox<String> finalComboBox = comboBox;
         okButton.setOnAction(e -> {
             //on stop la musique de fond et on met en place la musique de jeu
             SoundManager.stopFondMusic();
@@ -369,49 +363,7 @@ public class VueMenus {
                     Simulation simulation = null;
 
                     //Switch pour le choix de la difficulté de l'agent en fonction du choix de l'utilisateur
-                    switch (comboBox.getValue()) {
-                        case "Arbre de décision déterministe 1.0":
-                            if (choixPersonnage.equals("Prisonnier")) {
-                                simulation = new Simulation(true, Comportements.ArbreDeterministe);
-                            } else {
-                                simulation = new Simulation(false, Comportements.ArbreDeterministe);
-                            }
-                            break;
-                        case "Arbre de décision déterministe 2.0":
-                            simulation = new Simulation(false, Comportements.ArbreDeterministev2);
-                            break;
-                        case "Arbre de décision aléatoire":
-                            simulation = new Simulation(true, Comportements.ArbreAleatoire);
-                            break;
-                        case "Comportement aléatoire":
-                            if (choixPersonnage.equals("Prisonnier")) {
-                                simulation = new Simulation(true, Comportements.Aleatoire);
-                            } else {
-                                simulation = new Simulation(false, Comportements.Aleatoire);
-                            }
-                            break;
-                        case "Réseau de neurones MLP":
-                                simulation = new Simulation(true, Comportements.ReseauArbreMLP);
-                            break;
-                        case "Réseau de neurones CNN":
-                            simulation = new Simulation(true, Comportements.ReseauArbreCNN);
-                            break;
-                        case "Réseau de neurones renforcement":
-                            simulation = new Simulation(true, Comportements.ReseauRenforcement);
-                            break;
-                        case null:
-                            Platform.runLater(() -> {
-                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                                alert.setTitle("Information");
-                                alert.setHeaderText("Attention !");
-                                alert.setContentText("Veuillez choisir un niveau de difficulté");
-                                alert.showAndWait();
-                            });
-                            return null;
-                        default:
-                            throw new IllegalStateException("Unexpected value: " + comboBox.getValue());
-                    }
-                    return simulation;
+                    return FabriqueComportement.creerSimulation(finalComboBox.getValue());
                 }
             };
 
@@ -422,7 +374,9 @@ public class VueMenus {
                     //on change le nom de la scene
                     setScene(root, "Simulation interactive");
                     MoteurJeu.jeu = simulation;
-                    playGameMusic(); //lance la musique de jeu
+                    if (isMuted == false){
+                        playGameMusic();
+                    }
                     //Affichage du jeu
                     afficherJeu(MoteurJeu.jeu, root);
                 }

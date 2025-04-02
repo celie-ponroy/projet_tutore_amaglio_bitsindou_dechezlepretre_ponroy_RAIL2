@@ -70,10 +70,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // ComboBox prisonnier
         ComboBox<String> comboBoxPrisonnier = new ComboBox<>();
         comboBoxPrisonnier.getItems().addAll(
-                "Arbre de décision déterministe 1.0",
-                "Arbre de décision déterministe 2.0",
-                "Comportement aléatoire",
-                "Réseau de neurones renforcement"
+                FabriqueComportement.creerComboBoxPrisonnier().getItems()
         );
         //Ajout d'un titre dans la comboBox
         comboBoxPrisonnier.setPromptText("Choix du prisonnier");
@@ -95,11 +92,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // ComboBox gardien
         ComboBox<String> comboBoxGardien = new ComboBox<>();
         comboBoxGardien.getItems().addAll(
-                "Arbre de décision déterministe",
-                "Arbre de décision aléatoire",
-                "Comportement aléatoire",
-                "Réseau de neurones MLP",
-                "Réseau de neurones CNN"
+                FabriqueComportement.creerComboBoxGardien().getItems()
         );
         //Ajout d'un titre dans la comboBox avec une couleur grise
         comboBoxGardien.setPromptText("Choix du gardien");
@@ -267,6 +260,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         }
 
+
         // Conteneur pour centrer les graphiques verticalement et horizontalement
         VBox graphiquesWrapper = new VBox(graphiques);
         graphiquesWrapper.setAlignment(Pos.CENTER);
@@ -400,45 +394,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         Comportements comportementP; //stocke le comportement du prisonnier choisi
         Comportements comportementG; //stocke le comportement du gardien choisi
 
-        //Switch pour le choix de difficulté du gardien
-        switch (comboBoxGardien.getValue()) {
-            case "Arbre de décision déterministe":
-                comportementG = Comportements.ArbreDeterministe;
-                break;
-            case "Arbre de décision aléatoire":
-                comportementG = Comportements.ArbreAleatoire;
-                break;
-            case "Comportement aléatoire":
-                comportementG = Comportements.Aleatoire;
-                break;
-            case "Réseau de neurones MLP":
-                comportementG = Comportements.ReseauArbreMLP;
-                break;
-            case "Réseau de neurones CNN":
-                comportementG = Comportements.ReseauArbreCNN;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + comboBoxGardien.getValue());
-        }
+        //Choix de difficulté du gardien
+        comportementG = FabriqueComportement.creerComportement(comboBoxGardien.getValue());
 
-        //Switch pour le choix de difficulté du prisonnier
-        switch (comboBoxPrisonnier.getValue()) {
-            case "Arbre de décision déterministe 1.0":
-                comportementP = Comportements.ArbreDeterministe;
-                break;
-            case "Arbre de décision déterministe 2.0":
-                comportementP = Comportements.ArbreDeterministev2;
-                break;
-            case "Comportement aléatoire":
-                comportementP = Comportements.Aleatoire;
-                break;
-            case "Réseau de neurones renforcement":
-                comportementP = Comportements.ReseauRenforcement;
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + comboBoxPrisonnier.getValue());
-        }
-
+        //Choix de difficulté du prisonnier
+        comportementP = FabriqueComportement.creerComportement(comboBoxPrisonnier.getValue());
         //Ajoute les comportements choisis dans un tableau
         Comportements[] comportements = {comportementG, comportementP};
         return comportements; //retourne le tableau des comporteemnts choisis
@@ -691,71 +651,69 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
                 boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
 
+                Tooltip tooltip = new Tooltip(); // Un seul Tooltip
+                int nbVisites = 0;
+                double opacite = 0;
+
                 // En fonction de la position actuelle des personnages sélectionnés par les radioButtons
                 if (radioBtnPrisonnier.isSelected()) {
-                    // Affiche les positions de départ du prisonnier
+                    // Affiche les cases visitées par le prisonnier
+                    if (listeCasesVisitees.containsKey(currentPos)) {
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
+                        rect.setOpacity(1);
+                        tooltip.setText("Visites : " + nbVisites); // Mise à jour du texte
+                    }
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
+                        System.out.println("Spawn prisonnier" + lancerAnalyse.getCasesDepartPris().get(currentPos));
                     }
-                    // Affiche les cases visitées par le prisonnier
+
+                } else if (radioBtnGardien.isSelected()) {
+                    // Affiche les cases visitées par le gardien
                     if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
                         rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
+                        System.out.println("Cases visitees pri");
                     }
-                } else if (radioBtnGardien.isSelected()) {
                     // Affiche les positions de départ du gardien
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
+//                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                    }
-                    // Affiche les cases visitées par le gardien
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
+
                     }
                 } else if (radioBtnTous.isSelected()) {
+                    // Affiche les cases visitées par les deux
+                    if (listeCasesVisitees.containsKey(currentPos)) {
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
+                        rect.setOpacity(1);
+                        tooltip.setText("Visites : " + nbVisites);
+                        System.out.println("Cases visitees pri");
+                    }
                     // Affiche les positions de départ du prisonnier et du gardien
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
                     }
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
                     }
-                    // Affiche les cases visitées par les deux
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
-                    }
+                    Tooltip.install(rect, tooltip);
+
+
                 }
             }
         }

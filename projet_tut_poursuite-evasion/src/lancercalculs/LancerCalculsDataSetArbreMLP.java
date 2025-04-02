@@ -26,7 +26,7 @@ public class LancerCalculsDataSetArbreMLP {
         DataCollector.etiquettage("\"input\",\"dep\"", "donnees/game_data_validation.csv");
         DataCollector.etiquettage("\"input\",\"dep\"", "donnees/game_data.csv");
 
-        Simulation sim = new Simulation(Comportements.ArbreDeterministe, Comportements.ArbreDeterministev2);
+        Simulation sim = new Simulation(Comportements.ArbreDeterministeGard, Comportements.ArbreDeterministev2);
         List<double[][]> bayesien;
         List<Deplacement> deplacements;
         List<Position> positions;

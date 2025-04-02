@@ -13,6 +13,8 @@ import simulation.Simulation;
 import simulation.personnages.Personnage;
 import simulation.personnages.Position;
 
+import static affichage.PageAccueil.isMuted;
+
 /**
  * Classe pour la vue principale non interactive
  */
@@ -179,8 +181,10 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             retourMenuBtn.setPrefSize(410, 75);
             retourMenuBtn.getStyleClass().add("important");
             retourMenuBtn.setOnAction(e -> {
-                SoundManager.stopAllMusic();
-                SoundManager.playFondMusic();
+                if (isMuted == false) {
+                    SoundManager.stopAllMusic();
+                    SoundManager.playFondMusic();
+                }
                 //Ferme la fenetre actuelle
                 Stage stage = (Stage) retourMenuBtn.getScene().getWindow();
                 //retour au menu principal

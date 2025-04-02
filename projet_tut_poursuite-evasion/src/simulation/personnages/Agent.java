@@ -15,7 +15,7 @@ public class Agent extends Personnage implements Serializable {
         this.position = p;
     }
 
-
+    @Override
     public Position getPosition() {
         return position;
     }

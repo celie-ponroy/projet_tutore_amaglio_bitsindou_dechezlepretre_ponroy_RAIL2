@@ -27,7 +27,6 @@ public class LancerAnalyse implements Jeu {
     private HashMap casesVisiteesGardien = new HashMap();
     private int nbIterationsTotal; // Nombre total d'itérations à effectuer
     private boolean pause;
-    private boolean caseDepart;
     private HashMap<Position, Integer> casesDepartPris = new HashMap<>();
     private HashMap<Position, Integer> casesDepartGard = new HashMap<>();
 
@@ -41,7 +40,6 @@ public class LancerAnalyse implements Jeu {
         nbIterationCourrante = 0;
         nbDeplacementPerso = 0;
         pause = false;
-        caseDepart = false;
     }
 
     /**
@@ -106,19 +104,6 @@ public class LancerAnalyse implements Jeu {
         }
     }
 
-    /**
-     * Méthode pour mettre à jour les cases visitées
-     */
-    private void updateCasesVisitees(List<Position> positions) {
-        for (Position pos : positions) {
-            //si la case est déjà visitée, on incrémente le nombre de fois où elle a été visitée
-            if (casesVisitees.containsKey(pos)) {
-                casesVisitees.put(pos, (int) casesVisitees.get(pos) + 1);
-            } else {
-                casesVisitees.put(pos, 1);
-            }
-        }
-    }
 
     /**
      * Méthode pour mettre à jour les cases visitées par le prisonnier

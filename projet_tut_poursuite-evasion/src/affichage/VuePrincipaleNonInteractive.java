@@ -122,6 +122,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     /**
      * Met à jour uniquement les positions des personnages
      */
+    @Override
     protected void updatePositions() {
         // Met à jour la position du prisonnier
         Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
@@ -220,6 +221,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     /**
      * Methode set positions imagewiew
      */
+    @Override
     public void setPositions(Position p, ImageView im) {
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);

@@ -40,7 +40,7 @@ public class SimulationTutoriel extends Simulation {
             deplacementAgent = this.comportementGardien.prendreDecision();
         }
         //initialisation du déplacement du joueur
-        if (!verifierDeplacemnt(joueur, d)) {
+        if (!verifierDeplacement(joueur, d)) {
             historiqueDeplacement.get(joueur).removeLast();
             historiqueDeplacement.get(agent).removeLast();
             return;

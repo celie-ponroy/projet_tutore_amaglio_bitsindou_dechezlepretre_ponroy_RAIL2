@@ -80,17 +80,17 @@ public class VueSauvegarde extends VueSimulation {
             if (simulation.getJoueur() == simulation.getGardien()) {
                 vBoxGardien = creerVision("Vue joueur gardien"); //on ajoute le filtre vision
                 vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
-                vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB1);
+                vBoxPrisonnier = createBayesienneView("Vue bayésienne du prisonnier", vB1);
             } else {
                 vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
-                vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB2);
+                vBoxGardien = createBayesienneView( "Vue bayésienne du gardien", vB2);
                 vBoxPrisonnier = creerVision("Vue joueur prisonnier");
             }
         } else {
             vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
             vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
-            vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
-            vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB2);
+            vBoxGardien = createBayesienneView( "Vue bayésienne du gardien", vB1);
+            vBoxPrisonnier = createBayesienneView( "Vue bayésienne du prisonnier", vB2);
         }
 
         // Mise en forme des VBox
@@ -120,7 +120,7 @@ public class VueSauvegarde extends VueSimulation {
     /**
      * Crée une vue Bayesienne associée à un personnage.
      */
-    private VBox createBayesienneView(Personnage personnage, String titre, VueBayesienne vueBayesienne) {
+    private VBox createBayesienneView( String titre, VueBayesienne vueBayesienne) {
         VBox vueBayesienneVBox = new VBox();
         vueBayesienneVBox.setSpacing(10);
         vueBayesienneVBox.setAlignment(Pos.TOP_CENTER);
@@ -258,6 +258,7 @@ public class VueSauvegarde extends VueSimulation {
     /**
      * Met à jour uniquement les positions des personnages
      */
+    @Override
     protected void updatePositions() {
         // Met à jour la position du prisonnier
         Position p = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(tour);
@@ -368,6 +369,7 @@ public class VueSauvegarde extends VueSimulation {
     /**
      * Methode set positions imagewiew
      */
+    @Override
     public void setPositions(Position p, ImageView im) {
         im.setX(p.getX() * TAILLE_CELLULE);
         im.setY(p.getY() * TAILLE_CELLULE);

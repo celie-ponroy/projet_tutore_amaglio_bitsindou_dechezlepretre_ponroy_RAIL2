@@ -72,7 +72,7 @@ public class Simulation implements Jeu {
 
         //ajout des comportements
         setComportementsGardien(ComportementGardien);
-        setComportementsPrisonier(ComportementPrisonier);
+        setComportementsPrisonnier(ComportementPrisonier);
 
         //initialisation des victoires
         this.victoireGardien = false;
@@ -140,7 +140,7 @@ public class Simulation implements Jeu {
 
             this.positionnerAgentsSpawnAleatoire();
 
-            setComportementsPrisonier(ComportementAdversaire);
+            setComportementsPrisonnier(ComportementAdversaire);
 
             bayesiens.put(this.prisonnier, new Bayesien());
             carteBayesiennes.put(prisonnier, bayesiens.get(this.prisonnier).getCarteBayesienne());
@@ -193,6 +193,7 @@ public class Simulation implements Jeu {
      *
      * @param dj
      */
+    @Override
     public void ajouterObservateur(DessinJeu dj) {
         this.observateurs.add(dj);
     }
@@ -200,6 +201,7 @@ public class Simulation implements Jeu {
     /**
      * Methode permettant de notifier les observateurs
      */
+    @Override
     public void notifierObservateurs() {
         for (DessinJeu dj : this.observateurs) {
             dj.update(this);
@@ -325,7 +327,7 @@ public class Simulation implements Jeu {
             deplacementAgent = this.comportementPrisonnier.prendreDecision();
         }
         //initialisation du déplacement du joueur
-        if (!verifierDeplacemnt(joueur, d)) {
+        if (!verifierDeplacement(joueur, d)) {
             historiqueDeplacement.get(joueur).removeLast();
             historiqueDeplacement.get(agent).removeLast();
             return;
@@ -431,7 +433,7 @@ public class Simulation implements Jeu {
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
-        boolean valide = verifierDeplacemnt(p, d);
+        boolean valide = verifierDeplacement(p, d);
         //si oui deplacer le personnage
         if (valide)
             p.deplacer(nvPos);
@@ -446,7 +448,7 @@ public class Simulation implements Jeu {
      * @param d déplacement a effectuer
      * @return true si le deplacement est valide
      */
-    public boolean verifierDeplacemnt(Personnage p, Deplacement d) {
+    public boolean verifierDeplacement(Personnage p, Deplacement d) {
         Position persoPos = p.getPosition();
         Position nvPos = new Position(persoPos.getX(), persoPos.getY());
         nvPos.deplacement(d);
@@ -523,7 +525,7 @@ public class Simulation implements Jeu {
      *
      * @param comportements enums représantant le comportement chosit
      */
-    public void setComportementsPrisonier(Comportements comportements) {
+    public void setComportementsPrisonnier(Comportements comportements) {
         switch (comportements) {
             case Comportements.ArbreDeterministePris:
                 this.comportementPrisonnier = new ArbreDecisionPrisonnier(this, this.prisonnier);
@@ -595,8 +597,8 @@ public class Simulation implements Jeu {
     /**
      * Methode permettant de recuperer la carte bayesienne d'un personnage
      *
-     * @param p
-     * @return
+     * @param p personnage dont on veut la carte bayesienne
+     * @return la carte bayesienne
      */
     public double[][] getCarteBayesienne(Personnage p) {
         return carteBayesiennes.get(p);

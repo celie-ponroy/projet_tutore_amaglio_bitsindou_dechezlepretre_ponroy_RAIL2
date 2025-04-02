@@ -36,9 +36,9 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
     private int nbIterationsInt;
     private ObservableList<PieChart.Data> pieChartData;
     private final Rectangle[][] caseFiltreChaleur = new Rectangle[Simulation.CARTE.length][Simulation.CARTE[0].length];
-    RadioButton radioBtnTous = new RadioButton("Tous les deux");
-    RadioButton radioBtnPrisonnier = new RadioButton("Prisonnier");
-    RadioButton radioBtnGardien = new RadioButton("Gardien");
+    private RadioButton radioBtnTous = new RadioButton("Tous les deux");
+    private RadioButton radioBtnPrisonnier = new RadioButton("Prisonnier");
+    private RadioButton radioBtnGardien = new RadioButton("Gardien");
 
     //constructeur
     public VueAnalyse() {

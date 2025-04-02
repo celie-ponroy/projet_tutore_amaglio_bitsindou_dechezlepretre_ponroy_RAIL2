@@ -651,174 +651,69 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                 boolean isPrisonnierStart = lancerAnalyse.getCasesDepartPris().containsKey(currentPos);
                 boolean isGardienStart = lancerAnalyse.getCasesDepartGard().containsKey(currentPos);
 
+                Tooltip tooltip = new Tooltip(); // Un seul Tooltip
+                int nbVisites = 0;
+                double opacite = 0;
+
                 // En fonction de la position actuelle des personnages sélectionnés par les radioButtons
                 if (radioBtnPrisonnier.isSelected()) {
-                    // Affiche les positions de départ du prisonnier
-                    if (isPrisonnierStart) {
-                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier");
-                    }
                     // Affiche les cases visitées par le prisonnier
                     if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
                         rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
+                        tooltip.setText("Visites : " + nbVisites); // Mise à jour du texte
                     }
-                } else if (radioBtnGardien.isSelected()) {
-                    // Affiche les positions de départ du gardien
-                    if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
+                    if (isPrisonnierStart) {
+                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
+                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
+                        System.out.println("Spawn prisonnier" + lancerAnalyse.getCasesDepartPris().get(currentPos));
                     }
+
+                } else if (radioBtnGardien.isSelected()) {
                     // Affiche les cases visitées par le gardien
                     if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
                         rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
                         System.out.println("Cases visitees pri");
                     }
-                } else if (radioBtnGardien.isSelected()) {
                     // Affiche les positions de départ du gardien
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
+//                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien");
-                    }
-                    // Affiche les cases visitées par le gardien
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees gard");
+
                     }
                 } else if (radioBtnTous.isSelected()) {
-                    // Affiche les positions de départ du prisonnier et du gardien
-                    if (isPrisonnierStart) {
-                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier + ");
-                    }
-                    if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien + ");
-                    }
                     // Affiche les cases visitées par les deux
                     if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
+                        nbVisites = listeCasesVisitees.get(currentPos);
+                        opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
                         rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees tous");
-                    }
-                } else if (radioBtnTous.isSelected()) {
-                    // Affiche les positions de départ du prisonnier et du gardien
-                    if (isPrisonnierStart) {
-                        rect.setFill(Color.rgb(255, 165, 0)); // Orange
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                    }
-                    if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                    }
-                    // Affiche les cases visitées par les deux
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
                         System.out.println("Cases visitees pri");
                     }
-                } else if (radioBtnGardien.isSelected()) {
-                    // Affiche les positions de départ du gardien
-                    if (isGardienStart) {
-                        rect.setFill(Color.rgb(0, 0, 255)); // Bleu
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien");
-                    }
-                    // Affiche les cases visitées par le gardien
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees gard");
-                    }
-                } else if (radioBtnTous.isSelected()) {
                     // Affiche les positions de départ du prisonnier et du gardien
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn prisonnier + ");
                     }
                     if (isGardienStart) {
                         rect.setFill(Color.rgb(0, 0, 255)); // Bleu
                         rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
                         tooltip.setText("Départ gardien : " + lancerAnalyse.getCasesDepartGard().get(currentPos));
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Spawn gardien + ");
                     }
-                    // Affiche les cases visitées par les deux
-                    if (listeCasesVisitees.containsKey(currentPos)) {
-                        int nbVisites = listeCasesVisitees.get(currentPos);
-                        double opacite = Math.pow(normaliser(nbVisites, listeCasesVisitees), 0.5);
-                        rect.setFill(Color.rgb(0, 0, 255, opacite)); // Bleu avec transparence
-                        rect.setOpacity(1);
-                        Tooltip tooltip = new Tooltip();
-                        tooltip.setText("Visites : " + nbVisites);
-                        Tooltip.install(rect, tooltip);
-                        System.out.println("Cases visitees tous");
-                    }
+                    Tooltip.install(rect, tooltip);
+
+
                 }
             }
         }

@@ -7,7 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -17,9 +16,6 @@ import moteur.MoteurJeu;
 import musique.SoundManager;
 import simulation.tuto.SimulationTutoriel;
 
-import java.awt.*;
-
-import static musique.SoundManager.stopBtnMusic;
 public class PageAccueil {
 
     //Attributs
@@ -101,7 +97,7 @@ public class PageAccueil {
         boutons.setSpacing(20);
         Button lancerJeu = new Button("Commencer");
         lancerJeu.getStyleClass().add("gris");
-        lancerJeu.setPrefSize(20+150+150, 100); //150=taillle petit boutons 20 = spacing
+        lancerJeu.setPrefSize(20+150+150, 100); //150=taillle petit | boutons 20 = spacing
         lancerJeu.setOnAction(e -> {
             VueMenus vueMenus = new VueMenus(jeu,primaryStage);
             vueMenus.afficherMenuPrincipal();

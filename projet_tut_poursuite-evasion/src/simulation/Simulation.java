@@ -272,9 +272,7 @@ public class Simulation implements Jeu {
             actualisationBayesienne(this.prisonnier, this.gardien);
 
             Deplacement d1 = this.comportementPrisonnier.prendreDecision();
-            // System.out.println("décision prisonier : "+d1);
             Deplacement d2 = this.comportementGardien.prendreDecision();
-            // System.out.println("décision gardient réseau : "+d2);
 
             historiqueDeplacement.get(prisonnier).add(d1);
             historiqueDeplacement.get(gardien).add(d2);
@@ -353,8 +351,6 @@ public class Simulation implements Jeu {
                 this.historiqueDeplacement.get(joueur).removeLast();
                 this.historiqueDeplacement.get(joueur).add(d);
             }
-            //historiquePosition.get(prisonnier).add(prisonnier.getPosition());
-            //historiquePosition.get(gardien).add(gardien.getPosition());
         }
 
         this.nbTours++;

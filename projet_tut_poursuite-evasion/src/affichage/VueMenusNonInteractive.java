@@ -27,8 +27,6 @@ public class VueMenusNonInteractive {
      * Attributs
      */
     private static MoteurJeu jeu;
-    private static double WIDTH = 1540;
-    private static double HEIGHT = 1200;
 
     /**
      * constructeur
@@ -106,16 +104,13 @@ public class VueMenusNonInteractive {
         retour.setPrefSize(230, 50);
         retour.getStyleClass().add("important"); //rend le bouton rouge
 
-        //Événement lié au bouton de retour
         retour.setOnAction(e -> {
-            //Ferme la fenetre actuelle
-            Stage stage = (Stage) retour.getScene().getWindow();
             //retour au menu principal
+            Stage stage = (Stage) retour.getScene().getWindow();
             VueMenus vm = new VueMenus(stage);
             vm.afficherMenuPrincipal();
         });
 
-        // Événement lié au bouton de validation
         okButton.setOnAction(e -> {
             SoundManager.stopFondMusic();
 
@@ -141,13 +136,10 @@ public class VueMenusNonInteractive {
                     protected Simulation call() throws Exception {
                         Comportements comportementP;
                         Comportements comportementG;
-
                         // Switch pour le choix de difficulté du gardien
                         comportementG = FabriqueComportement.creerComportement(gardienComboBox.getValue());
-
                         // Switch pour le choix de difficulté du prisonnier
                         comportementP = FabriqueComportement.creerComportement(prisonnierComboBox.getValue());
-
                         // Création de la simulation
                         return new Simulation(comportementG, comportementP);
                     }
@@ -156,16 +148,15 @@ public class VueMenusNonInteractive {
                 // Gére la fin de la tâche
                 task.setOnSucceeded(event -> {
                     Simulation simulation = task.getValue();
-
                     //Si la simulation n'est pas null on lance la simulation
                     if (simulation != null) {
                         MoteurJeu.jeu = simulation;
-                        if (isMuted == false){
+                        if (!isMuted){
                             playGameMusic();
                         }
 
                         // Affichage du jeu
-                        VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive(WIDTH, HEIGHT);
+                        VuePrincipaleNonInteractive vp = new VuePrincipaleNonInteractive( primaryStage.getScene().getWidth(), primaryStage.getScene().getHeight());
                         vp.update(MoteurJeu.jeu);
                         MoteurJeu.jeu.ajouterObservateur(vp);
                         root.getChildren().clear();

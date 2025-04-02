@@ -36,7 +36,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
      */
     public VuePrincipaleNonInteractive(double width, double height) {
         super();
-        TAILLE_CELLULE = (int) ((width - 6 * 10) / (Simulation.CARTE[0].length) * 0.33);
+        TAILLE_CELLULE = (int) ((width - 7 * 10) / (Simulation.CARTE[0].length) * 0.33);
         this.tour = 0;
     }
 
@@ -65,14 +65,12 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
         //Ajout de la vbox de l'iteration au Pane
         labyPane.getChildren().add(iterationLabel);
 
-        // Création des deux vues bayésiennes dans des VBox distinctes
-
         //Création des vues bayesiennes
         vB1 = new VueBayesienne(this.simulation, simulation.getPrisonnier(), 0, 0, TAILLE_CELLULE);
         vB2 = new VueBayesienne(this.simulation, simulation.getGardien(), 0, 0, TAILLE_CELLULE);
 
-        VBox vBoxGardien = createBayesienneView(simulation.getGardien(), "Vue bayésienne du gardien", vB1);
-        VBox vBoxPrisonnier = createBayesienneView(simulation.getPrisonnier(), "Vue bayésienne du prisonnier", vB2);
+        VBox vBoxGardien = createBayesienneView( "Vue bayésienne du gardien", vB1);
+        VBox vBoxPrisonnier = createBayesienneView( "Vue bayésienne du prisonnier", vB2);
         // Mise en forme des VBox
         vBoxGardien.setAlignment(Pos.TOP_LEFT);
         vBoxPrisonnier.setAlignment(Pos.TOP_RIGHT);
@@ -97,7 +95,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
     /**
      * Crée une vue Bayesienne associée à un personnage.
      */
-    private VBox createBayesienneView(Personnage personnage, String titre, VueBayesienne vueBayesienne) {
+    private VBox createBayesienneView( String titre, VueBayesienne vueBayesienne) {
         VBox vueBayesienneVBox = new VBox();
         vueBayesienneVBox.setSpacing(10);
         vueBayesienneVBox.setAlignment(Pos.TOP_CENTER);
@@ -149,8 +147,8 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             sauvegarder.setOnAction(e -> {
                 lancerSauvegarde(sauvegarder);
             });
-            sauvegarder.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
-            sauvegarder.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 7);
+            sauvegarder.setLayoutX(TAILLE_CELLULE * Simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            sauvegarder.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + TAILLE_CELLULE * 7);
 
             javafx.scene.control.Button precedent = new Button("Précédent");
             precedent.setPrefSize(200, 75);
@@ -181,7 +179,7 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
             retourMenuBtn.setPrefSize(410, 75);
             retourMenuBtn.getStyleClass().add("important");
             retourMenuBtn.setOnAction(e -> {
-                if (isMuted == false) {
+                if (!isMuted) {
                     SoundManager.stopAllMusic();
                     SoundManager.playFondMusic();
                 }
@@ -190,13 +188,13 @@ public class VuePrincipaleNonInteractive extends VueSimulation implements Dessin
                 VueMenus vm = new VueMenus(stage);
                 vm.afficherMenuPrincipal();
             });
-            retourMenuBtn.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
-            retourMenuBtn.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 11);
+            retourMenuBtn.setLayoutX(TAILLE_CELLULE * Simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            retourMenuBtn.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + TAILLE_CELLULE * 11);
 
             //ajout des boutons
             HBox hboxBouttons = new HBox();
-            hboxBouttons.setLayoutX(TAILLE_CELLULE * simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
-            hboxBouttons.setLayoutY(TAILLE_CELLULE * simulation.CARTE.length + TAILLE_CELLULE * 3);
+            hboxBouttons.setLayoutX(TAILLE_CELLULE * Simulation.CARTE[0].length + 30 + TAILLE_CELLULE * 2);
+            hboxBouttons.setLayoutY(TAILLE_CELLULE * Simulation.CARTE.length + TAILLE_CELLULE * 3);
             hboxBouttons.setSpacing(10);
 
             hboxBouttons.getChildren().add(precedent);

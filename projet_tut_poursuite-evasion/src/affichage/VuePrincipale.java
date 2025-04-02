@@ -135,21 +135,21 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
             //on enleve l'affichage du bouton retour au menu
 //            this.getChildren().remove(this.getChildren().size()-1);
             if (!simulation.getVictoireGardien() && !simulation.getVictoirePrisonnier()) {
-                if (isMuted == false) {
+                if (!isMuted) {
                     playDrawMusic();
                 }
                 alert.setHeaderText("Egalité !");
                 alert.setContentText("Le nombre de coup est dépassé !\n" +
                         "Cliquez sur OK pour voir l'historique");
             } else if (simulation.getVictoireGardien() && simulation.getJoueur().equals(simulation.getGardien()) || (simulation.getVictoirePrisonnier() && simulation.getJoueur().equals(simulation.getPrisonnier()))) {
-                if (isMuted == false) {
+                if (!isMuted) {
                     playWinMusic();
                 }
                 alert.setHeaderText("Félicitations !");
                 alert.setContentText("Vous avez gagné la partie !\n" +
                         "Cliquez sur OK pour voir l'historique");
             } else if (!(simulation.getVictoirePrisonnier()) && simulation.getJoueur().equals(simulation.getPrisonnier()) || !(simulation.getVictoireGardien()) && simulation.getJoueur().equals(simulation.getGardien())) {
-                if (isMuted == false) {
+                if (!isMuted) {
                     playLooseMusic();
                 }
                 alert.setHeaderText("Dommage...");
@@ -225,8 +225,8 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
                 this.getChildren().add(sousrect);
             }
         }
-        //on met les perso à l'emplacement ini
 
+        //on met les perso à l'emplacement ini
         Position pPrisonnier = simulation.getHistoriquePosition().get(simulation.getPrisonnier()).get(0);
         Position pGardien = simulation.getHistoriquePosition().get(simulation.getGardien()).get(1);
         setPositions(pPrisonnier, prisonnierView);
@@ -252,7 +252,7 @@ public class VuePrincipale extends VueSimulation implements DessinJeu {
         retourMenuBtn.getStyleClass().add("important");
         retourMenuBtn.setPrefSize(350, 75);
         retourMenuBtn.setOnAction(e -> {
-            if (isMuted == false) {
+            if (!isMuted) {
                 stopAllMusic();//si le son n'est pas coupé
                 playFondMusic();
             }

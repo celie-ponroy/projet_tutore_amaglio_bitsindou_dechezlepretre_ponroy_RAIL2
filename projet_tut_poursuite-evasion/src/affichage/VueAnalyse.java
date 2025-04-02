@@ -111,7 +111,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             }
         });
 
-        //Intput pour le nombre d'itérations (uniquement des chiffres jusqu'à 400 itérations)
+        //Input pour le nombre d'itérations (uniquement des chiffres jusqu'à 400 itérations)
         TextField nbIterations = new TextField();
         nbIterations.setPromptText("Nombre de parties");
 
@@ -347,11 +347,11 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
 
                         try {
                             while (lancerAnalyse.isPause()) {
-                                Thread.sleep(500); // Attente active en pause
+                                Thread.sleep(500);
                             }
-                            Thread.sleep(1000); // Pause normale entre les itérations
+                            Thread.sleep(1000);
                         } catch (InterruptedException ex) {
-                            Thread.currentThread().interrupt(); // Bonne pratique pour gérer les interruptions
+                            Thread.currentThread().interrupt();
                         }
 
                     }
@@ -400,7 +400,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         comportementP = FabriqueComportement.creerComportement(comboBoxPrisonnier.getValue());
         //Ajoute les comportements choisis dans un tableau
         Comportements[] comportements = {comportementG, comportementP};
-        return comportements; //retourne le tableau des comporteemnts choisis
+        return comportements; //retourne le tableau des comportements choisis
     }
 
     /**
@@ -561,7 +561,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
         // Récuperation de la simulation
         this.lancerAnalyse = (LancerAnalyse) jeu;
 
-        // Mise à jour des graphiques
+        // Mise à jour du camembert
         afficherCamembert();
 
         // Mise à jour des courbes

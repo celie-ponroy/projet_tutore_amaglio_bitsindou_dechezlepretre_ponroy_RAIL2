@@ -39,15 +39,16 @@ package "lancercalculs"{
     + {static} main(String[]): void
   }
   class LancerCalculsDatasetArbreCNN{
-        + launch(): void
+         + {static} launch(): void
   }
-
    class LancerCalculsDatasetArbreMLP{
-          + launch(): void
-    }
-
+         + {static} launch(): void
+   }
+   class LancerCalculsDatasetQLearning{
+         + {static} launch(ReseauDeNeuronesQLearning): void
+   }
 }
-package "outil"{
+package "outils"{
     class ChargementCarte{
         + {static} charger(String): int[][]
     }

@@ -59,6 +59,9 @@ package "apprentissage"{
         + main(String[]): void
         + afficherRecord(CSVDatasetCNN):void
     }
+    class ApprentissageQLearning{
+            + main(String[]): void
+    }
     class OptimisationBayesienne{
         - {static} final MIN_NEURONS: int
         - {static} final MAX_NEURONS: int

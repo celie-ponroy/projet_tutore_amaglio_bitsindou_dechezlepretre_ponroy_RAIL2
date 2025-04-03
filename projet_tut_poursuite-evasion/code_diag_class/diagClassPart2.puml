@@ -22,7 +22,6 @@ package "simulation"{
     ReseauArbreCNN
     ReseauRenforcement
     ReseauArbreMLP
-    ReseauArbreAleatoire
   }
   enum CaseEnum{
     MUR
@@ -45,13 +44,21 @@ package "simulation"{
         + {static} getBlock():SequencialBlock
     }
     class ReseauDeNeuronesCNN{
-            - model : Model
-            - block : SequencialBlock
-            - translator: Translator<NDArray, Integer>
-            + ReseauDeNeuronesCNN(String, Simulation, Personnage)
-            + {static} setBlock():void
-            + {static} setBlock():SequencialBlock
-        }
+        - model : Model
+        - block : SequencialBlock
+        - translator: Translator<NDArray, Integer>
+        + ReseauDeNeuronesCNN(String, Simulation, Personnage)
+        + {static} setBlock():void
+        + {static} setBlock():SequencialBlock
+    }
+    class ReseauDeNeuronesQLearning{
+        - model : Model
+        - block : SequencialBlock
+        - translator: Translator<NDArray, Integer>
+        + ReseauDeNeurones(String, Simulation, Personnage)
+        + ReseauDeNeurones(Model model)
+        + donnerSortie() : float
+    }
     interface Comportement{
         + prendreDecision(): Deplacement
         + getType(): Comportements

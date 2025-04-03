@@ -38,8 +38,8 @@ public class InformationsIa {
                 "Cette IA fonctionne comme la version 1.0 mais une fois face au gardien, " + "\n" +
                         "le prisonnier cherche à fuir vers la sortie et non à l'opposé de l'adversaire.", vboxMain);
 
-        initLabel("Réseau de neurones 1.0",
-                "L'IA se déplace en suivant un réseau de neurones.", vboxMain);
+        initLabel("Réseau de neurones Renforcement",
+                "L'IA se déplace en suivant un réseau de neurones ayant appris par QLearning, il ne tient pas compte de l'inférence bayesienne.", vboxMain);
 
         return vboxMain;
     }
@@ -67,8 +67,10 @@ public class InformationsIa {
                 "Cette IA fonctionne comme la version 1.0 mais il y ajoute de " + "\n" +
                         "l'aléatoire en ayant une chance d'aller vers une direction égale à " + "\n" +
                         "la probabilité de présence de l'adversaire.", vboxMain);
-        initLabel("Réseau de neurones 1.0",
-                "L'IA se déplace en suivant un réseau de neurones.", vboxMain);
+        initLabel("Réseau de neurones (MLP)",
+                "L'IA se déplace en suivant un réseau de neurones ayant appris le comportement de l'arbre de décision déterministe 1.0.", vboxMain);
+        initLabel("Réseau de neurones (CNN)",
+                "L'IA se déplace en suivant un réseau de neurones avec une couche de convolution ayant appris le comportement de l'arbre de décision déterministe 1.0.", vboxMain);
 
         return vboxMain;
     }

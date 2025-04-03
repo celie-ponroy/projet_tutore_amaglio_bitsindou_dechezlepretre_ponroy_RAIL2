@@ -20,7 +20,7 @@ public class FabriqueComportement {
     //Créer une comboBox avec les comportements possibles du policier
     public static ComboBox<String> creerComboBoxGardien() {
         ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.getItems().addAll(ArbreDeterministeGard.toString(), AleatoireGard.toString(), ArbreAleatoire.toString(), ReseauArbreCNN.toString(), ReseauArbreMLP.toString(), ReseauArbreAleatoire.toString());
+        comboBox.getItems().addAll(ArbreDeterministeGard.toString(), AleatoireGard.toString(), ArbreAleatoire.toString(), ReseauArbreCNN.toString(), ReseauArbreMLP.toString());
         comboBox.setValue(ArbreDeterministeGard.toString()); //Par défaut
         return comboBox;
     }
@@ -47,8 +47,6 @@ public class FabriqueComportement {
                 return simulation = new Simulation(false, Comportements.ReseauRenforcement);
             case "Réseau de neurones (MLP)":
                 return simulation = new Simulation(true, Comportements.ReseauArbreMLP);
-            case "Réseau de neurones (Arbre aléatoire)":
-                return simulation = new Simulation(true, Comportements.ReseauArbreAleatoire);
         }
         return simulation;
     }
@@ -83,9 +81,6 @@ public class FabriqueComportement {
                 break;
             case "Réseau de neurones (MLP)":
                 comportements = Comportements.ReseauArbreMLP;
-                break;
-            case "Réseau de neurones (Arbre aléatoire)":
-                comportements = Comportements.ReseauArbreAleatoire;
                 break;
         }
         return comportements;

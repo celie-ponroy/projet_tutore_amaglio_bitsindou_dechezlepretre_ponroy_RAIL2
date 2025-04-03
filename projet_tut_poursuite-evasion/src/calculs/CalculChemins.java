@@ -88,7 +88,6 @@ public class CalculChemins {
                     for (int x2 = 0; x2 < CARTE[0].length; x2++) {
                         Position src = new Position(x1, y1);
                         Position dest = new Position(x2, y2);
-                        //System.out.println("Chemin de "+src+" à "+dest+" : "+vision.get(List.of(src,dest)));
                         bos.write((x1 + "," + y1 + "|" + x2 + "," + y2 + ":").getBytes());
                         bos.write((vision.get(List.of(src, dest)) + ";" + "\n").getBytes());
                     }
@@ -132,7 +131,6 @@ public class CalculChemins {
                         var res = aStarSearch(CARTE, CARTE.length, CARTE[0].length, src, dest);
                         //liste de positions avec src et dest
                         mapStack.put(List.of(src, dest), res);
-                        //System.out.println("Chemin de "+src+" à "+dest+" : "+res);
                     }
                 }
             }

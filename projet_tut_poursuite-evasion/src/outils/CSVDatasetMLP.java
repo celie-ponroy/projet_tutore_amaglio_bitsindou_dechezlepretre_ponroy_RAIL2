@@ -31,7 +31,6 @@ public class CSVDatasetMLP extends RandomAccessDataset implements CSVDataset{
 
         // Conversion de la colonne "map" en un tableau de float
         float[] mapValues = parseMap(record.get("input"));
-        //System.out.println("taille input "+mapValues.length);
         NDArray bayesien = manager.create(mapValues);
 
         // Conversion de "dep" en float
@@ -47,7 +46,6 @@ public class CSVDatasetMLP extends RandomAccessDataset implements CSVDataset{
 
     private float[] parseMap(String mapString) {
         // Diviser la chaîne sur les virgules et convertir chaque élément en float
-        //System.out.println(mapString);
         String[] strs = mapString.split(",");
         float[] mapValues = new float[strs.length];
         for (int i = 0; i < strs.length; i++) {

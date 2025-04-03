@@ -53,6 +53,8 @@ public class Simulation implements Jeu {
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(9, 18, VISION_P);
         this.gardien = new Agent(5, 4, VISION_G);
+
+        //spawn
         this.positionnerAgentsSpawnAleatoire();
 
         historiqueDeplacement = new HashMap<>();
@@ -123,9 +125,6 @@ public class Simulation implements Jeu {
             this.prisonnier = new Joueur(9, 18, VISION_P);
             this.gardien = new Agent(5, 4, VISION_G);
 
-            //Position aléatoire des agents
-            this.positionnerAgentsSpawnAleatoire();
-
             setComportementsGardien(ComportementAdversaire);
 
             bayesiens.put(this.gardien, new Bayesien());
@@ -138,8 +137,6 @@ public class Simulation implements Jeu {
             this.gardien = new Joueur(5, 4, VISION_G);
             this.prisonnier = new Agent(9, 18, VISION_P);
 
-            this.positionnerAgentsSpawnAleatoire();
-
             setComportementsPrisonnier(ComportementAdversaire);
 
             bayesiens.put(this.prisonnier, new Bayesien());
@@ -147,8 +144,10 @@ public class Simulation implements Jeu {
             ArrayList<double[][]> list1 = new ArrayList<>();
             list1.add(carteBayesiennes.get(prisonnier).clone());
             historiqueBayesien.put(prisonnier, list1);
-
         }
+
+        //spawn
+        this.positionnerAgentsSpawnAleatoire();
 
         //historique
         historiquePosition = new HashMap<>();
@@ -165,7 +164,6 @@ public class Simulation implements Jeu {
         List<Deplacement> depG = new ArrayList<>();
         historiqueDeplacement.put(gardien, depG);
         historiqueDeplacement.put(prisonnier, depP);
-
     }
 
     /**
@@ -250,18 +248,6 @@ public class Simulation implements Jeu {
 
         this.prisonnier.setPosition(new Position(spawnGardien.getX(), spawnGardien.getY()));
         this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
-        System.out.println("gardien : Y=" + spawnGardien.getY() + " X=" + spawnGardien.getX());
-        System.out.println("prisonier : Y=" + spawnPrisonnier.getY() + " X=" + spawnPrisonnier.getX());
-        int casesHaut = 0;
-        int casesBas = 0;
-
-        for (Case c : casesValides) {
-            if (c.getY() > 3) {
-                casesBas++;
-            } else if (c.getY() < 3) {
-                casesHaut++;
-            }
-        }
     }
 
     /**
@@ -537,7 +523,7 @@ public class Simulation implements Jeu {
                 this.comportementPrisonnier = new Aleatoire(this, this.prisonnier);
                 break;
             case Comportements.ReseauRenforcement:
-                //this.comportementPrisonnier = new ReseauDeNeurones("donnees/sauvegardes_NeuralNetwork/P-RN-ArbreDeterministe", this, this.prisonnier);
+                this.comportementPrisonnier = new ReseauDeNeuronesQLearning("mlp_q", this, this.prisonnier);
                 break;
             default:
                 System.out.println("comportement non définit");

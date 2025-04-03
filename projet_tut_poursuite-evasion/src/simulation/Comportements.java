@@ -11,8 +11,7 @@ public enum Comportements implements Serializable {
     ArbreAleatoire, //gardien
     ReseauArbreCNN, //gardien
     ReseauRenforcement, //prisonnier
-    ReseauArbreMLP, //gardien
-    ReseauArbreAleatoire,; //gardien
+    ReseauArbreMLP; //gardien
 
     //Méthode toString
 
@@ -46,9 +45,6 @@ public enum Comportements implements Serializable {
                 break;
             case ReseauArbreMLP:
                 res = "Réseau de neurones (MLP)";
-                break;
-            case ReseauArbreAleatoire:
-                res = "Réseau de neurones (Arbre aléatoire)";
                 break;
         }
         return res;

@@ -138,7 +138,6 @@ public class ReseauDeNeuronesCNN implements Comportement {
         Integer resultat = 0;
         try {
             resultat = predictor.predict(inputData);
-            System.out.println("resultats : " + resultat);
         } catch (Exception e) {
             System.out.println("erreur");
             System.out.println(e.getMessage());

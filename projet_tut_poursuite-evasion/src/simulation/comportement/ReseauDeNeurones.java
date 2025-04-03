@@ -51,7 +51,7 @@ public class ReseauDeNeurones implements Comportement {
 
         Path modelDir = Paths.get("donnees/reseau/mlp");
         model = Model.newInstance(nomReseau);
-        model.setBlock(new Mlp(Simulation.getTailleCarte() * 3, Deplacement.values().length, new int[]{350, 300, 256, 200, 128, 100, 64, 50, 32, 20}));
+        model.setBlock(block);
         try {
             model.load(modelDir);
             System.out.println("Chargement ok !");
@@ -69,7 +69,7 @@ public class ReseauDeNeurones implements Comportement {
             @Override
             public Integer processOutput(TranslatorContext ctx, NDList list) {
                 // Trouver l'index de la probabilité la plus haute
-                NDArray probabilities = list.singletonOrThrow().softmax(0);
+                NDArray probabilities = list.singletonOrThrow();
 
                 return (int) probabilities.argMax().getLong();
             }
@@ -103,7 +103,7 @@ public class ReseauDeNeurones implements Comportement {
 
     @Override
     public Comportements getType() {
-        return Comportements.ReseauArbreAleatoire;
+        return Comportements.ReseauArbreMLP;
     }
 
     public static void setBlock() {

@@ -41,7 +41,6 @@ public class LancerCalculsDataSetArbreMLP {
             bayesien = sim.getHistoriqueBayesien().get(sim.getGardien());
             //on récupère les positions
             positions = sim.getHistoriquePosition().get(sim.getGardien());
-            //System.out.println(bayesien.size()+" "+deplacements.size()+" "+positions.size());
 
             //si it > 80% du nbIte choisit, on enregistre dans les donnée de validations
             nomFichier = (i >= nbIteration * 0.8) ? "donnees/game_data_validation.csv" : "donnees/game_data.csv";

@@ -659,7 +659,6 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
                     if (isPrisonnierStart) {
                         rect.setFill(Color.rgb(255, 165, 0)); // Orange
                         tooltip.setText("Départ prisonnier : " + lancerAnalyse.getCasesDepartPris().get(currentPos));
-                        System.out.println("Spawn prisonnier" + lancerAnalyse.getCasesDepartPris().get(currentPos));
                     }
                 }
                 if (radioBtnGardien.isSelected()||radioBtnTous.isSelected()) {

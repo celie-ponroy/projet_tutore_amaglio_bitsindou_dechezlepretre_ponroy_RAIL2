@@ -26,6 +26,17 @@ public class Position implements Serializable {
         return y;
     }
 
+
+    /**
+     * Donne une position a partir d'un déplacement est d'une position
+     * @param d Déplacement en question
+     */
+    public Position getNouvellePosition(Deplacement d){
+        Position p = new Position(this.x, this.y);
+        p.deplacement(d);
+        return p;
+    }
+
     /**
      * Déplace la position selon le déplacement
      * @param d Déplacement en question

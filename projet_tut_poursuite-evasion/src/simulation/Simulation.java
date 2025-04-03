@@ -50,6 +50,8 @@ public class Simulation implements Jeu {
         //les 2 personnages sont des agents
         this.prisonnier = new Agent(9, 18, VISION_P);
         this.gardien = new Agent(5, 4, VISION_G);
+
+        //spawn
         this.positionnerAgentsSpawnAleatoire();
 
         historiqueDeplacement = new HashMap<>();
@@ -140,8 +142,9 @@ public class Simulation implements Jeu {
             historiqueBayesien.put(prisonnier, list1);
 
         }
-        //this.positionnerAgentsSpawnAleatoire();
-        this.positionnerAleatoirement();
+
+        //spawn
+        this.positionnerAgentsSpawnAleatoire();
 
         //historique
         historiquePosition = new HashMap<>();
@@ -241,17 +244,6 @@ public class Simulation implements Jeu {
 
         this.prisonnier.setPosition(new Position(spawnGardien.getX(),spawnGardien.getY()));
         this.gardien.setPosition(new Position(spawnPrisonnier.getX(), spawnPrisonnier.getY()));
-
-//        int casesHaut = 0;
-//        int casesBas = 0;
-
-//        for (Case c : casesValides) {
-//            if (c.getY() > 3) {
-//                casesBas++;
-//            } else if (c.getY() < 3) {
-//                casesHaut++;
-//            }
-//        }
     }
 
     /**

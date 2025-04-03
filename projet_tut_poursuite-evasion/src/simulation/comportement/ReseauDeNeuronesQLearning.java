@@ -2,7 +2,6 @@ package simulation.comportement;
 
 import ai.djl.MalformedModelException;
 import ai.djl.Model;
-import ai.djl.basicmodelzoo.basic.Mlp;
 import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
@@ -30,13 +29,20 @@ public class ReseauDeNeuronesQLearning implements Comportement {
     private Translator<NDArray, Integer> translatorDeplacement;
     private Translator<NDArray, Float> translatorSortie;
 
-    public ReseauDeNeuronesQLearning(String nomReseau, Simulation simulation, Personnage personnage)  {
+    /**
+     * Constructeur du Reseau de neurones pour le Qlearning
+     *
+     * @param nomReseau  nom donnée au réseau dans les fichiers
+     * @param simulation Simulation dans laquel interragie le reseau
+     * @param personnage Personnage affecter par le Reseau de neurones
+     */
+    public ReseauDeNeuronesQLearning(String nomReseau, Simulation simulation, Personnage personnage) {
         this.sim = simulation;
         this.personnage = personnage;
 
         Path modelDir = Paths.get("donnees/mlp");
         model = Model.newInstance(nomReseau);
-        long inputSize = Simulation.getTailleCarte()*2L;
+        long inputSize = Simulation.getTailleCarte() * 2L;
         int outputSize = Deplacement.values().length;
         SequentialBlock block = new SequentialBlock();
         block.add(Blocks.batchFlattenBlock(inputSize));
@@ -56,12 +62,18 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         try {
             model.load(modelDir);
             System.out.println("Chargement ok !");
-        }catch (MalformedModelException | IOException ex) {
+        } catch (MalformedModelException | IOException ex) {
             System.out.println(ex.getMessage());
         }
         setTranslatorSortie();
     }
-    public ReseauDeNeuronesQLearning(Model model){
+
+    /**
+     * Constructeur Reseau de neurones pour Qlearning avec le model en param
+     *
+     * @param model model du ResN
+     */
+    public ReseauDeNeuronesQLearning(Model model) {
         this.model = model;
         setTranslatorDeplacement();
         setTranslatorSortie();
@@ -80,7 +92,7 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         Integer resultat = 0;
         try {
             resultat = predictor.predict(arrayFlaot);
-        } catch (ai.djl.translate.TranslateException te){
+        } catch (ai.djl.translate.TranslateException te) {
             System.out.println(te.getMessage());
             return Deplacement.AUCUN;
         }
@@ -92,7 +104,10 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         return Comportements.ReseauArbreAleatoire;
     }
 
-    public void setTranslatorDeplacement(){
+    /**
+     * Set le translator pour la sortir sous forme de déplacement dans le reseau de neurones
+     */
+    public void setTranslatorDeplacement() {
         this.translatorDeplacement = new Translator<NDArray, Integer>() {
             @Override
             public NDList processInput(TranslatorContext ctx, NDArray input) {
@@ -115,7 +130,11 @@ public class ReseauDeNeuronesQLearning implements Comportement {
             }
         };
     }
-    public void setTranslatorSortie(){
+
+    /**
+     * Set le translator pour obtenir la sortie en brut du reseau de neurones
+     */
+    public void setTranslatorSortie() {
         this.translatorSortie = new Translator<NDArray, Float>() {
             @Override
             public NDList processInput(TranslatorContext ctx, NDArray input) {
@@ -128,7 +147,7 @@ public class ReseauDeNeuronesQLearning implements Comportement {
                 // Trouver l'index de la probabilité la plus haute
                 NDArray probabilities = list.singletonOrThrow();
 
-                return probabilities.getFloat((int)probabilities.argMax().getLong());
+                return probabilities.getFloat((int) probabilities.argMax().getLong());
             }
 
             @Override
@@ -138,7 +157,12 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         };
     }
 
-    public float donnerSortie(){
+    /**
+     * Donne la sortie la plus haute du reseau sous forme de float
+     *
+     * @return sortie la plus haute du ResN
+     */
+    public float donnerSortie() {
         var predictor = model.newPredictor(translatorSortie);
         NDManager manager = NDManager.newBaseManager();
         double[] cartePos = Outil.applatissement(sim.getPrisonnier().getPositionCarte());
@@ -149,11 +173,10 @@ public class ReseauDeNeuronesQLearning implements Comportement {
         Float resultat = 0f;
         try {
             resultat = predictor.predict(arrayFlaot);
-        } catch (ai.djl.translate.TranslateException te){
+        } catch (ai.djl.translate.TranslateException te) {
             System.out.println(te.getMessage());
             return 0.f;
         }
-        //System.out.println(Deplacement.values()[resultat]);
         return resultat;
     }
 

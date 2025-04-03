@@ -1,6 +1,5 @@
 package apprentissage;
 
-import ai.djl.Application;
 import ai.djl.Model;
 import ai.djl.ndarray.types.Shape;
 import ai.djl.nn.Activation;
@@ -27,13 +26,9 @@ import java.nio.file.Paths;
 
 public class ApprentissageQLearning {
     public static void main(String[] args) throws IOException, TranslateException {
-        //M"thode pour recalculer le dataset
-        //LancerCalculs.init();
 
-        //Application application = Application.Tabular.SOFTMAX_REGRESSION;
         long inputSize = Simulation.getTailleCarte() * 2L;
         long outputSize = 9;
-
 
         //parametrage nb couches / neurones
         SequentialBlock block = new SequentialBlock();
@@ -53,8 +48,8 @@ public class ApprentissageQLearning {
         //creation du modele du réseau a sauvegarder
         Model model = Model.newInstance("reseau_Qlearning");
         model.setBlock(block);
+
         //parametrage de l'entrainement
-        //Loss l = new SoftmaxCrossEntropyLoss("test",1,-1,false,true);
         TrainingConfig config = new DefaultTrainingConfig(Loss.l2Loss())
                 .addEvaluator(new Accuracy()) // Fonction qui permet de comprendre comment performe le réseau a l'entrainement
                 .addTrainingListeners(TrainingListener.Defaults.logging())
@@ -83,22 +78,25 @@ public class ApprentissageQLearning {
                     }
                 }); //affiche les info d'entrainement
 
-        int epoch = 15;
+        int epoch = 25;
         int batchSize = 32;
 
         Trainer trainer = model.newTrainer(config);
-        trainer.initialize(new Shape(batchSize,inputSize));
+        trainer.initialize(new Shape(batchSize, inputSize));
 
         ReseauDeNeuronesQLearning rn = new ReseauDeNeuronesQLearning(model);
-        for (int i = 0; i < 100; i++) {
+
+        //boucle de renforcement
+        for (int i = 0; i < 200; i++) {
+            //creation dataset
             LancerCalculsDataSetQLearning.launch(rn);
             CSVDataset csvDataset = new CSVDataset.Builder().setSampling(batchSize, true).build("donnees/game_data_Qlearning.csv");
 
-            System.out.println(csvDataset.size());
-
+            //entrainement
             EasyTrain.fit(trainer, epoch, csvDataset, null);
             rn = new ReseauDeNeuronesQLearning(model);
         }
+
         //enregistrement du model
         Path modelDir = Paths.get("donnees/mlp");
         Files.createDirectories(modelDir);

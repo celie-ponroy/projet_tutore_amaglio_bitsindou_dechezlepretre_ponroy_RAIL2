@@ -433,7 +433,7 @@ public class VueAnalyse extends VueSimulation implements DessinJeu {
             case "Comportement aléatoire":
                 comportementP = Comportements.Aleatoire;
                 break;
-            case "Réseau de neurones v1":
+            case "Réseau de neurones 1.0":
                 comportementP = Comportements.ReseauArbreDeterministe;
                 break;
             default:

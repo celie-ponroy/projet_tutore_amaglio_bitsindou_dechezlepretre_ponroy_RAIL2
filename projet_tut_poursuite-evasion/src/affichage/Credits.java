@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -49,6 +50,10 @@ public class Credits {
         this.creerTache(creditsBox, "Remerciements", new String[]{"Célie Ponroy", "Maëlle Bitsindou", "Luc Dechezleprêtre", "Matias Amaglio", "Guenaël Cabanes", "Isabelle Debled-Rennesson", "Charlemiam", "Les deux collègues de M. Cabanes","Victor Georges", "Nino Arcelin"});
         this.creerTache(creditsBox, "Ce projet à été réalisé dans la joie et la bonne humeur", new String[]{""});
         this.creerTache(creditsBox, "BUT Informatique 2025", new String[]{""});
+        ImageView groupe = new ImageView("file:images/groupe.jpg");
+        groupe.setFitHeight(200);
+        groupe.setPreserveRatio(true);
+        creditsBox.getChildren().add(groupe);
 
         ScrollPane scrollPane = new ScrollPane(creditsBox);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);

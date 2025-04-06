@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Main-Class: moteur.MoteurJeu
+Class-Path: javafx-base-21.jar javafx-controls-21.jar slf4j-simple-1.7.3
+ 6.jar slf4j-api-1.7.36.jar javafx-graphics-21.jar javafx-fxml-21-win.ja
+ r controlsfx-11.2.1.jar api-0.28.0.jar gson-2.10.1.jar jna-5.14.0.jar c
+ ommons-compress-1.26.1.jar commons-codec-1.16.1.jar commons-io-2.15.1.j
+ ar slf4j-api-1.7.36.jar mxnet-engine-0.28.0.jar api-0.28.0.jar gson-2.1
+ 0.1.jar jna-5.14.0.jar commons-compress-1.26.1.jar commons-codec-1.16.1
+ .jar commons-io-2.15.1.jar slf4j-api-1.7.36.jar javafx-fxml-21.jar java
+ fx-base-21-win.jar model-zoo-0.28.0.jar api-0.28.0.jar gson-2.10.1.jar 
+ jna-5.14.0.jar commons-compress-1.26.1.jar commons-codec-1.16.1.jar com
+ mons-io-2.15.1.jar slf4j-api-1.7.36.jar mxnet-model-zoo-0.28.0.jar api-
+ 0.28.0.jar gson-2.10.1.jar jna-5.14.0.jar commons-compress-1.26.1.jar c
+ ommons-codec-1.16.1.jar commons-io-2.15.1.jar slf4j-api-1.7.36.jar mxne
+ t-engine-0.28.0.jar javafx-graphics-21-win.jar javafx-controls-21-win.j
+ ar javafx-media-17.0.7.jar javafx-media-17.0.7-win.jar javafx-graphics-
+ 17.0.7.jar javafx-graphics-17.0.7-win.jar javafx-base-17.0.7.jar javafx
+ -base-17.0.7-win.jar formsfx-core-11.6.0.jar bootstrapfx-core-0.4.0.jar
+  basicdataset-0.28.0.jar api-0.28.0.jar gson-2.10.1.jar jna-5.14.0.jar 
+ commons-compress-1.26.1.jar slf4j-api-1.7.36.jar commons-csv-1.11.0.jar
+  commons-io-2.16.1.jar commons-codec-1.16.1.jar
+

@@ -1,0 +1,14 @@
+Modifications de l’analyse (Maëlle)
+
+Débogage et Optimisation et Refactorisation (Célie & Maëlle & Matias)
+
+Amélioration de l’interfaces (Célie)
+ - Gestion des plein écran
+ - Modification Boutons dans la page d’accueil
+ - Amélioration de la page de fin tutoriel
+
+Préparation de la présentation aux première années (Célie)
+
+Apprentissage par renforcement sans  carte bayésienne (Matias & Luc)
+
+Apprentissage par renforcement avec carte bayésienne (Matias & Luc)
